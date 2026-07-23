@@ -16,12 +16,6 @@
     "README.md",
     "LICENSE"
   ],
-  "scripts": {
-    "generate": "node scripts/generate.mjs"
-  },
-  "devDependencies": {
-    "culori": "^4.0.1"
-  },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
   }

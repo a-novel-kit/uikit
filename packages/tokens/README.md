@@ -1,19 +1,27 @@
 # @a-novel-kit/uikit-tokens
 
-Agora's design tokens as a single static stylesheet — `tokens.css`. CSS custom properties for colour
-(`--color-*`), font families (`--font-family-*`) and weights (`--font-weight-*`). No build step: import it.
+Agora's design tokens as a single static stylesheet — `tokens.css`. No build, no script, no dependencies:
+it is CSS. Import it once.
 
 ```ts
 import "@a-novel-kit/uikit-tokens/tokens.css";
 ```
 
-## Colour
+## Colour — derived in pure CSS
 
-`--color-<family>-<1..12>` are perceptually-even **OKLCH** scales (`oklch()` is a standard CSS colour) for
-six families — `neutral`, `brand`, `pressure`, `success`, `warning`, `danger`. They are _derived_, not
-hand-picked: each is one hue (taken from a demo seed) with an even lightness ramp and a chroma that peaks at
-the solid step. To recolour, edit the seed in `scripts/generate.mjs` and run `pnpm generate` — the committed
-`tokens.css` is rewritten.
+Each family has **one hand-written base OKLCH** (`--base-brand`, `--base-neutral`, …), and every 12-step
+scale (`--color-<family>-<1..12>`) is **derived from it in CSS** with relative color syntax + `calc()`:
+
+```css
+--color-brand-9: oklch(from var(--base-brand) var(--scale-l-9) calc(c * var(--scale-c-9)) h);
+```
+
+Hold the hue (`h`), walk the shared lightness ramp (`--scale-l-*`, perceptually even), taper the chroma
+(`c × --scale-c-*`). **Recolour the whole system by editing a `--base-*` value** — the scales follow. Six
+families: `neutral`, `brand`, `pressure`, `success`, `warning`, `danger`.
+
+Requires relative color syntax (Chrome 119+, Safari 16.4+, Firefox 128+ — a fine baseline for a web-only
+product).
 
 ## Type
 
