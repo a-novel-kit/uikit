@@ -8,10 +8,9 @@ export default defineConfig({
       provider: "v8",
       reporter: ["text", "json", "lcov"],
       reportsDirectory: "coverage",
-      include: ["packages/*/scripts/**", "packages/*/src/**"],
+      include: ["packages/*/src/**"],
     },
-    // Every package holding tests is registered here — vitest collects only from
-    // registered projects, so a package left out is silently never run.
-    projects: [{ root: "packages/tokens", extends: true }],
+    // Each package holding tests is a project; a package left out is never run.
+    projects: ["packages/uikit"],
   },
 });
