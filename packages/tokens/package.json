@@ -9,29 +9,18 @@
   "license": "MIT",
   "type": "module",
   "exports": {
-    ".": {
-      "types": "./dist/tokens.d.ts",
-      "import": "./dist/tokens.js"
-    },
-    "./tokens.css": "./dist/tokens.css"
+    "./tokens.css": "./tokens.css"
   },
   "files": [
-    "dist",
+    "tokens.css",
     "README.md",
     "LICENSE"
   ],
   "scripts": {
-    "build": "pnpm generate && tsx scripts/build.ts",
-    "generate": "tsx scripts/generate.ts",
-    "typecheck": "tsc --noEmit"
+    "generate": "node scripts/generate.mjs"
   },
   "devDependencies": {
-    "@types/culori": "^4.0.1",
-    "@types/node": "^24.10.0",
-    "culori": "^4.0.1",
-    "style-dictionary": "catalog:",
-    "tsx": "^4.19.2",
-    "typescript": "catalog:"
+    "culori": "^4.0.1"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"

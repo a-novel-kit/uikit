@@ -1,6 +1,7 @@
 pnpm-lock.yaml
 node_modules
 dist
+.svelte-kit
 coverage
 storybook-static
-packages/tokens/src/color.tokens.json
+packages/tokens/tokens.css
