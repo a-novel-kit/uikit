@@ -13,8 +13,8 @@
       },
       "story": {
         "$type": "fontFamily",
-        "$value": "\"Source Serif 4\", Georgia, \"Noto Serif\", serif",
-        "$description": "The reading serif for long prose. Screen-optimized variable serif; Georgia is the metric-adjacent system fallback."
+        "$value": "\"Lora\", Georgia, \"Noto Serif\", serif",
+        "$description": "The reading serif for long prose. Lora — a warm, variable OFL serif close in spirit to the demo's Georgia (which stays as the metric-adjacent system fallback)."
       },
       "mono": {
         "$type": "fontFamily",
