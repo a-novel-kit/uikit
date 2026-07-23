@@ -1,0 +1,39 @@
+{
+  "name": "@a-novel-kit/uikit-tokens",
+  "version": "0.1.0",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/a-novel-kit/uikit.git"
+  },
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/tokens.d.ts",
+      "import": "./dist/tokens.js"
+    },
+    "./tokens.css": "./dist/tokens.css"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "pnpm generate && tsx scripts/build.ts",
+    "generate": "tsx scripts/generate.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/culori": "^4.0.1",
+    "@types/node": "^24.10.0",
+    "culori": "^4.0.1",
+    "style-dictionary": "catalog:",
+    "tsx": "^4.19.2",
+    "typescript": "catalog:"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  }
+}
