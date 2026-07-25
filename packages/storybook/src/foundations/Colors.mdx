@@ -1,0 +1,33 @@
+import { ColorItem, ColorPalette, Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Foundations/Color system" />
+
+export const scale = (family) =>
+  Object.fromEntries(
+    Array.from({ length: 12 }, (_, index) => {
+      const step = index + 1;
+      return [`${family}.${step}`, `var(--color-${family}-${step})`];
+    })
+  );
+
+# Color system
+
+Each family is derived in CSS from one OKLCH seed. Steps move from the darkest surface value at
+`1` to the lightest text value at `12`, with chroma peaking around the solid-control range.
+
+These are the current primitive scales. Component documentation is the source of truth for which
+steps are safe for a particular foreground/background pairing.
+
+<ColorPalette>
+  <ColorItem title="color.neutral" subtitle="Surfaces, borders, and text" colors={scale("neutral")} />
+  <ColorItem title="color.brand" subtitle="Primary Agora actions and emphasis" colors={scale("brand")} />
+  <ColorItem title="color.pressure" subtitle="Narrative pressure and intensity" colors={scale("pressure")} />
+  <ColorItem title="color.success" subtitle="Completed and healthy states" colors={scale("success")} />
+  <ColorItem title="color.warning" subtitle="Caution and attention states" colors={scale("warning")} />
+  <ColorItem title="color.danger" subtitle="Destructive and error states" colors={scale("danger")} />
+</ColorPalette>
+
+## Authoring rule
+
+Do not type an OKLCH, RGB, or hex literal inside a component. Add or choose a token, then verify the
+actual pairing with the accessibility panel. A visual step number alone is not a contrast guarantee.

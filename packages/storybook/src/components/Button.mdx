@@ -1,0 +1,46 @@
+import * as ButtonStories from "./Button.stories.svelte";
+
+import { ArgTypes, Canvas, Controls, Meta, Stories } from "@storybook/addon-docs/blocks";
+
+<Meta of={ButtonStories} />
+
+# Button
+
+Buttons trigger an action in the current context. Use a link for navigation, including navigation
+that happens to look like a button.
+
+<Canvas of={ButtonStories.Playground} />
+<Controls of={ButtonStories.Playground} />
+
+## Variants
+
+- **Solid** identifies the primary action in a region. Prefer one solid action per decision.
+- **Ghost** keeps a secondary or dismissive action available without competing for attention.
+
+<Canvas of={ButtonStories.Solid} />
+<Canvas of={ButtonStories.Ghost} />
+
+## Sizes
+
+Choose size from the surrounding density, not from the perceived importance of the action. Small is
+for compact toolbars, medium is the default, and large suits sparse onboarding or prominent forms.
+
+<Canvas of={ButtonStories.Small} />
+<Canvas of={ButtonStories.Large} />
+
+## Accessibility contract
+
+- Renders a native `<button>` and defaults to `type="button"`.
+- Forwards `disabled`, `aria-*`, event handlers, and other native button attributes.
+- Requires a concise accessible name; visible text is preferred to `aria-label`.
+- Disabled state must explain itself in nearby content when the reason is not obvious.
+
+<Canvas of={ButtonStories.Disabled} />
+
+## API
+
+<ArgTypes of={ButtonStories} />
+
+## States
+
+<Stories includePrimary={false} />

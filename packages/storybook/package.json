@@ -1,0 +1,30 @@
+{
+  "name": "@a-novel-kit/uikit-storybook",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Private component workbench and design-system documentation for Agora UI",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "storybook build --output-dir storybook-static",
+    "storybook": "BROWSER=none storybook dev --port 6006 --no-open",
+    "typecheck": "svelte-check --tsconfig ./tsconfig.json"
+  },
+  "dependencies": {
+    "@a-novel-kit/uikit": "workspace:*",
+    "@a-novel-kit/uikit-fonts": "workspace:*",
+    "@a-novel-kit/uikit-tokens": "workspace:*"
+  },
+  "devDependencies": {
+    "@storybook/addon-a11y": "catalog:",
+    "@storybook/addon-docs": "catalog:",
+    "@storybook/addon-svelte-csf": "catalog:",
+    "@storybook/svelte-vite": "catalog:",
+    "@sveltejs/vite-plugin-svelte": "^6.2.0",
+    "@types/node": "^24.10.0",
+    "storybook": "catalog:",
+    "svelte": "^5.55.8",
+    "svelte-check": "catalog:",
+    "vite": "^7.1.7"
+  }
+}
