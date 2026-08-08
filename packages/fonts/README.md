@@ -5,15 +5,15 @@ Self-hosted web fonts for the Agora design system. **Every byte is vendored in t
 
 ## Voices
 
-| Token voice               | Family                                     | License                       |
-| ------------------------- | ------------------------------------------ | ----------------------------- |
-| Interface / Display       | TeX Gyre Heros + Heros Cn (Latin, 400/700) | GUST Font License (LPPL 1.3c) |
-| Story                     | Lora (variable serif)                      | SIL OFL 1.1                   |
-| Mono                      | JetBrains Mono (variable)                  | SIL OFL 1.1                   |
-| Interface i18n complement | Arimo (metric-compatible)                  | Apache-2.0                    |
+| Token voice         | Family                                     | License                       |
+| ------------------- | ------------------------------------------ | ----------------------------- |
+| Interface / Display | TeX Gyre Heros + Heros Cn (Latin, 400/700) | GUST Font License (LPPL 1.3c) |
+| Story               | Lora (variable serif)                      | SIL OFL 1.1                   |
+| Mono                | JetBrains Mono (variable)                  | SIL OFL 1.1                   |
+| Interface fallback  | Arimo (Latin, metric-compatible)           | SIL OFL 1.1                   |
 
-TeX Gyre Heros is scoped to Latin via `unicode-range`; Cyrillic / Greek / Hebrew fall through to Arimo,
-and other scripts to Noto Sans (added per locale). Heros ships only two real weights (400 / 700).
+TeX Gyre Heros is scoped to Latin through `unicode-range`. Missing scripts continue through the
+family stack; platforms add locale-specific Noto faces. Heros exposes real 400 and 700 weights.
 
 ## Usage
 

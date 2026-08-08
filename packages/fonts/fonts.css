@@ -1,14 +1,7 @@
 /*
- * Self-hosted web fonts — every byte is vendored in this package (./files/*.woff2,
- * produced by scripts/vendor.ts). NO CDN and no runtime font dependency: the
- * @font-face src is our own file, served same-origin by whatever platform bundles
- * the uikit.
- *
- * TeX Gyre Heros (GUST Font License) is scoped to Latin via unicode-range — its
- * Greek/Cyrillic are only "provisional", so those code points fall through to the
- * complements (Arimo for Cyrillic/Greek/Hebrew, then Noto Sans per locale) rather
- * than rendering Heros' incomplete glyphs. The Latin range below excludes Greek
- * (U+0370–03FF) and Cyrillic (U+0400–04FF) by construction.
+ * Every font file is vendored in this package and served from the platform's
+ * origin. TeX Gyre Heros is limited to Latin through unicode-range, so missing
+ * scripts continue through the family stack to platform-provided locale faces.
  */
 
 /* ------------------------------------------------------------------ *
@@ -117,8 +110,7 @@
 }
 
 /* ------------------------------------------------------------------ *
- * Interface i18n complement — Arimo (metric-compatible with Helvetica,
- * OFL). Latin subset now; Cyrillic/Greek/Hebrew subsets added per locale.
+ * Interface Latin fallback — Arimo (metric-compatible with Helvetica, OFL).
  * ------------------------------------------------------------------ */
 @font-face {
   font-style: normal;

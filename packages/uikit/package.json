@@ -18,6 +18,8 @@
   "types": "./dist/index.d.ts",
   "files": [
     "dist",
+    "!dist/**/*.test.*",
+    "!dist/**/*.spec.*",
     "README.md",
     "LICENSE"
   ],
