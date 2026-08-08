@@ -1,0 +1,63 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+import "./Metrics.css";
+
+<Meta title="Foundations/Layout & shape" />
+
+export const spacingTokens = [
+  "--space-1",
+  "--space-1-5",
+  "--space-2",
+  "--space-3",
+  "--space-4",
+  "--space-5",
+  "--space-6",
+  "--space-8",
+];
+
+export const radiusTokens = ["--radius-none", "--radius-sm", "--radius-md", "--radius-lg"];
+
+# Layout & shape
+
+Spacing, control height, radius, borders, and motion derive from compact bases and shared multipliers.
+Components consume the generated public tokens, keeping density and shape changes centralized.
+
+## Spacing
+
+The spacing scale starts at `--space-base`. Each public step multiplies that base by a preset factor.
+
+<div className="metric-stack">
+  {spacingTokens.map((token) => (
+    <div className="metric-row" key={token}>
+      <code>{token}</code>
+      <div className="metric-track">
+        <span className="spacing-swatch" style={{ "--metric-size": `var(${token})` }} />
+      </div>
+    </div>
+  ))}
+</div>
+
+## Border radius
+
+Radius tokens share `--radius-base`; components choose a named shape instead of declaring a length.
+
+<div className="radius-grid">
+  {radiusTokens.map((token) => (
+    <div className="radius-card" style={{ "--metric-radius": `var(${token})` }} key={token}>
+      <code>{token}</code>
+    </div>
+  ))}
+</div>
+
+## Control and interaction metrics
+
+| Contract       | Tokens                                                 |
+| -------------- | ------------------------------------------------------ |
+| Control height | `--control-height-{sm,md,lg}`                          |
+| Border         | `--border-width-thin`                                  |
+| Focus          | `--focus-ring-{width,offset}` and `--color-focus-ring` |
+| Motion         | `--duration-{fast,normal}` and `--easing-standard`     |
+| Disabled state | `--opacity-disabled`                                   |
+
+The Button stories apply these contracts directly. Adjust a base token to inspect how all rendered
+sizes change together.

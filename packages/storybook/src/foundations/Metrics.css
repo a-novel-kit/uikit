@@ -1,0 +1,46 @@
+.metric-stack {
+  display: grid;
+  gap: var(--space-3);
+  margin-block: var(--space-6);
+}
+
+.metric-row {
+  display: grid;
+  grid-template-columns: minmax(14ch, 20ch) 1fr;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.metric-track {
+  display: flex;
+  align-items: center;
+  border: var(--border-width-thin) solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-subtle);
+  block-size: var(--space-6);
+  overflow: hidden;
+}
+
+.spacing-swatch {
+  display: block;
+  background: var(--color-action-primary);
+  inline-size: var(--metric-size);
+  block-size: 100%;
+}
+
+.radius-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16ch, 1fr));
+  gap: var(--space-4);
+  margin-block: var(--space-6);
+}
+
+.radius-card {
+  display: grid;
+  place-items: center;
+  border: var(--border-width-thin) solid var(--color-border-subtle);
+  border-radius: var(--metric-radius);
+  background: var(--color-surface-subtle);
+  padding: var(--space-4);
+  min-block-size: calc(var(--space-8) * var(--multiplier-2));
+}

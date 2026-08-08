@@ -10,13 +10,36 @@ export const scale = (family) =>
     })
   );
 
+export const semanticColors = {
+  "surface.canvas": "var(--color-surface-canvas)",
+  "surface.subtle": "var(--color-surface-subtle)",
+  "text.primary": "var(--color-text-primary)",
+  "text.muted": "var(--color-text-muted)",
+  "border.subtle": "var(--color-border-subtle)",
+  "action.primary": "var(--color-action-primary)",
+  "action.primaryHover": "var(--color-action-primary-hover)",
+  "action.ghostText": "var(--color-action-ghost-text)",
+  "action.ghostHover": "var(--color-action-ghost-hover)",
+  "focus.ring": "var(--color-focus-ring)",
+};
+
 # Color system
 
-Each family is derived in CSS from one OKLCH seed. Steps move from the darkest surface value at
-`1` to the lightest text value at `12`, with chroma peaking around the solid-control range.
+One lightness base, one chroma base, and one hue base generate the families. Hue rotations and chroma
+multipliers distinguish each family; shared calculated ramps generate the 12 visible steps.
 
-These are the current primitive scales. Component documentation is the source of truth for which
-steps are safe for a particular foreground/background pairing.
+## Semantic colors
+
+Components consume semantic aliases so palette adjustments stay separate from component intent.
+
+<ColorPalette>
+  <ColorItem title="Semantic color" subtitle="Public component contracts" colors={semanticColors} />
+</ColorPalette>
+
+## Primitive scales
+
+Steps move from the darkest surface value at `1` to the lightest text value at `12`. Chroma peaks
+near the solid-control range.
 
 <ColorPalette>
   <ColorItem title="color.neutral" subtitle="Surfaces, borders, and text" colors={scale("neutral")} />
@@ -29,5 +52,5 @@ steps are safe for a particular foreground/background pairing.
 
 ## Authoring rule
 
-Do not type an OKLCH, RGB, or hex literal inside a component. Add or choose a token, then verify the
-actual pairing with the accessibility panel. A visual step number alone is not a contrast guarantee.
+Components use semantic color tokens and shared metric tokens. Verify every foreground/background
+pairing with the accessibility panel; a visual palette step does not guarantee sufficient contrast.

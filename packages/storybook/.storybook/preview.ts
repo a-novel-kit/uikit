@@ -16,8 +16,8 @@ const preview: Preview = {
     },
     backgrounds: {
       options: {
-        night: { name: "Agora night", value: "var(--color-neutral-1)" },
-        paper: { name: "Paper", value: "var(--color-neutral-12)" },
+        night: { name: "Agora night", value: "var(--color-surface-canvas)" },
+        paper: { name: "Paper", value: "var(--color-text-primary)" },
       },
     },
     controls: {
@@ -32,7 +32,7 @@ const preview: Preview = {
     },
     options: {
       storySort: {
-        order: ["Overview", "Foundations", ["Color system", "Typography"], "Components"],
+        order: ["Overview", "Foundations", ["Color system", "Layout & shape", "Typography"], "Components"],
       },
     },
   },

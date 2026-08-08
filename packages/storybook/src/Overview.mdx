@@ -9,23 +9,23 @@ workspace packages, so what you inspect here is what a platform consumes.
 
 ## Package boundary
 
-| Package                        | Purpose                                          | Published                          |
-| ------------------------------ | ------------------------------------------------ | ---------------------------------- |
-| `@a-novel-kit/uikit-tokens`    | CSS custom properties: color and type contracts  | Yes                                |
-| `@a-novel-kit/uikit-fonts`     | Self-hosted font faces and licensed WOFF2 assets | Yes                                |
-| `@a-novel-kit/uikit`           | Styled Svelte components                         | Yes                                |
-| `@a-novel-kit/uikit-storybook` | Stories, docs, and the local workbench           | **No — private workspace package** |
+| Package                        | Purpose                                           | Published                          |
+| ------------------------------ | ------------------------------------------------- | ---------------------------------- |
+| `@a-novel-kit/uikit-tokens`    | Derived color, metric, motion, and type contracts | Yes                                |
+| `@a-novel-kit/uikit-fonts`     | Self-hosted font faces and licensed WOFF2 assets  | Yes                                |
+| `@a-novel-kit/uikit`           | Styled Svelte components                          | Yes                                |
+| `@a-novel-kit/uikit-storybook` | Stories, docs, and the local workbench            | **No — private workspace package** |
 
 ## Current status
 
-The current branch establishes the token palette, four typographic voices, and the first component:
-`Button`. The visual values are still being evaluated; the package boundaries and CSS-variable
-contract are the stable part.
+The current branch establishes calculated color and metric scales, four typographic voices, and the
+first component: `Button`. Base values and shared multipliers control the rendered system from the
+published CSS contract.
 
 ## Principles
 
 - Accessible behavior belongs in the component, not in each consuming screen.
-- Platforms use semantic or component tokens when those tiers land; primitive scales remain a
-  design-system implementation detail.
+- Platforms and components use semantic tokens; primitive scales remain a design-system
+  implementation detail.
 - Fonts, icons, and other assets are self-hosted so platform CSPs do not need third-party origins.
 - Stories cover meaningful states and edge cases, while documentation explains intent and usage.

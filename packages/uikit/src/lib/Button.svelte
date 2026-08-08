@@ -26,51 +26,60 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    gap: 0.5em;
-    transition: background-color 120ms ease;
+    gap: var(--space-2);
+    transition: background-color var(--duration-fast) var(--easing-standard);
     cursor: pointer;
-    border: 0;
-    border-radius: 0.5rem;
+    box-sizing: border-box;
+    border: var(--border-width-thin) solid transparent;
+    border-radius: var(--radius-md);
     font-weight: var(--font-weight-bold);
-    line-height: 1;
+    line-height: var(--line-height-tight);
     font-family: var(--font-family-interface);
   }
 
+  .button:focus-visible {
+    outline: var(--focus-ring-width) solid var(--color-focus-ring);
+    outline-offset: var(--focus-ring-offset);
+  }
+
   .button:disabled {
-    opacity: 0.5;
+    opacity: var(--opacity-disabled);
     cursor: not-allowed;
   }
 
-  /* Sizes use logical properties so the component is RTL-ready. */
+  /* Logical padding keeps the control shape consistent in right-to-left layouts. */
   .sm {
-    padding-inline: 0.75rem;
-    padding-block: 0.375rem;
-    font-size: 0.8125rem;
+    padding-inline: var(--space-3);
+    padding-block: var(--space-1-5);
+    min-block-size: var(--control-height-sm);
+    font-size: var(--font-size-sm);
   }
   .md {
-    padding-inline: 1rem;
-    padding-block: 0.5rem;
-    font-size: 0.9375rem;
+    padding-inline: var(--space-4);
+    padding-block: var(--space-2);
+    min-block-size: var(--control-height-md);
+    font-size: var(--font-size-md);
   }
   .lg {
-    padding-inline: 1.25rem;
-    padding-block: 0.6875rem;
-    font-size: 1.0625rem;
+    padding-inline: var(--space-5);
+    padding-block: var(--space-3);
+    min-block-size: var(--control-height-lg);
+    font-size: var(--font-size-lg);
   }
 
   .solid {
-    background-color: var(--color-brand-9);
-    color: var(--color-neutral-1);
+    background-color: var(--color-action-primary);
+    color: var(--color-action-primary-text);
   }
   .solid:hover:not(:disabled) {
-    background-color: var(--color-brand-10);
+    background-color: var(--color-action-primary-hover);
   }
 
   .ghost {
     background-color: transparent;
-    color: var(--color-brand-11);
+    color: var(--color-action-ghost-text);
   }
   .ghost:hover:not(:disabled) {
-    background-color: var(--color-neutral-3);
+    background-color: var(--color-action-ghost-hover);
   }
 </style>

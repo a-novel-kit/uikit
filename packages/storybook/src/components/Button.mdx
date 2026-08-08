@@ -28,6 +28,12 @@ for compact toolbars, medium is the default, and large suits sparse onboarding o
 <Canvas of={ButtonStories.Small} />
 <Canvas of={ButtonStories.Large} />
 
+## Design contract
+
+Each size combines the shared control-height, spacing, and type scales. Radius, motion, focus, and
+disabled treatment also come from public metric tokens. Variants consume semantic action colors, so
+palette changes do not rewrite component CSS.
+
 ## Accessibility contract
 
 - Renders a native `<button>` and defaults to `type="button"`.
