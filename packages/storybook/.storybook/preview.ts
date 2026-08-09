@@ -1,10 +1,10 @@
 import "../src/preview.css";
+import { agoraTheme } from "./agoraTheme";
 
 import "@a-novel-kit/uikit-fonts/fonts.css";
 import "@a-novel-kit/uikit-tokens/tokens.css";
 
 import type { Preview } from "@storybook/svelte-vite";
-import { themes } from "storybook/theming";
 
 const preview: Preview = {
   parameters: {
@@ -27,7 +27,7 @@ const preview: Preview = {
       },
     },
     docs: {
-      theme: themes.dark,
+      theme: agoraTheme,
       toc: true,
     },
     options: {
