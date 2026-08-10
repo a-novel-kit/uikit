@@ -36,6 +36,7 @@
   --radius-sm: calc(var(--radius-base) * var(--multiplier-1));
   --radius-md: calc(var(--radius-base) * var(--multiplier-2));
   --radius-lg: calc(var(--radius-base) * var(--multiplier-3));
+  --radius-round: 50%;
 
   --border-width-base: 0.0625rem;
   --border-width-thin: var(--border-width-base);
@@ -54,19 +55,10 @@
   --color-chroma-base: 0.14;
   --color-chroma-min: 0.25;
   --color-chroma-step: 0.125;
-  --color-hue-base: 232.66;
-  --color-hue-step: 7.5;
+  --color-hue-brand: 232.66;
+  --color-harmony-complement: 180;
 
   --color-chroma-multiplier-neutral: 0.085714;
-  --color-chroma-multiplier-brand: 1;
-  --color-chroma-multiplier-functional: 1.071429;
-  --color-chroma-multiplier-vivid: 1.214286;
-
-  --color-hue-neutral-steps: 7;
-  --color-hue-pressure-steps: 21;
-  --color-hue-success-steps: -12;
-  --color-hue-warning-steps: -20;
-  --color-hue-danger-steps: 18;
 
   --scale-l-1: calc(var(--color-lightness-min) + var(--color-lightness-step) * var(--multiplier-0));
   --scale-l-2: calc(var(--color-lightness-min) + var(--color-lightness-step) * var(--multiplier-1));
@@ -94,36 +86,15 @@
   --scale-c-11: var(--scale-c-2);
   --scale-c-12: var(--scale-c-1);
 
-  --base-neutral: oklch(
-    var(--color-lightness-base)
-    calc(var(--color-chroma-base) * var(--color-chroma-multiplier-neutral))
-    calc(var(--color-hue-base) + var(--color-hue-step) * var(--color-hue-neutral-steps))
-  );
   --base-brand: oklch(
     var(--color-lightness-base)
-    calc(var(--color-chroma-base) * var(--color-chroma-multiplier-brand))
-    var(--color-hue-base)
+    var(--color-chroma-base)
+    var(--color-hue-brand)
   );
-  --base-pressure: oklch(
-    var(--color-lightness-base)
-    calc(var(--color-chroma-base) * var(--color-chroma-multiplier-vivid))
-    calc(var(--color-hue-base) + var(--color-hue-step) * var(--color-hue-pressure-steps))
+  --base-neutral: oklch(
+    from var(--base-brand) l calc(c * var(--color-chroma-multiplier-neutral)) h
   );
-  --base-success: oklch(
-    var(--color-lightness-base)
-    calc(var(--color-chroma-base) * var(--color-chroma-multiplier-functional))
-    calc(var(--color-hue-base) + var(--color-hue-step) * var(--color-hue-success-steps))
-  );
-  --base-warning: oklch(
-    var(--color-lightness-base)
-    calc(var(--color-chroma-base) * var(--color-chroma-multiplier-functional))
-    calc(var(--color-hue-base) + var(--color-hue-step) * var(--color-hue-warning-steps))
-  );
-  --base-danger: oklch(
-    var(--color-lightness-base)
-    calc(var(--color-chroma-base) * var(--color-chroma-multiplier-vivid))
-    calc(var(--color-hue-base) + var(--color-hue-step) * var(--color-hue-danger-steps))
-  );
+  --base-pressure: oklch(from var(--base-brand) l c calc(h + var(--color-harmony-complement)));
 
   /* Derived 12-step scales. */
   --color-neutral-1: oklch(from var(--base-neutral) var(--scale-l-1) calc(c * var(--scale-c-1)) h);
@@ -165,45 +136,6 @@
   --color-pressure-11: oklch(from var(--base-pressure) var(--scale-l-11) calc(c * var(--scale-c-11)) h);
   --color-pressure-12: oklch(from var(--base-pressure) var(--scale-l-12) calc(c * var(--scale-c-12)) h);
 
-  --color-success-1: oklch(from var(--base-success) var(--scale-l-1) calc(c * var(--scale-c-1)) h);
-  --color-success-2: oklch(from var(--base-success) var(--scale-l-2) calc(c * var(--scale-c-2)) h);
-  --color-success-3: oklch(from var(--base-success) var(--scale-l-3) calc(c * var(--scale-c-3)) h);
-  --color-success-4: oklch(from var(--base-success) var(--scale-l-4) calc(c * var(--scale-c-4)) h);
-  --color-success-5: oklch(from var(--base-success) var(--scale-l-5) calc(c * var(--scale-c-5)) h);
-  --color-success-6: oklch(from var(--base-success) var(--scale-l-6) calc(c * var(--scale-c-6)) h);
-  --color-success-7: oklch(from var(--base-success) var(--scale-l-7) calc(c * var(--scale-c-7)) h);
-  --color-success-8: oklch(from var(--base-success) var(--scale-l-8) calc(c * var(--scale-c-8)) h);
-  --color-success-9: oklch(from var(--base-success) var(--scale-l-9) calc(c * var(--scale-c-9)) h);
-  --color-success-10: oklch(from var(--base-success) var(--scale-l-10) calc(c * var(--scale-c-10)) h);
-  --color-success-11: oklch(from var(--base-success) var(--scale-l-11) calc(c * var(--scale-c-11)) h);
-  --color-success-12: oklch(from var(--base-success) var(--scale-l-12) calc(c * var(--scale-c-12)) h);
-
-  --color-warning-1: oklch(from var(--base-warning) var(--scale-l-1) calc(c * var(--scale-c-1)) h);
-  --color-warning-2: oklch(from var(--base-warning) var(--scale-l-2) calc(c * var(--scale-c-2)) h);
-  --color-warning-3: oklch(from var(--base-warning) var(--scale-l-3) calc(c * var(--scale-c-3)) h);
-  --color-warning-4: oklch(from var(--base-warning) var(--scale-l-4) calc(c * var(--scale-c-4)) h);
-  --color-warning-5: oklch(from var(--base-warning) var(--scale-l-5) calc(c * var(--scale-c-5)) h);
-  --color-warning-6: oklch(from var(--base-warning) var(--scale-l-6) calc(c * var(--scale-c-6)) h);
-  --color-warning-7: oklch(from var(--base-warning) var(--scale-l-7) calc(c * var(--scale-c-7)) h);
-  --color-warning-8: oklch(from var(--base-warning) var(--scale-l-8) calc(c * var(--scale-c-8)) h);
-  --color-warning-9: oklch(from var(--base-warning) var(--scale-l-9) calc(c * var(--scale-c-9)) h);
-  --color-warning-10: oklch(from var(--base-warning) var(--scale-l-10) calc(c * var(--scale-c-10)) h);
-  --color-warning-11: oklch(from var(--base-warning) var(--scale-l-11) calc(c * var(--scale-c-11)) h);
-  --color-warning-12: oklch(from var(--base-warning) var(--scale-l-12) calc(c * var(--scale-c-12)) h);
-
-  --color-danger-1: oklch(from var(--base-danger) var(--scale-l-1) calc(c * var(--scale-c-1)) h);
-  --color-danger-2: oklch(from var(--base-danger) var(--scale-l-2) calc(c * var(--scale-c-2)) h);
-  --color-danger-3: oklch(from var(--base-danger) var(--scale-l-3) calc(c * var(--scale-c-3)) h);
-  --color-danger-4: oklch(from var(--base-danger) var(--scale-l-4) calc(c * var(--scale-c-4)) h);
-  --color-danger-5: oklch(from var(--base-danger) var(--scale-l-5) calc(c * var(--scale-c-5)) h);
-  --color-danger-6: oklch(from var(--base-danger) var(--scale-l-6) calc(c * var(--scale-c-6)) h);
-  --color-danger-7: oklch(from var(--base-danger) var(--scale-l-7) calc(c * var(--scale-c-7)) h);
-  --color-danger-8: oklch(from var(--base-danger) var(--scale-l-8) calc(c * var(--scale-c-8)) h);
-  --color-danger-9: oklch(from var(--base-danger) var(--scale-l-9) calc(c * var(--scale-c-9)) h);
-  --color-danger-10: oklch(from var(--base-danger) var(--scale-l-10) calc(c * var(--scale-c-10)) h);
-  --color-danger-11: oklch(from var(--base-danger) var(--scale-l-11) calc(c * var(--scale-c-11)) h);
-  --color-danger-12: oklch(from var(--base-danger) var(--scale-l-12) calc(c * var(--scale-c-12)) h);
-
   --color-surface-canvas: var(--color-neutral-1);
   --color-surface-subtle: var(--color-neutral-2);
   --color-text-primary: var(--color-neutral-12);
@@ -215,6 +147,23 @@
   --color-action-ghost-text: var(--color-brand-11);
   --color-action-ghost-hover: var(--color-neutral-3);
   --color-focus-ring: var(--color-brand-11);
+  --color-feedback-info-surface: var(--color-brand-2);
+  --color-feedback-info-border: var(--color-brand-7);
+  --color-feedback-info-text: var(--color-brand-11);
+  --color-feedback-success-surface: var(--color-brand-2);
+  --color-feedback-success-border: var(--color-brand-7);
+  --color-feedback-success-text: var(--color-brand-11);
+  --color-feedback-warning-surface: var(--color-pressure-2);
+  --color-feedback-warning-border: var(--color-pressure-7);
+  --color-feedback-warning-text: var(--color-pressure-10);
+  --color-feedback-error-surface: var(--color-pressure-3);
+  --color-feedback-error-border: var(--color-pressure-8);
+  --color-feedback-error-text: var(--color-pressure-11);
+  --gradient-accent: linear-gradient(
+    135deg in oklch increasing hue,
+    var(--color-brand-9),
+    var(--color-pressure-9)
+  );
 
   --font-family-display: "TeX Gyre Heros Cn", "Arial Narrow", "Noto Sans", sans-serif;
   --font-family-interface: "TeX Gyre Heros", Arimo, "Noto Sans", Arial, system-ui, sans-serif;

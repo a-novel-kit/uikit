@@ -24,17 +24,18 @@ define the system's scale and are not component-level choices.
 
 ## Color
 
-One lightness base, one chroma base, one hue base, and small step values generate every family. Family
-hues are rotations of `--color-hue-base`; family chroma uses named multipliers. Shared lightness and
-chroma ramps then generate each 12-step palette in CSS.
+An electric-blue base generates the brand scale. Its exact `180deg` OKLCH complement generates
+pressure, while a reduced-chroma copy of the brand base generates neutral. Shared lightness and chroma
+ramps produce each 12-step scale in CSS.
 
 ```css
 --color-brand-9: oklch(from var(--base-brand) var(--scale-l-9) calc(c * var(--scale-c-9)) h);
 ```
 
-Components use semantic aliases such as `--color-action-primary` and `--color-text-primary`. Primitive
-palette steps remain available for design-system work. Relative color syntax requires Chrome 119+,
-Safari 16.4+, or Firefox 128+.
+Components use semantic aliases such as `--color-action-primary` and `--color-feedback-error-text`.
+Brand carries agency and favorable progress; pressure carries urgency, caution, and failure. Feedback
+components pair color with a label or icon. Primitive palette steps remain available for design-system
+work. Relative color syntax requires Chrome 119+, Safari 16.4+, or Firefox 128+.
 
 ## Spacing, shape, and motion
 

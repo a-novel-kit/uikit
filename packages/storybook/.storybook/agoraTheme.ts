@@ -3,12 +3,13 @@ import { create } from "storybook/theming";
 const colors = {
   action: "#61b8e4",
   actionMuted: "#ace3ff",
-  border: "#434349",
-  canvas: "#0f0f11",
-  hover: "#313136",
-  subtle: "#1f1f22",
-  text: "#f1f1f4",
-  textMuted: "#d9dade",
+  border: "#3e4549",
+  canvas: "#0e1010",
+  hover: "#2d3235",
+  pressure: "#e1996c",
+  subtle: "#1d2022",
+  text: "#f0f2f3",
+  textMuted: "#d6dbdd",
 } as const;
 
 const fonts = {
@@ -20,7 +21,7 @@ export const agoraTheme = create({
   base: "dark",
   brandTitle: "Agora UI",
   colorPrimary: colors.action,
-  colorSecondary: colors.actionMuted,
+  colorSecondary: colors.pressure,
   appBg: colors.canvas,
   appContentBg: colors.subtle,
   appHoverBg: colors.hover,

@@ -1,5 +1,7 @@
 import { ColorItem, ColorPalette, Meta } from "@storybook/addon-docs/blocks";
 
+import "./Colors.css";
+
 <Meta title="Foundations/Color system" />
 
 export const scale = (family) =>
@@ -10,7 +12,7 @@ export const scale = (family) =>
     })
   );
 
-export const semanticColors = {
+export const interfaceColors = {
   "surface.canvas": "var(--color-surface-canvas)",
   "surface.subtle": "var(--color-surface-subtle)",
   "text.primary": "var(--color-text-primary)",
@@ -23,18 +25,74 @@ export const semanticColors = {
   "focus.ring": "var(--color-focus-ring)",
 };
 
+export const feedbackColors = {
+  "feedback.info": "var(--color-feedback-info-text)",
+  "feedback.success": "var(--color-feedback-success-text)",
+  "feedback.warning": "var(--color-feedback-warning-text)",
+  "feedback.error": "var(--color-feedback-error-text)",
+};
+
 # Color system
 
-One lightness base, one chroma base, and one hue base generate the families. Hue rotations and chroma
-multipliers distinguish each family; shared calculated ramps generate the 12 visible steps.
+The interface uses one complementary pair on a neutral field. Electric blue carries agency and
+progress. Its warm copper complement carries narrative pressure, caution, and failure.
+
+## Harmony
+
+<div className="color-harmony">
+  <div className="color-harmony__swatch color-harmony__swatch--brand">
+    <strong>Brand</strong>
+    <code>232.66°</code>
+    <span>Agency · focus · progress</span>
+  </div>
+  <div className="color-harmony__relation" aria-label="Separated by 180 degrees">
+    <span>180°</span>
+  </div>
+  <div className="color-harmony__swatch color-harmony__swatch--pressure">
+    <strong>Pressure</strong>
+    <code>52.66°</code>
+    <span>Urgency · caution · failure</span>
+  </div>
+</div>
+
+Pressure derives from the brand hue with `calc(h + 180)`. Both families share the same base chroma
+and calculated scale, so changing the blue keeps the pair balanced.
+
+<div className="color-gradient">
+  <strong>Expressive accent</strong>
+  <span>The increasing OKLCH arc is reserved for key art, energy, and transitional surfaces.</span>
+</div>
 
 ## Semantic colors
 
 Components consume semantic aliases so palette adjustments stay separate from component intent.
 
 <ColorPalette>
-  <ColorItem title="Semantic color" subtitle="Public component contracts" colors={semanticColors} />
+  <ColorItem title="Interface roles" subtitle="Public component contracts" colors={interfaceColors} />
+  <ColorItem title="Feedback roles" subtitle="Two hues, explicit intent" colors={feedbackColors} />
 </ColorPalette>
+
+<div className="feedback-grid">
+  <div className="feedback feedback--info">
+    <span aria-hidden="true">i</span>
+    <strong>Information</strong>
+  </div>
+  <div className="feedback feedback--success">
+    <span aria-hidden="true">✓</span>
+    <strong>Saved</strong>
+  </div>
+  <div className="feedback feedback--warning">
+    <span aria-hidden="true">!</span>
+    <strong>Check input</strong>
+  </div>
+  <div className="feedback feedback--error">
+    <span aria-hidden="true">×</span>
+    <strong>Upload failed</strong>
+  </div>
+</div>
+
+Feedback never depends on hue alone. Labels and icons carry meaning; surface, border, and text steps
+increase emphasis inside the two-family grammar.
 
 ## Primitive scales
 
@@ -44,10 +102,7 @@ near the solid-control range.
 <ColorPalette>
   <ColorItem title="color.neutral" subtitle="Surfaces, borders, and text" colors={scale("neutral")} />
   <ColorItem title="color.brand" subtitle="Primary Agora actions and emphasis" colors={scale("brand")} />
-  <ColorItem title="color.pressure" subtitle="Narrative pressure and intensity" colors={scale("pressure")} />
-  <ColorItem title="color.success" subtitle="Completed and healthy states" colors={scale("success")} />
-  <ColorItem title="color.warning" subtitle="Caution and attention states" colors={scale("warning")} />
-  <ColorItem title="color.danger" subtitle="Destructive and error states" colors={scale("danger")} />
+  <ColorItem title="color.pressure" subtitle="Narrative intensity and adverse feedback" colors={scale("pressure")} />
 </ColorPalette>
 
 ## Authoring rule
