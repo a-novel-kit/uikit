@@ -24,10 +24,12 @@ define the system's scale and are not component-level choices.
 
 ## Color
 
-An electric-blue base generates the brand scale. Two `120deg` OKLCH rotations generate pressure and
-signal, while a reduced-chroma copy of the brand base generates neutral. Shared lightness and chroma
-ramps produce each 12-step scale in CSS. Chroma peaks at step `9`, where solid controls and expressive
-accents need the clearest hue.
+An electric-blue base at `oklch(0.78 0.17 212.66)` anchors the brand scale. The system applies a
+`20deg` symmetric compression to a `120deg` triad, producing `130deg / 100deg / 130deg` gaps between
+brand, pressure, and signal. A reduced-chroma copy of brand generates neutral.
+
+A shared `0.07` lightness step produces each 12-step scale around solid step `9`. Chroma also peaks
+at step `9`, where solid controls and expressive accents need the clearest hue.
 
 ```css
 --color-brand-9: oklch(from var(--base-brand) var(--scale-l-9) calc(c * var(--scale-c-9)) h);

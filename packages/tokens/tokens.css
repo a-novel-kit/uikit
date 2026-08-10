@@ -49,29 +49,29 @@
   --easing-standard: ease;
   --opacity-disabled: 0.5;
 
-  --color-lightness-base: 0.53;
-  --color-lightness-min: 0.17;
-  --color-lightness-step: 0.071818;
+  --color-lightness-base: 0.78;
+  --color-lightness-step: 0.07;
   --color-chroma-base: 0.17;
   --color-chroma-scale-min: 0.2;
   --color-chroma-scale-step: 0.1;
-  --color-hue-brand: 232.66;
+  --color-hue-brand: 212.66;
   --color-harmony-triad-step: 120;
+  --color-harmony-compression: 20;
 
   --color-chroma-multiplier-neutral: 0.070588;
 
-  --scale-l-1: calc(var(--color-lightness-min) + var(--color-lightness-step) * var(--multiplier-0));
-  --scale-l-2: calc(var(--color-lightness-min) + var(--color-lightness-step) * var(--multiplier-1));
-  --scale-l-3: calc(var(--color-lightness-min) + var(--color-lightness-step) * var(--multiplier-2));
-  --scale-l-4: calc(var(--color-lightness-min) + var(--color-lightness-step) * var(--multiplier-3));
-  --scale-l-5: calc(var(--color-lightness-min) + var(--color-lightness-step) * var(--multiplier-4));
-  --scale-l-6: calc(var(--color-lightness-min) + var(--color-lightness-step) * var(--multiplier-5));
-  --scale-l-7: calc(var(--color-lightness-min) + var(--color-lightness-step) * var(--multiplier-6));
-  --scale-l-8: calc(var(--color-lightness-min) + var(--color-lightness-step) * var(--multiplier-7));
-  --scale-l-9: calc(var(--color-lightness-min) + var(--color-lightness-step) * var(--multiplier-8));
-  --scale-l-10: calc(var(--color-lightness-min) + var(--color-lightness-step) * var(--multiplier-9));
-  --scale-l-11: calc(var(--color-lightness-min) + var(--color-lightness-step) * var(--multiplier-10));
-  --scale-l-12: calc(var(--color-lightness-min) + var(--color-lightness-step) * var(--multiplier-11));
+  --scale-l-1: calc(var(--color-lightness-base) - var(--color-lightness-step) * var(--multiplier-8));
+  --scale-l-2: calc(var(--color-lightness-base) - var(--color-lightness-step) * var(--multiplier-7));
+  --scale-l-3: calc(var(--color-lightness-base) - var(--color-lightness-step) * var(--multiplier-6));
+  --scale-l-4: calc(var(--color-lightness-base) - var(--color-lightness-step) * var(--multiplier-5));
+  --scale-l-5: calc(var(--color-lightness-base) - var(--color-lightness-step) * var(--multiplier-4));
+  --scale-l-6: calc(var(--color-lightness-base) - var(--color-lightness-step) * var(--multiplier-3));
+  --scale-l-7: calc(var(--color-lightness-base) - var(--color-lightness-step) * var(--multiplier-2));
+  --scale-l-8: calc(var(--color-lightness-base) - var(--color-lightness-step) * var(--multiplier-1));
+  --scale-l-9: var(--color-lightness-base);
+  --scale-l-10: calc(var(--color-lightness-base) + var(--color-lightness-step) * var(--multiplier-1));
+  --scale-l-11: calc(var(--color-lightness-base) + var(--color-lightness-step) * var(--multiplier-2));
+  --scale-l-12: calc(var(--color-lightness-base) + var(--color-lightness-step) * var(--multiplier-3));
 
   --scale-c-1: var(--color-chroma-scale-min);
   --scale-c-2: calc(
@@ -110,10 +110,19 @@
   --base-neutral: oklch(
     from var(--base-brand) l calc(c * var(--color-chroma-multiplier-neutral)) h
   );
-  --base-pressure: oklch(from var(--base-brand) l c calc(h + var(--color-harmony-triad-step)));
+  --base-pressure: oklch(
+    from var(--base-brand) l c
+      calc(
+        h + var(--color-harmony-triad-step) + var(--color-harmony-compression) *
+          var(--multiplier-half)
+      )
+  );
   --base-signal: oklch(
     from var(--base-brand) l c
-      calc(h + var(--color-harmony-triad-step) * var(--multiplier-2))
+      calc(
+        h + var(--color-harmony-triad-step) * var(--multiplier-2) - var(--color-harmony-compression) *
+          var(--multiplier-half)
+      )
   );
 
   /* Derived 12-step scales. */

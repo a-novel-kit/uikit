@@ -34,36 +34,39 @@ export const feedbackColors = {
 
 # Color system
 
-The interface uses one triad on a neutral field. Electric blue carries agency, rose-magenta carries
-pressure, and acid green signals resolution. The three anchors share lightness and chroma while their
-hues stay exactly `120°` apart.
+The interface uses a compressed triadic harmony on a neutral field. Electric blue carries agency, hot
+magenta carries pressure, and electric amber signals resolution. At solid step `9`, the three anchors
+share lightness `0.78` and chroma `0.17`; their hues form `130° / 100° / 130°` gaps.
 
 ## Harmony
 
 <div className="color-harmony">
   <div className="color-harmony__swatch color-harmony__swatch--brand">
     <strong>Brand</strong>
-    <code>232.66°</code>
+    <code>212.66°</code>
     <span>Agency · focus · progress</span>
   </div>
   <div className="color-harmony__swatch color-harmony__swatch--pressure">
     <strong>Pressure</strong>
-    <code>352.66°</code>
+    <code>342.66°</code>
     <span>Urgency · caution · failure</span>
   </div>
   <div className="color-harmony__swatch color-harmony__swatch--signal">
     <strong>Signal</strong>
-    <code>112.66°</code>
+    <code>82.66°</code>
     <span>Readiness · success · reward</span>
   </div>
 </div>
 
-<div className="color-harmony__relation" aria-label="Each hue is separated by 120 degrees">
-  <span>120° · 120° · 120°</span>
+<div
+  className="color-harmony__relation"
+  aria-label="Hue gaps: 130 degrees from brand to pressure, 100 from pressure to signal, and 130 from signal to brand"
+>
+  <span>130° · 100° · 130°</span>
 </div>
 
-Pressure and signal derive from the brand hue with one shared `120` step. Changing the blue rotates
-the complete triad without breaking its geometry.
+Pressure and signal sit symmetrically around the brand complement. The `20°` compression narrows
+their mutual gap while preserving equal separation from brand.
 
 ## Chromatic hierarchy
 
