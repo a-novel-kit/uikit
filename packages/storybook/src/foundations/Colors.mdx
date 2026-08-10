@@ -34,8 +34,9 @@ export const feedbackColors = {
 
 # Color system
 
-The interface uses one complementary pair on a neutral field. Electric blue carries agency and
-progress. Its warm copper complement carries narrative pressure, caution, and failure.
+The interface uses one triad on a neutral field. Electric blue carries agency, rose-magenta carries
+pressure, and acid green signals resolution. The three anchors share lightness and chroma while their
+hues stay exactly `120°` apart.
 
 ## Harmony
 
@@ -45,22 +46,48 @@ progress. Its warm copper complement carries narrative pressure, caution, and fa
     <code>232.66°</code>
     <span>Agency · focus · progress</span>
   </div>
-  <div className="color-harmony__relation" aria-label="Separated by 180 degrees">
-    <span>180°</span>
-  </div>
   <div className="color-harmony__swatch color-harmony__swatch--pressure">
     <strong>Pressure</strong>
-    <code>52.66°</code>
+    <code>352.66°</code>
     <span>Urgency · caution · failure</span>
+  </div>
+  <div className="color-harmony__swatch color-harmony__swatch--signal">
+    <strong>Signal</strong>
+    <code>112.66°</code>
+    <span>Readiness · success · reward</span>
   </div>
 </div>
 
-Pressure derives from the brand hue with `calc(h + 180)`. Both families share the same base chroma
-and calculated scale, so changing the blue keeps the pair balanced.
+<div className="color-harmony__relation" aria-label="Each hue is separated by 120 degrees">
+  <span>120° · 120° · 120°</span>
+</div>
+
+Pressure and signal derive from the brand hue with one shared `120` step. Changing the blue rotates
+the complete triad without breaking its geometry.
+
+## Chromatic hierarchy
+
+<div className="color-usage" aria-label="Relative chromatic emphasis: 60 brand, 30 pressure, 10 signal">
+  <div className="color-usage__brand">
+    <strong>60</strong>
+    <span>Brand</span>
+  </div>
+  <div className="color-usage__pressure">
+    <strong>30</strong>
+    <span>Pressure</span>
+  </div>
+  <div className="color-usage__signal">
+    <strong>10</strong>
+    <span>Signal</span>
+  </div>
+</div>
+
+These proportions guide chromatic moments rather than total page area. Neutral surfaces remain the
+field; signal stays rare enough to retain meaning.
 
 <div className="color-gradient">
   <strong>Expressive accent</strong>
-  <span>The increasing OKLCH arc is reserved for key art, energy, and transitional surfaces.</span>
+  <span>Three localized glows add energy without interpolating through a rainbow of extra hues.</span>
 </div>
 
 ## Semantic colors
@@ -69,7 +96,7 @@ Components consume semantic aliases so palette adjustments stay separate from co
 
 <ColorPalette>
   <ColorItem title="Interface roles" subtitle="Public component contracts" colors={interfaceColors} />
-  <ColorItem title="Feedback roles" subtitle="Two hues, explicit intent" colors={feedbackColors} />
+  <ColorItem title="Feedback roles" subtitle="Three hues, explicit intent" colors={feedbackColors} />
 </ColorPalette>
 
 <div className="feedback-grid">
@@ -92,7 +119,7 @@ Components consume semantic aliases so palette adjustments stay separate from co
 </div>
 
 Feedback never depends on hue alone. Labels and icons carry meaning; surface, border, and text steps
-increase emphasis inside the two-family grammar.
+increase emphasis inside the three-family grammar.
 
 ## Primitive scales
 
@@ -103,6 +130,7 @@ near the solid-control range.
   <ColorItem title="color.neutral" subtitle="Surfaces, borders, and text" colors={scale("neutral")} />
   <ColorItem title="color.brand" subtitle="Primary Agora actions and emphasis" colors={scale("brand")} />
   <ColorItem title="color.pressure" subtitle="Narrative intensity and adverse feedback" colors={scale("pressure")} />
+  <ColorItem title="color.signal" subtitle="Readiness, successful outcomes, and rewards" colors={scale("signal")} />
 </ColorPalette>
 
 ## Authoring rule

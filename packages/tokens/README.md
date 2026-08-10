@@ -24,18 +24,19 @@ define the system's scale and are not component-level choices.
 
 ## Color
 
-An electric-blue base generates the brand scale. Its exact `180deg` OKLCH complement generates
-pressure, while a reduced-chroma copy of the brand base generates neutral. Shared lightness and chroma
-ramps produce each 12-step scale in CSS.
+An electric-blue base generates the brand scale. Two `120deg` OKLCH rotations generate pressure and
+signal, while a reduced-chroma copy of the brand base generates neutral. Shared lightness and chroma
+ramps produce each 12-step scale in CSS. Chroma peaks at step `9`, where solid controls and expressive
+accents need the clearest hue.
 
 ```css
 --color-brand-9: oklch(from var(--base-brand) var(--scale-l-9) calc(c * var(--scale-c-9)) h);
 ```
 
 Components use semantic aliases such as `--color-action-primary` and `--color-feedback-error-text`.
-Brand carries agency and favorable progress; pressure carries urgency, caution, and failure. Feedback
-components pair color with a label or icon. Primitive palette steps remain available for design-system
-work. Relative color syntax requires Chrome 119+, Safari 16.4+, or Firefox 128+.
+Brand carries agency, pressure carries urgency and failure, and signal carries readiness and successful
+outcomes. Feedback components pair color with a label or icon. Primitive palette steps remain available
+for design-system work. Relative color syntax requires Chrome 119+, Safari 16.4+, or Firefox 128+.
 
 ## Spacing, shape, and motion
 

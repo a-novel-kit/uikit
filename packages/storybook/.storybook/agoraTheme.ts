@@ -1,13 +1,13 @@
 import { create } from "storybook/theming";
 
 const colors = {
-  action: "#61b8e4",
-  actionMuted: "#ace3ff",
-  border: "#3e4549",
+  action: "#00bbfc",
+  actionMuted: "#afe3ff",
+  border: "#414446",
   canvas: "#0e1010",
-  hover: "#2d3235",
-  pressure: "#e1996c",
-  subtle: "#1d2022",
+  hover: "#2f3233",
+  pressure: "#fb7ab6",
+  subtle: "#1e2021",
   text: "#f0f2f3",
   textMuted: "#d6dbdd",
 } as const;

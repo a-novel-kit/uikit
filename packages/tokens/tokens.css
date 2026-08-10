@@ -52,13 +52,13 @@
   --color-lightness-base: 0.53;
   --color-lightness-min: 0.17;
   --color-lightness-step: 0.071818;
-  --color-chroma-base: 0.14;
-  --color-chroma-min: 0.25;
-  --color-chroma-step: 0.125;
+  --color-chroma-base: 0.17;
+  --color-chroma-scale-min: 0.2;
+  --color-chroma-scale-step: 0.1;
   --color-hue-brand: 232.66;
-  --color-harmony-complement: 180;
+  --color-harmony-triad-step: 120;
 
-  --color-chroma-multiplier-neutral: 0.085714;
+  --color-chroma-multiplier-neutral: 0.070588;
 
   --scale-l-1: calc(var(--color-lightness-min) + var(--color-lightness-step) * var(--multiplier-0));
   --scale-l-2: calc(var(--color-lightness-min) + var(--color-lightness-step) * var(--multiplier-1));
@@ -73,17 +73,33 @@
   --scale-l-11: calc(var(--color-lightness-min) + var(--color-lightness-step) * var(--multiplier-10));
   --scale-l-12: calc(var(--color-lightness-min) + var(--color-lightness-step) * var(--multiplier-11));
 
-  --scale-c-1: var(--color-chroma-min);
-  --scale-c-2: calc(var(--color-chroma-min) + var(--color-chroma-step) * var(--multiplier-2));
-  --scale-c-3: calc(var(--color-chroma-min) + var(--color-chroma-step) * var(--multiplier-4));
-  --scale-c-4: calc(var(--color-chroma-min) + var(--color-chroma-step) * var(--multiplier-5));
-  --scale-c-5: calc(var(--color-chroma-min) + var(--color-chroma-step) * var(--multiplier-6));
-  --scale-c-6: var(--scale-c-5);
-  --scale-c-7: var(--scale-c-5);
-  --scale-c-8: var(--scale-c-4);
-  --scale-c-9: var(--scale-c-3);
-  --scale-c-10: calc(var(--color-chroma-min) + var(--color-chroma-step) * var(--multiplier-3));
-  --scale-c-11: var(--scale-c-2);
+  --scale-c-1: var(--color-chroma-scale-min);
+  --scale-c-2: calc(
+    var(--color-chroma-scale-min) + var(--color-chroma-scale-step) * var(--multiplier-1)
+  );
+  --scale-c-3: calc(
+    var(--color-chroma-scale-min) + var(--color-chroma-scale-step) * var(--multiplier-2)
+  );
+  --scale-c-4: calc(
+    var(--color-chroma-scale-min) + var(--color-chroma-scale-step) * var(--multiplier-3)
+  );
+  --scale-c-5: calc(
+    var(--color-chroma-scale-min) + var(--color-chroma-scale-step) * var(--multiplier-4)
+  );
+  --scale-c-6: calc(
+    var(--color-chroma-scale-min) + var(--color-chroma-scale-step) * var(--multiplier-5)
+  );
+  --scale-c-7: calc(
+    var(--color-chroma-scale-min) + var(--color-chroma-scale-step) * var(--multiplier-6)
+  );
+  --scale-c-8: calc(
+    var(--color-chroma-scale-min) + var(--color-chroma-scale-step) * var(--multiplier-7)
+  );
+  --scale-c-9: calc(
+    var(--color-chroma-scale-min) + var(--color-chroma-scale-step) * var(--multiplier-8)
+  );
+  --scale-c-10: var(--scale-c-8);
+  --scale-c-11: var(--scale-c-4);
   --scale-c-12: var(--scale-c-1);
 
   --base-brand: oklch(
@@ -94,7 +110,11 @@
   --base-neutral: oklch(
     from var(--base-brand) l calc(c * var(--color-chroma-multiplier-neutral)) h
   );
-  --base-pressure: oklch(from var(--base-brand) l c calc(h + var(--color-harmony-complement)));
+  --base-pressure: oklch(from var(--base-brand) l c calc(h + var(--color-harmony-triad-step)));
+  --base-signal: oklch(
+    from var(--base-brand) l c
+      calc(h + var(--color-harmony-triad-step) * var(--multiplier-2))
+  );
 
   /* Derived 12-step scales. */
   --color-neutral-1: oklch(from var(--base-neutral) var(--scale-l-1) calc(c * var(--scale-c-1)) h);
@@ -136,6 +156,19 @@
   --color-pressure-11: oklch(from var(--base-pressure) var(--scale-l-11) calc(c * var(--scale-c-11)) h);
   --color-pressure-12: oklch(from var(--base-pressure) var(--scale-l-12) calc(c * var(--scale-c-12)) h);
 
+  --color-signal-1: oklch(from var(--base-signal) var(--scale-l-1) calc(c * var(--scale-c-1)) h);
+  --color-signal-2: oklch(from var(--base-signal) var(--scale-l-2) calc(c * var(--scale-c-2)) h);
+  --color-signal-3: oklch(from var(--base-signal) var(--scale-l-3) calc(c * var(--scale-c-3)) h);
+  --color-signal-4: oklch(from var(--base-signal) var(--scale-l-4) calc(c * var(--scale-c-4)) h);
+  --color-signal-5: oklch(from var(--base-signal) var(--scale-l-5) calc(c * var(--scale-c-5)) h);
+  --color-signal-6: oklch(from var(--base-signal) var(--scale-l-6) calc(c * var(--scale-c-6)) h);
+  --color-signal-7: oklch(from var(--base-signal) var(--scale-l-7) calc(c * var(--scale-c-7)) h);
+  --color-signal-8: oklch(from var(--base-signal) var(--scale-l-8) calc(c * var(--scale-c-8)) h);
+  --color-signal-9: oklch(from var(--base-signal) var(--scale-l-9) calc(c * var(--scale-c-9)) h);
+  --color-signal-10: oklch(from var(--base-signal) var(--scale-l-10) calc(c * var(--scale-c-10)) h);
+  --color-signal-11: oklch(from var(--base-signal) var(--scale-l-11) calc(c * var(--scale-c-11)) h);
+  --color-signal-12: oklch(from var(--base-signal) var(--scale-l-12) calc(c * var(--scale-c-12)) h);
+
   --color-surface-canvas: var(--color-neutral-1);
   --color-surface-subtle: var(--color-neutral-2);
   --color-text-primary: var(--color-neutral-12);
@@ -150,20 +183,32 @@
   --color-feedback-info-surface: var(--color-brand-2);
   --color-feedback-info-border: var(--color-brand-7);
   --color-feedback-info-text: var(--color-brand-11);
-  --color-feedback-success-surface: var(--color-brand-2);
-  --color-feedback-success-border: var(--color-brand-7);
-  --color-feedback-success-text: var(--color-brand-11);
+  --color-feedback-success-surface: var(--color-signal-2);
+  --color-feedback-success-border: var(--color-signal-7);
+  --color-feedback-success-text: var(--color-signal-11);
   --color-feedback-warning-surface: var(--color-pressure-2);
   --color-feedback-warning-border: var(--color-pressure-7);
   --color-feedback-warning-text: var(--color-pressure-10);
   --color-feedback-error-surface: var(--color-pressure-3);
   --color-feedback-error-border: var(--color-pressure-8);
   --color-feedback-error-text: var(--color-pressure-11);
-  --gradient-accent: linear-gradient(
-    135deg in oklch increasing hue,
-    var(--color-brand-9),
-    var(--color-pressure-9)
-  );
+  --gradient-accent:
+    radial-gradient(
+      circle at 12% 15%,
+      color-mix(in oklch, var(--color-brand-9) 88%, transparent),
+      transparent 46%
+    ),
+    radial-gradient(
+      circle at 88% 18%,
+      color-mix(in oklch, var(--color-pressure-9) 84%, transparent),
+      transparent 48%
+    ),
+    radial-gradient(
+      circle at 50% 112%,
+      color-mix(in oklch, var(--color-signal-9) 80%, transparent),
+      transparent 54%
+    ),
+    var(--color-surface-subtle);
 
   --font-family-display: "TeX Gyre Heros Cn", "Arial Narrow", "Noto Sans", sans-serif;
   --font-family-interface: "TeX Gyre Heros", Arimo, "Noto Sans", Arial, system-ui, sans-serif;
