@@ -25,7 +25,7 @@ define the system's scale and are not component-level choices.
 ## Color
 
 An electric-blue base at `oklch(0.78 0.17 212.66)` anchors the brand scale. The system applies a
-`20deg` symmetric compression to a `120deg` triad, producing `130deg / 100deg / 130deg` gaps between
+`40deg` symmetric compression to a `120deg` triad, producing `140deg / 80deg / 140deg` gaps between
 brand, pressure, and signal. A reduced-chroma copy of brand generates neutral.
 
 A shared `0.07` lightness step produces each 12-step scale around solid step `9`. Chroma also peaks
