@@ -19,4 +19,4 @@ Use native elements first, preserve their keyboard behavior, and provide an acce
 
 Use `Popover` for non-modal supporting content and `Dialog` when the rest of the page must be unavailable. Escape closes temporary layers. Restoring focus to the invoking control is part of closing behavior.
 
-Storybook runs WCAG 2 A/AA, WCAG 2.1 A/AA, WCAG 2.2 AA, and best-practice checks on every rendered story. Automated checks supplement keyboard and screen-reader review.
+Storybook runs WCAG 2 A/AA, WCAG 2.1 A/AA, WCAG 2.2 AA, and best-practice checks on every rendered story. Run `pnpm test:storybook` locally; CI runs the same Chromium suite. Automated checks supplement keyboard and screen-reader review.

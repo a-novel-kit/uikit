@@ -38,6 +38,7 @@
     "@storybook/addon-a11y": "catalog:",
     "@storybook/addon-docs": "catalog:",
     "@storybook/addon-svelte-csf": "catalog:",
+    "@storybook/addon-vitest": "catalog:",
     "colorjs.io": "^0.7.1",
     "remark-gfm": "4.0.1"
   },

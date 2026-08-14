@@ -5,7 +5,7 @@ import { mergeConfig } from "vite";
 import type { StorybookConfig } from "@storybook/svelte-vite";
 
 const config: StorybookConfig = {
-  stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|ts|svelte)"],
+  stories: ["../src/**/*.mdx", "../src/**/*.stories.{js,ts,svelte}"],
   addons: ["@a-novel-kit/uikit-storybook"],
   framework: "@storybook/svelte-vite",
   viteFinal: async (config) =>

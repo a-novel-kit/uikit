@@ -16,12 +16,14 @@ export const addons = [
   resolve("@storybook/addon-svelte-csf/preset"),
   resolve("@storybook/addon-docs/preset"),
   resolve("@storybook/addon-a11y/preset"),
+  resolve("@storybook/addon-vitest/preset"),
 ];
 
 export const managerEntries = (entries: string[] = []) => [
   ...entries,
   resolve("@storybook/addon-docs/manager"),
   resolve("@storybook/addon-a11y/manager"),
+  resolve("@storybook/addon-vitest/manager"),
 ];
 
 export const previewAnnotations = (entries: string[] = []) => [

@@ -24,6 +24,8 @@ jobs:
 
   test-js:
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.0-noble
     needs:
       - lint-js
     permissions:
