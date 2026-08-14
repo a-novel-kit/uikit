@@ -43,9 +43,13 @@
     const canvas = within(canvasElement);
     const copy = canvas.getByRole("button", { name: "Copy" });
     const refresh = canvas.getByRole("button", { name: "Refresh" });
+    const preview = canvas.getByRole("button", { name: "Preview" });
+    const help = canvas.getByRole("link", { name: "Help" });
     copy.focus();
     await userEvent.keyboard("{ArrowRight}");
     await expect(refresh).toHaveFocus();
+    await expect(help.getBoundingClientRect().height).toBe(preview.getBoundingClientRect().height);
+    await expect(getComputedStyle(help).borderRadius).toBe(getComputedStyle(preview).borderRadius);
   }
 </script>
 
