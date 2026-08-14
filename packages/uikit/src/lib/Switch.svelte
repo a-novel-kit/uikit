@@ -3,9 +3,13 @@
 
   import type { HTMLInputAttributes } from "svelte/elements";
 
+  /** Props for a native checkbox presented as an immediate on/off switch. */
   export interface SwitchProps extends Omit<HTMLInputAttributes, "type" | "role" | "checked"> {
+    /** Optional switch label. */
     label?: Content;
+    /** Supporting content shown below the label. */
     description?: Content;
+    /** Current on/off state. */
     checked?: boolean;
   }
 </script>

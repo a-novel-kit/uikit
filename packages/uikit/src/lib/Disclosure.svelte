@@ -1,8 +1,11 @@
 <script lang="ts" module>
   import type { HTMLDetailsAttributes } from "svelte/elements";
 
+  /** Props for a single native disclosure. */
   export interface DisclosureProps extends Omit<HTMLDetailsAttributes, "open"> {
+    /** Plain-text disclosure trigger. */
     summary: string;
+    /** Current expanded state. */
     open?: boolean;
   }
 </script>

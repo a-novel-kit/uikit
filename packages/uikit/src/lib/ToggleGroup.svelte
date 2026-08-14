@@ -4,8 +4,11 @@
 
   /** Props for grouping related independent toggle buttons. */
   export interface ToggleGroupProps extends Omit<HTMLAttributes<HTMLDivElement>, "children"> {
+    /** Accessible name for the group. */
     label: string;
+    /** Direction in which toggles are arranged. */
     orientation?: "horizontal" | "vertical";
+    /** ToggleButton children. */
     children: Snippet;
   }
 </script>

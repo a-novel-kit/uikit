@@ -4,16 +4,23 @@
 
   /** Attributes that connect a button to its native popover. */
   export interface PopoverTriggerAttributes {
+    /** Identifier of the popover controlled by the trigger. */
     popovertarget: string;
+    /** Native action performed by the trigger. */
     popovertargetaction: "toggle";
   }
 
   /** Props for non-modal content anchored to a composed trigger. */
   export interface PopoverProps extends Omit<HTMLAttributes<HTMLDivElement>, "children" | "popover" | "ontoggle"> {
+    /** Renders the trigger with its required native popover attributes. */
     trigger: Snippet<[PopoverTriggerAttributes]>;
+    /** Content shown in the popover. */
     children?: Snippet;
+    /** Current popover visibility. */
     open?: boolean;
+    /** Preferred side of the trigger. */
     position?: "top" | "right" | "bottom" | "left";
+    /** Runs after the popover visibility changes. */
     onOpenChange?: (open: boolean) => void;
   }
 </script>

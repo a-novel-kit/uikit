@@ -3,9 +3,11 @@
 
   import type { Snippet } from "svelte";
 
+  /** Props for a square button whose visible content is an icon. */
   export interface IconButtonProps extends Omit<ButtonProps, "children" | "square"> {
     /** Required accessible name for the icon-only control. */
     label: string;
+    /** Icon content rendered inside the button. */
     children: Snippet;
   }
 </script>

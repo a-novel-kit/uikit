@@ -8,9 +8,13 @@
     ToolbarTypes.RootProps,
     "aria-label" | "children" | "loop" | "orientation"
   > {
+    /** Accessible name for the toolbar. */
     label: string;
+    /** Axis along which controls and keyboard navigation are arranged. */
     orientation?: "horizontal" | "vertical";
+    /** Wraps keyboard navigation from the last control to the first. */
     loop?: boolean;
+    /** Toolbar controls and groups. */
     children: Snippet;
   }
 </script>

@@ -1,14 +1,20 @@
 <script lang="ts" module>
+  import type { ComponentSize } from "./types";
+
   import type { HTMLInputAttributes } from "svelte/elements";
 
   /** Props for a styled native file input. */
   export interface FileInputProps extends Omit<HTMLInputAttributes, "type" | "value"> {
-    controlSize?: "sm" | "md" | "lg";
+    /** Sets the control height and type scale. */
+    controlSize?: ComponentSize;
+    /** Applies the invalid surface and focus treatment. */
     invalid?: boolean;
   }
 </script>
 
 <script lang="ts">
+  import { resolveInvalidState } from "./selection";
+
   let {
     controlSize = "md",
     invalid = false,
@@ -17,7 +23,7 @@
     ...rest
   }: FileInputProps = $props();
 
-  const isInvalid = $derived(invalid || ariaInvalid === true || ariaInvalid === "true");
+  const isInvalid = $derived(resolveInvalidState(invalid, ariaInvalid));
 </script>
 
 <input

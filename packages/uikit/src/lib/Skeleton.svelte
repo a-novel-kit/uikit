@@ -1,7 +1,9 @@
 <script lang="ts" module>
   import type { HTMLAttributes } from "svelte/elements";
 
+  /** Props for a non-interactive loading placeholder. */
   export interface SkeletonProps extends HTMLAttributes<HTMLSpanElement> {
+    /** Geometry of the placeholder. */
     shape?: "text" | "rectangle" | "circle";
   }
 </script>

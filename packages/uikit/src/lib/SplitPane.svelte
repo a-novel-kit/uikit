@@ -2,6 +2,7 @@
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
 
+  /** Props for a main region paired with a responsive secondary pane. */
   export interface SplitPaneProps extends HTMLAttributes<HTMLDivElement> {
     /** Secondary pane content. */
     aside: Snippet;

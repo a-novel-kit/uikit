@@ -1,6 +1,7 @@
 <script lang="ts" module>
   import type { HTMLAttributes } from "svelte/elements";
 
+  /** Native attributes for content available only to assistive technology. */
   export type VisuallyHiddenProps = HTMLAttributes<HTMLSpanElement>;
 </script>
 

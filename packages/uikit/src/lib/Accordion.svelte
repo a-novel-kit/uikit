@@ -4,7 +4,9 @@
 
   /** Props for a composed group of native disclosure items. */
   export interface AccordionProps extends Omit<HTMLAttributes<HTMLDivElement>, "children"> {
+    /** Lets more than one item remain open. */
     multiple?: boolean;
+    /** AccordionItem children. */
     children: Snippet;
   }
 </script>

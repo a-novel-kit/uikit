@@ -1,8 +1,12 @@
 <script lang="ts" module>
+  import type { FeedbackTone } from "./types";
+
   import type { HTMLAttributes } from "svelte/elements";
 
+  /** Props for a compact inline status message. */
   export interface InlineMessageProps extends HTMLAttributes<HTMLSpanElement> {
-    tone?: "info" | "success" | "warning" | "error";
+    /** Semantic status conveyed by the message. */
+    tone?: FeedbackTone;
   }
 </script>
 

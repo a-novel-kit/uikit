@@ -1,13 +1,19 @@
 <script lang="ts" module>
   import type { Content } from "./content";
+  import type { FeedbackTone } from "./types";
 
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
 
+  /** Props for a prominent status message with optional actions. */
   export interface AlertProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
-    tone?: "info" | "success" | "warning" | "error";
+    /** Semantic status conveyed by the alert. */
+    tone?: FeedbackTone;
+    /** Alert heading. */
     title: Content;
+    /** Optional leading graphic. */
     icon?: Snippet;
+    /** Optional controls rendered after the message. */
     actions?: Snippet;
   }
 </script>

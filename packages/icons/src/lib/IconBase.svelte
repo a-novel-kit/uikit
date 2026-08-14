@@ -2,12 +2,15 @@
   import type { Snippet } from "svelte";
   import type { SVGAttributes } from "svelte/elements";
 
+  /** Props shared by custom Agora SVG icons. */
   export interface IconProps extends Omit<SVGAttributes<SVGSVGElement>, "children"> {
     /** Square rendered size. Components inherit surrounding text color. */
     size?: number | string;
+    /** Width of the icon strokes. */
     strokeWidth?: number | string;
     /** Use only when the icon has no adjacent visible label. */
     label?: string;
+    /** SVG geometry rendered inside the shared icon frame. */
     children: Snippet;
   }
 </script>

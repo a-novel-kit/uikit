@@ -1,11 +1,12 @@
 <script lang="ts" module>
-  import type { LayoutGap } from "./Stack.svelte";
+  import type { ComponentSize, LayoutGap } from "./types";
 
   import type { HTMLAttributes } from "svelte/elements";
 
+  /** Props for an intrinsic grid that wraps at a minimum item width. */
   export interface GridProps extends HTMLAttributes<HTMLDivElement> {
     /** Minimum card width before the intrinsic grid wraps. */
-    minItemWidth?: "sm" | "md" | "lg";
+    minItemWidth?: ComponentSize;
     /** Space between grid items. */
     gap?: LayoutGap;
   }

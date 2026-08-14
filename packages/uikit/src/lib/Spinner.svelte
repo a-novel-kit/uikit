@@ -1,9 +1,14 @@
 <script lang="ts" module>
+  import type { ComponentSize } from "./types";
+
   import type { HTMLAttributes } from "svelte/elements";
 
+  /** Props for an indeterminate loading indicator. */
   export interface SpinnerProps extends HTMLAttributes<HTMLSpanElement> {
+    /** Accessible description of the pending work. */
     label: string;
-    size?: "sm" | "md" | "lg";
+    /** Indicator diameter. */
+    size?: ComponentSize;
   }
 </script>
 

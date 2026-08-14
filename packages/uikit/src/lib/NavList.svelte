@@ -2,18 +2,29 @@
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
 
+  /** One application-owned destination in a NavList. */
   export interface NavigationItem {
+    /** Visible destination name. */
     label: string;
+    /** Application-owned destination URL. */
     href: string;
+    /** Marks the destination as the current page. */
     current?: boolean;
+    /** Prevents following the destination. */
     disabled?: boolean;
+    /** Optional compact status or count. */
     badge?: string | number;
+    /** Optional leading graphic. */
     icon?: Snippet;
   }
 
+  /** Props for a primary or local navigation list. */
   export interface NavListProps extends Omit<HTMLAttributes<HTMLUListElement>, "children"> {
+    /** Destinations shown in the list. */
     items: NavigationItem[];
+    /** Direction in which destinations are arranged. */
     orientation?: "horizontal" | "vertical";
+    /** Replaces visible item copy while preserving link semantics. */
     renderItem?: Snippet<[NavigationItem]>;
   }
 </script>

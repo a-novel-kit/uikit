@@ -24,6 +24,7 @@ const fonts = {
   mono: '"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace',
 } as const;
 
+/** Dark Storybook manager and documentation theme derived from Agora tokens. */
 export const agoraTheme = create({
   base: "dark",
   brandTitle: "Agora UI",

@@ -2,10 +2,15 @@
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
 
+  /** Props for a composable content surface. */
   export interface CardProps extends HTMLAttributes<HTMLDivElement> {
+    /** Semantic surface depth. */
     surface?: "plain" | "subtle" | "raised" | "overlay";
+    /** Internal spacing applied around all card regions. */
     padding?: "none" | "sm" | "md" | "lg";
+    /** Optional leading region. */
     header?: Snippet;
+    /** Optional trailing region. */
     footer?: Snippet;
   }
 </script>

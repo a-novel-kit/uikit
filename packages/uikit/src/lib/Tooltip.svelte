@@ -3,13 +3,20 @@
 
   import type { Snippet } from "svelte";
 
+  /** Primitive attributes applied to a composed tooltip trigger. */
   export type TooltipTriggerAttributes = Record<string, unknown>;
 
+  /** Props for a short description attached to a trigger. */
   export interface TooltipProps {
+    /** Description shown in the tooltip. */
     content: Content;
+    /** Renders the trigger with its required primitive attributes. */
     trigger: Snippet<[TooltipTriggerAttributes]>;
+    /** Preferred side of the trigger. */
     side?: "top" | "right" | "bottom" | "left";
+    /** Delay in milliseconds before the tooltip opens. */
     delayDuration?: number;
+    /** Prevents the tooltip from opening. */
     disabled?: boolean;
   }
 </script>

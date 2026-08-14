@@ -1,8 +1,9 @@
 <script lang="ts" module>
-  import type { LayoutGap } from "./Stack.svelte";
+  import type { LayoutGap } from "./types";
 
   import type { HTMLAttributes } from "svelte/elements";
 
+  /** Props for a wrapping horizontal layout with tokenized spacing. */
   export interface InlineProps extends HTMLAttributes<HTMLDivElement> {
     /** Space between direct children, expressed on the public spacing scale. */
     gap?: LayoutGap;

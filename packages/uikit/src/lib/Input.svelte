@@ -1,11 +1,13 @@
 <script lang="ts" module>
+  import type { ComponentSize } from "./types";
+
   import type { Snippet } from "svelte";
   import type { HTMLInputAttributes } from "svelte/elements";
 
   /** Props for a single-line input with optional content at either edge. */
   export interface InputProps extends HTMLInputAttributes {
     /** Sets the control height and type scale. */
-    controlSize?: "sm" | "md" | "lg";
+    controlSize?: ComponentSize;
     /** Applies the invalid surface and focus treatment. */
     invalid?: boolean;
     /** Renders content before the editable value. */

@@ -4,19 +4,31 @@
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
 
+  /** Accessibility attributes passed from Field to its composed control. */
   export interface FieldControlProps {
+    /** Stable identifier targeted by the generated label. */
     id: string;
+    /** Identifiers for the generated hint and error content. */
     "aria-describedby"?: string;
+    /** Indicates that the field currently has an error. */
     "aria-invalid"?: true;
+    /** Indicates that the field is required. */
     required?: true;
   }
 
+  /** Props for composing a label, control, hint, and validation error. */
   export interface FieldProps extends Omit<HTMLAttributes<HTMLDivElement>, "children"> {
+    /** Optional control label. */
     label?: Content;
+    /** Optional supporting content shown before an error. */
     hint?: Content;
+    /** Optional validation message. */
     error?: Content;
+    /** Marks the composed control as required. */
     required?: boolean;
+    /** Stable identifier used by the label and supporting content. */
     controlId?: string;
+    /** Renders the control with generated accessibility attributes. */
     children: Snippet<[FieldControlProps]>;
   }
 </script>

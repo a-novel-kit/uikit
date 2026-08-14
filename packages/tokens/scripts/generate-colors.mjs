@@ -10,6 +10,7 @@ const scaleLength = 12;
 const scaleDivisions = scaleLength - 1;
 const scaleMultipliers = Array.from({ length: scaleLength }, (_, index) => index);
 
+// Compact authoring inputs; generated scales and public metadata derive from these values.
 const bases = Object.freeze({
   harmony: Object.freeze({
     halfTurn: 180,
@@ -56,6 +57,7 @@ const familyHues = Object.freeze({
   signal: round(normalizeHue(oppositionCenter + bases.harmony.oppositionSpread / 2), 2),
 });
 
+/** Finds the highest Display P3 chroma reachable for a hue within the authored lightness range. */
 const findGamutCusp = (hue) => {
   const sampleCount = Math.round(
     (bases.gamutCusp.lightnessMax - bases.gamutCusp.lightnessMin) / bases.gamutCusp.lightnessStep
@@ -85,6 +87,7 @@ const familyCusps = Object.freeze(
 const toOklch = ({ chroma, hue, lightness }) =>
   `oklch(${round(lightness)} ${round(chroma)} ${round(normalizeHue(hue), 2)})`;
 
+/** Derives one smoothstep scale against the selected hue's gamut cusp. */
 const accentScale = (family, hue) =>
   scaleMultipliers.map((multiplier) => {
     const progress = multiplier / scaleDivisions;

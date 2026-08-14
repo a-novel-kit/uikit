@@ -1,8 +1,11 @@
 <script lang="ts" module>
   import type { HTMLMeterAttributes } from "svelte/elements";
 
+  /** Props for a labeled native scalar measurement. */
   export interface MeterProps extends HTMLMeterAttributes {
+    /** Visible label for the measurement. */
     label: string;
+    /** Displays the current value beside the label. */
     showValue?: boolean;
   }
 </script>

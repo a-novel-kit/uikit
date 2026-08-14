@@ -1,8 +1,9 @@
 <script lang="ts" module>
+  import type { LayoutGap } from "./types";
+
   import type { HTMLAttributes } from "svelte/elements";
 
-  export type LayoutGap = "0" | "1" | "2" | "3" | "4" | "6" | "8" | "12" | "16";
-
+  /** Props for a vertical layout with tokenized spacing. */
   export interface StackProps extends HTMLAttributes<HTMLDivElement> {
     /** Space between direct children, expressed on the public spacing scale. */
     gap?: LayoutGap;

@@ -1,8 +1,6 @@
-// Vendor every web font into THIS repo as same-origin WOFF2 — no CDN, no runtime
-// font dependency. TeX Gyre Heros (GFL) is fetched from CTAN and converted to
-// WOFF2 by us; the OFL variable voices (Lora, JetBrains Mono, Arimo) are copied
-// out of their npm packages into our own files/ dir. Re-run to refresh the
-// vendored bytes. The produced files/ are committed — they ARE the fonts.
+/**
+ * Vendors same-origin WOFF2 files and required licenses. Generated files are committed.
+ */
 import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
@@ -18,8 +16,7 @@ mkdirSync(outDir, { recursive: true });
 
 // 1. TeX Gyre Heros + its Condensed sibling, from CTAN (GUST Font License).
 //    We convert the OTF to WOFF2 ourselves — the bytes never touch a CDN.
-// A pinned, full-chain CTAN mirror (mirrors.ctan.org load-balances to random
-// mirrors, some with broken TLS). curl uses the system CA bundle.
+// A pinned CTAN mirror avoids load-balanced mirrors with inconsistent TLS.
 const CTAN = "https://ctan.math.illinois.edu/fonts/tex-gyre/opentype";
 const HEROS: Array<[string, string]> = [
   ["texgyreheros-regular.otf", "heros-regular.woff2"],

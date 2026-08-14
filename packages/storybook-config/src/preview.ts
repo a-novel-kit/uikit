@@ -36,4 +36,5 @@ const preview: Preview = {
   },
 };
 
+/** Shared dark-mode preview defaults and accessibility checks. */
 export default preview;

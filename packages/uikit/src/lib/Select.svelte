@@ -1,16 +1,11 @@
 <script lang="ts" module>
+  import type { ComponentSize, SelectionOption } from "./types";
+
   import type { Snippet } from "svelte";
   import type { HTMLInputAttributes } from "svelte/elements";
 
   /** A selectable value and its visible label. */
-  export interface SelectOption<Value extends string> {
-    /** Value submitted with the form. */
-    value: Value;
-    /** Text shown in the trigger and menu. */
-    label: string;
-    /** Prevents the option from being selected. */
-    disabled?: boolean;
-  }
+  export type SelectOption<Value extends string> = SelectionOption<Value>;
 
   /** Props for a single-value select with a themed listbox. */
   export interface SelectProps<Value extends string> {
@@ -25,7 +20,7 @@
     /** Browser autofill hint forwarded to the hidden form input. */
     autocomplete?: HTMLInputAttributes["autocomplete"];
     /** Sets the control height and type scale. */
-    controlSize?: "sm" | "md" | "lg";
+    controlSize?: ComponentSize;
     /** Applies the invalid surface and focus treatment. */
     invalid?: boolean;
     /** Requires a value during form validation. */
@@ -41,7 +36,7 @@
     /** Sets an accessible name when no visible label targets the trigger. */
     "aria-label"?: string;
     /** Reports validation state to assistive technology. */
-    "aria-invalid"?: boolean;
+    "aria-invalid"?: HTMLInputAttributes["aria-invalid"];
     /** Includes the trigger in sequential keyboard navigation. */
     tabindex?: number;
     /** Runs after the selected value changes. */
@@ -54,6 +49,8 @@
 </script>
 
 <script lang="ts" generics="Value extends string">
+  import { normalizeSelectionValue, resolveInvalidState, toSelectionItems } from "./selection";
+
   import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "@a-novel-kit/uikit-icons";
 
   import { Select as SelectPrimitive } from "bits-ui";
@@ -81,11 +78,11 @@
 
   let primitiveValue = $derived(externalValue ?? "");
 
-  const items = $derived(options.map((option) => ({ ...option })));
-  const isInvalid = $derived(invalid || ariaInvalid === true);
+  const items = $derived(toSelectionItems(options));
+  const isInvalid = $derived(resolveInvalidState(invalid, ariaInvalid));
 
   function handleValueChange(nextValue: string) {
-    const normalizedValue = nextValue === "" ? undefined : (nextValue as Value);
+    const normalizedValue = normalizeSelectionValue<Value>(nextValue);
     externalValue = normalizedValue;
     onValueChange?.(normalizedValue);
   }

@@ -1,6 +1,7 @@
 <script lang="ts" module>
   import type { HTMLAnchorAttributes } from "svelte/elements";
 
+  /** Props for a styled native anchor. */
   export interface LinkProps extends HTMLAnchorAttributes {
     /** Inline is underlined in prose; quiet is intended for navigation chrome. */
     variant?: "inline" | "quiet";

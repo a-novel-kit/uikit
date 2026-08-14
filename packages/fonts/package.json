@@ -2,11 +2,15 @@
   "name": "@a-novel-kit/uikit-fonts",
   "version": "0.1.0",
   "private": false,
+  "description": "Self-hosted interface, editorial, and monospace font faces for Agora interfaces",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/a-novel-kit/uikit.git"
   },
   "license": "MIT",
+  "sideEffects": [
+    "**/*.css"
+  ],
   "type": "module",
   "exports": {
     "./fonts.css": "./fonts.css",

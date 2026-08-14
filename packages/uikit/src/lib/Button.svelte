@@ -1,16 +1,19 @@
 <script lang="ts" module>
+  import type { ComponentSize } from "./types";
+
   import type { Snippet } from "svelte";
   import type { HTMLButtonAttributes } from "svelte/elements";
 
+  /** Props for a styled native button. */
   export interface ButtonProps extends Omit<HTMLButtonAttributes, "children"> {
     /** Content rendered inside the button. */
     children?: Snippet;
     /** Visual treatment. Choose importance with variant and meaning with tone. */
     variant?: "solid" | "outline" | "ghost";
-    /** Semantic intent. Danger is reserved for destructive or irreversible actions. */
+    /** Semantic intent; danger is reserved for destructive or irreversible actions. */
     tone?: "brand" | "neutral" | "danger";
     /** Control size. */
-    size?: "sm" | "md" | "lg";
+    size?: ComponentSize;
     /** Removes inline padding and makes the control square. Used by IconButton. */
     square?: boolean;
   }

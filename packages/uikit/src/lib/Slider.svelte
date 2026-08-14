@@ -1,9 +1,13 @@
 <script lang="ts" module>
   import type { HTMLInputAttributes } from "svelte/elements";
 
+  /** Props for a labeled native range input. */
   export interface SliderProps extends Omit<HTMLInputAttributes, "type" | "value"> {
+    /** Visible label for the range input. */
     label: string;
+    /** Current numeric value. */
     value?: number;
+    /** Displays the current value beside the label. */
     showValue?: boolean;
   }
 </script>

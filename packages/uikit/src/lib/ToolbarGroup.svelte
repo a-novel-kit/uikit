@@ -4,7 +4,9 @@
 
   /** Props for naming a related subset of controls inside a Toolbar. */
   export interface ToolbarGroupProps extends Omit<HTMLAttributes<HTMLDivElement>, "children"> {
+    /** Accessible name for the control subset. */
     label: string;
+    /** Related toolbar controls. */
     children: Snippet;
   }
 </script>

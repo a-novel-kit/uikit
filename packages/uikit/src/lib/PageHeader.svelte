@@ -4,12 +4,19 @@
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
 
+  /** Props for a page title, supporting copy, and related actions. */
   export interface PageHeaderProps extends Omit<HTMLAttributes<HTMLElement>, "title"> {
+    /** Page heading content. */
     title: Content;
+    /** Supporting content shown below the heading. */
     description?: Content;
+    /** Short context rendered before the heading. */
     eyebrow?: Content;
+    /** Page-level controls rendered beside the heading. */
     actions?: Snippet;
+    /** Root element used by the header. */
     as?: "header" | "div";
+    /** Semantic level of the generated heading. */
     headingLevel?: 1 | 2 | 3 | 4 | 5 | 6;
   }
 </script>

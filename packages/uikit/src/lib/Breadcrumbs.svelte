@@ -4,15 +4,23 @@
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
 
+  /** One location in a breadcrumb trail. */
   export interface BreadcrumbItem {
+    /** Visible location name. */
     label: string;
+    /** Application-owned URL; omitted for the current location. */
     href?: string;
   }
 
+  /** Props for a hierarchical breadcrumb trail. */
   export interface BreadcrumbsProps extends Omit<HTMLAttributes<HTMLElement>, "children"> {
+    /** Ordered locations from the broadest parent to the current page. */
     items: BreadcrumbItem[];
+    /** Accessible name for the navigation landmark. */
     label?: string;
+    /** Visual content placed between locations. */
     separator?: Content;
+    /** Replaces visible item copy while preserving the item data. */
     renderItem?: Snippet<[BreadcrumbItem]>;
   }
 </script>

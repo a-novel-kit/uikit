@@ -1,30 +1,45 @@
 <script lang="ts" module>
+  import type { SelectionOption } from "./types";
+
   import type { Snippet } from "svelte";
   import type { HTMLInputAttributes } from "svelte/elements";
 
-  export interface ComboboxOption<Value extends string> {
-    value: Value;
-    label: string;
-    disabled?: boolean;
-  }
+  /** A value available to the searchable selection control. */
+  export type ComboboxOption<Value extends string> = SelectionOption<Value>;
 
+  /** Props for a searchable single-value selection control. */
   export interface ComboboxProps<Value extends string> {
+    /** Values available for search and selection. */
     options: readonly ComboboxOption<Value>[];
+    /** Currently selected value. */
     value?: Value | undefined;
+    /** Name used for form submission. */
     name?: string;
+    /** Text shown when the search input is empty. */
     placeholder?: string;
+    /** Requires a value during form validation. */
     required?: boolean;
+    /** Prevents searching or changing the value. */
     disabled?: boolean;
+    /** Applies the invalid surface and focus treatment. */
     invalid?: boolean;
+    /** Lets an optional combobox return to its unset state. */
     allowDeselect?: boolean;
     /** Maximum height of the options menu before it scrolls. Defaults to the menu-height token. */
     maxMenuHeight?: string;
+    /** Identifies the input and connects it to a label. */
     id?: string;
+    /** Browser autofill hint for the search input. */
     autocomplete?: HTMLInputAttributes["autocomplete"];
+    /** Identifies elements that describe the input. */
     "aria-describedby"?: string;
+    /** Sets an accessible name when no visible label targets the input. */
     "aria-label"?: string;
-    "aria-invalid"?: boolean;
+    /** Reports validation state to assistive technology. */
+    "aria-invalid"?: HTMLInputAttributes["aria-invalid"];
+    /** Adds classes to the component root. */
     class?: string;
+    /** Runs after the selected value changes. */
     onValueChange?: (value: Value | undefined) => void;
     /** Replaces visible option copy while label remains available to filtering and accessibility. */
     renderOption?: Snippet<[ComboboxOption<Value>]>;
@@ -32,6 +47,8 @@
 </script>
 
 <script lang="ts" generics="Value extends string">
+  import { normalizeSelectionValue, resolveInvalidState, toSelectionItems } from "./selection";
+
   import { CheckIcon, ChevronDownIcon } from "@a-novel-kit/uikit-icons";
 
   import { Combobox as ComboboxPrimitive } from "bits-ui";
@@ -61,8 +78,8 @@
   let inputElement = $state<HTMLInputElement | null>(null);
   let primitiveValue = $derived(externalValue ?? "");
 
-  const items = $derived(options.map((option) => ({ ...option })));
-  const isInvalid = $derived(invalid || ariaInvalid === true);
+  const items = $derived(toSelectionItems(options));
+  const isInvalid = $derived(resolveInvalidState(invalid, ariaInvalid));
   const filteredOptions = $derived(
     searchValue === ""
       ? options
@@ -70,7 +87,7 @@
   );
 
   function handleValueChange(nextValue: string) {
-    const normalizedValue = nextValue === "" ? undefined : (nextValue as Value);
+    const normalizedValue = normalizeSelectionValue<Value>(nextValue);
     externalValue = normalizedValue;
     onValueChange?.(normalizedValue);
   }

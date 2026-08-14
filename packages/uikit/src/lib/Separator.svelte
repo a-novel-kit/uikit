@@ -1,8 +1,11 @@
 <script lang="ts" module>
   import type { HTMLAttributes } from "svelte/elements";
 
+  /** Props for a visual or semantic divider. */
   export interface SeparatorProps extends HTMLAttributes<HTMLElement> {
+    /** Axis along which the divider is drawn. */
     orientation?: "horizontal" | "vertical";
+    /** Removes separator semantics when the divider is purely visual. */
     decorative?: boolean;
   }
 </script>

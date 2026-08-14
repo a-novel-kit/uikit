@@ -1,7 +1,9 @@
 <script lang="ts" module>
   import type { HTMLAttributes } from "svelte/elements";
 
+  /** Props for grouping adjacent buttons as one related control set. */
   export interface ButtonGroupProps extends HTMLAttributes<HTMLDivElement> {
+    /** Direction in which buttons are arranged. */
     orientation?: "horizontal" | "vertical";
     /** Accessible name when surrounding text does not name the group. */
     label?: string;

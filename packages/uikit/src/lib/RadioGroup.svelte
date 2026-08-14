@@ -1,21 +1,27 @@
 <script lang="ts" module>
   import type { Content } from "./content";
+  import type { SelectionOption } from "./types";
 
   import type { Snippet } from "svelte";
   import type { HTMLFieldsetAttributes } from "svelte/elements";
 
-  export interface RadioOption<Value extends string> {
-    value: Value;
-    label: string;
+  /** A labeled value available to a radio group. */
+  export interface RadioOption<Value extends string> extends SelectionOption<Value> {
+    /** Supporting content shown below the label. */
     description?: Content;
-    disabled?: boolean;
   }
 
+  /** Props for a native single-choice radio group. */
   export interface RadioGroupProps<Value extends string> extends Omit<HTMLFieldsetAttributes, "value"> {
+    /** Optional fieldset legend. */
     legend?: Content;
+    /** Values available for selection. */
     options: readonly RadioOption<Value>[];
+    /** Currently selected value. */
     value?: Value;
+    /** Direction in which options are arranged. */
     orientation?: "vertical" | "horizontal";
+    /** Shared form name for the radio inputs. */
     name?: string;
     /** Replaces the visible option copy while `label` remains its accessible name. */
     renderOption?: Snippet<[RadioOption<Value>]>;

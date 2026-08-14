@@ -1,21 +1,33 @@
 <script lang="ts" module>
   import type { Content } from "./content";
+  import type { FeedbackTone } from "./types";
 
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
 
+  /** A transient message displayed by ToastRegion. */
   export interface ToastMessage {
+    /** Stable identifier used when dismissing the message. */
     id: string;
+    /** Optional toast heading. */
     title?: Content;
+    /** Primary toast content. */
     message: Content;
-    tone?: "info" | "success" | "warning" | "error";
+    /** Semantic status conveyed by the toast. */
+    tone?: FeedbackTone;
+    /** Optional action rendered after the message. */
     action?: Snippet;
+    /** Accessible name for the dismiss control. */
     dismissLabel?: string;
   }
 
+  /** Props for the live region that displays transient messages. */
   export interface ToastRegionProps extends Omit<HTMLAttributes<HTMLElement>, "children"> {
+    /** Messages currently shown in the region. */
     toasts: ToastMessage[];
+    /** Accessible name for the notification region. */
     label?: string;
+    /** Runs when a toast requests dismissal. */
     onDismiss?: (id: string) => void;
   }
 </script>

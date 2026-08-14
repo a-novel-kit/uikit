@@ -2,10 +2,15 @@
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
 
+  /** Props for the application landmark and responsive region layout. */
   export interface AppShellProps extends HTMLAttributes<HTMLDivElement> {
+    /** Content rendered in the banner region. */
     header?: Snippet;
+    /** Primary navigation content. */
     navigation?: Snippet;
+    /** Optional complementary content. */
     aside?: Snippet;
+    /** Content rendered after the main application regions. */
     footer?: Snippet;
     /** Accessible name for the navigation landmark. */
     navigationLabel?: string;

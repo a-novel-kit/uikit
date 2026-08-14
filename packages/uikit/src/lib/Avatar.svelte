@@ -1,13 +1,18 @@
 <script lang="ts" module>
+  import type { ComponentSize } from "./types";
+
   import type { HTMLAttributes } from "svelte/elements";
 
+  /** Props for an image avatar with an initials fallback. */
   export interface AvatarProps extends HTMLAttributes<HTMLSpanElement> {
     /** Image source. When absent, initials are rendered. */
     src?: string;
     /** Accessible name and image alternative. */
     label: string;
+    /** Fallback characters shown when no image is available. */
     initials?: string;
-    size?: "sm" | "md" | "lg";
+    /** Avatar diameter. */
+    size?: ComponentSize;
   }
 </script>
 

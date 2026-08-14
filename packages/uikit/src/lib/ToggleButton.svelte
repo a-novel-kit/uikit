@@ -5,9 +5,13 @@
 
   /** Props for a button that exposes a persistent pressed state. */
   export interface ToggleButtonProps extends Omit<ButtonProps, "aria-pressed" | "onclick" | "tone"> {
+    /** Current pressed state. */
     pressed?: boolean;
+    /** Semantic treatment of the toggle. */
     tone?: "brand" | "neutral";
+    /** Runs after the pressed state changes. */
     onPressedChange?: (pressed: boolean) => void;
+    /** Native click handler run after the internal state update. */
     onclick?: HTMLButtonAttributes["onclick"];
   }
 </script>

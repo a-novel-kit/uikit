@@ -1,6 +1,7 @@
 <script lang="ts" module>
   import type { HTMLAttributes } from "svelte/elements";
 
+  /** Native attributes for a readable long-form content wrapper. */
   export type ProseProps = HTMLAttributes<HTMLElement>;
 </script>
 

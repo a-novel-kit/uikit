@@ -1,7 +1,9 @@
 <script lang="ts" module>
   import type { HTMLAnchorAttributes } from "svelte/elements";
 
+  /** Props for a keyboard-visible link that bypasses repeated navigation. */
   export interface SkipLinkProps extends HTMLAnchorAttributes {
+    /** Fragment identifier for the primary content; defaults to `#main-content`. */
     href?: string;
   }
 </script>

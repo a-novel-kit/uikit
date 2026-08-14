@@ -5,17 +5,25 @@
 
   /** A validation problem linked to its control. */
   export interface ErrorSummaryItem {
+    /** Stable identifier for rendering the error. */
     id: string;
+    /** Fragment link to the invalid control. */
     href: string;
+    /** Human-readable validation message. */
     message: Content;
   }
 
   /** Props for a focusable summary of form validation errors. */
   export interface ErrorSummaryProps extends Omit<HTMLAttributes<HTMLElement>, "title" | "children"> {
+    /** Summary heading. */
     title?: Content;
+    /** Optional guidance shown before the error list. */
     description?: Content;
+    /** Validation problems linked to their controls. */
     errors: readonly ErrorSummaryItem[];
+    /** Semantic level of the generated heading. */
     headingLevel?: 2 | 3 | 4 | 5 | 6;
+    /** Moves focus to the summary when it mounts. */
     focusOnMount?: boolean;
   }
 </script>

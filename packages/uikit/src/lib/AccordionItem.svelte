@@ -6,10 +6,15 @@
 
   /** Props for one native disclosure within an Accordion. */
   export interface AccordionItemProps extends Omit<HTMLDetailsAttributes, "children" | "name" | "open" | "ontoggle"> {
+    /** Content rendered in the disclosure trigger. */
     summary: Content;
+    /** Current expanded state. */
     open?: boolean;
+    /** Prevents the item from being toggled. */
     disabled?: boolean;
+    /** Content revealed while the item is open. */
     children?: Snippet;
+    /** Runs after the expanded state changes. */
     onOpenChange?: (open: boolean) => void;
   }
 </script>

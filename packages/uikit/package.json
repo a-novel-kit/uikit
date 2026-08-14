@@ -2,6 +2,7 @@
   "name": "@a-novel-kit/uikit",
   "version": "0.1.0",
   "private": false,
+  "description": "Composable Svelte components for the Agora design system",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/a-novel-kit/uikit.git"

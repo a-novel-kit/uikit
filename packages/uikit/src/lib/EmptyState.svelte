@@ -4,10 +4,15 @@
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
 
+  /** Props for a zero-data or zero-result state. */
   export interface EmptyStateProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
+    /** Empty-state heading. */
     title: Content;
+    /** Supporting guidance. */
     description?: Content;
+    /** Optional leading graphic. */
     illustration?: Snippet;
+    /** Optional controls that resolve the empty state. */
     actions?: Snippet;
   }
 </script>

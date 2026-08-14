@@ -1,7 +1,9 @@
 <script lang="ts" module>
   import type { HTMLTableAttributes } from "svelte/elements";
 
+  /** Props for a responsive native data table. */
   export interface TableProps extends HTMLTableAttributes {
+    /** Optional accessible table caption. */
     caption?: string;
     /** Keeps rows compact for data-dense views. */
     density?: "compact" | "default";

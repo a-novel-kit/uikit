@@ -4,8 +4,11 @@
 
   /** Props for a native description list arranged with shared layout tokens. */
   export interface DescriptionListProps extends Omit<HTMLAttributes<HTMLDListElement>, "children"> {
+    /** Maximum number of term-description columns. */
     columns?: 1 | 2 | 3;
+    /** Vertical spacing between entries. */
     density?: "compact" | "default";
+    /** Native term and description content. */
     children: Snippet;
   }
 </script>

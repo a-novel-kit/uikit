@@ -3,10 +3,15 @@
 
   import type { HTMLInputAttributes } from "svelte/elements";
 
+  /** Props for a native checkbox with optional supporting content. */
   export interface CheckboxProps extends Omit<HTMLInputAttributes, "type" | "checked"> {
+    /** Optional label content. */
     label?: Content;
+    /** Supporting content shown below the label. */
     description?: Content;
+    /** Current checked state. */
     checked?: boolean;
+    /** Displays a mixed state without changing the submitted value. */
     indeterminate?: boolean;
   }
 </script>

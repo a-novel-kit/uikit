@@ -50,9 +50,10 @@ chroma factors to pressure and signal, preserving the approved vividness without
 ```
 
 The chromatic ramps end at each hue's Display P3 gamut cusp: brand `L 0.718 / C 0.193`, pressure
-`L 0.656 / C 0.296`, and signal `L 0.797 / C 0.201`. CSS `pow()` applies the `1.45` lightness curve.
-Neutrals use a `1.6` curve, fixed `C = 0.009`, and the brand hue. These non-linear curves hold early
-steps near black, then accelerate into the vivid and readable half of each scale.
+`L 0.656 / C 0.296`, and signal `L 0.797 / C 0.201`. Chromatic lightness and relative chroma follow a
+smoothstep curve toward those cusps. Neutrals use a `1.6` lightness curve, fixed `C = 0.008`, and the
+brand hue. Both curves hold early steps near black, then accelerate into the vivid and readable half
+of each scale.
 
 Semantic surfaces and borders mix the cusp-derived peaks into the neutral field. Their strengths derive
 from `--color-mix-base: 6.25%`: surfaces use two units and borders use eight, nine, or ten units.

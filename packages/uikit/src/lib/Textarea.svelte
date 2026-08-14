@@ -1,11 +1,13 @@
 <script lang="ts" module>
+  import type { ComponentSize } from "./types";
+
   import type { Snippet } from "svelte";
   import type { HTMLTextareaAttributes } from "svelte/elements";
 
   /** Props for a multiline input with optional supporting content below it. */
   export interface TextareaProps extends HTMLTextareaAttributes {
     /** Sets the control padding and type scale. */
-    controlSize?: "sm" | "md" | "lg";
+    controlSize?: ComponentSize;
     /** Applies the invalid surface and focus treatment. */
     invalid?: boolean;
     /** Lets supporting browsers grow the control with its content. */

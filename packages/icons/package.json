@@ -1,6 +1,7 @@
 {
   "name": "@a-novel-kit/uikit-icons",
   "version": "0.1.0",
+  "private": false,
   "description": "Curated interface icons and custom Agora glyphs for the a-novel-kit design system",
   "repository": {
     "type": "git",

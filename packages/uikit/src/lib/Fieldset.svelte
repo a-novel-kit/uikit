@@ -3,8 +3,11 @@
 
   import type { HTMLFieldsetAttributes } from "svelte/elements";
 
+  /** Props for a native group of related form controls. */
   export interface FieldsetProps extends HTMLFieldsetAttributes {
+    /** Optional fieldset legend. */
     legend?: Content;
+    /** Supporting content shown after the legend. */
     description?: Content;
   }
 </script>

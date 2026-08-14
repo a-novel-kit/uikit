@@ -1,12 +1,17 @@
 <script lang="ts" module>
   import type { HTMLAttributes } from "svelte/elements";
 
+  /** Props for navigating a finite set of numbered pages. */
   export interface PaginationProps extends Omit<HTMLAttributes<HTMLElement>, "children"> {
+    /** One-based active page. */
     currentPage: number;
+    /** Total number of available pages. */
     totalPages: number;
     /** Returns an application-owned URL. Without it, controls are buttons. */
     getHref?: (page: number) => string;
+    /** Runs when a button-based page control is activated. */
     onPageChange?: (page: number) => void;
+    /** Accessible name for the navigation landmark. */
     label?: string;
   }
 </script>

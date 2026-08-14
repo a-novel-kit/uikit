@@ -1,34 +1,58 @@
 <script lang="ts" module>
   import type { Snippet } from "svelte";
 
+  /** An invokable item in an ActionMenu. */
   export interface ActionMenuAction {
+    /** Item discriminator; omitted for actions. */
     kind?: "action";
+    /** Stable identifier for keyed rendering. */
     id: string;
+    /** Plain-text label used for display and accessibility. */
     label: string;
+    /** Prevents the action from being invoked. */
     disabled?: boolean;
+    /** Semantic treatment for destructive actions. */
     tone?: "neutral" | "danger";
+    /** Optional leading graphic. */
     icon?: Snippet;
+    /** Optional keyboard shortcut hint. */
     shortcut?: string;
+    /** Runs when the item is selected. */
     onSelect?: () => void;
   }
 
+  /** A visual divider between groups of menu actions. */
   export interface ActionMenuSeparator {
+    /** Item discriminator for separators. */
     kind: "separator";
+    /** Stable identifier for keyed rendering. */
     id: string;
   }
 
+  /** An action or visual divider accepted by ActionMenu. */
   export type ActionMenuItem = ActionMenuAction | ActionMenuSeparator;
 
+  /** Props for a composed menu of contextual actions. */
   export interface ActionMenuProps {
+    /** Accessible name for the trigger. */
     label: string;
+    /** Actions and separators shown in the menu. */
     items: ActionMenuItem[];
+    /** Default trigger text. */
     triggerText?: string;
+    /** Optional graphic in the default trigger. */
     triggerIcon?: Snippet;
+    /** Replaces the default trigger and receives its primitive attributes. */
     trigger?: Snippet<[Record<string, unknown>]>;
+    /** Replaces visible action content while preserving its text label. */
     renderItem?: Snippet<[ActionMenuAction]>;
+    /** Current menu visibility. */
     open?: boolean;
+    /** Alignment of the menu against its trigger. */
     align?: "start" | "center" | "end";
+    /** Prevents the default trigger from opening the menu. */
     disabled?: boolean;
+    /** Adds classes to the component root. */
     class?: string;
   }
 </script>

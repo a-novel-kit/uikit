@@ -1,21 +1,35 @@
 <script lang="ts" module>
   import type { Snippet } from "svelte";
 
+  /** One selectable view in a Tabs component. */
   export interface TabItem {
+    /** Stable value used by application state. */
     value: string;
+    /** Plain-text label used for display and accessibility. */
     label: string;
+    /** Prevents the tab from being selected. */
     disabled?: boolean;
+    /** Optional leading graphic. */
     icon?: Snippet;
   }
 
+  /** Props for a composed tab list and its associated panels. */
   export interface TabsProps {
+    /** Views available for selection. */
     tabs: TabItem[];
+    /** Currently selected tab value. */
     value?: string;
+    /** Accessible name for the tab list. */
     label: string;
+    /** Axis along which tabs and keyboard navigation are arranged. */
     orientation?: "horizontal" | "vertical";
+    /** Selects on focus automatically or waits for explicit activation. */
     activationMode?: "automatic" | "manual";
+    /** Wraps keyboard navigation from the last tab to the first. */
     loop?: boolean;
+    /** Adds classes to the component root. */
     class?: string;
+    /** Runs after the selected tab changes. */
     onValueChange?: (value: string) => void;
     /** Replaces visible tab copy while label remains available to accessibility and application logic. */
     renderTab?: Snippet<[TabItem]>;

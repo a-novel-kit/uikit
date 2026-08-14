@@ -1,8 +1,11 @@
 <script lang="ts" module>
   import type { HTMLProgressAttributes } from "svelte/elements";
 
+  /** Props for a labeled native progress indicator. */
   export interface ProgressProps extends HTMLProgressAttributes {
+    /** Visible label for the operation. */
     label: string;
+    /** Displays the current percentage beside the label. */
     showValue?: boolean;
   }
 </script>

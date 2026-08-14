@@ -1,6 +1,7 @@
 <script lang="ts" module>
   import type { HTMLAttributes } from "svelte/elements";
 
+  /** Props for a centered content container with responsive gutters. */
   export interface ContainerProps extends HTMLAttributes<HTMLDivElement> {
     /** Maximum inline size. Readable uses the prose measure. */
     size?: "sm" | "md" | "lg" | "readable" | "full";

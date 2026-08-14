@@ -1,7 +1,9 @@
 <script lang="ts" module>
   import type { HTMLAttributes } from "svelte/elements";
 
+  /** Props for a compact categorical label or status. */
   export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
+    /** Semantic treatment of the badge. */
     tone?: "neutral" | "brand" | "success" | "warning" | "danger";
   }
 </script>

@@ -4,14 +4,23 @@
   import type { Snippet } from "svelte";
   import type { HTMLDialogAttributes } from "svelte/elements";
 
+  /** Props for a native modal or non-modal dialog. */
   export interface DialogProps extends Omit<HTMLDialogAttributes, "children" | "open" | "title" | "onclose"> {
+    /** Current dialog visibility. */
     open?: boolean;
+    /** Dialog heading. */
     title: Content;
+    /** Supporting content shown below the heading. */
     description?: Content;
+    /** Optional controls rendered after the dialog body. */
     actions?: Snippet;
+    /** Uses modal focus and interaction behavior when true. */
     modal?: boolean;
+    /** Closes the dialog when its backdrop is activated. */
     closeOnBackdrop?: boolean;
+    /** Runs after the native dialog closes. */
     onClose?: (returnValue: string) => void;
+    /** Dialog body content. */
     children?: Snippet;
   }
 </script>
