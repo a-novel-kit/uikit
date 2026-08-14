@@ -151,7 +151,7 @@
     border: 0;
   }
 
-  .state-matrix tbody tr:hover {
+  .state-matrix tbody tr {
     background: transparent;
   }
 

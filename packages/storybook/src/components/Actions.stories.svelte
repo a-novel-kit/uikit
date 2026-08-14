@@ -161,7 +161,7 @@
   .matrix td {
     border: 0;
   }
-  .matrix tbody tr:hover {
+  .matrix tbody tr {
     background: transparent;
   }
   .matrix td {

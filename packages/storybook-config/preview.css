@@ -63,16 +63,14 @@ body {
   font-family: var(--font-family-mono);
 }
 
-.sbdocs-content table tbody tr {
+.sbdocs-content > table tbody tr,
+.sbdocs-content .docblock-argstable tbody tr {
   background: var(--color-surface-sunken);
 }
 
-.sbdocs-content table tbody tr:nth-of-type(2n) {
+.sbdocs-content > table tbody tr:nth-of-type(2n),
+.sbdocs-content .docblock-argstable tbody tr:nth-of-type(2n) {
   background: var(--color-surface-island-subtle);
-}
-
-.sbdocs-content table tbody tr:hover {
-  background: var(--color-surface-island);
 }
 
 .sbdocs-content table a {
