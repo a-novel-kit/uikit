@@ -103,10 +103,18 @@
     from var(--color-neutral-1) calc(l / var(--ratio-hierarchy)) c h
   );
   --color-surface-sunken: var(--color-neutral-2);
-  --color-surface-subtle: var(--color-neutral-3);
+  --color-surface-subtle: color-mix(
+    in oklab,
+    var(--color-neutral-3) var(--color-mix-12),
+    var(--color-neutral-4)
+  );
   --color-surface-raised: var(--color-neutral-4);
-  --color-surface-overlay: var(--color-neutral-5);
-  --color-surface-hover: var(--color-neutral-5);
+  --color-surface-overlay: color-mix(
+    in oklab,
+    var(--color-neutral-4) var(--color-mix-8),
+    var(--color-neutral-5)
+  );
+  --color-surface-hover: var(--color-surface-overlay);
   --color-surface-island-subtle: var(--color-surface-subtle);
   --color-surface-island: var(--color-surface-raised);
   --color-surface-island-strong: var(--color-surface-overlay);
@@ -148,7 +156,7 @@
 
   --color-control-surface: color-mix(
     in oklab,
-    var(--color-neutral-5) var(--color-mix-2),
+    var(--color-neutral-5) var(--color-mix-4),
     var(--color-surface-sunken)
   );
   --color-control-surface-hover: color-mix(

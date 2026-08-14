@@ -25,6 +25,15 @@ body {
   font-family: var(--font-family-interface);
 }
 
+.sbdocs-content *,
+.sbdocs-content *::before,
+.sbdocs-content *::after,
+.docs-story *,
+.docs-story *::before,
+.docs-story *::after {
+  box-sizing: border-box;
+}
+
 .sbdocs-content > h1 {
   margin-block-end: var(--space-5);
 }
@@ -68,4 +77,31 @@ body {
 
 .sbdocs-content table a {
   color: var(--color-text-link);
+}
+
+.sbdocs-content .docblock-argstable {
+  display: block;
+  max-inline-size: 100%;
+  overflow-x: auto;
+}
+
+.sbdocs-content > table {
+  inline-size: 100%;
+  table-layout: fixed;
+}
+
+.sbdocs-content > table th,
+.sbdocs-content > table td {
+  overflow-wrap: anywhere;
+}
+
+.sbdocs-content > table code {
+  white-space: normal;
+  word-break: break-word;
+}
+
+.sbdocs-content pre,
+.sbdocs-content .prismjs {
+  max-inline-size: 100%;
+  overflow-x: auto;
 }
