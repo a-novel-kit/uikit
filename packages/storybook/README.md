@@ -1,8 +1,8 @@
 # Agora UI Storybook
 
 This private workspace package is the local component workbench and rendered design-system
-documentation. It consumes `@a-novel-kit/uikit`, `@a-novel-kit/uikit-tokens`, and
-`@a-novel-kit/uikit-fonts`; it is never published with those packages.
+documentation. It consumes the published UI packages and `@a-novel-kit/uikit-storybook`; the
+workbench itself is not published.
 
 ## Run it
 
@@ -12,8 +12,8 @@ From the repository root:
 pnpm storybook
 ```
 
-The workbench starts in Agora's dark theme. Its dev command sets `BROWSER=none` (and passes
-`--no-open`), so it prints the local URL without opening a browser tab.
+The shared preset applies Agora's dark theme. The dev command sets `BROWSER=none` and passes
+`--no-open`, so it prints the local URL without opening a browser tab.
 
 Build the static verification artifact through the repository build command. The generated
 `storybook-static/` directory is ignored and is not a release artifact.

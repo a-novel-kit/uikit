@@ -1,142 +1,182 @@
-import { ColorItem, ColorPalette, Meta } from "@storybook/addon-docs/blocks";
+import { colorSystem, palette } from "@a-novel-kit/uikit-tokens/palette";
+
+import { Meta } from "@storybook/addon-docs/blocks";
 
 import "./Colors.css";
 
 <Meta title="Foundations/Color system" />
 
-export const scale = (family) =>
-  Object.fromEntries(
-    Array.from({ length: 12 }, (_, index) => {
-      const step = index + 1;
-      return [`${family}.${step}`, `var(--color-${family}-${step})`];
-    })
-  );
+export const coreColors = [
+  {
+    family: "brand",
+    label: "Brand",
+    role: "Actions / focus / progress",
+  },
+  {
+    family: "pressure",
+    label: "Pressure",
+    role: "Urgency / caution / failure",
+  },
+  {
+    family: "signal",
+    label: "Signal",
+    role: "Readiness / success / reward",
+  },
+];
 
-export const interfaceColors = {
-  "surface.canvas": "var(--color-surface-canvas)",
-  "surface.subtle": "var(--color-surface-subtle)",
-  "text.primary": "var(--color-text-primary)",
-  "text.muted": "var(--color-text-muted)",
-  "border.subtle": "var(--color-border-subtle)",
-  "action.primary": "var(--color-action-primary)",
-  "action.primaryHover": "var(--color-action-primary-hover)",
-  "action.ghostText": "var(--color-action-ghost-text)",
-  "action.ghostHover": "var(--color-action-ghost-hover)",
-  "focus.ring": "var(--color-focus-ring)",
-};
+export const scaleSteps = Array.from({ length: 12 }, (_, index) => index + 1);
 
-export const feedbackColors = {
-  "feedback.info": "var(--color-feedback-info-text)",
-  "feedback.success": "var(--color-feedback-success-text)",
-  "feedback.warning": "var(--color-feedback-warning-text)",
-  "feedback.error": "var(--color-feedback-error-text)",
-};
+export const percentage = (value) => (value * 100).toFixed(0) + "%";
 
-# Color system
+export const accentDescription = (family) =>
+  "L " +
+  percentage(colorSystem.scale.lightnessFloor) +
+  "–" +
+  percentage(colorSystem.scale.peaks[family].lightness) +
+  " / C " +
+  colorSystem.scale.peaks[family].chroma.toFixed(3) +
+  " / " +
+  colorSystem.scale.toneCurve;
 
-The interface uses a compressed triadic harmony on a neutral field. Electric blue carries agency, hot
-magenta carries pressure, and electric amber signals resolution. At solid step `9`, the three anchors
-share lightness `0.78` and chroma `0.17`; their hues form `140° / 80° / 140°` gaps.
+export const neutralDescription =
+  "L " +
+  percentage(colorSystem.neutral.lightnessFloor) +
+  "–" +
+  percentage(colorSystem.neutral.lightnessPeak) +
+  " / curve " +
+  colorSystem.neutral.lightnessCurve.toFixed(1);
 
-## Harmony
-
-<div className="color-harmony">
-  <div className="color-harmony__swatch color-harmony__swatch--brand">
-    <strong>Brand</strong>
-    <code>212.66°</code>
-    <span>Agency · focus · progress</span>
+export const PrimitiveScale = ({ family, label, description }) => (
+  <div className="primitive-scale">
+    <div className="primitive-scale__header">
+      <div>
+        <strong>{label}</strong>
+        <span>{description}</span>
+      </div>
+      <code>{"--color-" + family + "-*"}</code>
+    </div>
+    <div className="primitive-scale__steps">
+      {scaleSteps.map((step) => (
+        <div className="primitive-scale__step" key={family + step}>
+          <span
+            role="img"
+            aria-label={label + " step " + step}
+            style={{ backgroundColor: "var(--color-" + family + "-" + step + ")" }}
+          />
+          <code>{String(step).padStart(2, "0")}</code>
+        </div>
+      ))}
+    </div>
   </div>
-  <div className="color-harmony__swatch color-harmony__swatch--pressure">
-    <strong>Pressure</strong>
-    <code>352.66°</code>
-    <span>Urgency · caution · failure</span>
+);
+
+# Color
+
+Brand, pressure, and signal accents sit on a blue-black neutral scale. Use semantic tokens in
+components.
+
+<div className="core-palette">
+  {coreColors.map((item) => (
+    <div
+      className={"core-palette__card core-palette__card--" + item.family}
+      key={item.family}
+      style={{ backgroundColor: "var(--base-" + item.family + ")" }}
+    >
+      <div>
+        <strong>{item.label}</strong>
+        <span>{colorSystem.harmony.hues[item.family].toFixed(0)}deg</span>
+      </div>
+      <code>{"--base-" + item.family}</code>
+      <small>{palette[item.family][11]}</small>
+      <p>{item.role}</p>
+    </div>
+  ))}
+</div>
+
+## Usage
+
+<div className="color-rules">
+  <div>
+    <strong>Field</strong>
+    <span>Keep most area neutral; group with spacing before adding a surface.</span>
   </div>
-  <div className="color-harmony__swatch color-harmony__swatch--signal">
-    <strong>Signal</strong>
-    <code>72.66°</code>
-    <span>Readiness · success · reward</span>
+  <div>
+    <strong>Accent</strong>
+    <span>Keep one accent dominant within a component or region.</span>
+  </div>
+  <div>
+    <strong>Status</strong>
+    <span>Pair status color with text, an icon, or a shape.</span>
   </div>
 </div>
 
-<div
-  className="color-harmony__relation"
-  aria-label="Hue gaps: 140 degrees from brand to pressure, 80 from pressure to signal, and 140 from signal to brand"
->
-  <span>140° · 80° · 140°</span>
-</div>
+Brand marks interaction, pressure marks urgency and failure, and signal marks readiness and success.
 
-Pressure and signal sit symmetrically around the brand complement. The `40°` compression narrows
-their mutual gap while preserving equal separation from brand.
+## Semantic roles
 
-## Chromatic hierarchy
-
-<div className="color-usage" aria-label="Relative chromatic emphasis: 60 brand, 30 pressure, 10 signal">
-  <div className="color-usage__brand">
-    <strong>60</strong>
-    <span>Brand</span>
+<div className="action-states" aria-label="Action state progression">
+  <div>
+    <span className="action-state action-state--idle">Idle</span>
+    <code>brand.9</code>
   </div>
-  <div className="color-usage__pressure">
-    <strong>30</strong>
-    <span>Pressure</span>
+  <div>
+    <span className="action-state action-state--hover">Hover</span>
+    <code>brand.11</code>
   </div>
-  <div className="color-usage__signal">
-    <strong>10</strong>
-    <span>Signal</span>
+  <div>
+    <span className="action-state action-state--selected">Selected</span>
+    <code>brand.12 + glow</code>
+  </div>
+  <div>
+    <button type="button" className="action-state action-state--disabled" disabled>
+      Disabled
+    </button>
+    <code>neutral.3 / neutral.8</code>
   </div>
 </div>
-
-These proportions guide chromatic moments rather than total page area. Neutral surfaces remain the
-field; signal stays rare enough to retain meaning.
-
-<div className="color-gradient">
-  <strong>Expressive accent</strong>
-  <span>Three localized glows add energy without interpolating through a rainbow of extra hues.</span>
-</div>
-
-## Semantic colors
-
-Components consume semantic aliases so palette adjustments stay separate from component intent.
-
-<ColorPalette>
-  <ColorItem title="Interface roles" subtitle="Public component contracts" colors={interfaceColors} />
-  <ColorItem title="Feedback roles" subtitle="Three hues, explicit intent" colors={feedbackColors} />
-</ColorPalette>
 
 <div className="feedback-grid">
   <div className="feedback feedback--info">
     <span aria-hidden="true">i</span>
-    <strong>Information</strong>
+    <div>
+      <strong>Information</strong>
+      <code>feedback.info</code>
+    </div>
   </div>
   <div className="feedback feedback--success">
-    <span aria-hidden="true">✓</span>
-    <strong>Saved</strong>
+    <span aria-hidden="true">OK</span>
+    <div>
+      <strong>Saved</strong>
+      <code>feedback.success</code>
+    </div>
   </div>
   <div className="feedback feedback--warning">
     <span aria-hidden="true">!</span>
-    <strong>Check input</strong>
+    <div>
+      <strong>Check input</strong>
+      <code>feedback.warning</code>
+    </div>
   </div>
   <div className="feedback feedback--error">
-    <span aria-hidden="true">×</span>
-    <strong>Upload failed</strong>
+    <span aria-hidden="true">x</span>
+    <div>
+      <strong>Upload failed</strong>
+      <code>feedback.error</code>
+    </div>
   </div>
 </div>
 
-Feedback never depends on hue alone. Labels and icons carry meaning; surface, border, and text steps
-increase emphasis inside the three-family grammar.
+Selected actions keep their peak color and localized glow through interaction. Rest action colors are
+derived from steps 9–10 and meet at least {colorSystem.contrast.minimumNormalText}:1 against inverse
+text.
 
-## Primitive scales
+## Primitive ramps
 
-Steps move from the darkest surface value at `1` to the lightest text value at `12`. Chroma peaks
-near the solid-control range.
+Primitive ramps define each theme family. Component styles consume their semantic aliases.
 
-<ColorPalette>
-  <ColorItem title="color.neutral" subtitle="Surfaces, borders, and text" colors={scale("neutral")} />
-  <ColorItem title="color.brand" subtitle="Primary Agora actions and emphasis" colors={scale("brand")} />
-  <ColorItem title="color.pressure" subtitle="Narrative intensity and adverse feedback" colors={scale("pressure")} />
-  <ColorItem title="color.signal" subtitle="Readiness, successful outcomes, and rewards" colors={scale("signal")} />
-</ColorPalette>
-
-## Authoring rule
-
-Components use semantic color tokens and shared metric tokens. Verify every foreground/background
-pairing with the accessibility panel; a visual palette step does not guarantee sufficient contrast.
+<div className="primitive-scales">
+  <PrimitiveScale family="neutral" label="Neutral" description={neutralDescription} />
+  <PrimitiveScale family="brand" label="Brand" description={accentDescription("brand")} />
+  <PrimitiveScale family="pressure" label="Pressure" description={accentDescription("pressure")} />
+  <PrimitiveScale family="signal" label="Signal" description={accentDescription("signal")} />
+</div>

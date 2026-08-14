@@ -8,7 +8,7 @@ export default defineConfig({
       provider: "v8",
       reporter: ["text", "json", "lcov"],
       reportsDirectory: "coverage",
-      include: ["packages/*/src/**"],
+      include: ["packages/uikit/src/**/*.{svelte,ts}"],
     },
     // Each package holding tests is a project; a package left out is never run.
     projects: ["packages/uikit"],

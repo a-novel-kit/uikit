@@ -1,31 +1,54 @@
-import { Meta } from "@storybook/addon-docs/blocks";
+import buttonWithIconSource from "./examples/ButtonWithIcon.svelte?raw";
+
+import { Meta, Source } from "@storybook/addon-docs/blocks";
 
 <Meta title="Overview/Agora UI" />
 
 # Agora UI
 
-Agora UI is the shared visual language for every Agora platform. This workbench renders the actual
-workspace packages, so what you inspect here is what a platform consumes.
+Agora UI provides shared tokens, fonts, icons, and Svelte components for Agora interfaces.
 
-## Package boundary
+## Packages
 
-| Package                        | Purpose                                           | Published                          |
-| ------------------------------ | ------------------------------------------------- | ---------------------------------- |
-| `@a-novel-kit/uikit-tokens`    | Derived color, metric, motion, and type contracts | Yes                                |
-| `@a-novel-kit/uikit-fonts`     | Self-hosted font faces and licensed WOFF2 assets  | Yes                                |
-| `@a-novel-kit/uikit`           | Styled Svelte components                          | Yes                                |
-| `@a-novel-kit/uikit-storybook` | Stories, docs, and the local workbench            | **No — private workspace package** |
+| Package                        | Purpose                                            |
+| ------------------------------ | -------------------------------------------------- |
+| `@a-novel-kit/uikit-tokens`    | Derived color, metric, motion, and type contracts  |
+| `@a-novel-kit/uikit-fonts`     | Self-hosted font faces and licensed WOFF2 assets   |
+| `@a-novel-kit/uikit`           | Styled Svelte components                           |
+| `@a-novel-kit/uikit-icons`     | Curated standard and custom Svelte icon components |
+| `@a-novel-kit/uikit-storybook` | Shared Storybook theme and configuration           |
 
-## Current status
+## Setup
 
-The current branch establishes calculated color and metric scales, four typographic voices, and the
-first component: `Button`. Base values and shared multipliers control the rendered system from the
-published CSS contract.
+Load the font and token styles once at the application entry point.
 
-## Principles
+```ts
+import "@a-novel-kit/uikit-fonts/fonts.css";
+import "@a-novel-kit/uikit-tokens/tokens.css";
+```
 
-- Accessible behavior belongs in the component, not in each consuming screen.
-- Platforms and components use semantic tokens; primitive scales remain a design-system
-  implementation detail.
-- Fonts, icons, and other assets are self-hosted so platform CSPs do not need third-party origins.
-- Stories cover meaningful states and edge cases, while documentation explains intent and usage.
+## Example
+
+Import components and icons from their separate packages.
+
+<Source code={buttonWithIconSource.trim()} dark language="html" />
+
+## Storybook setup
+
+Add the shared preset to a Svelte Storybook. It provides the Agora theme, dark preview, fonts,
+tokens, documentation, and accessibility checks.
+
+```ts
+import type { StorybookConfig } from "@storybook/svelte-vite";
+
+const config: StorybookConfig = {
+  stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|ts|svelte)"],
+  addons: ["@a-novel-kit/uikit-storybook"],
+  framework: "@storybook/svelte-vite",
+};
+
+export default config;
+```
+
+Open the [component catalog](?path=/docs/components-catalog--documentation) to browse the available
+groups.

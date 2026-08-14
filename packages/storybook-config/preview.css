@@ -1,0 +1,71 @@
+:root {
+  color-scheme: dark;
+  font-family: var(--font-family-interface);
+}
+
+body {
+  margin: 0;
+  background: var(--color-surface-canvas);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-interface);
+}
+
+.docs-story,
+.sbdocs-wrapper {
+  background: var(--color-surface-canvas);
+  min-inline-size: 0;
+  color: var(--color-text-primary);
+}
+
+.sbdocs-content {
+  box-sizing: border-box;
+  inline-size: 100%;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  font-family: var(--font-family-interface);
+}
+
+.sbdocs-content > h1 {
+  margin-block-end: var(--space-5);
+}
+
+.sbdocs-content > h2 {
+  margin-block: var(--space-8) var(--space-4);
+}
+
+.sbdocs-content > h3 {
+  margin-block: var(--space-6) var(--space-3);
+}
+
+.sbdocs-content > p,
+.sbdocs-content > ul,
+.sbdocs-content > ol {
+  max-inline-size: var(--layout-readable-measure);
+  line-height: var(--line-height-normal);
+}
+
+.sbdocs-content h1,
+.sbdocs-content h2,
+.sbdocs-content h3 {
+  font-family: var(--font-family-display);
+}
+
+.sbdocs-content code {
+  font-family: var(--font-family-mono);
+}
+
+.sbdocs-content table tbody tr {
+  background: var(--color-surface-sunken);
+}
+
+.sbdocs-content table tbody tr:nth-of-type(2n) {
+  background: var(--color-surface-island-subtle);
+}
+
+.sbdocs-content table tbody tr:hover {
+  background: var(--color-surface-island);
+}
+
+.sbdocs-content table a {
+  color: var(--color-text-link);
+}

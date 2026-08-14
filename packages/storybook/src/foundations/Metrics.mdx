@@ -17,14 +17,20 @@ export const spacingTokens = [
 
 export const radiusTokens = ["--radius-none", "--radius-sm", "--radius-md", "--radius-lg"];
 
+export const ratios = [
+  { token: "--ratio-density", label: "Density", use: "Type and compact details" },
+  { token: "--ratio-hierarchy", label: "Hierarchy", use: "Local component emphasis" },
+  { token: "--ratio-emphasis", label: "Emphasis", use: "Strong local contrast" },
+  { token: "--ratio-major", label: "Major", use: "Page and split hierarchy" },
+];
+
 # Layout & shape
 
-Spacing, control height, radius, borders, and motion derive from compact bases and shared multipliers.
-Components consume the generated public tokens, keeping density and shape changes centralized.
+Use public spacing, radius, control, border, focus, and motion tokens in component styles.
 
 ## Spacing
 
-The spacing scale starts at `--space-base`. Each public step multiplies that base by a preset factor.
+The spacing scale starts at `--space-base` and exposes named steps.
 
 <div className="metric-stack">
   {spacingTokens.map((token) => (
@@ -37,9 +43,46 @@ The spacing scale starts at `--space-base`. Each public step multiplies that bas
   ))}
 </div>
 
+## Proportion
+
+Use smaller ratios for dense interface details and reserve the major ratio for page-level hierarchy.
+
+<div className="ratio-grid">
+  {ratios.map((ratio) => (
+    <div className="ratio-card" key={ratio.token}>
+      <div>
+        <strong>{ratio.label}</strong>
+        <code>{ratio.token}</code>
+      </div>
+      <span>{ratio.use}</span>
+      <i style={{ "--metric-ratio": `var(${ratio.token})` }} />
+    </div>
+  ))}
+</div>
+
+## Surfaces
+
+Group related content with spacing first. Use a borderless island when a region needs its own visual
+plane.
+
+<div className="surface-demo">
+  <section className="surface-group">
+    <strong>Invisible group</strong>
+    <span>Primary content and related sections</span>
+  </section>
+  <section className="surface-island surface-island--subtle">
+    <strong>Subtle island</strong>
+    <span>Supporting groups and passive regions</span>
+  </section>
+  <section className="surface-island surface-island--strong">
+    <strong>Strong island</strong>
+    <span>Floating tools, navigation, and overlays</span>
+  </section>
+</div>
+
 ## Border radius
 
-Radius tokens share `--radius-base`; components choose a named shape instead of declaring a length.
+Choose a named radius token for each component shape.
 
 <div className="radius-grid">
   {radiusTokens.map((token) => (
@@ -59,5 +102,5 @@ Radius tokens share `--radius-base`; components choose a named shape instead of 
 | Motion         | `--duration-{fast,normal}` and `--easing-standard`     |
 | Disabled state | `--opacity-disabled`                                   |
 
-The Button stories apply these contracts directly. Adjust a base token to inspect how all rendered
-sizes change together.
+The [Button](?path=/docs/components-button--documentation) stories show these tokens on an interactive
+control.

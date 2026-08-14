@@ -1,60 +1,77 @@
-import { Meta, Typeset } from "@storybook/addon-docs/blocks";
+import { Meta } from "@storybook/addon-docs/blocks";
+
+import "./Typography.css";
 
 <Meta title="Foundations/Typography" />
 
-export const interfaceStack = "var(--font-family-interface)";
-export const displayStack = "var(--font-family-display)";
-export const storyStack = "var(--font-family-story)";
-export const monoStack = "var(--font-family-mono)";
+export const families = [
+  {
+    label: "Display",
+    token: "--font-family-display",
+    usage: "Headings and navigation landmarks.",
+    sample: "Build worlds worth returning to.",
+  },
+  {
+    label: "Interface",
+    token: "--font-family-interface",
+    usage: "Controls, labels, and interface copy.",
+    sample: "Create, review, and publish your next chapter.",
+  },
+  {
+    label: "Story",
+    token: "--font-family-story",
+    usage: "Narrative prose and long-form reading.",
+    sample: "Beyond the last lantern, the road became a promise.",
+  },
+  {
+    label: "Monospace",
+    token: "--font-family-mono",
+    usage: "Identifiers, structured values, logs, and code.",
+    sample: "scene.intensity = 0.72",
+  },
+];
+
+export const sizes = ["xs", "sm", "md", "lg", "xl", "2xl", "3xl", "4xl"];
+
+export const FamilySpecimen = ({ family }) => (
+  <div className="type-family">
+    <div className="type-family__meta">
+      <strong>{family.label}</strong>
+      <code>{family.token}</code>
+    </div>
+    <p className="type-family__sample" style={{ fontFamily: "var(" + family.token + ")" }}>
+      {family.sample}
+    </p>
+    <span>{family.usage}</span>
+  </div>
+);
 
 # Typography
 
-The system has four distinct voices. All font files are bundled in
-`@a-novel-kit/uikit-fonts`; no browser request goes to a font CDN.
+Import `@a-novel-kit/uikit-fonts/fonts.css` once, then use the family and size tokens.
 
-## Display
+## Families
 
-TeX Gyre Heros Condensed gives navigation landmarks and editorial headings a compact, recognizable
-shape. Use it sparingly and prefer the real 400 or 700 faces.
+<div className="type-families">
+  {families.map((family) => (
+    <FamilySpecimen family={family} key={family.token} />
+  ))}
+</div>
 
-<Typeset
-  fontFamily={displayStack}
-  fontSizes={[24, 32, 40, 48, 64]}
-  fontWeight={700}
-  sampleText="Build worlds worth returning to."
-/>
+## Scale
 
-## Interface
+Use `md` for body text and move through adjacent steps to establish hierarchy.
 
-TeX Gyre Heros is the default product voice. Arimo and platform locale fonts complete scripts that
-the Latin-only Heros files do not cover.
+<div className="type-scale" aria-label="Typography size scale">
+  {sizes.map((size) => (
+    <div key={size}>
+      <code>{"--font-size-" + size}</code>
+      <span style={{ fontSize: "var(--font-size-" + size + ")" }}>Agora interface</span>
+    </div>
+  ))}
+</div>
 
-<Typeset
-  fontFamily={interfaceStack}
-  fontSizes={[12, 14, 16, 18, 20, 24, 32]}
-  fontWeight={400}
-  sampleText="Create, review, and publish your next chapter."
-/>
+## Weights
 
-## Story
-
-Lora is reserved for narrative prose and long-form reading, keeping authored worlds visually
-separate from the surrounding product chrome.
-
-<Typeset
-  fontFamily={storyStack}
-  fontSizes={[16, 18, 20, 24, 32, 40]}
-  fontWeight={400}
-  sampleText="Beyond the last lantern, the road became a promise."
-/>
-
-## Monospace
-
-JetBrains Mono is used for identifiers, structured values, logs, and code-adjacent content.
-
-<Typeset fontFamily={monoStack} fontSizes={[12, 14, 16, 18, 20]} fontWeight={400} sampleText="scene.intensity = 0.72" />
-
-## Weight rule
-
-The interface and display families ship real regular and bold files. Use `400` or `700`; synthetic
-intermediate weights undermine the intended typography and can vary by browser.
+Use `--font-weight-regular` for body copy, `--font-weight-medium` for emphasis, and
+`--font-weight-bold` for labels and headings.

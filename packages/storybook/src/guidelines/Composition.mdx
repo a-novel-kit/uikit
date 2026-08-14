@@ -1,0 +1,29 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Guidelines/Composition" />
+
+# Composition
+
+Build interfaces from small semantic parts. Components own behavior and shared styling; applications own their content and arrangement.
+
+## Choose the smallest brick
+
+| Need                                 | Use                                               |
+| ------------------------------------ | ------------------------------------------------- |
+| Place content with consistent rhythm | `Stack`, `Inline`, `Grid`, `Container`            |
+| Name and describe a control          | `Field` or `Fieldset` around a control            |
+| Perform an action                    | `Button` or `IconButton`                          |
+| Navigate                             | `Link`, `NavList`, `Tabs`, or `Breadcrumbs`       |
+| Reveal supporting content            | `Disclosure`, `Accordion`, `Popover`, or `Dialog` |
+
+## Content hooks
+
+Visible labels, descriptions, adornments, actions, and item renderers accept snippets where composition is useful. Keep plain text identifiers in the data model so keyboard search, accessible names, and application logic remain reliable.
+
+Prefer children and named snippets over adding presentation-only options. Promote a repeated composition to a recipe before creating another primitive.
+
+## Ownership
+
+- Components own focus, keyboard behavior, state attributes, and token use.
+- Applications own routing, data loading, validation rules, and domain workflows.
+- Recipes show common assemblies without becoming required abstractions.

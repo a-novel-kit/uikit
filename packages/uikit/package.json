@@ -29,7 +29,9 @@
   },
   "dependencies": {
     "@a-novel-kit/uikit-fonts": "workspace:*",
-    "@a-novel-kit/uikit-tokens": "workspace:*"
+    "@a-novel-kit/uikit-icons": "workspace:*",
+    "@a-novel-kit/uikit-tokens": "workspace:*",
+    "bits-ui": "^2.18.1"
   },
   "devDependencies": {
     "@sveltejs/package": "^2.5.4",

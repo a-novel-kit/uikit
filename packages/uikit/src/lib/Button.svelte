@@ -1,23 +1,35 @@
 <script lang="ts" module>
+  import type { Snippet } from "svelte";
   import type { HTMLButtonAttributes } from "svelte/elements";
 
-  export interface ButtonProps extends HTMLButtonAttributes {
-    /** Visual emphasis. `solid` is the primary action; `ghost` is low-emphasis. */
-    variant?: "solid" | "ghost";
+  export interface ButtonProps extends Omit<HTMLButtonAttributes, "children"> {
+    /** Content rendered inside the button. */
+    children?: Snippet;
+    /** Visual treatment. Choose importance with variant and meaning with tone. */
+    variant?: "solid" | "outline" | "ghost";
+    /** Semantic intent. Danger is reserved for destructive or irreversible actions. */
+    tone?: "brand" | "neutral" | "danger";
     /** Control size. */
     size?: "sm" | "md" | "lg";
+    /** Removes inline padding and makes the control square. Used by IconButton. */
+    square?: boolean;
   }
 </script>
 
 <script lang="ts">
-  // A native <button> — the accessible element already exists, so we style it with
-  // tokens rather than reach for a primitive. All other native button attributes
-  // (type, disabled, onclick, aria-*, …) come from HTMLButtonAttributes and forward
-  // through {...rest}. Emphasis is Bold (Heros ships only 400/700), never a mid weight.
-  let { variant = "solid", size = "md", type = "button", children, ...rest }: ButtonProps = $props();
+  let {
+    variant = "solid",
+    tone = "brand",
+    size = "md",
+    square = false,
+    type = "button",
+    class: className = "",
+    children,
+    ...rest
+  }: ButtonProps = $props();
 </script>
 
-<button {type} class="button {variant} {size}" {...rest}>
+<button {type} class="button {variant} {tone} {size} {square ? 'square' : ''} {className}" {...rest}>
   {@render children?.()}
 </button>
 
@@ -27,9 +39,14 @@
     justify-content: center;
     align-items: center;
     gap: var(--space-2);
-    transition: background-color var(--duration-fast) var(--easing-standard);
+    transition:
+      background-color var(--duration-fast) var(--easing-standard),
+      border-color var(--duration-fast) var(--easing-standard),
+      box-shadow var(--duration-fast) var(--easing-standard),
+      color var(--duration-fast) var(--easing-standard);
     cursor: pointer;
     box-sizing: border-box;
+    box-shadow: none;
     border: var(--border-width-thin) solid transparent;
     border-radius: var(--radius-md);
     font-weight: var(--font-weight-bold);
@@ -37,14 +54,45 @@
     font-family: var(--font-family-interface);
   }
 
+  .brand {
+    --button-rest: var(--color-action-primary);
+    --button-hover: var(--color-action-primary-hover);
+    --button-active: var(--color-action-primary-active);
+    --button-selected: var(--color-action-primary-selected);
+    --button-selected-foreground: var(--color-action-primary-selected);
+    --button-text: var(--color-action-primary-text);
+    --button-foreground: var(--color-action-primary);
+    --button-foreground-hover: var(--color-action-primary-hover);
+    --button-glow: var(--shadow-glow-brand-strong);
+  }
+
+  .neutral {
+    --button-rest: var(--color-action-neutral);
+    --button-hover: var(--color-action-neutral-hover);
+    --button-active: var(--color-action-neutral-active);
+    --button-selected: var(--color-action-neutral-selected);
+    --button-selected-foreground: var(--color-action-neutral-text);
+    --button-text: var(--color-action-neutral-text);
+    --button-foreground: var(--color-text-secondary);
+    --button-foreground-hover: var(--color-text-primary);
+    --button-glow: var(--shadow-glow-neutral);
+  }
+
+  .danger {
+    --button-rest: var(--color-action-danger);
+    --button-hover: var(--color-action-danger-hover);
+    --button-active: var(--color-action-danger-active);
+    --button-selected: var(--color-action-danger-selected);
+    --button-selected-foreground: var(--color-action-danger-selected);
+    --button-text: var(--color-action-danger-text);
+    --button-foreground: var(--color-action-danger);
+    --button-foreground-hover: var(--color-action-danger-hover);
+    --button-glow: var(--shadow-glow-pressure-strong);
+  }
+
   .button:focus-visible {
     outline: var(--focus-ring-width) solid var(--color-focus-ring);
     outline-offset: var(--focus-ring-offset);
-  }
-
-  .button:disabled {
-    opacity: var(--opacity-disabled);
-    cursor: not-allowed;
   }
 
   /* Logical padding keeps the control shape consistent in right-to-left layouts. */
@@ -67,19 +115,91 @@
     font-size: var(--font-size-lg);
   }
 
-  .solid {
-    background-color: var(--color-action-primary);
-    color: var(--color-action-primary-text);
+  .square {
+    padding: 0;
+    aspect-ratio: 1;
   }
-  .solid:hover:not(:disabled) {
-    background-color: var(--color-action-primary-hover);
+
+  .sm.square {
+    inline-size: var(--control-height-sm);
+  }
+
+  .md.square {
+    inline-size: var(--control-height-md);
+  }
+
+  .lg.square {
+    inline-size: var(--control-height-lg);
+  }
+
+  .solid {
+    background-color: var(--button-rest);
+    color: var(--button-text);
+  }
+
+  .solid:hover:not(:disabled):not([aria-pressed="true"]) {
+    background-color: var(--button-hover);
+  }
+
+  .solid:active:not(:disabled):not([aria-pressed="true"]) {
+    background-color: var(--button-active);
+  }
+
+  .solid[aria-pressed="true"] {
+    box-shadow: var(--button-glow);
+    background-color: var(--button-selected);
+  }
+
+  .outline {
+    border-color: var(--button-rest);
+    background-color: transparent;
+    color: var(--button-foreground);
+  }
+
+  .outline:hover:not(:disabled):not([aria-pressed="true"]) {
+    border-color: var(--button-hover);
+    background-color: color-mix(in oklab, var(--button-selected) var(--color-mix-2), transparent);
+    color: var(--button-foreground-hover);
+  }
+
+  .outline:active:not(:disabled):not([aria-pressed="true"]) {
+    background-color: color-mix(in oklab, var(--button-active) var(--color-mix-3), transparent);
+  }
+
+  .outline[aria-pressed="true"] {
+    box-shadow: var(--button-glow);
+    border-color: var(--button-selected);
+    background-color: color-mix(in oklab, var(--button-selected) var(--color-mix-2), transparent);
+    color: var(--button-selected-foreground);
   }
 
   .ghost {
     background-color: transparent;
-    color: var(--color-action-ghost-text);
+    color: var(--button-foreground);
   }
-  .ghost:hover:not(:disabled) {
+
+  .ghost:hover:not(:disabled):not([aria-pressed="true"]) {
     background-color: var(--color-action-ghost-hover);
+    color: var(--button-foreground-hover);
+  }
+
+  .ghost:active:not(:disabled):not([aria-pressed="true"]) {
+    background-color: var(--color-surface-subtle);
+  }
+
+  .ghost[aria-pressed="true"] {
+    box-shadow: var(--button-glow);
+    border-color: var(--button-selected);
+    background-color: color-mix(in oklab, var(--button-selected) var(--color-mix-2), var(--color-surface-raised));
+    color: var(--button-selected-foreground);
+  }
+
+  .button:disabled {
+    opacity: 1;
+    cursor: not-allowed;
+    box-shadow: none;
+    border-color: var(--color-action-disabled-border);
+    background-color: var(--color-action-disabled-surface);
+    color: var(--color-action-disabled-text);
   }
 </style>

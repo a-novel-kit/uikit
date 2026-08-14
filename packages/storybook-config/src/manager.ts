@@ -1,4 +1,4 @@
-import { agoraTheme } from "./agoraTheme";
+import { agoraTheme } from "./theme.js";
 
 import "@a-novel-kit/uikit-fonts/fonts.css";
 

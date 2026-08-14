@@ -1,52 +1,56 @@
 import * as ButtonStories from "./Button.stories.svelte";
 
-import { ArgTypes, Canvas, Controls, Meta, Stories } from "@storybook/addon-docs/blocks";
+import { Canvas, Controls, Meta } from "@storybook/addon-docs/blocks";
 
 <Meta of={ButtonStories} />
 
 # Button
 
-Buttons trigger an action in the current context. Use a link for navigation, including navigation
-that happens to look like a button.
+Buttons trigger an action in the current context. Use `Link` for navigation.
 
 <Canvas of={ButtonStories.Playground} />
 <Controls of={ButtonStories.Playground} />
 
 ## Variants
 
-- **Solid** identifies the primary action in a region. Prefer one solid action per decision.
-- **Ghost** keeps a secondary or dismissive action available without competing for attention.
+| Variant   | Use                                     |
+| --------- | --------------------------------------- |
+| `solid`   | Primary action in a region.             |
+| `outline` | Secondary action with a visible border. |
+| `ghost`   | Quiet, supplementary, or cancel action. |
 
-<Canvas of={ButtonStories.Solid} />
-<Canvas of={ButtonStories.Ghost} />
+<Canvas of={ButtonStories.Variants} />
+
+## Tones
+
+Tone sets semantic intent. Use `brand` by default, `neutral` for utility actions, and `danger` for
+destructive actions. `signal` communicates status and feedback, so it is not a button tone.
+
+<Canvas of={ButtonStories.Tones} />
+
+## Content
+
+The default snippet accepts text, HTML, and Svelte components. Combine an icon with a visible label;
+use `IconButton` for icon-only actions.
+
+<Canvas of={ButtonStories.IconAndText} />
 
 ## Sizes
 
-Choose size from the surrounding density, not from the perceived importance of the action. Small is
-for compact toolbars, medium is the default, and large suits sparse onboarding or prominent forms.
+Use `md` by default, `sm` in compact controls, and `lg` in spacious layouts.
 
-<Canvas of={ButtonStories.Small} />
-<Canvas of={ButtonStories.Large} />
-
-## Design contract
-
-Each size combines the shared control-height, spacing, and type scales. Radius, motion, focus, and
-disabled treatment also come from public metric tokens. Variants consume semantic action colors, so
-palette changes do not rewrite component CSS.
-
-## Accessibility contract
-
-- Renders a native `<button>` and defaults to `type="button"`.
-- Forwards `disabled`, `aria-*`, event handlers, and other native button attributes.
-- Requires a concise accessible name; visible text is preferred to `aria-label`.
-- Disabled state must explain itself in nearby content when the reason is not obvious.
-
-<Canvas of={ButtonStories.Disabled} />
-
-## API
-
-<ArgTypes of={ButtonStories} />
+<Canvas of={ButtonStories.Sizes} />
 
 ## States
 
-<Stories includePrimary={false} />
+`aria-pressed="true"` creates a persistent brand or neutral toggle. Neutral toggles remain neutral
+when selected. Danger buttons trigger destructive actions and do not represent selection. Selected
+buttons remain unchanged on hover and active interaction. Use the native `disabled` attribute when an
+action is unavailable.
+
+<Canvas of={ButtonStories.States} />
+
+## Accessibility
+
+`Button` renders a native `<button>`, defaults to `type="button"`, and forwards native attributes and
+event handlers. Provide a concise visible label or an accessible name.

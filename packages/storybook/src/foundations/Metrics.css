@@ -14,9 +14,8 @@
 .metric-track {
   display: flex;
   align-items: center;
-  border: var(--border-width-thin) solid var(--color-border-subtle);
   border-radius: var(--radius-sm);
-  background: var(--color-surface-subtle);
+  background: var(--color-surface-island-subtle);
   block-size: var(--space-6);
   overflow: hidden;
 }
@@ -26,6 +25,67 @@
   background: var(--color-action-primary);
   inline-size: var(--metric-size);
   block-size: 100%;
+}
+
+.ratio-grid,
+.surface-demo {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18ch, 1fr));
+  gap: var(--space-4);
+  margin-block: var(--space-6);
+}
+
+.ratio-card,
+.surface-demo > section {
+  display: grid;
+  align-content: start;
+  gap: var(--space-2);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  min-inline-size: 0;
+}
+
+.ratio-card {
+  background: var(--color-surface-island-subtle);
+}
+
+.ratio-card > div {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.ratio-card strong,
+.surface-demo strong {
+  color: var(--color-text-primary);
+  font-family: var(--font-family-display);
+}
+
+.ratio-card span,
+.surface-demo span {
+  color: var(--color-text-muted);
+  line-height: var(--line-height-normal);
+}
+
+.ratio-card i {
+  display: block;
+  border-radius: var(--radius-sm);
+  background: var(--color-action-primary);
+  inline-size: calc(var(--space-16) * var(--metric-ratio));
+  max-inline-size: 100%;
+  block-size: var(--space-2);
+}
+
+.surface-group {
+  background: transparent;
+}
+
+.surface-island--subtle {
+  background: var(--color-surface-island-subtle);
+}
+
+.surface-island--strong {
+  box-shadow: var(--shadow-island);
+  background: var(--color-surface-island-strong);
 }
 
 .radius-grid {
@@ -38,9 +98,8 @@
 .radius-card {
   display: grid;
   place-items: center;
-  border: var(--border-width-thin) solid var(--color-border-subtle);
   border-radius: var(--metric-radius);
-  background: var(--color-surface-subtle);
+  background: var(--color-surface-island);
   padding: var(--space-4);
   min-block-size: calc(var(--space-8) * var(--multiplier-2));
 }

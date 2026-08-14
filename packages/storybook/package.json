@@ -1,5 +1,5 @@
 {
-  "name": "@a-novel-kit/uikit-storybook",
+  "name": "@a-novel-kit/uikit-storybook-workbench",
   "version": "0.1.0",
   "private": true,
   "description": "Private component workbench and design-system documentation for Agora UI",
@@ -13,16 +13,16 @@
   "dependencies": {
     "@a-novel-kit/uikit": "workspace:*",
     "@a-novel-kit/uikit-fonts": "workspace:*",
+    "@a-novel-kit/uikit-icons": "workspace:*",
+    "@a-novel-kit/uikit-storybook": "workspace:*",
     "@a-novel-kit/uikit-tokens": "workspace:*"
   },
   "devDependencies": {
-    "@storybook/addon-a11y": "catalog:",
     "@storybook/addon-docs": "catalog:",
     "@storybook/addon-svelte-csf": "catalog:",
     "@storybook/svelte-vite": "catalog:",
     "@sveltejs/vite-plugin-svelte": "^6.2.0",
     "@types/node": "^24.10.0",
-    "remark-gfm": "4.0.1",
     "storybook": "catalog:",
     "svelte": "^5.55.8",
     "svelte-check": "catalog:",

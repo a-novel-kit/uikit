@@ -15,9 +15,12 @@ describe("Button", () => {
   });
 
   it("forwards native attributes through rest props", () => {
-    const { getByRole } = render(Button, { props: { disabled: true, "aria-label": "save" } });
+    const { getByRole } = render(Button, {
+      props: { disabled: true, "aria-label": "save", "aria-pressed": true },
+    });
     const button = getByRole("button");
     expect(button.hasAttribute("disabled")).toBe(true);
     expect(button.getAttribute("aria-label")).toBe("save");
+    expect(button.getAttribute("aria-pressed")).toBe("true");
   });
 });

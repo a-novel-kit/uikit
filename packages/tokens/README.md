@@ -24,27 +24,58 @@ define the system's scale and are not component-level choices.
 
 ## Color
 
-An electric-blue base at `oklch(0.78 0.17 212.66)` anchors the brand scale. The system applies a
-`40deg` symmetric compression to a `120deg` triad, producing `140deg / 80deg / 140deg` gaps between
-brand, pressure, and signal. A reduced-chroma copy of brand generates neutral.
+Colors are authored from one OKLCH anchor. The generated stylesheet keeps primitives in `oklch()`,
+relative color syntax, and CSS math. Semantic transparency and blending use `color-mix()`. The browser
+maps each device-independent color to the display gamut at paint time under CSS Color 4. Applications
+receive a dependency-free stylesheet.
 
-A shared `0.07` lightness step produces each 12-step scale around solid step `9`. Chroma also peaks
-at step `9`, where solid controls and expressive accents need the clearest hue.
+Electric blue at `232deg` anchors the palette. Its `52deg` complement is biased by `-10deg` to an
+opposition center at `42deg`, then split by `±26deg`. CSS `calc()` derives pressure at `16deg` and signal
+at `68deg`, producing `144deg / 52deg / 164deg` gaps from the brand hue.
+
+The generator samples the Display P3 gamut to calculate peak and per-step chroma coefficients for each
+derived hue. The CSS output stores the brand peak once. Relative OKLCH applies generated lightness and
+chroma factors to pressure and signal, preserving the approved vividness without authored RGB values.
 
 ```css
---color-brand-9: oklch(from var(--base-brand) var(--scale-l-9) calc(c * var(--scale-c-9)) h);
+--color-hue-pressure: calc(
+  var(--color-hue-brand) + var(--color-harmony-half-turn) + var(--color-harmony-opposition-bias) -
+    var(--color-harmony-opposition-spread) / var(--multiplier-2)
+);
+
+--base-pressure: oklch(
+  from var(--base-brand) calc(l * var(--color-peak-lightness-pressure-factor))
+    calc(c * var(--color-peak-chroma-pressure-factor)) var(--color-hue-pressure)
+);
 ```
+
+The chromatic ramps end at each hue's Display P3 gamut cusp: brand `L 0.718 / C 0.193`, pressure
+`L 0.656 / C 0.296`, and signal `L 0.797 / C 0.201`. CSS `pow()` applies the `1.45` lightness curve.
+Neutrals use a `1.6` curve, fixed `C = 0.009`, and the brand hue. These non-linear curves hold early
+steps near black, then accelerate into the vivid and readable half of each scale.
+
+Semantic surfaces and borders mix the cusp-derived peaks into the neutral field. Their strengths derive
+from `--color-mix-base: 6.25%`: surfaces use two units and borders use eight, nine, or ten units.
+Graphic grid, trace, glow, and gradient tokens use the same palette and mix scale; effects remain
+separate from component meaning and foreground contrast.
 
 Components use semantic aliases such as `--color-action-primary` and `--color-feedback-error-text`.
 Brand carries agency, pressure carries urgency and failure, and signal carries readiness and successful
-outcomes. Feedback components pair color with a label or icon. Primitive palette steps remain available
-for design-system work. Relative color syntax requires Chrome 119+, Safari 16.4+, or Firefox 128+.
+outcomes. Actions use a restrained idle step, lighten once on hover, and reserve the peak plus glow for
+selected state. Disabled controls use neutral surface, border, and text tokens. Feedback components pair
+color with a label or icon. Primitive palette steps remain available for design-system work.
+
+`scripts/generate-colors.mjs` is the authoring source. Run
+`pnpm --filter @a-novel-kit/uikit-tokens generate:colors` after changing its compact bases. It writes
+the formula-based `colors.css` and an OKLCH `palette` export for tooling. Color.js samples gamut only
+during development. The private Storybook manager derives the legacy string required by its theme
+parser; that conversion is outside the token and component APIs.
 
 ## Spacing, shape, and motion
 
-Spacing uses a `0.25rem` base. Radius, control height, border, focus-ring, duration, easing, and disabled
-opacity tokens follow the same compact model. Changing a base preserves the relationships between
-generated values.
+Spacing uses a `0.25rem` base. Blur, radius, control height, border, focus-ring, duration, easing, and
+disabled opacity tokens follow the same compact model. Changing a base preserves the relationships
+between generated values.
 
 ## Type
 

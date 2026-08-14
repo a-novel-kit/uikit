@@ -4,4 +4,5 @@ dist
 .svelte-kit
 coverage
 storybook-static
+packages/tokens/colors.css
 packages/tokens/tokens.css

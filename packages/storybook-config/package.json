@@ -1,0 +1,56 @@
+{
+  "name": "@a-novel-kit/uikit-storybook",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Shared Storybook configuration and Agora theme for Svelte interfaces",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/a-novel-kit/uikit.git"
+  },
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./manager": "./dist/manager.js",
+    "./package.json": "./package.json",
+    "./preset": "./dist/preset.js",
+    "./preview": {
+      "types": "./dist/preview.d.ts",
+      "default": "./dist/preview.js"
+    }
+  },
+  "files": [
+    "dist",
+    "preview.css",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@a-novel-kit/uikit-fonts": "workspace:*",
+    "@a-novel-kit/uikit-tokens": "workspace:*",
+    "@storybook/addon-a11y": "catalog:",
+    "@storybook/addon-docs": "catalog:",
+    "@storybook/addon-svelte-csf": "catalog:",
+    "colorjs.io": "^0.7.1",
+    "remark-gfm": "4.0.1"
+  },
+  "devDependencies": {
+    "@storybook/svelte-vite": "catalog:",
+    "@types/node": "^24.10.0",
+    "storybook": "catalog:",
+    "typescript": "catalog:"
+  },
+  "peerDependencies": {
+    "storybook": "^10.5.4"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  }
+}
