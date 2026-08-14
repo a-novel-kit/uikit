@@ -75,6 +75,7 @@
 
 .action-states > div {
   display: grid;
+  align-content: start;
   gap: var(--space-2);
   min-inline-size: 0;
 }
@@ -90,6 +91,7 @@
   inline-size: 100%;
   min-inline-size: 0;
   min-block-size: var(--control-height-md);
+  font: inherit;
   font-weight: var(--font-weight-bold);
   font-family: var(--font-family-interface);
 }
