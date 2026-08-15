@@ -24,7 +24,7 @@ describe("Select", () => {
       },
     });
 
-    const trigger = getByRole("button");
+    const trigger = getByRole("combobox");
     expect(trigger.getAttribute("id")).toBe("visibility");
     expect(trigger.getAttribute("aria-haspopup")).toBe("listbox");
     expect(trigger.textContent).toContain("Choose visibility");
@@ -44,7 +44,7 @@ describe("Select", () => {
       },
     });
 
-    const trigger = getByRole("button", { name: "Visibility" });
+    const trigger = getByRole("combobox", { name: "Visibility" });
     await fireEvent.keyDown(trigger, { key: "ArrowDown" });
 
     expect(getByRole("listbox")).toBeTruthy();
@@ -60,8 +60,7 @@ describe("Select", () => {
 
   it("uses composed option visuals without replacing accessible labels", async () => {
     const renderOption = createRawSnippet<[SelectOption<string>]>((option) => ({
-      render: () =>
-        `<span data-testid="option-${option().value}"><svg aria-hidden="true"></svg>${option().label}</span>`,
+      render: () => `<span data-testid="option-${option().value}"><svg aria-hidden="true"></svg></span>`,
     }));
     const { getByRole, getByTestId } = render(Select, {
       props: {
@@ -73,7 +72,7 @@ describe("Select", () => {
     });
 
     expect(getByTestId("option-private")).toBeTruthy();
-    await fireEvent.keyDown(getByRole("button", { name: "Visibility" }), { key: "ArrowDown" });
+    await fireEvent.keyDown(getByRole("combobox", { name: "Visibility" }), { key: "ArrowDown" });
     expect(getByRole("option", { name: "Organization" })).toBeTruthy();
     expect(getByTestId("option-organization")).toBeTruthy();
   });
@@ -90,7 +89,7 @@ describe("Select", () => {
       },
     });
 
-    const trigger = getByRole("button", { name: "Visibility" });
+    const trigger = getByRole("combobox", { name: "Visibility" });
     await fireEvent.keyDown(trigger, { key: "ArrowDown" });
     await fireEvent.keyDown(trigger, { key: "Enter" });
 

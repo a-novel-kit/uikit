@@ -13,8 +13,13 @@
     ToolbarToggleButton,
     VisuallyHidden,
   } from "@a-novel-kit/uikit";
-  import { CopyIcon, ExternalLinkIcon, RefreshIcon, SaveIcon } from "@a-novel-kit/uikit-icons";
 
+  import {
+    Copy as CopyIcon,
+    ExternalLink as ExternalLinkIcon,
+    RefreshCw as RefreshIcon,
+    Save as SaveIcon,
+  } from "@lucide/svelte";
   import { defineMeta } from "@storybook/addon-svelte-csf";
   import { expect, userEvent, within } from "storybook/test";
 

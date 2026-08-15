@@ -8,8 +8,6 @@
 <script lang="ts">
   import ToggleButton from "./ToggleButton.svelte";
 
-  import { Toolbar as ToolbarPrimitive } from "bits-ui";
-
   let {
     children,
     disabled = false,
@@ -19,10 +17,6 @@
   }: ToolbarToggleButtonProps = $props();
 </script>
 
-<ToolbarPrimitive.Button {disabled}>
-  {#snippet child({ props })}
-    <ToggleButton {...toggleProps} {...props} {disabled} bind:pressed {onPressedChange}>
-      {@render children?.()}
-    </ToggleButton>
-  {/snippet}
-</ToolbarPrimitive.Button>
+<ToggleButton {...toggleProps} {disabled} data-composite-item="" tabindex={-1} bind:pressed {onPressedChange}>
+  {@render children?.()}
+</ToggleButton>

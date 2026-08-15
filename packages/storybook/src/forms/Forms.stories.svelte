@@ -16,8 +16,8 @@
     Switch,
     Textarea,
   } from "@a-novel-kit/uikit";
-  import { LockIcon, SearchIcon, UsersIcon } from "@a-novel-kit/uikit-icons";
 
+  import { Lock as LockIcon, Search as SearchIcon, Users as UsersIcon } from "@lucide/svelte";
   import { defineMeta } from "@storybook/addon-svelte-csf";
 
   const visibilityOptions = [

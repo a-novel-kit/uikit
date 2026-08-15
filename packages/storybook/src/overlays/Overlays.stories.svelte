@@ -10,8 +10,8 @@
     Stack,
     Tooltip,
   } from "@a-novel-kit/uikit";
-  import { HelpIcon } from "@a-novel-kit/uikit-icons";
 
+  import { CircleHelp as HelpIcon } from "@lucide/svelte";
   import { defineMeta } from "@storybook/addon-svelte-csf";
 
   const { Story } = defineMeta({

@@ -49,11 +49,12 @@
 </script>
 
 <script lang="ts" generics="Value extends string">
-  import { normalizeSelectionValue, resolveInvalidState, toSelectionItems } from "./selection";
+  import FloatingSurface from "./internal/FloatingSurface.svelte";
+  import { findEnabledBoundary, findNextEnabledIndex, resolveInvalidState } from "./selection";
 
-  import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "@a-novel-kit/uikit-icons";
+  import { onDestroy, tick } from "svelte";
 
-  import { Select as SelectPrimitive } from "bits-ui";
+  import { Check as CheckIcon, ChevronDown as ChevronDownIcon } from "@lucide/svelte";
 
   let {
     options,
@@ -76,88 +77,237 @@
     renderOption,
   }: SelectProps<Value> = $props();
 
-  let primitiveValue = $derived(externalValue ?? "");
+  const componentId = $props.id();
+  const triggerId = $derived(id ?? componentId + "-trigger");
+  const listboxId = componentId + "-listbox";
 
-  const items = $derived(toSelectionItems(options));
+  let open = $state(false);
+  let activeIndex = $state(-1);
+  let triggerElement = $state<HTMLButtonElement | null>(null);
+  let listboxElement = $state<HTMLDivElement | null>(null);
+  let anchorWidth = $state("0px");
+  let typeaheadBuffer = "";
+  let typeaheadTimer: ReturnType<typeof setTimeout> | undefined;
+
+  const selectedIndex = $derived(options.findIndex((option) => option.value === externalValue));
+  const selectedOption = $derived(selectedIndex >= 0 ? options[selectedIndex] : undefined);
   const isInvalid = $derived(resolveInvalidState(invalid, ariaInvalid));
 
-  function handleValueChange(nextValue: string) {
-    const normalizedValue = normalizeSelectionValue<Value>(nextValue);
-    externalValue = normalizedValue;
-    onValueChange?.(normalizedValue);
+  $effect(() => {
+    if (disabled && open) closeListbox();
+  });
+
+  function optionId(index: number) {
+    return componentId + "-option-" + index;
   }
+
+  function rememberTrigger(element: HTMLButtonElement) {
+    triggerElement = element;
+    anchorWidth = element.getBoundingClientRect().width + "px";
+  }
+
+  function scrollActiveOption() {
+    if (activeIndex < 0) return;
+    const option = listboxElement?.querySelector<HTMLElement>('[data-option-index="' + activeIndex + '"]');
+    option?.scrollIntoView?.({ block: "nearest" });
+  }
+
+  async function openListbox(element: HTMLButtonElement, boundary?: "first" | "last") {
+    if (disabled) return;
+
+    rememberTrigger(element);
+    activeIndex =
+      boundary === undefined && selectedIndex >= 0 && !options[selectedIndex]?.disabled
+        ? selectedIndex
+        : findEnabledBoundary(options, boundary ?? "first");
+    open = true;
+    await tick();
+    scrollActiveOption();
+  }
+
+  function closeListbox(focusTrigger = false) {
+    open = false;
+    activeIndex = -1;
+    if (focusTrigger) triggerElement?.focus();
+  }
+
+  function moveActive(direction: -1 | 1) {
+    const boundary = direction === 1 ? "first" : "last";
+    activeIndex =
+      activeIndex < 0 ? findEnabledBoundary(options, boundary) : findNextEnabledIndex(options, activeIndex, direction);
+    void tick().then(scrollActiveOption);
+  }
+
+  function updateValue(nextValue: Value | undefined) {
+    if (externalValue === nextValue) return;
+
+    externalValue = nextValue;
+    onValueChange?.(nextValue);
+  }
+
+  function selectOption(option: SelectOption<Value>) {
+    if (option.disabled) return;
+
+    updateValue(allowDeselect && externalValue === option.value ? undefined : option.value);
+    closeListbox(true);
+  }
+
+  function handleTriggerClick(event: MouseEvent) {
+    const trigger = event.currentTarget as HTMLButtonElement;
+    if (open) closeListbox();
+    else void openListbox(trigger);
+  }
+
+  function handleTypeahead(key: string) {
+    clearTimeout(typeaheadTimer);
+    typeaheadBuffer += key.toLocaleLowerCase();
+    typeaheadTimer = setTimeout(() => (typeaheadBuffer = ""), 500);
+
+    const start = open ? activeIndex : selectedIndex;
+    for (let offset = 1; offset <= options.length; offset += 1) {
+      const index = (Math.max(start, -1) + offset) % options.length;
+      const option = options[index];
+      if (!option?.disabled && option.label.toLocaleLowerCase().startsWith(typeaheadBuffer)) {
+        if (open) {
+          activeIndex = index;
+          void tick().then(scrollActiveOption);
+        } else {
+          updateValue(option.value);
+        }
+        return;
+      }
+    }
+  }
+
+  function handleTriggerKeyDown(event: KeyboardEvent) {
+    if (disabled) return;
+    const trigger = event.currentTarget as HTMLButtonElement;
+
+    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      event.preventDefault();
+      if (!open) void openListbox(trigger, event.key === "ArrowDown" ? undefined : "last");
+      else moveActive(event.key === "ArrowDown" ? 1 : -1);
+      return;
+    }
+
+    if (event.key === "Home" || event.key === "End") {
+      if (!open) return;
+      event.preventDefault();
+      activeIndex = findEnabledBoundary(options, event.key === "Home" ? "first" : "last");
+      void tick().then(scrollActiveOption);
+      return;
+    }
+
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      if (!open) void openListbox(trigger);
+      else if (activeIndex >= 0 && options[activeIndex]) selectOption(options[activeIndex]);
+      return;
+    }
+
+    if (event.key === "Escape" && open) {
+      event.preventDefault();
+      closeListbox(true);
+      return;
+    }
+
+    if (!event.altKey && !event.ctrlKey && !event.metaKey && event.key.length === 1) {
+      handleTypeahead(event.key);
+    }
+  }
+
+  onDestroy(() => clearTimeout(typeaheadTimer));
 </script>
 
-<SelectPrimitive.Root
-  type="single"
-  {items}
-  bind:value={primitiveValue}
-  {name}
-  {autocomplete}
-  {required}
-  {disabled}
-  loop
-  {allowDeselect}
-  onValueChange={handleValueChange}
->
-  <SelectPrimitive.Trigger
+<div class="select-root">
+  <button
+    bind:this={triggerElement}
+    id={triggerId}
     class="agora-select-trigger {controlSize} {isInvalid ? 'invalid' : ''} {allowDeselect
       ? 'deselectable'
       : ''} {className}"
-    {id}
+    type="button"
+    role="combobox"
+    aria-controls={listboxId}
     aria-describedby={ariaDescribedBy}
+    aria-expanded={open}
+    aria-haspopup="listbox"
     aria-label={ariaLabel}
+    aria-activedescendant={open && activeIndex >= 0 ? optionId(activeIndex) : undefined}
     aria-invalid={isInvalid || undefined}
+    aria-required={required || undefined}
+    data-placeholder={selectedOption ? undefined : ""}
+    data-state={open ? "open" : "closed"}
+    {disabled}
     {tabindex}
+    onclick={handleTriggerClick}
+    onkeydown={handleTriggerKeyDown}
   >
-    <SelectPrimitive.Value {placeholder}>
-      {#snippet children({ selection })}
-        {#if selection.type === "single" && selection.selected}
-          {@const selectedOption = options.find((candidate) => candidate.value === selection.selected?.value)}
-          {#if renderOption && selectedOption}
-            {@render renderOption(selectedOption)}
-          {:else}
-            {selection.selected.label}
-          {/if}
-        {:else}
-          {placeholder}
-        {/if}
-      {/snippet}
-    </SelectPrimitive.Value>
+    <span data-select-value>
+      {#if selectedOption}
+        {#if renderOption}{@render renderOption(selectedOption)}{:else}{selectedOption.label}{/if}
+      {:else}
+        {placeholder}
+      {/if}
+    </span>
     <ChevronDownIcon class="agora-select-indicator" size="var(--icon-size-sm)" aria-hidden="true" />
-  </SelectPrimitive.Trigger>
-  <SelectPrimitive.Portal>
-    <SelectPrimitive.Content class="agora-select-content" sideOffset={8}>
-      <SelectPrimitive.ScrollUpButton class="agora-select-scroll-button">
-        <ChevronUpIcon size="var(--icon-size-sm)" aria-hidden="true" />
-      </SelectPrimitive.ScrollUpButton>
-      <SelectPrimitive.Viewport class="agora-select-viewport">
-        {#each options as option (option.value)}
-          <SelectPrimitive.Item
-            class="agora-select-item {allowDeselect ? 'deselectable' : ''}"
-            aria-disabled={option.disabled || undefined}
-            value={option.value}
-            label={option.label}
-            disabled={option.disabled}
-          >
-            {#snippet children({ selected })}
-              <span>
-                {#if renderOption}{@render renderOption(option)}{:else}{option.label}{/if}
-              </span>
-              {#if selected}<CheckIcon size="var(--icon-size-sm)" aria-hidden="true" />{/if}
-            {/snippet}
-          </SelectPrimitive.Item>
-        {/each}
-      </SelectPrimitive.Viewport>
-      <SelectPrimitive.ScrollDownButton class="agora-select-scroll-button">
-        <ChevronDownIcon size="var(--icon-size-sm)" aria-hidden="true" />
-      </SelectPrimitive.ScrollDownButton>
-    </SelectPrimitive.Content>
-  </SelectPrimitive.Portal>
-</SelectPrimitive.Root>
+  </button>
+
+  {#if name}
+    <input type="hidden" {name} value={externalValue ?? ""} {autocomplete} {disabled} />
+  {/if}
+
+  <FloatingSurface
+    bind:open
+    bind:element={listboxElement}
+    source={triggerElement}
+    id={listboxId}
+    class="agora-select-content"
+    role="listbox"
+    aria-labelledby={triggerId}
+    style="--agora-select-anchor-width: {anchorWidth}"
+    onOpenChange={(nextOpen) => {
+      if (!nextOpen) activeIndex = -1;
+    }}
+  >
+    {#each options as option, index (option.value)}
+      <button
+        id={optionId(index)}
+        class="agora-select-item {allowDeselect ? 'deselectable' : ''}"
+        type="button"
+        tabindex={-1}
+        role="option"
+        aria-label={option.label}
+        aria-selected={externalValue === option.value}
+        aria-disabled={option.disabled || undefined}
+        data-option-index={index}
+        data-highlighted={activeIndex === index || undefined}
+        data-selected={externalValue === option.value || undefined}
+        data-disabled={option.disabled || undefined}
+        disabled={option.disabled}
+        onpointermove={() => {
+          if (!option.disabled) activeIndex = index;
+        }}
+        onpointerdown={(event) => event.preventDefault()}
+        onclick={() => selectOption(option)}
+      >
+        <span
+          >{#if renderOption}{@render renderOption(option)}{:else}{option.label}{/if}</span
+        >
+        {#if externalValue === option.value}
+          <CheckIcon size="var(--icon-size-sm)" aria-hidden="true" />
+        {/if}
+      </button>
+    {/each}
+  </FloatingSurface>
+</div>
 
 <style>
-  :global(.agora-select-trigger) {
+  .select-root {
+    min-inline-size: 0;
+  }
+
+  .agora-select-trigger {
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
@@ -181,19 +331,19 @@
     text-align: start;
   }
 
-  :global(.agora-select-trigger:hover:not(:disabled, :focus-visible, [aria-invalid="true"])) {
+  .agora-select-trigger:hover:not(:disabled, :focus-visible, [aria-invalid="true"]) {
     border-color: var(--color-control-border-hover);
     background: var(--color-control-surface-hover);
   }
 
-  :global(.agora-select-trigger:focus-visible) {
+  .agora-select-trigger:focus-visible {
     outline: none;
     box-shadow: var(--shadow-focus-ring);
     border-color: var(--color-control-border-focus);
     background: var(--color-control-surface-focus);
   }
 
-  :global(.agora-select-trigger[data-placeholder] [data-select-value]) {
+  .agora-select-trigger[data-placeholder] [data-select-value] {
     color: var(--color-text-muted);
   }
 
@@ -203,95 +353,90 @@
     color: var(--color-text-muted);
   }
 
-  :global(.agora-select-trigger[data-state="open"] .agora-select-indicator) {
+  .agora-select-trigger[data-state="open"] :global(.agora-select-indicator) {
     transform: rotate(180deg);
   }
 
-  @media (forced-colors: active) {
-    :global(.agora-select-trigger:focus-visible) {
-      outline: var(--border-width-strong) solid Highlight;
-      outline-offset: var(--focus-ring-offset);
-    }
-
-    :global(.agora-select-content) {
-      border: var(--border-width-thin) solid CanvasText;
-    }
-  }
-
-  :global(.agora-select-trigger:disabled) {
+  .agora-select-trigger:disabled {
     cursor: not-allowed;
     border-color: var(--color-border-subtle);
     background: var(--color-control-surface-disabled);
     color: var(--color-control-disabled-text);
   }
 
-  :global(.agora-select-trigger:disabled .agora-select-indicator) {
+  .agora-select-trigger:disabled :global(.agora-select-indicator) {
     color: var(--color-control-disabled-text);
   }
 
-  :global(.agora-select-trigger.invalid),
-  :global(.agora-select-trigger[aria-invalid="true"]) {
+  .agora-select-trigger.invalid,
+  .agora-select-trigger[aria-invalid="true"] {
     border-color: var(--color-feedback-error-border);
     background: var(--color-control-surface-invalid);
   }
 
-  :global(.agora-select-trigger.invalid:focus-visible),
-  :global(.agora-select-trigger[aria-invalid="true"]:focus-visible) {
+  .agora-select-trigger.invalid:focus-visible,
+  .agora-select-trigger[aria-invalid="true"]:focus-visible {
     box-shadow: var(--shadow-invalid-focus-ring);
     border-color: var(--color-feedback-error-border);
     background: var(--color-control-surface-invalid);
   }
 
-  :global(.agora-select-trigger.sm) {
+  .agora-select-trigger.sm {
     padding-inline: var(--space-3);
     min-block-size: var(--control-height-sm);
     font-size: var(--font-size-sm);
   }
-  :global(.agora-select-trigger.md) {
+  .agora-select-trigger.md {
     padding-inline: var(--space-3);
     min-block-size: var(--control-height-md);
     font-size: var(--font-size-md);
   }
-  :global(.agora-select-trigger.lg) {
+  .agora-select-trigger.lg {
     padding-inline: var(--space-4);
     min-block-size: var(--control-height-lg);
     font-size: var(--font-size-lg);
   }
 
   :global(.agora-select-content) {
+    display: grid;
+    position-area: block-end span-inline-end;
+    justify-self: start;
+    gap: var(--space-1);
     z-index: var(--layer-dropdown);
+    inset-block-start: var(--space-2);
     outline: none;
     box-shadow: var(--shadow-lg);
     border: 0;
     border-radius: var(--radius-lg);
     background: var(--color-surface-island-strong);
-    inline-size: var(--bits-select-anchor-width);
-    min-inline-size: var(--bits-select-anchor-width);
-    max-block-size: min(var(--bits-select-content-available-height), var(--control-menu-max-height));
-    overflow: hidden;
-    color: var(--color-text-primary);
-  }
-
-  :global(.agora-select-viewport) {
-    display: grid;
-    gap: var(--space-1);
     padding: var(--space-1);
-    overflow: auto;
+    inline-size: var(--agora-select-anchor-width);
+    min-inline-size: var(--agora-select-anchor-width);
+    max-block-size: min(calc(100dvb - var(--space-8)), var(--control-menu-max-height));
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior-block: contain;
+    color: var(--color-text-primary);
   }
 
   :global(.agora-select-item) {
     display: flex;
     align-items: center;
     gap: var(--space-3);
+    appearance: none;
     cursor: pointer;
     outline: none;
+    border: 0;
     border-radius: var(--radius-md);
+    background: transparent;
     padding: var(--space-1) var(--space-3);
+    inline-size: 100%;
     min-block-size: calc(var(--control-height-sm) - var(--space-1));
     color: var(--color-text-secondary);
     font-size: var(--font-size-sm);
     font-family: var(--font-family-interface);
     user-select: none;
+    text-align: start;
   }
 
   :global(.agora-select-item > :last-child:not(:first-child)) {
@@ -319,14 +464,6 @@
     color: var(--color-text-disabled);
   }
 
-  :global(.agora-select-scroll-button) {
-    display: grid;
-    flex: none;
-    place-items: center;
-    block-size: var(--control-height-sm);
-    color: var(--color-text-muted);
-  }
-
   @supports (backdrop-filter: blur(0)) or (-webkit-backdrop-filter: blur(0)) {
     :global(.agora-select-content) {
       -webkit-backdrop-filter: blur(var(--blur-md));
@@ -337,6 +474,17 @@
     :global(.agora-select-item[data-highlighted]:not([data-selected]):not([data-disabled])) {
       -webkit-backdrop-filter: blur(var(--blur-sm));
       backdrop-filter: blur(var(--blur-sm));
+    }
+  }
+
+  @media (forced-colors: active) {
+    .agora-select-trigger:focus-visible {
+      outline: var(--border-width-strong) solid Highlight;
+      outline-offset: var(--focus-ring-offset);
+    }
+
+    :global(.agora-select-content) {
+      border: var(--border-width-thin) solid CanvasText;
     }
   }
 </style>

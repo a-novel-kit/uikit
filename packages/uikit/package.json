@@ -30,9 +30,8 @@
   },
   "dependencies": {
     "@a-novel-kit/uikit-fonts": "workspace:*",
-    "@a-novel-kit/uikit-icons": "workspace:*",
     "@a-novel-kit/uikit-tokens": "workspace:*",
-    "bits-ui": "^2.18.1"
+    "@lucide/svelte": "^1.31.0"
   },
   "devDependencies": {
     "@sveltejs/package": "^2.5.4",

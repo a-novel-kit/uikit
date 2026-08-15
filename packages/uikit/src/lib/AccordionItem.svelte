@@ -25,7 +25,7 @@
 
   import { getContext } from "svelte";
 
-  import { ChevronDownIcon } from "@a-novel-kit/uikit-icons";
+  import { ChevronDown as ChevronDownIcon } from "@lucide/svelte";
 
   let {
     summary,

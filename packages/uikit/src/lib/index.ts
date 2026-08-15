@@ -7,7 +7,13 @@ export type { AccordionProps } from "./Accordion.svelte";
 export { default as AccordionItem } from "./AccordionItem.svelte";
 export type { AccordionItemProps } from "./AccordionItem.svelte";
 export { default as ActionMenu } from "./ActionMenu.svelte";
-export type { ActionMenuAction, ActionMenuItem, ActionMenuProps, ActionMenuSeparator } from "./ActionMenu.svelte";
+export type {
+  ActionMenuAction,
+  ActionMenuItem,
+  ActionMenuProps,
+  ActionMenuSeparator,
+  ActionMenuTriggerAttributes,
+} from "./ActionMenu.svelte";
 export { default as Alert } from "./Alert.svelte";
 export type { AlertProps } from "./Alert.svelte";
 export { default as Avatar } from "./Avatar.svelte";

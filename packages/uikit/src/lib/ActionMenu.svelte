@@ -32,6 +32,28 @@
   /** An action or visual divider accepted by ActionMenu. */
   export type ActionMenuItem = ActionMenuAction | ActionMenuSeparator;
 
+  /** Attributes applied to a composed ActionMenu trigger. */
+  export interface ActionMenuTriggerAttributes {
+    /** Identifies the trigger. */
+    id: string;
+    /** Provides the trigger's accessible name. */
+    "aria-label": string;
+    /** Identifies the controlled menu. */
+    "aria-controls": string;
+    /** Reports menu visibility. */
+    "aria-expanded": boolean;
+    /** Reports the popup type. */
+    "aria-haspopup": "menu";
+    /** Prevents opening the menu. */
+    disabled: boolean;
+    /** Exposes visibility for trigger styling. */
+    "data-state": "open" | "closed";
+    /** Toggles the menu with a pointer. */
+    onclick: (event: MouseEvent) => void;
+    /** Opens the menu with standard menu-button keys. */
+    onkeydown: (event: KeyboardEvent) => void;
+  }
+
   /** Props for a composed menu of contextual actions. */
   export interface ActionMenuProps {
     /** Accessible name for the trigger. */
@@ -42,8 +64,8 @@
     triggerText?: string;
     /** Optional graphic in the default trigger. */
     triggerIcon?: Snippet;
-    /** Replaces the default trigger and receives its primitive attributes. */
-    trigger?: Snippet<[Record<string, unknown>]>;
+    /** Replaces the default trigger and receives its required attributes. */
+    trigger?: Snippet<[ActionMenuTriggerAttributes]>;
     /** Replaces visible action content while preserving its text label. */
     renderItem?: Snippet<[ActionMenuAction]>;
     /** Current menu visibility. */
@@ -58,7 +80,10 @@
 </script>
 
 <script lang="ts">
-  import { DropdownMenu } from "bits-ui";
+  import { getEnabledCompositeItems, moveCompositeFocus } from "./focus";
+  import FloatingSurface from "./internal/FloatingSurface.svelte";
+
+  import { onDestroy, tick } from "svelte";
 
   let {
     label,
@@ -72,46 +97,230 @@
     disabled = false,
     class: className = "",
   }: ActionMenuProps = $props();
+
+  const componentId = $props.id();
+  const triggerId = componentId + "-trigger";
+  const menuId = componentId + "-menu";
+
+  let triggerElement = $state<HTMLElement | null>(null);
+  let menuElement = $state<HTMLDivElement | null>(null);
+  let activeItemIndex = $state(-1);
+  let anchorWidth = $state("0px");
+  let typeaheadBuffer = "";
+  let typeaheadTimer: ReturnType<typeof setTimeout> | undefined;
+
+  const triggerAttributes = $derived<ActionMenuTriggerAttributes>({
+    id: triggerId,
+    "aria-label": label,
+    "aria-controls": menuId,
+    "aria-expanded": open,
+    "aria-haspopup": "menu",
+    disabled,
+    "data-state": open ? "open" : "closed",
+    onclick: handleTriggerClick,
+    onkeydown: handleTriggerKeyDown,
+  });
+
+  $effect(() => {
+    if (!open || !triggerElement) return;
+
+    anchorWidth = triggerElement.getBoundingClientRect().width + "px";
+  });
+
+  $effect(() => {
+    if (disabled && open) closeMenu();
+  });
+
+  function rememberTrigger(element: HTMLElement) {
+    triggerElement = element;
+    anchorWidth = element.getBoundingClientRect().width + "px";
+  }
+
+  function menuItems() {
+    return menuElement ? getEnabledCompositeItems(menuElement, "[data-menu-item]") : [];
+  }
+
+  function focusMenuItem(boundary: "first" | "last") {
+    const enabledItems = menuItems();
+    const item = boundary === "first" ? enabledItems[0] : enabledItems.at(-1);
+    if (!item) return;
+
+    activeItemIndex = Number(item.dataset.menuIndex);
+    item.focus();
+  }
+
+  async function openMenu(source: HTMLElement, boundary: "first" | "last") {
+    if (disabled) return;
+
+    rememberTrigger(source);
+    open = true;
+    await tick();
+    focusMenuItem(boundary);
+  }
+
+  function closeMenu(focusTrigger = false) {
+    open = false;
+    activeItemIndex = -1;
+    if (focusTrigger) triggerElement?.focus();
+  }
+
+  function handleTriggerClick(event: MouseEvent) {
+    const source = event.currentTarget as HTMLElement;
+    if (open) closeMenu();
+    else void openMenu(source, "first");
+  }
+
+  function handleTriggerKeyDown(event: KeyboardEvent) {
+    const source = event.currentTarget as HTMLElement;
+    if (event.key === "ArrowUp") {
+      event.preventDefault();
+      void openMenu(source, "last");
+      return;
+    }
+
+    if (event.key === "ArrowDown" || event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      void openMenu(source, "first");
+    }
+  }
+
+  function focusItem(item: HTMLElement) {
+    activeItemIndex = Number(item.dataset.menuIndex);
+    item.focus();
+  }
+
+  function handleTypeahead(key: string) {
+    clearTimeout(typeaheadTimer);
+    typeaheadBuffer += key.toLocaleLowerCase();
+    typeaheadTimer = setTimeout(() => (typeaheadBuffer = ""), 500);
+
+    const enabledItems = menuItems();
+    const currentIndex = enabledItems.findIndex((item) => Number(item.dataset.menuIndex) === activeItemIndex);
+    for (let offset = 1; offset <= enabledItems.length; offset += 1) {
+      const index = (Math.max(currentIndex, -1) + offset) % enabledItems.length;
+      const item = enabledItems[index];
+      if (item?.dataset.label?.toLocaleLowerCase().startsWith(typeaheadBuffer)) {
+        focusItem(item);
+        return;
+      }
+    }
+  }
+
+  function handleMenuKeyDown(event: KeyboardEvent) {
+    const current = event.target instanceof Element ? event.target.closest<HTMLElement>("[data-menu-item]") : null;
+
+    if (event.key === "Escape") {
+      event.preventDefault();
+      closeMenu(true);
+      return;
+    }
+
+    if (event.key === "Tab") {
+      closeMenu();
+      return;
+    }
+
+    if (!current) return;
+
+    const enabledItems = menuItems();
+    let next: HTMLElement | undefined;
+
+    if (event.key === "Home") next = enabledItems[0];
+    else if (event.key === "End") next = enabledItems.at(-1);
+    else if (event.key === "ArrowDown") next = moveCompositeFocus(enabledItems, current, 1, true);
+    else if (event.key === "ArrowUp") next = moveCompositeFocus(enabledItems, current, -1, true);
+    else if (!event.altKey && !event.ctrlKey && !event.metaKey && event.key.length === 1) {
+      handleTypeahead(event.key);
+      return;
+    }
+
+    if (!next) return;
+    event.preventDefault();
+    focusItem(next);
+  }
+
+  function selectAction(action: ActionMenuAction) {
+    if (action.disabled) return;
+
+    action.onSelect?.();
+    closeMenu(true);
+  }
+
+  onDestroy(() => clearTimeout(typeaheadTimer));
 </script>
 
-<DropdownMenu.Root bind:open>
-  {#if trigger}
-    <DropdownMenu.Trigger {disabled}>
-      {#snippet child({ props })}
-        {@render trigger(props)}
-      {/snippet}
-    </DropdownMenu.Trigger>
-  {:else}
-    <DropdownMenu.Trigger class={`agora-menu-trigger ${className}`} type="button" aria-label={label} {disabled}>
-      {#if triggerIcon}<span class="trigger-icon" aria-hidden="true">{@render triggerIcon()}</span>{/if}
-      {#if triggerText}<span>{triggerText}</span>{/if}
-    </DropdownMenu.Trigger>
-  {/if}
-  <DropdownMenu.Portal>
-    <DropdownMenu.Content class="agora-menu-content" {align} sideOffset={8} loop>
-      <DropdownMenu.Group class="agora-menu-group" aria-label={label}>
-        {#each items as item (item.id)}
-          {#if item.kind === "separator"}
-            <DropdownMenu.Separator class="agora-menu-separator" />
-          {:else}
-            <DropdownMenu.Item
-              class="agora-menu-item {item.tone === 'danger' ? 'danger' : ''}"
-              textValue={item.label}
-              disabled={item.disabled}
-              onSelect={() => item.onSelect?.()}
-            >
-              {#if item.icon}<span class="item-icon" aria-hidden="true">{@render item.icon()}</span>{/if}
-              <span
-                >{#if renderItem}{@render renderItem(item)}{:else}{item.label}{/if}</span
-              >
-              {#if item.shortcut}<kbd>{item.shortcut}</kbd>{/if}
-            </DropdownMenu.Item>
-          {/if}
-        {/each}
-      </DropdownMenu.Group>
-    </DropdownMenu.Content>
-  </DropdownMenu.Portal>
-</DropdownMenu.Root>
+{#if trigger}
+  {@render trigger(triggerAttributes)}
+{:else}
+  <button
+    bind:this={triggerElement}
+    id={triggerId}
+    class="agora-menu-trigger {className}"
+    type="button"
+    aria-controls={menuId}
+    aria-expanded={open}
+    aria-haspopup="menu"
+    aria-label={label}
+    data-state={open ? "open" : "closed"}
+    {disabled}
+    onclick={handleTriggerClick}
+    onkeydown={handleTriggerKeyDown}
+  >
+    {#if triggerIcon}<span class="trigger-icon" aria-hidden="true">{@render triggerIcon()}</span>{/if}
+    {#if triggerText}<span>{triggerText}</span>{/if}
+  </button>
+{/if}
+
+<FloatingSurface
+  bind:open
+  bind:element={menuElement}
+  source={triggerElement}
+  id={menuId}
+  class="agora-menu-content {align}"
+  role="menu"
+  aria-label={label}
+  style="--agora-menu-anchor-width: {anchorWidth}"
+  onkeydown={handleMenuKeyDown}
+  onfocusin={(event) => {
+    const item = event.target instanceof Element ? event.target.closest<HTMLElement>("[data-menu-item]") : null;
+    if (item) activeItemIndex = Number(item.dataset.menuIndex);
+  }}
+  onOpenChange={(nextOpen) => {
+    if (!nextOpen) activeItemIndex = -1;
+  }}
+>
+  <div class="agora-menu-group" role="group" aria-label={label}>
+    {#each items as item, index (item.id)}
+      {#if item.kind === "separator"}
+        <div class="agora-menu-separator" role="separator"></div>
+      {:else}
+        <button
+          class="agora-menu-item {item.tone === 'danger' ? 'danger' : ''}"
+          type="button"
+          role="menuitem"
+          aria-label={item.label}
+          data-menu-item=""
+          data-menu-index={index}
+          data-label={item.label}
+          data-highlighted={activeItemIndex === index || undefined}
+          data-disabled={item.disabled || undefined}
+          disabled={item.disabled}
+          tabindex={-1}
+          onpointermove={() => {
+            if (!item.disabled) activeItemIndex = index;
+          }}
+          onclick={() => selectAction(item)}
+        >
+          {#if item.icon}<span class="item-icon" aria-hidden="true">{@render item.icon()}</span>{/if}
+          <span
+            >{#if renderItem}{@render renderItem(item)}{:else}{item.label}{/if}</span
+          >
+          {#if item.shortcut}<kbd>{item.shortcut}</kbd>{/if}
+        </button>
+      {/if}
+    {/each}
+  </div>
+</FloatingSurface>
 
 <style>
   :global(.agora-menu-trigger) {
@@ -155,20 +364,30 @@
     color: var(--color-action-disabled-text);
   }
   :global(.agora-menu-content) {
-    transform-origin: var(--bits-dropdown-menu-content-transform-origin);
+    position-area: block-end span-inline-end;
     z-index: var(--layer-dropdown);
+    inset-block-start: var(--space-2);
     outline: none;
     box-shadow: var(--shadow-lg);
     border: 0;
     border-radius: var(--radius-lg);
     background: var(--color-surface-island-strong);
     padding: var(--space-1);
-    min-inline-size: max(var(--bits-dropdown-menu-anchor-width), calc(var(--space-base) * var(--multiplier-48)));
-    max-block-size: min(var(--bits-dropdown-menu-content-available-height), var(--control-menu-max-height));
+    min-inline-size: max(var(--agora-menu-anchor-width), calc(var(--space-base) * var(--multiplier-48)));
+    max-block-size: min(calc(100dvb - var(--space-8)), var(--control-menu-max-height));
     overflow-x: hidden;
     overflow-y: auto;
     overscroll-behavior-block: contain;
     color: var(--color-text-primary);
+  }
+  :global(.agora-menu-content.start) {
+    justify-self: start;
+  }
+  :global(.agora-menu-content.center) {
+    justify-self: center;
+  }
+  :global(.agora-menu-content.end) {
+    justify-self: end;
   }
   :global(.agora-menu-group) {
     display: grid;
@@ -178,15 +397,20 @@
     display: flex;
     align-items: center;
     gap: var(--space-3);
+    appearance: none;
     cursor: pointer;
     outline: none;
+    border: 0;
     border-radius: var(--radius-md);
+    background: transparent;
     padding: var(--space-1) var(--space-3);
+    inline-size: 100%;
     min-block-size: calc(var(--control-height-sm) - var(--space-1));
     color: var(--color-text-secondary);
     font-size: var(--font-size-sm);
     font-family: var(--font-family-interface);
     user-select: none;
+    text-align: start;
   }
   :global(.agora-menu-item[data-highlighted]) {
     background: var(--color-surface-glass-hover);

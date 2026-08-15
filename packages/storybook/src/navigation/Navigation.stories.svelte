@@ -1,7 +1,13 @@
 <script module lang="ts">
   import { ActionMenu, Breadcrumbs, Card, NavList, Pagination, Stack, Tabs } from "@a-novel-kit/uikit";
-  import { EditIcon, HomeIcon, MoreIcon, SettingsIcon, UsersIcon } from "@a-novel-kit/uikit-icons";
 
+  import {
+    Pencil as EditIcon,
+    House as HomeIcon,
+    Ellipsis as MoreIcon,
+    Settings as SettingsIcon,
+    Users as UsersIcon,
+  } from "@lucide/svelte";
   import { defineMeta } from "@storybook/addon-svelte-csf";
 
   const { Story } = defineMeta({

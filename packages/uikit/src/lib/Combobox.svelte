@@ -47,11 +47,12 @@
 </script>
 
 <script lang="ts" generics="Value extends string">
-  import { normalizeSelectionValue, resolveInvalidState, toSelectionItems } from "./selection";
+  import FloatingSurface from "./internal/FloatingSurface.svelte";
+  import { findEnabledBoundary, findNextEnabledIndex, resolveInvalidState } from "./selection";
 
-  import { CheckIcon, ChevronDownIcon } from "@a-novel-kit/uikit-icons";
+  import { tick } from "svelte";
 
-  import { Combobox as ComboboxPrimitive } from "bits-ui";
+  import { Check as CheckIcon, ChevronDown as ChevronDownIcon } from "@lucide/svelte";
 
   let {
     options,
@@ -73,115 +74,250 @@
     renderOption,
   }: ComboboxProps<Value> = $props();
 
-  let searchValue = $state("");
-  let open = $state(false);
-  let inputElement = $state<HTMLInputElement | null>(null);
-  let primitiveValue = $derived(externalValue ?? "");
+  const componentId = $props.id();
+  const inputId = $derived(id ?? componentId + "-input");
+  const listboxId = componentId + "-listbox";
 
-  const items = $derived(toSelectionItems(options));
+  let inputValue = $state("");
+  let searchTerm = $state("");
+  let open = $state(false);
+  let activeIndex = $state(-1);
+  let inputElement = $state<HTMLInputElement | null>(null);
+  let listboxElement = $state<HTMLDivElement | null>(null);
+  let anchorWidth = $state("0px");
+
+  const selectedOption = $derived(options.find((option) => option.value === externalValue));
   const isInvalid = $derived(resolveInvalidState(invalid, ariaInvalid));
   const filteredOptions = $derived(
-    searchValue === ""
+    searchTerm === ""
       ? options
-      : options.filter((option) => option.label.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))
+      : options.filter((option) => option.label.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase()))
   );
 
-  function handleValueChange(nextValue: string) {
-    const normalizedValue = normalizeSelectionValue<Value>(nextValue);
-    externalValue = normalizedValue;
-    onValueChange?.(normalizedValue);
+  $effect(() => {
+    if (!open) inputValue = selectedOption?.label ?? "";
+  });
+
+  $effect(() => {
+    if (!open) return;
+    if (activeIndex >= 0 && filteredOptions[activeIndex] && !filteredOptions[activeIndex]?.disabled) return;
+
+    activeIndex = findEnabledBoundary(filteredOptions, "first");
+  });
+
+  $effect(() => {
+    if (disabled && open) closeListbox();
+  });
+
+  function optionId(index: number) {
+    return componentId + "-option-" + index;
+  }
+
+  function rememberAnchor() {
+    if (!inputElement) return;
+    anchorWidth = inputElement.getBoundingClientRect().width + "px";
+  }
+
+  function scrollActiveOption() {
+    if (activeIndex < 0) return;
+    const option = listboxElement?.querySelector<HTMLElement>('[data-option-index="' + activeIndex + '"]');
+    option?.scrollIntoView?.({ block: "nearest" });
+  }
+
+  async function openListbox() {
+    if (disabled) return;
+
+    rememberAnchor();
+    searchTerm = "";
+    const selectedIndex = filteredOptions.findIndex((option) => option.value === externalValue);
+    activeIndex =
+      selectedIndex >= 0 && !filteredOptions[selectedIndex]?.disabled
+        ? selectedIndex
+        : findEnabledBoundary(filteredOptions, "first");
+    open = true;
+    await tick();
+    scrollActiveOption();
+  }
+
+  function closeListbox(focusInput = false) {
+    open = false;
+    activeIndex = -1;
+    searchTerm = "";
+    inputValue = selectedOption?.label ?? "";
+    if (focusInput) inputElement?.focus();
+  }
+
+  function ensureOpenForInput() {
+    if (open || disabled) return;
+
+    rememberAnchor();
+    open = true;
+  }
+
+  function moveActive(direction: -1 | 1) {
+    const boundary = direction === 1 ? "first" : "last";
+    activeIndex =
+      activeIndex < 0
+        ? findEnabledBoundary(filteredOptions, boundary)
+        : findNextEnabledIndex(filteredOptions, activeIndex, direction);
+    void tick().then(scrollActiveOption);
+  }
+
+  function updateValue(nextValue: Value | undefined) {
+    if (externalValue === nextValue) return;
+
+    externalValue = nextValue;
+    onValueChange?.(nextValue);
+  }
+
+  function selectOption(option: ComboboxOption<Value>) {
+    if (option.disabled) return;
+
+    updateValue(allowDeselect && externalValue === option.value ? undefined : option.value);
+    closeListbox(true);
   }
 
   function handleInputFocus() {
-    if (!disabled) open = true;
+    if (!open) void openListbox();
+  }
+
+  function handleInput(event: Event) {
+    inputValue = (event.currentTarget as HTMLInputElement).value;
+    searchTerm = inputValue;
+    ensureOpenForInput();
+    activeIndex = findEnabledBoundary(filteredOptions, "first");
+  }
+
+  function handleInputKeyDown(event: KeyboardEvent) {
+    if (disabled) return;
+
+    if (event.key === "Tab" && open) {
+      closeListbox();
+      return;
+    }
+
+    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      event.preventDefault();
+      if (!open) void openListbox();
+      else moveActive(event.key === "ArrowDown" ? 1 : -1);
+      return;
+    }
+
+    if (event.key === "Enter" && open && activeIndex >= 0 && filteredOptions[activeIndex]) {
+      event.preventDefault();
+      selectOption(filteredOptions[activeIndex]);
+      return;
+    }
+
+    if (event.key === "Escape" && open) {
+      event.preventDefault();
+      closeListbox(true);
+    }
   }
 
   function focusInputAndOpen() {
     if (disabled) return;
+
     inputElement?.focus();
-    open = true;
+    if (!open) void openListbox();
   }
 
   function handleTriggerPointerDown(event: PointerEvent) {
     event.preventDefault();
     if (event.button === 0) focusInputAndOpen();
   }
-
-  function handleTriggerKeyDown(event: KeyboardEvent) {
-    if (event.key !== "Enter" && event.key !== " ") return;
-    event.preventDefault();
-    focusInputAndOpen();
-  }
 </script>
 
 <div class="combobox {className}">
-  <ComboboxPrimitive.Root
-    type="single"
-    {items}
+  <div class="input-wrap" class:invalid={isInvalid}>
+    <input
+      bind:this={inputElement}
+      id={inputId}
+      class="agora-combobox-input"
+      type="text"
+      role="combobox"
+      value={inputValue}
+      {placeholder}
+      {autocomplete}
+      {disabled}
+      aria-autocomplete="list"
+      aria-controls={listboxId}
+      aria-describedby={ariaDescribedBy}
+      aria-expanded={open}
+      aria-haspopup="listbox"
+      aria-label={ariaLabel}
+      aria-activedescendant={open && activeIndex >= 0 ? optionId(activeIndex) : undefined}
+      aria-invalid={isInvalid || undefined}
+      aria-required={required || undefined}
+      onfocus={handleInputFocus}
+      oninput={handleInput}
+      onkeydown={handleInputKeyDown}
+    />
+    <button
+      class="agora-combobox-trigger"
+      type="button"
+      aria-label="Show options"
+      data-state={open ? "open" : "closed"}
+      tabindex={-1}
+      {disabled}
+      onpointerdown={handleTriggerPointerDown}
+      onclick={focusInputAndOpen}
+    >
+      <ChevronDownIcon size="var(--icon-size-sm)" aria-hidden="true" />
+    </button>
+  </div>
+
+  {#if name}
+    <input type="hidden" {name} value={externalValue ?? ""} {disabled} />
+  {/if}
+
+  <FloatingSurface
     bind:open
-    bind:value={primitiveValue}
-    {name}
-    {required}
-    {disabled}
-    {allowDeselect}
-    loop
-    onValueChange={handleValueChange}
-    onOpenChangeComplete={(open) => {
-      if (!open) searchValue = "";
+    bind:element={listboxElement}
+    source={inputElement}
+    id={listboxId}
+    class="agora-combobox-content"
+    role="listbox"
+    aria-labelledby={inputId}
+    style="--agora-combobox-anchor-width: {anchorWidth}; {maxMenuHeight
+      ? '--agora-combobox-menu-max-height: ' + maxMenuHeight
+      : ''}"
+    onOpenChange={(nextOpen) => {
+      if (!nextOpen) closeListbox();
     }}
   >
-    <div class="input-wrap" class:invalid={isInvalid}>
-      <ComboboxPrimitive.Input
-        bind:ref={inputElement}
-        class="agora-combobox-input"
-        {id}
-        {placeholder}
-        aria-describedby={ariaDescribedBy}
-        aria-label={ariaLabel}
-        aria-invalid={isInvalid || undefined}
-        {autocomplete}
-        onfocus={handleInputFocus}
-        oninput={(event) => (searchValue = event.currentTarget.value)}
-      />
-      <ComboboxPrimitive.Trigger
-        class="agora-combobox-trigger"
-        aria-label="Show options"
+    {#each filteredOptions as option, index (option.value)}
+      <button
+        id={optionId(index)}
+        class="agora-combobox-item {allowDeselect ? 'deselectable' : ''}"
+        type="button"
         tabindex={-1}
-        onpointerdown={handleTriggerPointerDown}
-        onkeydown={handleTriggerKeyDown}
-        onclick={focusInputAndOpen}
+        role="option"
+        aria-label={option.label}
+        aria-selected={externalValue === option.value}
+        aria-disabled={option.disabled || undefined}
+        data-option-index={index}
+        data-highlighted={activeIndex === index || undefined}
+        data-selected={externalValue === option.value || undefined}
+        data-disabled={option.disabled || undefined}
+        disabled={option.disabled}
+        onpointermove={() => {
+          if (!option.disabled) activeIndex = index;
+        }}
+        onpointerdown={(event) => event.preventDefault()}
+        onclick={() => selectOption(option)}
       >
-        <ChevronDownIcon size="var(--icon-size-sm)" aria-hidden="true" />
-      </ComboboxPrimitive.Trigger>
-    </div>
-    <ComboboxPrimitive.Portal>
-      <ComboboxPrimitive.Content
-        class="agora-combobox-content"
-        sideOffset={8}
-        style={maxMenuHeight ? `--agora-combobox-menu-max-height: ${maxMenuHeight}` : undefined}
-      >
-        <ComboboxPrimitive.Viewport class="agora-combobox-viewport">
-          {#each filteredOptions as option (option.value)}
-            <ComboboxPrimitive.Item
-              class="agora-combobox-item {allowDeselect ? 'deselectable' : ''}"
-              value={option.value}
-              label={option.label}
-              disabled={option.disabled}
-            >
-              {#snippet children({ selected })}
-                <span
-                  >{#if renderOption}{@render renderOption(option)}{:else}{option.label}{/if}</span
-                >
-                {#if selected}<CheckIcon size="var(--icon-size-sm)" aria-hidden="true" />{/if}
-              {/snippet}
-            </ComboboxPrimitive.Item>
-          {:else}
-            <span class="empty">No matching options</span>
-          {/each}
-        </ComboboxPrimitive.Viewport>
-      </ComboboxPrimitive.Content>
-    </ComboboxPrimitive.Portal>
-  </ComboboxPrimitive.Root>
+        <span
+          >{#if renderOption}{@render renderOption(option)}{:else}{option.label}{/if}</span
+        >
+        {#if externalValue === option.value}
+          <CheckIcon size="var(--icon-size-sm)" aria-hidden="true" />
+        {/if}
+      </button>
+    {:else}
+      <span class="empty">No matching options</span>
+    {/each}
+  </FloatingSurface>
 </div>
 
 <style>
@@ -199,7 +335,7 @@
   .input-wrap.invalid:focus-within {
     box-shadow: var(--shadow-invalid-focus-ring);
   }
-  :global(.agora-combobox-input) {
+  .agora-combobox-input {
     appearance: none;
     transition:
       background-color var(--duration-fast) var(--easing-standard),
@@ -217,35 +353,35 @@
     font-size: var(--font-size-md);
     font-family: var(--font-family-interface);
   }
-  :global(.agora-combobox-input:hover:not(:disabled, :focus-visible, [aria-invalid="true"], :user-invalid)) {
+  .agora-combobox-input:hover:not(:disabled, :focus-visible, [aria-invalid="true"], :user-invalid) {
     border-color: var(--color-control-border-hover);
     background: var(--color-control-surface-hover);
   }
-  :global(.agora-combobox-input:focus-visible) {
+  .agora-combobox-input:focus-visible {
     outline: none;
     border-color: var(--color-control-border-focus);
     background: var(--color-control-surface-focus);
   }
-  :global(.agora-combobox-input[aria-invalid="true"]),
-  :global(.agora-combobox-input:user-invalid) {
+  .agora-combobox-input[aria-invalid="true"],
+  .agora-combobox-input:user-invalid {
     border-color: var(--color-feedback-error-border);
     background: var(--color-control-surface-invalid);
   }
-  :global(.agora-combobox-input[aria-invalid="true"]:focus-visible),
-  :global(.agora-combobox-input:user-invalid:focus-visible) {
+  .agora-combobox-input[aria-invalid="true"]:focus-visible,
+  .agora-combobox-input:user-invalid:focus-visible {
     border-color: var(--color-feedback-error-border);
     background: var(--color-control-surface-invalid);
   }
-  :global(.agora-combobox-input::placeholder) {
+  .agora-combobox-input::placeholder {
     color: var(--color-control-placeholder);
   }
-  :global(.agora-combobox-input:disabled) {
+  .agora-combobox-input:disabled {
     cursor: not-allowed;
     border-color: var(--color-border-subtle);
     background: var(--color-control-surface-disabled);
     color: var(--color-control-disabled-text);
   }
-  :global(.agora-combobox-trigger) {
+  .agora-combobox-trigger {
     display: grid;
     position: absolute;
     place-items: center;
@@ -259,71 +395,61 @@
     inline-size: var(--control-height-md);
     color: var(--color-text-muted);
   }
-  .input-wrap:not(:focus-within) :global(.agora-combobox-trigger:hover:not([data-disabled])) {
+  .input-wrap:not(:focus-within) .agora-combobox-trigger:hover:not(:disabled) {
     background: var(--color-action-ghost-hover);
     color: var(--color-text-primary);
   }
-  :global(.agora-combobox-trigger:focus-visible) {
+  .agora-combobox-trigger:focus-visible {
     outline: none;
     color: var(--color-text-primary);
   }
-
-  @media (forced-colors: active) {
-    :global(.agora-combobox-input:focus-visible),
-    :global(.agora-combobox-trigger:focus-visible) {
-      outline: var(--border-width-strong) solid Highlight;
-      outline-offset: calc(var(--focus-ring-offset) * -1);
-    }
-
-    :global(.agora-combobox-content) {
-      border: var(--border-width-thin) solid CanvasText;
-    }
-  }
-  :global(.agora-combobox-trigger[data-disabled]) {
+  .agora-combobox-trigger:disabled {
     cursor: not-allowed;
     color: var(--color-text-disabled);
   }
+
   :global(.agora-combobox-content) {
+    display: grid;
+    position-area: block-end span-inline-end;
+    justify-self: start;
+    gap: var(--space-1);
     z-index: var(--layer-dropdown);
+    inset-block-start: var(--space-2);
     outline: none;
     box-shadow: var(--shadow-lg);
     border: 0;
     border-radius: var(--radius-lg);
     background: var(--color-surface-island-strong);
-    inline-size: var(--bits-combobox-anchor-width);
-    min-inline-size: var(--bits-combobox-anchor-width);
-    max-block-size: min(
-      var(--bits-combobox-content-available-height),
-      var(--agora-combobox-menu-max-height, var(--control-menu-max-height))
-    );
-    overflow: hidden;
-    color: var(--color-text-primary);
-  }
-  :global(.agora-combobox-viewport) {
-    display: grid;
-    gap: var(--space-1);
     padding: var(--space-1);
+    inline-size: var(--agora-combobox-anchor-width);
+    min-inline-size: var(--agora-combobox-anchor-width);
     max-block-size: min(
-      var(--bits-combobox-content-available-height),
+      calc(100dvb - var(--space-8)),
       var(--agora-combobox-menu-max-height, var(--control-menu-max-height))
     );
     overflow-x: hidden;
     overflow-y: auto;
     overscroll-behavior-block: contain;
+    color: var(--color-text-primary);
   }
   :global(.agora-combobox-item) {
     display: flex;
     align-items: center;
     gap: var(--space-3);
+    appearance: none;
     cursor: pointer;
     outline: none;
+    border: 0;
     border-radius: var(--radius-md);
+    background: transparent;
     padding: var(--space-1) var(--space-3);
+    inline-size: 100%;
     min-block-size: calc(var(--control-height-sm) - var(--space-1));
     color: var(--color-text-secondary);
     font-size: var(--font-size-sm);
     font-family: var(--font-family-interface);
     user-select: none;
+    text-align: start;
   }
   :global(.agora-combobox-item > :last-child:not(:first-child)) {
     margin-inline-start: auto;
@@ -366,6 +492,18 @@
     :global(.agora-combobox-item[data-highlighted]:not([data-selected]):not([data-disabled])) {
       -webkit-backdrop-filter: blur(var(--blur-sm));
       backdrop-filter: blur(var(--blur-sm));
+    }
+  }
+
+  @media (forced-colors: active) {
+    .agora-combobox-input:focus-visible,
+    .agora-combobox-trigger:focus-visible {
+      outline: var(--border-width-strong) solid Highlight;
+      outline-offset: calc(var(--focus-ring-offset) * -1);
+    }
+
+    :global(.agora-combobox-content) {
+      border: var(--border-width-thin) solid CanvasText;
     }
   }
 </style>

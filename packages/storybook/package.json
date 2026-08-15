@@ -15,7 +15,8 @@
     "@a-novel-kit/uikit-fonts": "workspace:*",
     "@a-novel-kit/uikit-icons": "workspace:*",
     "@a-novel-kit/uikit-storybook": "workspace:*",
-    "@a-novel-kit/uikit-tokens": "workspace:*"
+    "@a-novel-kit/uikit-tokens": "workspace:*",
+    "@lucide/svelte": "^1.31.0"
   },
   "devDependencies": {
     "@storybook/addon-docs": "catalog:",

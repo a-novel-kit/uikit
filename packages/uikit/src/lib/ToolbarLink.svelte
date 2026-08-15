@@ -8,18 +8,12 @@
 <script lang="ts">
   import Link from "./Link.svelte";
 
-  import { Toolbar as ToolbarPrimitive } from "bits-ui";
-
   let { children, variant = "quiet", class: className = "", ...linkProps }: ToolbarLinkProps = $props();
 </script>
 
-<ToolbarPrimitive.Link>
-  {#snippet child({ props })}
-    <Link {...linkProps} {...props} {variant} class="toolbar-link {className}">
-      {@render children?.()}
-    </Link>
-  {/snippet}
-</ToolbarPrimitive.Link>
+<Link {...linkProps} {variant} class="toolbar-link {className}" data-composite-item="" tabindex={-1}>
+  {@render children?.()}
+</Link>
 
 <style>
   :global(.link.toolbar-link) {

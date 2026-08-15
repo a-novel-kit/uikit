@@ -1,21 +1,28 @@
-import { normalizeSelectionValue, resolveInvalidState, toSelectionItems } from "./selection";
+import { findEnabledBoundary, findNextEnabledIndex, resolveInvalidState } from "./selection";
 
 import { describe, expect, it } from "vitest";
 
+const options = [
+  { value: "draft", label: "Draft" },
+  { value: "review", label: "Review", disabled: true },
+  { value: "published", label: "Published" },
+] as const;
+
 describe("selection helpers", () => {
-  it("copies readonly options for composite primitives", () => {
-    const options = [{ value: "draft", label: "Draft", disabled: true }] as const;
-
-    const items = toSelectionItems(options);
-
-    expect(items).toEqual(options);
-    expect(items).not.toBe(options);
-    expect(items[0]).not.toBe(options[0]);
+  it("finds enabled options from either edge", () => {
+    expect(findEnabledBoundary(options, "first")).toBe(0);
+    expect(findEnabledBoundary(options, "last")).toBe(2);
+    expect(findEnabledBoundary([{ value: "draft", label: "Draft", disabled: true }], "first")).toBe(-1);
   });
 
-  it("normalizes the empty selection sentinel", () => {
-    expect(normalizeSelectionValue("")).toBeUndefined();
-    expect(normalizeSelectionValue<"draft">("draft")).toBe("draft");
+  it("skips disabled options and wraps navigation", () => {
+    expect(findNextEnabledIndex(options, 0, 1)).toBe(2);
+    expect(findNextEnabledIndex(options, 2, 1)).toBe(0);
+    expect(findNextEnabledIndex(options, 0, -1)).toBe(2);
+  });
+
+  it("keeps the current option when navigation cannot wrap", () => {
+    expect(findNextEnabledIndex(options, 2, 1, false)).toBe(2);
   });
 
   it.each([true, "true"] as const)("accepts %s as an ARIA invalid state", (ariaInvalid) => {

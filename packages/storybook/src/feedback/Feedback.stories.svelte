@@ -14,8 +14,8 @@
     Stack,
     ToastRegion,
   } from "@a-novel-kit/uikit";
-  import { FolderIcon, InfoIcon } from "@a-novel-kit/uikit-icons";
 
+  import { Folder as FolderIcon, Info as InfoIcon } from "@lucide/svelte";
   import { defineMeta } from "@storybook/addon-svelte-csf";
 
   const { Story } = defineMeta({

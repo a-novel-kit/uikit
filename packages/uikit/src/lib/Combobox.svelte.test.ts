@@ -1,4 +1,7 @@
 import Combobox from "./Combobox.svelte";
+import type { ComboboxOption } from "./Combobox.svelte";
+
+import { createRawSnippet } from "svelte";
 
 import { describe, expect, it } from "vitest";
 
@@ -67,5 +70,37 @@ describe("Combobox", () => {
     const listbox = getByRole("listbox");
     const content = listbox.closest<HTMLElement>(".agora-combobox-content");
     expect(content?.style.getPropertyValue("--agora-combobox-menu-max-height")).toBe("8rem");
+  });
+
+  it("keeps option labels when custom visuals replace their content", async () => {
+    const renderOption = createRawSnippet<[ComboboxOption<string>]>((option) => ({
+      render: () => `<span data-testid="option-${option().value}"><svg aria-hidden="true"></svg></span>`,
+    }));
+    const { getByRole } = render(Combobox, {
+      props: {
+        "aria-label": "Language",
+        options,
+        renderOption,
+      },
+    });
+
+    await fireEvent.focus(getByRole("combobox", { name: "Language" }));
+
+    expect(getByRole("option", { name: "English" })).toBeTruthy();
+  });
+
+  it("closes its options when keyboard focus moves away", async () => {
+    const { getByRole, queryByRole } = render(Combobox, {
+      props: {
+        "aria-label": "Language",
+        options,
+      },
+    });
+    const input = getByRole("combobox", { name: "Language" });
+
+    await fireEvent.focus(input);
+    await fireEvent.keyDown(input, { key: "Tab" });
+
+    expect(queryByRole("listbox")).toBeNull();
   });
 });

@@ -1,8 +1,7 @@
 # @a-novel-kit/uikit
 
 Agora's shared Svelte components consume the public contracts from
-`@a-novel-kit/uikit-tokens`, the self-hosted faces from `@a-novel-kit/uikit-fonts`, and named icons
-from `@a-novel-kit/uikit-icons`.
+`@a-novel-kit/uikit-tokens` and the self-hosted faces from `@a-novel-kit/uikit-fonts`.
 
 Install the component package and the foundations imported by your application.
 
@@ -37,7 +36,8 @@ The package follows native-first layering:
 
 - native elements provide buttons, links, forms, disclosure, dialog, progress, meter, and document
   semantics;
-- the internal headless primitive handles only composite keyboard patterns such as tabs, action
-  menus, tooltips, and searchable comboboxes;
+- shared internal helpers coordinate top-layer placement and composite keyboard focus;
+- tabs, menus, tooltips, and selection controls follow their corresponding WAI-ARIA Authoring
+  Practices patterns;
 - platforms import the UI-kit API, never its internal primitive dependency;
 - applications compose page shells, routing landmarks, workflows, and domain content from these primitives.

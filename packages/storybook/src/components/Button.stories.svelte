@@ -2,8 +2,8 @@
   import type { ComponentProps } from "svelte";
 
   import { Button, Inline } from "@a-novel-kit/uikit";
-  import { SaveIcon } from "@a-novel-kit/uikit-icons";
 
+  import { Save as SaveIcon } from "@lucide/svelte";
   import { defineMeta } from "@storybook/addon-svelte-csf";
 
   type Args = Omit<ComponentProps<typeof Button>, "children"> & {

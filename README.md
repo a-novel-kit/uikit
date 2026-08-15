@@ -21,7 +21,7 @@ packages/
 ├── uikit/             composable Svelte components
 ├── tokens/            generated CSS and JavaScript design tokens
 ├── fonts/             self-hosted font faces and licenses
-├── icons/             curated Svelte icon components
+├── icons/             custom Svelte icon components
 ├── storybook-config/  reusable Agora Storybook preset and theme
 └── storybook/         private design-system workbench
 ```
@@ -61,7 +61,7 @@ import "@a-novel-kit/uikit-tokens/tokens.css";
 | [`@a-novel-kit/uikit`](./packages/uikit)                      | Generic Svelte components and public component types.         |
 | [`@a-novel-kit/uikit-tokens`](./packages/tokens)              | CSS tokens, generated OKLCH palette, and palette metadata.    |
 | [`@a-novel-kit/uikit-fonts`](./packages/fonts)                | Self-hosted interface, editorial, and monospace font faces.   |
-| [`@a-novel-kit/uikit-icons`](./packages/icons)                | Curated interface icons exported as Svelte components.        |
+| [`@a-novel-kit/uikit-icons`](./packages/icons)                | Custom icon components and their shared SVG canvas.           |
 | [`@a-novel-kit/uikit-storybook`](./packages/storybook-config) | Shared Storybook preset, preview defaults, and manager theme. |
 
 ## Contributing
