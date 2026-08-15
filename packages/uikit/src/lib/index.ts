@@ -10,8 +10,6 @@ export { default as ActionMenu } from "./ActionMenu.svelte";
 export type { ActionMenuAction, ActionMenuItem, ActionMenuProps, ActionMenuSeparator } from "./ActionMenu.svelte";
 export { default as Alert } from "./Alert.svelte";
 export type { AlertProps } from "./Alert.svelte";
-export { default as AppShell } from "./AppShell.svelte";
-export type { AppShellProps } from "./AppShell.svelte";
 export { default as Avatar } from "./Avatar.svelte";
 export type { AvatarProps } from "./Avatar.svelte";
 export { default as Badge } from "./Badge.svelte";

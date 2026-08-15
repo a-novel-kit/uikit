@@ -58,12 +58,12 @@
   <Stack gap="4" align="start">
     <Button onclick={() => (dialogOpen = true)}>Open dialog</Button>
     <span class="muted">Press Escape or select an action to close the dialog.</span>
-    <Dialog bind:open={dialogOpen} title="Archive project?" description="You can restore an archived project later.">
+    <Dialog bind:open={dialogOpen} title="Archive item?" description="You can restore an archived item later.">
       {#snippet actions()}
         <Button variant="ghost" tone="neutral" onclick={() => (dialogOpen = false)}>Cancel</Button>
         <Button tone="danger" onclick={() => (dialogOpen = false)}>Archive</Button>
       {/snippet}
-      <p class="dialog-copy">Collaborators will lose access until the project is restored.</p>
+      <p class="dialog-copy">Other people will lose access until the item is restored.</p>
     </Dialog>
   </Stack>
 </Story>

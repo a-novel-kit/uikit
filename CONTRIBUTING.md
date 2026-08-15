@@ -18,9 +18,9 @@ Platform setup and shared commands live in the
   repositories.
 - `packages/storybook` is the private workbench and design-system documentation site.
 
-Product-specific workflows, manuscript rendering, and screen composition stay in their feature or
-client repository. Move a pattern into the UI kit only when it is useful without Agora domain
-knowledge.
+Product-specific workflows, page shells, manuscript rendering, and screen composition stay in their
+feature or client repository. Move a pattern into the UI kit only when it is useful without Agora
+domain knowledge.
 
 ## Component contracts
 

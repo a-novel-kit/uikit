@@ -40,4 +40,4 @@ The package follows native-first layering:
 - the internal headless primitive handles only composite keyboard patterns such as tabs, action
   menus, tooltips, and searchable comboboxes;
 - platforms import the UI-kit API, never its internal primitive dependency;
-- workflow, manuscript, and other product-specific components remain feature-owned.
+- applications compose page shells, routing landmarks, workflows, and domain content from these primitives.

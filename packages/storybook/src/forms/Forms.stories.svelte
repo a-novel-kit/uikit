@@ -65,9 +65,9 @@
 <Story name="Text fields" asChild>
   <form class="form" onsubmit={(event) => event.preventDefault()}>
     <Grid minItemWidth="lg" gap="4">
-      <Field label="Project name" hint="Use a short name people can scan." required>
+      <Field label="Display name" hint="Use a short name people can scan." required>
         {#snippet children(control)}
-          <Input {...control} placeholder="Untitled project" />
+          <Input {...control} placeholder="Untitled" />
         {/snippet}
       </Field>
       <Field label="Visibility">
@@ -76,17 +76,17 @@
         {/snippet}
       </Field>
     </Grid>
-    <Field label="Description" hint="Plain text, up to 500 characters.">
+    <Field label="Description" hint="Add context for other people.">
       {#snippet children(control)}
-        <Textarea {...control} rows={4} autoSize placeholder="What is this project for?" />
+        <Textarea {...control} rows={4} autoSize placeholder="What should people know?" />
       {/snippet}
     </Field>
-    <Field label="Slug" error="This slug is already in use.">
+    <Field label="Identifier" error="This identifier is already in use.">
       {#snippet children(control)}
-        <Input {...control} value="agora" invalid />
+        <Input {...control} value="example" invalid />
       {/snippet}
     </Field>
-    <Button type="submit">Create project</Button>
+    <Button type="submit">Save changes</Button>
   </form>
 </Story>
 
@@ -104,21 +104,21 @@
   <form class="form" onsubmit={(event) => event.preventDefault()}>
     <ErrorSummary
       errors={[
-        { id: "project-name", href: "#invalid-project-name", message: "Enter a project name" },
-        { id: "project-owner", href: "#invalid-project-owner", message: "Choose a project owner" },
+        { id: "display-name", href: "#invalid-display-name", message: "Enter a display name" },
+        { id: "visibility", href: "#invalid-visibility", message: "Choose a visibility" },
       ]}
     />
-    <Field controlId="invalid-project-name" label="Project name" error="Enter a project name" required>
+    <Field controlId="invalid-display-name" label="Display name" error="Enter a display name" required>
       {#snippet children(control)}
         <Input {...control} invalid />
       {/snippet}
     </Field>
-    <Field controlId="invalid-project-owner" label="Project owner" error="Choose a project owner" required>
+    <Field controlId="invalid-visibility" label="Visibility" error="Choose a visibility" required>
       {#snippet children(control)}
-        <Select {...control} options={[]} placeholder="Choose an owner" invalid />
+        <Select {...control} options={visibilityOptions} placeholder="Choose a visibility" invalid />
       {/snippet}
     </Field>
-    <Button type="submit">Save project</Button>
+    <Button type="submit">Save changes</Button>
   </form>
 </Story>
 
@@ -126,7 +126,7 @@
   <div class="adornment-grid">
     <Field label="Search">
       {#snippet children(control)}
-        <Input {...control} placeholder="Search projects">
+        <Input {...control} placeholder="Search records">
           {#snippet startAdornment()}
             <SearchIcon size="var(--icon-size-sm)" aria-hidden="true" />
           {/snippet}
@@ -138,7 +138,7 @@
     </Field>
     <Field label="Summary">
       {#snippet children(control)}
-        <Textarea {...control} rows={4} placeholder="Describe the project">
+        <Textarea {...control} rows={4} placeholder="Add supporting details">
           {#snippet startAdornment()}
             <span>Plain text supported</span>
           {/snippet}
@@ -155,7 +155,7 @@
   <Stack gap="6">
     <Fieldset legend="Notifications" description="Choose persistent preferences with native controls.">
       <Checkbox label="Product updates" description="Occasional release and maintenance notes." checked />
-      <Switch label="Desktop alerts" description="Show an alert while Agora is in the background." checked />
+      <Switch label="Desktop alerts" description="Show an alert while this page is in the background." checked />
     </Fieldset>
     <RadioGroup
       legend="Density"

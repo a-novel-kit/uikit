@@ -40,8 +40,8 @@
   <Stack gap="6">
     <Breadcrumbs
       items={[
-        { label: "Projects", href: "#projects" },
-        { label: "Northstar", href: "#northstar" },
+        { label: "Library", href: "#library" },
+        { label: "Pattern guide", href: "#pattern-guide" },
         { label: "Settings" },
       ]}
     />
@@ -72,8 +72,8 @@
 
 <Story name="Action menu" asChild>
   <ActionMenu
-    label="Project actions"
-    triggerText="Project actions"
+    label="Item actions"
+    triggerText="Item actions"
     triggerIcon={moreIcon}
     items={[
       { id: "rename", label: "Rename", icon: editIcon, shortcut: "R" },

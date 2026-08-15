@@ -57,16 +57,18 @@
 
 <Story name="Split pane" asChild>
   <Container size="lg">
-    <SplitPane asideLabel="Inspector">
-      {#snippet aside()}
-        <Stack gap="3">
-          <strong>Inspector</strong>
-          <span class="muted">Secondary content moves below the primary pane at narrow widths.</span>
-        </Stack>
+    <SplitPane>
+      {#snippet secondary()}
+        <Card surface="subtle">
+          <Stack gap="3">
+            <strong>Supporting details</strong>
+            <span class="muted">The secondary pane wraps below the primary pane when space runs out.</span>
+          </Stack>
+        </Card>
       {/snippet}
       <Stack gap="3">
-        <strong>Primary workspace</strong>
-        <p class="muted">Primary workspace content.</p>
+        <strong>Primary content</strong>
+        <p class="muted">SplitPane arranges regions without assigning landmarks or surface styling.</p>
       </Stack>
     </SplitPane>
   </Container>
