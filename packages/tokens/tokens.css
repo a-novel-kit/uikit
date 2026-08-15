@@ -202,7 +202,7 @@
   --color-action-danger-selected: var(--base-pressure);
   --color-action-danger-text: var(--color-text-inverse);
   --color-action-ghost-text: var(--color-action-primary);
-  --color-action-ghost-hover: var(--color-surface-hover);
+  --color-action-ghost-hover: var(--color-surface-glass-hover);
   --color-action-ghost-hover-text: var(--color-brand-11);
   --color-action-ghost-selected: var(--color-surface-selected);
   --color-action-ghost-selected-border: color-mix(
