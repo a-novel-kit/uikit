@@ -1,0 +1,51 @@
+{
+  "name": "@a-novel-kit/uikit",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Composable Svelte components for the Agora design system",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/a-novel-kit/uikit.git"
+  },
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "svelte": "./dist/index.js"
+    }
+  },
+  "svelte": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "!dist/**/*.test.*",
+    "!dist/**/*.spec.*",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "svelte-package",
+    "typecheck": "svelte-check --tsconfig ./tsconfig.json"
+  },
+  "dependencies": {
+    "@a-novel-kit/uikit-fonts": "workspace:*",
+    "@a-novel-kit/uikit-tokens": "workspace:*",
+    "@lucide/svelte": "^1.31.0"
+  },
+  "devDependencies": {
+    "@sveltejs/package": "^2.5.4",
+    "@sveltejs/vite-plugin-svelte": "^7.0.1",
+    "@testing-library/svelte": "^5.2.4",
+    "jsdom": "^29.0.0",
+    "svelte": "^5.55.8",
+    "svelte-check": "^4.3.3",
+    "vite": "^8.0.0"
+  },
+  "peerDependencies": {
+    "svelte": "^5"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  }
+}

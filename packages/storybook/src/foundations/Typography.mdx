@@ -1,0 +1,77 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+import "./Typography.css";
+
+<Meta title="Foundations/Typography" />
+
+export const families = [
+  {
+    label: "Display",
+    token: "--font-family-display",
+    usage: "Headings and navigation landmarks.",
+    sample: "Build worlds worth returning to.",
+  },
+  {
+    label: "Interface",
+    token: "--font-family-interface",
+    usage: "Controls, labels, and interface copy.",
+    sample: "Create, review, and publish your next chapter.",
+  },
+  {
+    label: "Story",
+    token: "--font-family-story",
+    usage: "Narrative prose and long-form reading.",
+    sample: "Beyond the last lantern, the road became a promise.",
+  },
+  {
+    label: "Monospace",
+    token: "--font-family-mono",
+    usage: "Identifiers, structured values, logs, and code.",
+    sample: "scene.intensity = 0.72",
+  },
+];
+
+export const sizes = ["xs", "sm", "md", "lg", "xl", "2xl", "3xl", "4xl"];
+
+export const FamilySpecimen = ({ family }) => (
+  <div className="type-family">
+    <div className="type-family__meta">
+      <strong>{family.label}</strong>
+      <code>{family.token}</code>
+    </div>
+    <p className="type-family__sample" style={{ fontFamily: "var(" + family.token + ")" }}>
+      {family.sample}
+    </p>
+    <span>{family.usage}</span>
+  </div>
+);
+
+# Typography
+
+Import `@a-novel-kit/uikit-fonts/fonts.css` once, then use the family and size tokens.
+
+## Families
+
+<div className="type-families">
+  {families.map((family) => (
+    <FamilySpecimen family={family} key={family.token} />
+  ))}
+</div>
+
+## Scale
+
+Use `md` for body text and move through adjacent steps to establish hierarchy.
+
+<div className="type-scale" aria-label="Typography size scale">
+  {sizes.map((size) => (
+    <div key={size}>
+      <code>{"--font-size-" + size}</code>
+      <span style={{ fontSize: "var(--font-size-" + size + ")" }}>Agora interface</span>
+    </div>
+  ))}
+</div>
+
+## Weights
+
+Use `--font-weight-regular` for body copy, `--font-weight-medium` for emphasis, and
+`--font-weight-bold` for labels and headings.

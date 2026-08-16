@@ -1,0 +1,412 @@
+@import "./colors.css";
+
+/* Agora metric tokens derive in the browser from compact CSS bases. */
+:root {
+  --multiplier-0: 0;
+  --multiplier-half: 0.5;
+  --multiplier-1: 1;
+  --multiplier-1-5: 1.5;
+  --multiplier-2: 2;
+  --multiplier-3: 3;
+  --multiplier-4: 4;
+  --multiplier-5: 5;
+  --multiplier-6: 6;
+  --multiplier-7: 7;
+  --multiplier-8: 8;
+  --multiplier-9: 9;
+  --multiplier-10: 10;
+  --multiplier-11: 11;
+  --multiplier-12: 12;
+  --multiplier-16: 16;
+  --multiplier-20: 20;
+  --multiplier-24: 24;
+  --multiplier-32: 32;
+  --multiplier-40: 40;
+  --multiplier-48: 48;
+  --multiplier-64: 64;
+  --multiplier-80: 80;
+
+  --ratio-density: 1.125;
+  --ratio-hierarchy: 1.25;
+  --ratio-emphasis: 1.5;
+  --ratio-major: 1.618;
+
+  --space-base: 0.25rem;
+  --space-0: 0;
+  --space-1: calc(var(--space-base) * var(--multiplier-1));
+  --space-1-5: calc(var(--space-base) * var(--multiplier-1-5));
+  --space-2: calc(var(--space-base) * var(--multiplier-2));
+  --space-3: calc(var(--space-base) * var(--multiplier-3));
+  --space-4: calc(var(--space-base) * var(--multiplier-4));
+  --space-5: calc(var(--space-base) * var(--multiplier-5));
+  --space-6: calc(var(--space-base) * var(--multiplier-6));
+  --space-8: calc(var(--space-base) * var(--multiplier-8));
+  --space-10: calc(var(--space-base) * var(--multiplier-10));
+  --space-12: calc(var(--space-base) * var(--multiplier-12));
+  --space-16: calc(var(--space-base) * var(--multiplier-16));
+  --space-20: calc(var(--space-base) * var(--multiplier-20));
+  --space-24: calc(var(--space-base) * var(--multiplier-24));
+
+  --blur-base: var(--space-base);
+  --blur-sm: calc(var(--blur-base) * var(--multiplier-2));
+  --blur-md: calc(var(--blur-base) * var(--multiplier-4));
+  --blur-lg: calc(var(--blur-base) * var(--multiplier-8));
+
+  --control-height-sm: calc(var(--space-base) * var(--multiplier-8));
+  --control-height-md: calc(var(--space-base) * var(--multiplier-10));
+  --control-height-lg: calc(var(--space-base) * var(--multiplier-12));
+  --control-menu-max-height: calc(var(--space-base) * var(--multiplier-64));
+  --icon-size-sm: var(--space-4);
+  --icon-size-md: var(--space-5);
+  --icon-size-lg: var(--space-6);
+
+  --radius-base: 0.25rem;
+  --radius-none: 0;
+  --radius-sm: calc(var(--radius-base) * var(--multiplier-1));
+  --radius-md: calc(var(--radius-base) * var(--multiplier-2));
+  --radius-lg: calc(var(--radius-base) * var(--multiplier-3));
+  --radius-xl: calc(var(--radius-base) * var(--multiplier-4));
+  --radius-round: 50%;
+
+  --border-width-base: 0.0625rem;
+  --border-width-thin: var(--border-width-base);
+  --border-width-strong: calc(var(--border-width-base) * var(--multiplier-2));
+  --focus-ring-width: calc(var(--border-width-base) * var(--multiplier-3));
+  --focus-ring-offset: var(--space-1);
+
+  --duration-base: 100ms;
+  --duration-fast: calc(var(--duration-base) * var(--multiplier-1));
+  --duration-normal: calc(var(--duration-base) * var(--multiplier-2));
+  --duration-slow: calc(var(--duration-base) * var(--multiplier-3));
+  --easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --easing-emphasized: cubic-bezier(0.2, 0, 0, 1.4);
+  --opacity-base: 0.125;
+  --opacity-disabled: calc(var(--opacity-base) * var(--multiplier-4));
+  --opacity-muted: calc(var(--opacity-base) * var(--multiplier-6));
+  --opacity-overlay: calc(var(--opacity-base) * var(--multiplier-6));
+
+  --color-mix-base: 6.25%;
+  --color-mix-1: var(--color-mix-base);
+  --color-mix-2: calc(var(--color-mix-base) * var(--multiplier-2));
+  --color-mix-3: calc(var(--color-mix-base) * var(--multiplier-3));
+  --color-mix-4: calc(var(--color-mix-base) * var(--multiplier-4));
+  --color-mix-5: calc(var(--color-mix-base) * var(--multiplier-5));
+  --color-mix-6: calc(var(--color-mix-base) * var(--multiplier-6));
+  --color-mix-7: calc(var(--color-mix-base) * var(--multiplier-7));
+  --color-mix-8: calc(var(--color-mix-base) * var(--multiplier-8));
+  --color-mix-9: calc(var(--color-mix-base) * var(--multiplier-9));
+  --color-mix-10: calc(var(--color-mix-base) * var(--multiplier-10));
+  --color-mix-11: calc(var(--color-mix-base) * var(--multiplier-11));
+  --color-mix-12: calc(var(--color-mix-base) * var(--multiplier-12));
+
+  --color-surface-canvas: oklch(
+    from var(--color-neutral-1) calc(l / var(--ratio-hierarchy)) c h
+  );
+  --color-surface-sunken: var(--color-neutral-2);
+  --color-surface-subtle: color-mix(
+    in oklab,
+    var(--color-neutral-3) var(--color-mix-12),
+    var(--color-neutral-4)
+  );
+  --color-surface-raised: var(--color-neutral-4);
+  --color-surface-overlay: color-mix(
+    in oklab,
+    var(--color-neutral-4) var(--color-mix-8),
+    var(--color-neutral-5)
+  );
+  --color-surface-hover: var(--color-surface-overlay);
+  --color-surface-island-subtle: var(--color-surface-subtle);
+  --color-surface-island: var(--color-surface-raised);
+  --color-surface-island-strong: var(--color-surface-overlay);
+  --color-surface-glass: color-mix(
+    in oklab,
+    var(--color-surface-island-strong) var(--color-mix-12),
+    transparent
+  );
+  --color-surface-glass-hover: color-mix(
+    in oklab,
+    var(--color-neutral-12) var(--color-mix-2),
+    transparent
+  );
+  --color-surface-selected: color-mix(
+    in oklab,
+    var(--base-brand) var(--color-mix-2),
+    var(--color-surface-raised)
+  );
+  --color-overlay-backdrop: color-mix(
+    in oklab,
+    var(--color-neutral-1) var(--color-mix-12),
+    transparent
+  );
+
+  --color-text-primary: var(--color-neutral-12);
+  --color-text-secondary: var(--color-neutral-11);
+  --color-text-muted: var(--color-neutral-10);
+  --color-text-subtle: var(--color-neutral-9);
+  --color-text-disabled: var(--color-neutral-8);
+  --color-text-inverse: var(--color-neutral-1);
+  --color-text-accent: var(--base-brand);
+  --color-text-link: var(--color-brand-11);
+  --color-text-link-hover: var(--base-brand);
+
+  --color-border-subtle: var(--color-neutral-5);
+  --color-border-default: var(--color-neutral-6);
+  --color-border-strong: var(--color-neutral-8);
+  --color-border-selected: var(--base-brand);
+
+  --color-control-surface: color-mix(
+    in oklab,
+    var(--color-neutral-5) var(--color-mix-4),
+    var(--color-surface-sunken)
+  );
+  --color-control-surface-hover: color-mix(
+    in oklab,
+    var(--color-neutral-7) var(--color-mix-2),
+    var(--color-control-surface)
+  );
+  --color-control-surface-focus: color-mix(
+    in oklab,
+    var(--base-brand) var(--color-mix-1),
+    var(--color-control-surface)
+  );
+  --color-control-surface-invalid: color-mix(
+    in oklab,
+    var(--base-pressure) var(--color-mix-1),
+    var(--color-control-surface)
+  );
+  --color-control-surface-disabled: var(--color-neutral-3);
+  --color-control-border: var(--color-border-default);
+  --color-control-border-hover: var(--color-border-strong);
+  --color-control-border-focus: var(--base-brand);
+  --color-control-text: var(--color-text-primary);
+  --color-control-placeholder: var(--color-text-subtle);
+  --color-control-disabled-text: var(--color-text-disabled);
+
+  --color-action-primary: var(--color-brand-9);
+  --color-action-primary-hover: var(--color-brand-11);
+  --color-action-primary-active: var(--color-brand-8);
+  --color-action-primary-selected: var(--base-brand);
+  --color-action-primary-text: var(--color-text-inverse);
+  --color-action-neutral: var(--color-neutral-4);
+  --color-action-neutral-hover: var(--color-neutral-5);
+  --color-action-neutral-active: var(--color-neutral-3);
+  --color-action-neutral-selected: var(--color-neutral-6);
+  --color-action-neutral-text: var(--color-text-primary);
+  --color-action-danger: color-mix(
+    in oklab,
+    var(--color-pressure-10) var(--color-mix-8),
+    var(--color-pressure-9)
+  );
+  --color-action-danger-hover: var(--color-pressure-11);
+  --color-action-danger-active: var(--color-pressure-8);
+  --color-action-danger-selected: var(--base-pressure);
+  --color-action-danger-text: var(--color-text-inverse);
+  --color-action-ghost-text: var(--color-action-primary);
+  --color-action-ghost-hover: var(--color-surface-glass-hover);
+  --color-action-ghost-hover-text: var(--color-brand-11);
+  --color-action-ghost-selected: var(--color-surface-selected);
+  --color-action-ghost-selected-border: color-mix(
+    in oklab,
+    var(--base-brand) var(--color-mix-8),
+    var(--color-surface-subtle)
+  );
+  --color-action-disabled-surface: var(--color-control-surface-disabled);
+  --color-action-disabled-border: var(--color-border-subtle);
+  --color-action-disabled-text: var(--color-text-disabled);
+
+  --color-navigation-text: var(--color-text-muted);
+  --color-navigation-hover-surface: var(--color-surface-hover);
+  --color-navigation-hover-text: var(--color-text-primary);
+  --color-navigation-selected-surface: var(--color-surface-selected);
+  --color-navigation-selected-text: var(--base-brand);
+  --color-navigation-selected-indicator: var(--base-brand);
+
+  --color-focus-ring: var(--base-brand);
+  --color-selection-surface: color-mix(
+    in oklab,
+    var(--base-brand) var(--color-mix-5),
+    transparent
+  );
+  --color-selection-text: var(--color-text-primary);
+
+  --color-feedback-info-surface: color-mix(
+    in oklab,
+    var(--base-brand) var(--color-mix-2),
+    var(--color-surface-canvas)
+  );
+  --color-feedback-info-border: color-mix(
+    in oklab,
+    var(--base-brand) var(--color-mix-9),
+    var(--color-surface-subtle)
+  );
+  --color-feedback-info-text: var(--base-brand);
+  --color-feedback-success-surface: color-mix(
+    in oklab,
+    var(--base-signal) var(--color-mix-2),
+    var(--color-surface-canvas)
+  );
+  --color-feedback-success-border: color-mix(
+    in oklab,
+    var(--base-signal) var(--color-mix-9),
+    var(--color-surface-subtle)
+  );
+  --color-feedback-success-text: var(--base-signal);
+  --color-feedback-warning-surface: color-mix(
+    in oklab,
+    var(--base-pressure) var(--color-mix-2),
+    var(--color-surface-canvas)
+  );
+  --color-feedback-warning-border: color-mix(
+    in oklab,
+    var(--base-pressure) var(--color-mix-8),
+    var(--color-surface-subtle)
+  );
+  --color-feedback-warning-text: var(--base-pressure);
+  --color-feedback-error-surface: color-mix(
+    in oklab,
+    var(--base-pressure) var(--color-mix-3),
+    var(--color-surface-canvas)
+  );
+  --color-feedback-error-border: color-mix(
+    in oklab,
+    var(--base-pressure) var(--color-mix-10),
+    var(--color-surface-subtle)
+  );
+  --color-feedback-error-text: var(--base-pressure);
+
+  --color-graphic-grid: color-mix(
+    in oklab,
+    var(--base-brand) var(--color-mix-2),
+    transparent
+  );
+  --color-graphic-axis: color-mix(
+    in oklab,
+    var(--color-text-muted) var(--color-mix-4),
+    transparent
+  );
+  --color-graphic-brand: var(--base-brand);
+  --color-graphic-pressure: var(--base-pressure);
+  --color-graphic-signal: var(--base-signal);
+
+  --shadow-sm: 0 var(--space-1) var(--space-3)
+    color-mix(in oklab, var(--color-neutral-1) var(--color-mix-8), transparent);
+  --shadow-md: 0 var(--space-2) var(--space-6)
+    color-mix(in oklab, var(--color-neutral-1) var(--color-mix-10), transparent);
+  --shadow-lg: 0 var(--space-3) var(--space-10)
+    color-mix(in oklab, var(--color-neutral-1) var(--color-mix-11), transparent);
+  --shadow-island: var(--shadow-md);
+  --shadow-glow-brand:
+    0 0 var(--space-2) color-mix(in oklab, var(--base-brand) var(--color-mix-7), transparent),
+    0 0 var(--space-4) color-mix(in oklab, var(--base-brand) var(--color-mix-3), transparent);
+  --shadow-glow-pressure:
+    0 0 var(--space-2) color-mix(in oklab, var(--base-pressure) var(--color-mix-7), transparent),
+    0 0 var(--space-4) color-mix(in oklab, var(--base-pressure) var(--color-mix-3), transparent);
+  --shadow-glow-neutral:
+    0 0 var(--space-2)
+      color-mix(in oklab, var(--color-neutral-12) var(--color-mix-4), transparent),
+    0 0 var(--space-4)
+      color-mix(in oklab, var(--color-neutral-12) var(--color-mix-1), transparent);
+  --shadow-glow-brand-strong:
+    0 0 0 var(--border-width-thin)
+      color-mix(in oklab, var(--base-brand) var(--color-mix-8), transparent),
+    0 0 var(--space-3) color-mix(in oklab, var(--base-brand) var(--color-mix-9), transparent),
+    0 0 var(--space-6) color-mix(in oklab, var(--base-brand) var(--color-mix-4), transparent);
+  --shadow-glow-pressure-strong:
+    0 0 0 var(--border-width-thin)
+      color-mix(in oklab, var(--base-pressure) var(--color-mix-8), transparent),
+    0 0 var(--space-3)
+      color-mix(in oklab, var(--base-pressure) var(--color-mix-9), transparent),
+    0 0 var(--space-6)
+      color-mix(in oklab, var(--base-pressure) var(--color-mix-4), transparent);
+  --shadow-glow-signal:
+    0 0 var(--space-2) color-mix(in oklab, var(--base-signal) var(--color-mix-7), transparent),
+    0 0 var(--space-4) color-mix(in oklab, var(--base-signal) var(--color-mix-3), transparent);
+  --shadow-indicator-brand:
+    0 0 var(--space-2) color-mix(in oklab, var(--base-brand) var(--color-mix-8), transparent),
+    0 0 var(--space-4) color-mix(in oklab, var(--base-brand) var(--color-mix-3), transparent);
+  --shadow-focus-ring:
+    0 0 0 var(--border-width-strong)
+      color-mix(in oklab, var(--color-focus-ring) var(--color-mix-5), transparent),
+    0 0 var(--space-4)
+      color-mix(in oklab, var(--color-focus-ring) var(--color-mix-3), transparent);
+  --shadow-invalid-focus-ring:
+    0 0 0 var(--border-width-strong)
+      color-mix(
+        in oklab,
+        var(--color-feedback-error-border) var(--color-mix-5),
+        transparent
+      ),
+    0 0 var(--space-4)
+      color-mix(in oklab, var(--base-pressure) var(--color-mix-3), transparent);
+  --shadow-action-selected: var(--shadow-glow-brand);
+  --gradient-accent:
+    radial-gradient(
+      circle at 12% 15%,
+      color-mix(in oklab, var(--base-brand) var(--color-mix-8), transparent),
+      transparent 46%
+    ),
+    radial-gradient(
+      circle at 88% 18%,
+      color-mix(in oklab, var(--base-pressure) var(--color-mix-7), transparent),
+      transparent 48%
+    ),
+    radial-gradient(
+      circle at 50% 112%,
+      color-mix(in oklab, var(--base-signal) var(--color-mix-6), transparent),
+      transparent 54%
+    ),
+    var(--color-surface-canvas);
+  --gradient-telemetry-grid:
+    linear-gradient(var(--color-graphic-grid) var(--border-width-thin), transparent var(--border-width-thin)),
+    linear-gradient(90deg, var(--color-graphic-grid) var(--border-width-thin), transparent var(--border-width-thin));
+
+  --font-family-display: "TeX Gyre Heros Cn", "Arial Narrow", "Noto Sans", sans-serif;
+  --font-family-interface: "TeX Gyre Heros", Arimo, "Noto Sans", Arial, system-ui, sans-serif;
+  --font-family-story: "Lora", Georgia, "Noto Serif", serif;
+  --font-family-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-size-base: 1rem;
+  --font-size-ratio: var(--ratio-density);
+  --font-size-xs: calc(var(--font-size-base) / pow(var(--font-size-ratio), var(--multiplier-2)));
+  --font-size-sm: calc(var(--font-size-base) / var(--font-size-ratio));
+  --font-size-md: var(--font-size-base);
+  --font-size-lg: calc(var(--font-size-base) * var(--font-size-ratio));
+  --font-size-xl: calc(var(--font-size-base) * pow(var(--font-size-ratio), var(--multiplier-2)));
+  --font-size-2xl: calc(var(--font-size-base) * pow(var(--font-size-ratio), var(--multiplier-3)));
+  --font-size-3xl: calc(var(--font-size-base) * pow(var(--font-size-ratio), var(--multiplier-4)));
+  --font-size-4xl: calc(var(--font-size-base) * pow(var(--font-size-ratio), var(--multiplier-5)));
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+  --line-height-tight: 1;
+  --line-height-compact: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-loose: 1.75;
+  --letter-spacing-tight: -0.02em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.08em;
+  --letter-spacing-display: 0.12em;
+
+  --layout-gutter: clamp(var(--space-4), 2vw, var(--space-8));
+  --layout-container-sm: calc(var(--font-size-base) * var(--multiplier-40));
+  --layout-container-md: calc(var(--font-size-base) * var(--multiplier-64));
+  --layout-container-lg: calc(var(--font-size-base) * var(--multiplier-80));
+  --layout-sidebar: calc(var(--layout-container-sm) / pow(var(--ratio-major), var(--multiplier-2)));
+  --layout-sidebar-min: calc(var(--font-size-base) * var(--multiplier-12));
+  --layout-island-gap: var(--space-3);
+  --layout-readable-measure: 68ch;
+
+  --layer-step: 10;
+  --layer-base: 0;
+  --layer-dropdown: calc(var(--layer-step) * var(--multiplier-1));
+  --layer-sticky: calc(var(--layer-step) * var(--multiplier-2));
+  --layer-modal: calc(var(--layer-step) * var(--multiplier-3));
+  --layer-toast: calc(var(--layer-step) * var(--multiplier-4));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-normal: 0ms;
+    --duration-slow: 0ms;
+  }
+}

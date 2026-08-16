@@ -1,0 +1,79 @@
+name: release
+
+# Releases are cut from the GitHub UI. The protected release environment
+# approves the version bump before any package is published.
+on:
+  workflow_dispatch:
+    inputs:
+      release_type:
+        description: Version bump to cut
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+      dry_run:
+        description: Bump and report only — do not commit, tag, push, or publish
+        required: false
+        type: boolean
+        default: false
+  workflow_call:
+    inputs:
+      release_type:
+        required: true
+        type: string
+      dry_run:
+        required: false
+        type: boolean
+        default: false
+
+run-name: "🚀 release ${{ inputs.release_type }}${{ inputs.dry_run && ' (dry-run)' || '' }}"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      contents: write
+    outputs:
+      version: ${{ steps.core.outputs.version }}
+      tag: ${{ steps.core.outputs.tag }}
+    steps:
+      - id: core
+        uses: a-novel-kit/workflows/publish-actions/release-core@v1.29.0
+        with:
+          # renovate: datasource=go depName=github.com/a-novel-kit/stack/cli
+          cli_version: "1.7.5"
+          release_type: ${{ inputs.release_type }}
+          dry_run: ${{ inputs.dry_run }}
+          client_id: ${{ vars.AGENT_BOT_CLIENT_ID }}
+          app_private_key: ${{ secrets.AGENT_BOT_PRIVATE_KEY }}
+
+  publish-npm:
+    needs: [release]
+    if: ${{ !inputs.dry_run }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: a-novel-kit/workflows/publish-actions/npm@v1.29.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          app_private_key: ${{ secrets.PUBLISH_BOT_PRIVATE_KEY }}
+          client_id: ${{ vars.PUBLISH_BOT_CLIENT_ID }}
+          ref: ${{ needs.release.outputs.tag }}
+
+  archive:
+    needs: [release, publish-npm]
+    if: ${{ !inputs.dry_run }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: a-novel-kit/workflows/generic-actions/archive-board-items@v1.29.0
+        with:
+          client_id: ${{ vars.AGENT_BOT_CLIENT_ID }}
+          app_private_key: ${{ secrets.AGENT_BOT_PRIVATE_KEY }}
+          project_id: ${{ github.repository_owner == 'a-novel' && 'PVT_kwDOB9MxdM4BMh8r' || 'PVT_kwDOCy-nAM4BbtKH' }}

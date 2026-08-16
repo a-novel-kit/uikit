@@ -1,0 +1,106 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+import "./Metrics.css";
+
+<Meta title="Foundations/Layout & shape" />
+
+export const spacingTokens = [
+  "--space-1",
+  "--space-1-5",
+  "--space-2",
+  "--space-3",
+  "--space-4",
+  "--space-5",
+  "--space-6",
+  "--space-8",
+];
+
+export const radiusTokens = ["--radius-none", "--radius-sm", "--radius-md", "--radius-lg"];
+
+export const ratios = [
+  { token: "--ratio-density", label: "Density", use: "Type and compact details" },
+  { token: "--ratio-hierarchy", label: "Hierarchy", use: "Local component emphasis" },
+  { token: "--ratio-emphasis", label: "Emphasis", use: "Strong local contrast" },
+  { token: "--ratio-major", label: "Major", use: "Page and split hierarchy" },
+];
+
+# Layout & shape
+
+Use public spacing, radius, control, border, focus, and motion tokens in component styles.
+
+## Spacing
+
+The spacing scale starts at `--space-base` and exposes named steps.
+
+<div className="metric-stack">
+  {spacingTokens.map((token) => (
+    <div className="metric-row" key={token}>
+      <code>{token}</code>
+      <div className="metric-track">
+        <span className="spacing-swatch" style={{ "--metric-size": `var(${token})` }} />
+      </div>
+    </div>
+  ))}
+</div>
+
+## Proportion
+
+Use smaller ratios for dense interface details and reserve the major ratio for page-level hierarchy.
+
+<div className="ratio-grid">
+  {ratios.map((ratio) => (
+    <div className="ratio-card" key={ratio.token}>
+      <div>
+        <strong>{ratio.label}</strong>
+        <code>{ratio.token}</code>
+      </div>
+      <span>{ratio.use}</span>
+      <i style={{ "--metric-ratio": `var(${ratio.token})` }} />
+    </div>
+  ))}
+</div>
+
+## Surfaces
+
+Group related content with spacing first. Use a borderless island when a region needs its own visual
+plane.
+
+<div className="surface-demo">
+  <section className="surface-group">
+    <strong>Invisible group</strong>
+    <span>Primary content and related sections</span>
+  </section>
+  <section className="surface-island surface-island--subtle">
+    <strong>Subtle island</strong>
+    <span>Supporting groups and passive regions</span>
+  </section>
+  <section className="surface-island surface-island--strong">
+    <strong>Strong island</strong>
+    <span>Floating tools, navigation, and overlays</span>
+  </section>
+</div>
+
+## Border radius
+
+Choose a named radius token for each component shape.
+
+<div className="radius-grid">
+  {radiusTokens.map((token) => (
+    <div className="radius-card" style={{ "--metric-radius": `var(${token})` }} key={token}>
+      <code>{token}</code>
+    </div>
+  ))}
+</div>
+
+## Control and interaction metrics
+
+| Contract       | Tokens                                                 |
+| -------------- | ------------------------------------------------------ |
+| Control height | `--control-height-{sm,md,lg}`                          |
+| Border         | `--border-width-thin`                                  |
+| Focus          | `--focus-ring-{width,offset}` and `--color-focus-ring` |
+| Motion         | `--duration-{fast,normal}` and `--easing-standard`     |
+| Disabled state | `--opacity-disabled`                                   |
+
+The [Button](?path=/docs/components-button--documentation) stories show these tokens on an interactive
+control.

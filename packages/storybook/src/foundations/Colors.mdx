@@ -1,0 +1,182 @@
+import { colorSystem, palette } from "@a-novel-kit/uikit-tokens/palette";
+
+import { Meta } from "@storybook/addon-docs/blocks";
+
+import "./Colors.css";
+
+<Meta title="Foundations/Color system" />
+
+export const coreColors = [
+  {
+    family: "brand",
+    label: "Brand",
+    role: "Actions / focus / progress",
+  },
+  {
+    family: "pressure",
+    label: "Pressure",
+    role: "Urgency / caution / failure",
+  },
+  {
+    family: "signal",
+    label: "Signal",
+    role: "Readiness / success / reward",
+  },
+];
+
+export const scaleSteps = Array.from({ length: 12 }, (_, index) => index + 1);
+
+export const percentage = (value) => (value * 100).toFixed(0) + "%";
+
+export const accentDescription = (family) =>
+  "L " +
+  percentage(colorSystem.scale.lightnessFloor) +
+  "–" +
+  percentage(colorSystem.scale.peaks[family].lightness) +
+  " / C " +
+  colorSystem.scale.peaks[family].chroma.toFixed(3) +
+  " / " +
+  colorSystem.scale.toneCurve;
+
+export const neutralDescription =
+  "L " +
+  percentage(colorSystem.neutral.lightnessFloor) +
+  "–" +
+  percentage(colorSystem.neutral.lightnessPeak) +
+  " / curve " +
+  colorSystem.neutral.lightnessCurve.toFixed(1);
+
+export const PrimitiveScale = ({ family, label, description }) => (
+  <div className="primitive-scale">
+    <div className="primitive-scale__header">
+      <div>
+        <strong>{label}</strong>
+        <span>{description}</span>
+      </div>
+      <code>{"--color-" + family + "-*"}</code>
+    </div>
+    <div className="primitive-scale__steps">
+      {scaleSteps.map((step) => (
+        <div className="primitive-scale__step" key={family + step}>
+          <span
+            role="img"
+            aria-label={label + " step " + step}
+            style={{ backgroundColor: "var(--color-" + family + "-" + step + ")" }}
+          />
+          <code>{String(step).padStart(2, "0")}</code>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+# Color
+
+Brand, pressure, and signal accents sit on a blue-black neutral scale. Use semantic tokens in
+components.
+
+<div className="core-palette">
+  {coreColors.map((item) => (
+    <div
+      className={"core-palette__card core-palette__card--" + item.family}
+      key={item.family}
+      style={{ backgroundColor: "var(--base-" + item.family + ")" }}
+    >
+      <div>
+        <strong>{item.label}</strong>
+        <span>{colorSystem.harmony.hues[item.family].toFixed(0)}deg</span>
+      </div>
+      <code>{"--base-" + item.family}</code>
+      <small>{palette[item.family][11]}</small>
+      <p>{item.role}</p>
+    </div>
+  ))}
+</div>
+
+## Usage
+
+<div className="color-rules">
+  <div>
+    <strong>Field</strong>
+    <span>Keep most area neutral; group with spacing before adding a surface.</span>
+  </div>
+  <div>
+    <strong>Accent</strong>
+    <span>Keep one accent dominant within a component or region.</span>
+  </div>
+  <div>
+    <strong>Status</strong>
+    <span>Pair status color with text, an icon, or a shape.</span>
+  </div>
+</div>
+
+Brand marks interaction, pressure marks urgency and failure, and signal marks readiness and success.
+
+## Semantic roles
+
+<div className="action-states" aria-label="Action state progression">
+  <div>
+    <span className="action-state action-state--idle">Idle</span>
+    <code>brand.9</code>
+  </div>
+  <div>
+    <span className="action-state action-state--hover">Hover</span>
+    <code>brand.11</code>
+  </div>
+  <div>
+    <span className="action-state action-state--selected">Selected</span>
+    <code>brand.12 + glow</code>
+  </div>
+  <div>
+    <button type="button" className="action-state action-state--disabled" disabled>
+      <span>Disabled</span>
+    </button>
+    <code>neutral.3 / neutral.8</code>
+  </div>
+</div>
+
+<div className="feedback-grid">
+  <div className="feedback feedback--info">
+    <span aria-hidden="true">i</span>
+    <div>
+      <strong>Information</strong>
+      <code>feedback.info</code>
+    </div>
+  </div>
+  <div className="feedback feedback--success">
+    <span aria-hidden="true">OK</span>
+    <div>
+      <strong>Saved</strong>
+      <code>feedback.success</code>
+    </div>
+  </div>
+  <div className="feedback feedback--warning">
+    <span aria-hidden="true">!</span>
+    <div>
+      <strong>Check input</strong>
+      <code>feedback.warning</code>
+    </div>
+  </div>
+  <div className="feedback feedback--error">
+    <span aria-hidden="true">x</span>
+    <div>
+      <strong>Upload failed</strong>
+      <code>feedback.error</code>
+    </div>
+  </div>
+</div>
+
+Selected actions keep their peak color and localized glow through interaction. Rest action colors are
+derived from steps 9–10 and meet at least {colorSystem.contrast.minimumNormalText}:1 against inverse
+text.
+
+## Primitive ramps
+
+Primitive ramps define each theme family. Component styles consume their semantic aliases.
+
+<div className="primitive-scales">
+  <PrimitiveScale family="neutral" label="Neutral" description={neutralDescription} />
+  <PrimitiveScale family="brand" label="Brand" description={accentDescription("brand")} />
+  <PrimitiveScale family="pressure" label="Pressure" description={accentDescription("pressure")} />
+  <PrimitiveScale family="signal" label="Signal" description={accentDescription("signal")} />
+</div>

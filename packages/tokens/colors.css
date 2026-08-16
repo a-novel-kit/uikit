@@ -1,0 +1,584 @@
+/* Generated from one OKLCH basis and gamut-relative coefficients. Do not edit. */
+:root {
+  --color-hue-brand: 232;
+  --color-harmony-half-turn: 180;
+  --color-harmony-opposition-bias: -10;
+  --color-harmony-opposition-spread: 52;
+  --color-hue-pressure: calc(
+    var(--color-hue-brand) + var(--color-harmony-half-turn) +
+      var(--color-harmony-opposition-bias) -
+      var(--color-harmony-opposition-spread) / var(--multiplier-2)
+  );
+  --color-hue-signal: calc(
+    var(--color-hue-brand) + var(--color-harmony-half-turn) +
+      var(--color-harmony-opposition-bias) +
+      var(--color-harmony-opposition-spread) / var(--multiplier-2)
+  );
+
+  --color-peak-lightness-brand: 0.718;
+  --color-peak-chroma-brand: 0.19264;
+  --color-peak-lightness-pressure-factor: 0.91364903;
+  --color-peak-chroma-pressure-factor: 1.53670058;
+  --color-peak-lightness-signal-factor: 1.11002786;
+  --color-peak-chroma-signal-factor: 1.04095723;
+  --base-brand: oklch(
+    var(--color-peak-lightness-brand)
+    var(--color-peak-chroma-brand)
+    var(--color-hue-brand)
+  );
+  --base-pressure: oklch(
+    from var(--base-brand)
+      calc(l * var(--color-peak-lightness-pressure-factor))
+      calc(c * var(--color-peak-chroma-pressure-factor))
+      var(--color-hue-pressure)
+  );
+  --base-signal: oklch(
+    from var(--base-brand)
+      calc(l * var(--color-peak-lightness-signal-factor))
+      calc(c * var(--color-peak-chroma-signal-factor))
+      var(--color-hue-signal)
+  );
+
+  --color-accent-lightness-floor: 0.26;
+  --color-neutral-lightness-floor: 0.11;
+  --color-neutral-lightness-peak: 0.96;
+  --color-neutral-lightness-curve: 1.6;
+  --color-neutral-chroma: 0.008;
+  --color-scale-divisions: var(--multiplier-11);
+  --color-scale-progress-1: calc(var(--multiplier-0) / var(--color-scale-divisions));
+  --color-scale-tone-1: calc(var(--color-scale-progress-1) * var(--color-scale-progress-1) * (var(--multiplier-3) - var(--multiplier-2) * var(--color-scale-progress-1)));
+  --color-scale-progress-2: calc(var(--multiplier-1) / var(--color-scale-divisions));
+  --color-scale-tone-2: calc(var(--color-scale-progress-2) * var(--color-scale-progress-2) * (var(--multiplier-3) - var(--multiplier-2) * var(--color-scale-progress-2)));
+  --color-scale-progress-3: calc(var(--multiplier-2) / var(--color-scale-divisions));
+  --color-scale-tone-3: calc(var(--color-scale-progress-3) * var(--color-scale-progress-3) * (var(--multiplier-3) - var(--multiplier-2) * var(--color-scale-progress-3)));
+  --color-scale-progress-4: calc(var(--multiplier-3) / var(--color-scale-divisions));
+  --color-scale-tone-4: calc(var(--color-scale-progress-4) * var(--color-scale-progress-4) * (var(--multiplier-3) - var(--multiplier-2) * var(--color-scale-progress-4)));
+  --color-scale-progress-5: calc(var(--multiplier-4) / var(--color-scale-divisions));
+  --color-scale-tone-5: calc(var(--color-scale-progress-5) * var(--color-scale-progress-5) * (var(--multiplier-3) - var(--multiplier-2) * var(--color-scale-progress-5)));
+  --color-scale-progress-6: calc(var(--multiplier-5) / var(--color-scale-divisions));
+  --color-scale-tone-6: calc(var(--color-scale-progress-6) * var(--color-scale-progress-6) * (var(--multiplier-3) - var(--multiplier-2) * var(--color-scale-progress-6)));
+  --color-scale-progress-7: calc(var(--multiplier-6) / var(--color-scale-divisions));
+  --color-scale-tone-7: calc(var(--color-scale-progress-7) * var(--color-scale-progress-7) * (var(--multiplier-3) - var(--multiplier-2) * var(--color-scale-progress-7)));
+  --color-scale-progress-8: calc(var(--multiplier-7) / var(--color-scale-divisions));
+  --color-scale-tone-8: calc(var(--color-scale-progress-8) * var(--color-scale-progress-8) * (var(--multiplier-3) - var(--multiplier-2) * var(--color-scale-progress-8)));
+  --color-scale-progress-9: calc(var(--multiplier-8) / var(--color-scale-divisions));
+  --color-scale-tone-9: calc(var(--color-scale-progress-9) * var(--color-scale-progress-9) * (var(--multiplier-3) - var(--multiplier-2) * var(--color-scale-progress-9)));
+  --color-scale-progress-10: calc(var(--multiplier-9) / var(--color-scale-divisions));
+  --color-scale-tone-10: calc(var(--color-scale-progress-10) * var(--color-scale-progress-10) * (var(--multiplier-3) - var(--multiplier-2) * var(--color-scale-progress-10)));
+  --color-scale-progress-11: calc(var(--multiplier-10) / var(--color-scale-divisions));
+  --color-scale-tone-11: calc(var(--color-scale-progress-11) * var(--color-scale-progress-11) * (var(--multiplier-3) - var(--multiplier-2) * var(--color-scale-progress-11)));
+  --color-scale-progress-12: calc(var(--multiplier-11) / var(--color-scale-divisions));
+  --color-scale-tone-12: calc(var(--color-scale-progress-12) * var(--color-scale-progress-12) * (var(--multiplier-3) - var(--multiplier-2) * var(--color-scale-progress-12)));
+
+  --color-gamut-chroma-brand-1: 0.28971138;
+  --color-gamut-chroma-brand-2: 0.30331188;
+  --color-gamut-chroma-brand-3: 0.34146595;
+  --color-gamut-chroma-brand-4: 0.40033223;
+  --color-gamut-chroma-brand-5: 0.4763289;
+  --color-gamut-chroma-brand-6: 0.56525125;
+  --color-gamut-chroma-brand-7: 0.66185631;
+  --color-gamut-chroma-brand-8: 0.75970723;
+  --color-gamut-chroma-brand-9: 0.85127699;
+  --color-gamut-chroma-brand-10: 0.9279485;
+  --color-gamut-chroma-brand-11: 0.98053364;
+  --color-gamut-chroma-brand-12: 1;
+
+  --color-gamut-chroma-pressure-1: 0.31706246;
+  --color-gamut-chroma-pressure-2: 0.3302368;
+  --color-gamut-chroma-pressure-3: 0.36698983;
+  --color-gamut-chroma-pressure-4: 0.42374084;
+  --color-gamut-chroma-pressure-5: 0.49694288;
+  --color-gamut-chroma-pressure-6: 0.58247475;
+  --color-gamut-chroma-pressure-7: 0.67533696;
+  --color-gamut-chroma-pressure-8: 0.76938148;
+  --color-gamut-chroma-pressure-9: 0.85731176;
+  --color-gamut-chroma-pressure-10: 0.93088538;
+  --color-gamut-chroma-pressure-11: 0.98135324;
+  --color-gamut-chroma-pressure-12: 1;
+
+  --color-gamut-chroma-signal-1: 0.26095846;
+  --color-gamut-chroma-signal-2: 0.27512093;
+  --color-gamut-chroma-signal-3: 0.31466613;
+  --color-gamut-chroma-signal-4: 0.37580412;
+  --color-gamut-chroma-signal-5: 0.45474493;
+  --color-gamut-chroma-signal-6: 0.54715005;
+  --color-gamut-chroma-signal-7: 0.64768364;
+  --color-gamut-chroma-signal-8: 0.74956366;
+  --color-gamut-chroma-signal-9: 0.84496085;
+  --color-gamut-chroma-signal-10: 0.92484915;
+  --color-gamut-chroma-signal-11: 0.97970378;
+  --color-gamut-chroma-signal-12: 1;
+
+  --color-neutral-1: oklch(
+    calc(
+      var(--color-neutral-lightness-floor) +
+        (var(--color-neutral-lightness-peak) - var(--color-neutral-lightness-floor)) *
+          pow(var(--color-scale-progress-1), var(--color-neutral-lightness-curve))
+    )
+    var(--color-neutral-chroma)
+    var(--color-hue-brand)
+  );
+  --color-neutral-2: oklch(
+    calc(
+      var(--color-neutral-lightness-floor) +
+        (var(--color-neutral-lightness-peak) - var(--color-neutral-lightness-floor)) *
+          pow(var(--color-scale-progress-2), var(--color-neutral-lightness-curve))
+    )
+    var(--color-neutral-chroma)
+    var(--color-hue-brand)
+  );
+  --color-neutral-3: oklch(
+    calc(
+      var(--color-neutral-lightness-floor) +
+        (var(--color-neutral-lightness-peak) - var(--color-neutral-lightness-floor)) *
+          pow(var(--color-scale-progress-3), var(--color-neutral-lightness-curve))
+    )
+    var(--color-neutral-chroma)
+    var(--color-hue-brand)
+  );
+  --color-neutral-4: oklch(
+    calc(
+      var(--color-neutral-lightness-floor) +
+        (var(--color-neutral-lightness-peak) - var(--color-neutral-lightness-floor)) *
+          pow(var(--color-scale-progress-4), var(--color-neutral-lightness-curve))
+    )
+    var(--color-neutral-chroma)
+    var(--color-hue-brand)
+  );
+  --color-neutral-5: oklch(
+    calc(
+      var(--color-neutral-lightness-floor) +
+        (var(--color-neutral-lightness-peak) - var(--color-neutral-lightness-floor)) *
+          pow(var(--color-scale-progress-5), var(--color-neutral-lightness-curve))
+    )
+    var(--color-neutral-chroma)
+    var(--color-hue-brand)
+  );
+  --color-neutral-6: oklch(
+    calc(
+      var(--color-neutral-lightness-floor) +
+        (var(--color-neutral-lightness-peak) - var(--color-neutral-lightness-floor)) *
+          pow(var(--color-scale-progress-6), var(--color-neutral-lightness-curve))
+    )
+    var(--color-neutral-chroma)
+    var(--color-hue-brand)
+  );
+  --color-neutral-7: oklch(
+    calc(
+      var(--color-neutral-lightness-floor) +
+        (var(--color-neutral-lightness-peak) - var(--color-neutral-lightness-floor)) *
+          pow(var(--color-scale-progress-7), var(--color-neutral-lightness-curve))
+    )
+    var(--color-neutral-chroma)
+    var(--color-hue-brand)
+  );
+  --color-neutral-8: oklch(
+    calc(
+      var(--color-neutral-lightness-floor) +
+        (var(--color-neutral-lightness-peak) - var(--color-neutral-lightness-floor)) *
+          pow(var(--color-scale-progress-8), var(--color-neutral-lightness-curve))
+    )
+    var(--color-neutral-chroma)
+    var(--color-hue-brand)
+  );
+  --color-neutral-9: oklch(
+    calc(
+      var(--color-neutral-lightness-floor) +
+        (var(--color-neutral-lightness-peak) - var(--color-neutral-lightness-floor)) *
+          pow(var(--color-scale-progress-9), var(--color-neutral-lightness-curve))
+    )
+    var(--color-neutral-chroma)
+    var(--color-hue-brand)
+  );
+  --color-neutral-10: oklch(
+    calc(
+      var(--color-neutral-lightness-floor) +
+        (var(--color-neutral-lightness-peak) - var(--color-neutral-lightness-floor)) *
+          pow(var(--color-scale-progress-10), var(--color-neutral-lightness-curve))
+    )
+    var(--color-neutral-chroma)
+    var(--color-hue-brand)
+  );
+  --color-neutral-11: oklch(
+    calc(
+      var(--color-neutral-lightness-floor) +
+        (var(--color-neutral-lightness-peak) - var(--color-neutral-lightness-floor)) *
+          pow(var(--color-scale-progress-11), var(--color-neutral-lightness-curve))
+    )
+    var(--color-neutral-chroma)
+    var(--color-hue-brand)
+  );
+  --color-neutral-12: oklch(
+    calc(
+      var(--color-neutral-lightness-floor) +
+        (var(--color-neutral-lightness-peak) - var(--color-neutral-lightness-floor)) *
+          pow(var(--color-scale-progress-12), var(--color-neutral-lightness-curve))
+    )
+    var(--color-neutral-chroma)
+    var(--color-hue-brand)
+  );
+  --base-neutral: var(--color-neutral-9);
+
+  --color-brand-1: oklch(
+    from var(--base-brand)
+      calc(
+        var(--color-accent-lightness-floor) +
+          (l - var(--color-accent-lightness-floor)) *
+            var(--color-scale-tone-1)
+      )
+      calc(c * var(--color-gamut-chroma-brand-1))
+      h
+  );
+  --color-brand-2: oklch(
+    from var(--base-brand)
+      calc(
+        var(--color-accent-lightness-floor) +
+          (l - var(--color-accent-lightness-floor)) *
+            var(--color-scale-tone-2)
+      )
+      calc(c * var(--color-gamut-chroma-brand-2))
+      h
+  );
+  --color-brand-3: oklch(
+    from var(--base-brand)
+      calc(
+        var(--color-accent-lightness-floor) +
+          (l - var(--color-accent-lightness-floor)) *
+            var(--color-scale-tone-3)
+      )
+      calc(c * var(--color-gamut-chroma-brand-3))
+      h
+  );
+  --color-brand-4: oklch(
+    from var(--base-brand)
+      calc(
+        var(--color-accent-lightness-floor) +
+          (l - var(--color-accent-lightness-floor)) *
+            var(--color-scale-tone-4)
+      )
+      calc(c * var(--color-gamut-chroma-brand-4))
+      h
+  );
+  --color-brand-5: oklch(
+    from var(--base-brand)
+      calc(
+        var(--color-accent-lightness-floor) +
+          (l - var(--color-accent-lightness-floor)) *
+            var(--color-scale-tone-5)
+      )
+      calc(c * var(--color-gamut-chroma-brand-5))
+      h
+  );
+  --color-brand-6: oklch(
+    from var(--base-brand)
+      calc(
+        var(--color-accent-lightness-floor) +
+          (l - var(--color-accent-lightness-floor)) *
+            var(--color-scale-tone-6)
+      )
+      calc(c * var(--color-gamut-chroma-brand-6))
+      h
+  );
+  --color-brand-7: oklch(
+    from var(--base-brand)
+      calc(
+        var(--color-accent-lightness-floor) +
+          (l - var(--color-accent-lightness-floor)) *
+            var(--color-scale-tone-7)
+      )
+      calc(c * var(--color-gamut-chroma-brand-7))
+      h
+  );
+  --color-brand-8: oklch(
+    from var(--base-brand)
+      calc(
+        var(--color-accent-lightness-floor) +
+          (l - var(--color-accent-lightness-floor)) *
+            var(--color-scale-tone-8)
+      )
+      calc(c * var(--color-gamut-chroma-brand-8))
+      h
+  );
+  --color-brand-9: oklch(
+    from var(--base-brand)
+      calc(
+        var(--color-accent-lightness-floor) +
+          (l - var(--color-accent-lightness-floor)) *
+            var(--color-scale-tone-9)
+      )
+      calc(c * var(--color-gamut-chroma-brand-9))
+      h
+  );
+  --color-brand-10: oklch(
+    from var(--base-brand)
+      calc(
+        var(--color-accent-lightness-floor) +
+          (l - var(--color-accent-lightness-floor)) *
+            var(--color-scale-tone-10)
+      )
+      calc(c * var(--color-gamut-chroma-brand-10))
+      h
+  );
+  --color-brand-11: oklch(
+    from var(--base-brand)
+      calc(
+        var(--color-accent-lightness-floor) +
+          (l - var(--color-accent-lightness-floor)) *
+            var(--color-scale-tone-11)
+      )
+      calc(c * var(--color-gamut-chroma-brand-11))
+      h
+  );
+  --color-brand-12: oklch(
+    from var(--base-brand)
+      calc(
+        var(--color-accent-lightness-floor) +
+          (l - var(--color-accent-lightness-floor)) *
+            var(--color-scale-tone-12)
+      )
+      calc(c * var(--color-gamut-chroma-brand-12))
+      h
+  );
+
+  --color-pressure-1: oklch(
+    from var(--base-pressure)
+      calc(
+        var(--color-accent-lightness-floor) +
+          (l - var(--color-accent-lightness-floor)) *
+            var(--color-scale-tone-1)
+      )
+      calc(c * var(--color-gamut-chroma-pressure-1))
+      h
+  );
+  --color-pressure-2: oklch(
+    from var(--base-pressure)
+      calc(
+        var(--color-accent-lightness-floor) +
+          (l - var(--color-accent-lightness-floor)) *
+            var(--color-scale-tone-2)
+      )
+      calc(c * var(--color-gamut-chroma-pressure-2))
+      h
+  );
+  --color-pressure-3: oklch(
+    from var(--base-pressure)
+      calc(
+        var(--color-accent-lightness-floor) +
+          (l - var(--color-accent-lightness-floor)) *
+            var(--color-scale-tone-3)
+      )
+      calc(c * var(--color-gamut-chroma-pressure-3))
+      h
+  );
+  --color-pressure-4: oklch(
+    from var(--base-pressure)
+      calc(
+        var(--color-accent-lightness-floor) +
+          (l - var(--color-accent-lightness-floor)) *
+            var(--color-scale-tone-4)
+      )
+      calc(c * var(--color-gamut-chroma-pressure-4))
+      h
+  );
+  --color-pressure-5: oklch(
+    from var(--base-pressure)
+      calc(
+        var(--color-accent-lightness-floor) +
+          (l - var(--color-accent-lightness-floor)) *
+            var(--color-scale-tone-5)
+      )
+      calc(c * var(--color-gamut-chroma-pressure-5))
+      h
+  );
+  --color-pressure-6: oklch(
+    from var(--base-pressure)
+      calc(
+        var(--color-accent-lightness-floor) +
+          (l - var(--color-accent-lightness-floor)) *
+            var(--color-scale-tone-6)
+      )
+      calc(c * var(--color-gamut-chroma-pressure-6))
+      h
+  );
+  --color-pressure-7: oklch(
+    from var(--base-pressure)
+      calc(
+        var(--color-accent-lightness-floor) +
+          (l - var(--color-accent-lightness-floor)) *
+            var(--color-scale-tone-7)
+      )
+      calc(c * var(--color-gamut-chroma-pressure-7))
+      h
+  );
+  --color-pressure-8: oklch(
+    from var(--base-pressure)
+      calc(
+        var(--color-accent-lightness-floor) +
+          (l - var(--color-accent-lightness-floor)) *
+            var(--color-scale-tone-8)
+      )
+      calc(c * var(--color-gamut-chroma-pressure-8))
+      h
+  );
+  --color-pressure-9: oklch(
+    from var(--base-pressure)
+      calc(
+        var(--color-accent-lightness-floor) +
+          (l - var(--color-accent-lightness-floor)) *
+            var(--color-scale-tone-9)
+      )
+      calc(c * var(--color-gamut-chroma-pressure-9))
+      h
+  );
+  --color-pressure-10: oklch(
+    from var(--base-pressure)
+      calc(
+        var(--color-accent-lightness-floor) +
+          (l - var(--color-accent-lightness-floor)) *
+            var(--color-scale-tone-10)
+      )
+      calc(c * var(--color-gamut-chroma-pressure-10))
+      h
+  );
+  --color-pressure-11: oklch(
+    from var(--base-pressure)
+      calc(
+        var(--color-accent-lightness-floor) +
+          (l - var(--color-accent-lightness-floor)) *
+            var(--color-scale-tone-11)
+      )
+      calc(c * var(--color-gamut-chroma-pressure-11))
+      h
+  );
+  --color-pressure-12: oklch(
+    from var(--base-pressure)
+      calc(
+        var(--color-accent-lightness-floor) +
+          (l - var(--color-accent-lightness-floor)) *
+            var(--color-scale-tone-12)
+      )
+      calc(c * var(--color-gamut-chroma-pressure-12))
+      h
+  );
+
+  --color-signal-1: oklch(
+    from var(--base-signal)
+      calc(
+        var(--color-accent-lightness-floor) +
+          (l - var(--color-accent-lightness-floor)) *
+            var(--color-scale-tone-1)
+      )
+      calc(c * var(--color-gamut-chroma-signal-1))
+      h
+  );
+  --color-signal-2: oklch(
+    from var(--base-signal)
+      calc(
+        var(--color-accent-lightness-floor) +
+          (l - var(--color-accent-lightness-floor)) *
+            var(--color-scale-tone-2)
+      )
+      calc(c * var(--color-gamut-chroma-signal-2))
+      h
+  );
+  --color-signal-3: oklch(
+    from var(--base-signal)
+      calc(
+        var(--color-accent-lightness-floor) +
+          (l - var(--color-accent-lightness-floor)) *
+            var(--color-scale-tone-3)
+      )
+      calc(c * var(--color-gamut-chroma-signal-3))
+      h
+  );
+  --color-signal-4: oklch(
+    from var(--base-signal)
+      calc(
+        var(--color-accent-lightness-floor) +
+          (l - var(--color-accent-lightness-floor)) *
+            var(--color-scale-tone-4)
+      )
+      calc(c * var(--color-gamut-chroma-signal-4))
+      h
+  );
+  --color-signal-5: oklch(
+    from var(--base-signal)
+      calc(
+        var(--color-accent-lightness-floor) +
+          (l - var(--color-accent-lightness-floor)) *
+            var(--color-scale-tone-5)
+      )
+      calc(c * var(--color-gamut-chroma-signal-5))
+      h
+  );
+  --color-signal-6: oklch(
+    from var(--base-signal)
+      calc(
+        var(--color-accent-lightness-floor) +
+          (l - var(--color-accent-lightness-floor)) *
+            var(--color-scale-tone-6)
+      )
+      calc(c * var(--color-gamut-chroma-signal-6))
+      h
+  );
+  --color-signal-7: oklch(
+    from var(--base-signal)
+      calc(
+        var(--color-accent-lightness-floor) +
+          (l - var(--color-accent-lightness-floor)) *
+            var(--color-scale-tone-7)
+      )
+      calc(c * var(--color-gamut-chroma-signal-7))
+      h
+  );
+  --color-signal-8: oklch(
+    from var(--base-signal)
+      calc(
+        var(--color-accent-lightness-floor) +
+          (l - var(--color-accent-lightness-floor)) *
+            var(--color-scale-tone-8)
+      )
+      calc(c * var(--color-gamut-chroma-signal-8))
+      h
+  );
+  --color-signal-9: oklch(
+    from var(--base-signal)
+      calc(
+        var(--color-accent-lightness-floor) +
+          (l - var(--color-accent-lightness-floor)) *
+            var(--color-scale-tone-9)
+      )
+      calc(c * var(--color-gamut-chroma-signal-9))
+      h
+  );
+  --color-signal-10: oklch(
+    from var(--base-signal)
+      calc(
+        var(--color-accent-lightness-floor) +
+          (l - var(--color-accent-lightness-floor)) *
+            var(--color-scale-tone-10)
+      )
+      calc(c * var(--color-gamut-chroma-signal-10))
+      h
+  );
+  --color-signal-11: oklch(
+    from var(--base-signal)
+      calc(
+        var(--color-accent-lightness-floor) +
+          (l - var(--color-accent-lightness-floor)) *
+            var(--color-scale-tone-11)
+      )
+      calc(c * var(--color-gamut-chroma-signal-11))
+      h
+  );
+  --color-signal-12: oklch(
+    from var(--base-signal)
+      calc(
+        var(--color-accent-lightness-floor) +
+          (l - var(--color-accent-lightness-floor)) *
+            var(--color-scale-tone-12)
+      )
+      calc(c * var(--color-gamut-chroma-signal-12))
+      h
+  );
+}

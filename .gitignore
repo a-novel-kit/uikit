@@ -1,0 +1,8 @@
+node_modules
+dist
+.svelte-kit
+coverage
+storybook-static
+*.tsbuildinfo
+.DS_Store
+tmp

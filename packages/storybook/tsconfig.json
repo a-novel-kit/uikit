@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "paths": {
+      "@a-novel-kit/uikit": ["../uikit/src/lib/index.ts"],
+      "@a-novel-kit/uikit-icons": ["../icons/src/lib/index.ts"]
+    }
+  },
+  "include": [".storybook/**/*.ts", "src/**/*.d.ts", "src/**/*.ts", "src/**/*.svelte", "vite.config.ts"]
+}

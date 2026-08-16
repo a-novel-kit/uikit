@@ -1,0 +1,22 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Guidelines/Accessibility" />
+
+# Accessibility
+
+Use native elements first, preserve their keyboard behavior, and provide an accessible name for every control.
+
+## Required checks
+
+- Complete the task with a keyboard alone; focus remains visible and follows reading order.
+- Do not encode meaning with color alone. Pair status color with text, an icon, or both.
+- Associate labels, hints, and errors with their controls. Move focus to `ErrorSummary` after failed submission.
+- Keep icon-only actions named with `IconButton` or `VisuallyHidden` text.
+- Test zoom, narrow viewports, long translated copy, forced colors, and reduced motion.
+- Use landmarks and heading levels to expose the same structure visually and programmatically.
+
+## Focus and overlays
+
+Use `Popover` for non-modal supporting content and `Dialog` when the rest of the page must be unavailable. Escape closes temporary layers. Restoring focus to the invoking control is part of closing behavior.
+
+Storybook runs WCAG 2 A/AA, WCAG 2.1 A/AA, WCAG 2.2 AA, and best-practice checks on every rendered story. Run `pnpm test:storybook` locally; CI runs the same Chromium suite. Automated checks supplement keyboard and screen-reader review.

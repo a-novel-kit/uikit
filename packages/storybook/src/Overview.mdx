@@ -1,0 +1,54 @@
+import buttonWithIconSource from "./examples/ButtonWithIcon.svelte?raw";
+
+import { Meta, Source } from "@storybook/addon-docs/blocks";
+
+<Meta title="Overview/Agora UI" />
+
+# Agora UI
+
+Agora UI provides shared tokens, fonts, custom icons, and Svelte components for Agora interfaces.
+
+## Packages
+
+| Package                        | Purpose                                              |
+| ------------------------------ | ---------------------------------------------------- |
+| `@a-novel-kit/uikit-tokens`    | Derived color, metric, motion, and type contracts    |
+| `@a-novel-kit/uikit-fonts`     | Self-hosted font faces and licensed WOFF2 assets     |
+| `@a-novel-kit/uikit`           | Styled Svelte components                             |
+| `@a-novel-kit/uikit-icons`     | Custom Svelte icon components and shared icon canvas |
+| `@a-novel-kit/uikit-storybook` | Shared Storybook theme and configuration             |
+
+## Setup
+
+Load the font and token styles once at the application entry point.
+
+```ts
+import "@a-novel-kit/uikit-fonts/fonts.css";
+import "@a-novel-kit/uikit-tokens/tokens.css";
+```
+
+## Example
+
+Import components from Agora UI and standard icons from Lucide.
+
+<Source code={buttonWithIconSource.trim()} dark language="html" />
+
+## Storybook setup
+
+Add the shared preset to a Svelte Storybook. It provides the Agora theme, dark preview, fonts,
+tokens, documentation, and accessibility checks.
+
+```ts
+import type { StorybookConfig } from "@storybook/svelte-vite";
+
+const config: StorybookConfig = {
+  stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|ts|svelte)"],
+  addons: ["@a-novel-kit/uikit-storybook"],
+  framework: "@storybook/svelte-vite",
+};
+
+export default config;
+```
+
+Open the [component catalog](?path=/docs/components-catalog--documentation) to browse the available
+groups.

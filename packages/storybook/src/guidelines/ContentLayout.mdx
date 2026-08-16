@@ -1,0 +1,25 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Guidelines/Content & layout" />
+
+# Content and layout
+
+Write concise interface copy and let content determine the final size of a component.
+
+## Interface copy
+
+- Begin action labels with a verb: “Save changes,” “Create project,” “Open preview.”
+- Use sentence case and keep one term for one concept.
+- State what happened and what the user can do next in errors.
+- Put irreversible consequences in the confirmation, not only in the button label.
+- Keep placeholders as examples; they do not replace labels.
+
+## Responsive composition
+
+Use logical properties and fluid primitives. Prefer wrapping, reflow, and scrolling over truncating required content. Set a maximum height on long menus, and preserve the focused or selected option while scrolling.
+
+Components must tolerate longer labels, right-to-left direction, 200% text zoom, and a narrow container. Density changes spacing and control height; it must not remove labels, focus indicators, or targets.
+
+## Visual hierarchy
+
+Start with spacing and type. Use borderless islands for grouping, shadows for raised layers, and glow for selected, focused, or confirmed states. Avoid permanent glow and decorative borders around every region.

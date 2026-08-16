@@ -1,0 +1,73 @@
+{
+  "name": "uikit-project",
+  "version": "0.1.0",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/a-novel-kit/uikit.git"
+  },
+  "license": "MIT",
+  "type": "module",
+  "workspaces": [
+    ".",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "pnpm -r build",
+    "build:ci": "pnpm build && pnpm check:packages && pnpm check:publish",
+    "check:packages": "node scripts/check-package-contract.mjs",
+    "check:publish": "pnpm publish -r --dry-run --access public --no-git-checks",
+    "format": "prettier --write . --config prettier.config.ts",
+    "preinstall": "npx only-allow pnpm",
+    "lint": "pnpm lint:docs && pnpm lint:generated && pnpm lint:stylecheck && pnpm lint:typecheck && pnpm lint:eslint",
+    "lint:ci": "pnpm lint",
+    "lint:docs": "node scripts/check-public-docs.mjs",
+    "lint:eslint": "eslint .",
+    "lint:generated": "pnpm --filter @a-novel-kit/uikit-tokens check:colors",
+    "lint:stylecheck": "prettier --check . --config prettier.config.ts",
+    "lint:typecheck": "pnpm -r --if-present typecheck",
+    "prepare:vitest": "pnpm --filter @a-novel-kit/uikit-storybook build",
+    "storybook": "pnpm --filter @a-novel-kit/uikit-storybook build && pnpm --filter @a-novel-kit/uikit-storybook-workbench storybook",
+    "test": "pnpm prepare:vitest && vitest run",
+    "test:browser": "pnpm prepare:vitest && vitest run --project=uikit-browser --coverage.enabled=false",
+    "test:ci": "pnpm test:unit && pnpm test:browser && pnpm test:storybook",
+    "test:storybook": "pnpm prepare:vitest && vitest run --project=storybook --coverage.enabled=false",
+    "test:unit": "pnpm prepare:vitest && vitest run --project=uikit-unit"
+  },
+  "devDependencies": {
+    "@a-novel-kit/nodelib-config": "catalog:",
+    "@eslint/config-helpers": "catalog:",
+    "@eslint/js": "catalog:",
+    "@storybook/addon-vitest": "catalog:",
+    "@sveltejs/vite-plugin-svelte": "^7.0.1",
+    "@trivago/prettier-plugin-sort-imports": "catalog:",
+    "@types/node": "^24.10.0",
+    "@vitest/browser-playwright": "catalog:",
+    "@vitest/coverage-v8": "4.1.10",
+    "eslint": "catalog:",
+    "eslint-config-prettier": "catalog:",
+    "eslint-plugin-prettier": "catalog:",
+    "eslint-plugin-svelte": "^3.19.0",
+    "globals": "^17.0.0",
+    "jiti": "catalog:",
+    "playwright": "catalog:",
+    "prettier": "catalog:",
+    "prettier-plugin-css-order": "^2.1.2",
+    "prettier-plugin-packagejson": "catalog:",
+    "prettier-plugin-svelte": "^4.0.0",
+    "storybook": "catalog:",
+    "svelte": "^5.55.8",
+    "typescript": "catalog:",
+    "typescript-eslint": "catalog:",
+    "vite": "catalog:",
+    "vitest": "catalog:"
+  },
+  "packageManager": "pnpm@11.15.0",
+  "engines": {
+    "node": ">=24.0.0",
+    "npm": ">=10.9.2"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  }
+}

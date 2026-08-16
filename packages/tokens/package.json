@@ -1,0 +1,41 @@
+{
+  "name": "@a-novel-kit/uikit-tokens",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Generated color, typography, spacing, shape, and motion tokens for Agora interfaces",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/a-novel-kit/uikit.git"
+  },
+  "license": "MIT",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "type": "module",
+  "exports": {
+    "./palette": {
+      "types": "./palette.d.ts",
+      "default": "./palette.js"
+    },
+    "./tokens.css": "./tokens.css"
+  },
+  "files": [
+    "colors.css",
+    "palette.d.ts",
+    "palette.js",
+    "tokens.css",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "pnpm generate:colors",
+    "check:colors": "node scripts/generate-colors.mjs --check && node scripts/check-color-contract.mjs",
+    "generate:colors": "node scripts/generate-colors.mjs"
+  },
+  "devDependencies": {
+    "colorjs.io": "^0.7.1"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  }
+}

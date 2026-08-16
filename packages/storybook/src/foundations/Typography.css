@@ -1,0 +1,86 @@
+.type-families {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin-block: var(--space-6);
+}
+
+.type-family {
+  display: grid;
+  align-content: start;
+  gap: var(--space-3);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-island-subtle);
+  padding: var(--space-5);
+  min-inline-size: 0;
+}
+
+.type-family__meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.type-family strong {
+  color: var(--color-text-primary);
+  font-family: var(--font-family-display);
+}
+
+.type-family code,
+.type-family > span {
+  color: var(--color-text-muted);
+}
+
+.type-family__sample {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-xl);
+  line-height: var(--line-height-normal);
+}
+
+.type-family > span {
+  line-height: var(--line-height-normal);
+}
+
+.type-scale {
+  display: grid;
+  gap: var(--space-1);
+  margin-block: var(--space-6);
+}
+
+.type-scale > div {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  align-items: baseline;
+  gap: var(--space-4);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
+}
+
+.type-scale > div:nth-child(odd) {
+  background: var(--color-surface-island-subtle);
+}
+
+.type-scale code {
+  color: var(--color-text-muted);
+}
+
+.type-scale span {
+  min-inline-size: 0;
+  color: var(--color-text-primary);
+  line-height: var(--line-height-normal);
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 40rem) {
+  .type-families {
+    grid-template-columns: 1fr;
+  }
+
+  .type-scale > div {
+    grid-template-columns: 1fr;
+    gap: var(--space-1);
+  }
+}

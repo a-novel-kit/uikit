@@ -1,0 +1,8 @@
+pnpm-lock.yaml
+node_modules
+dist
+.svelte-kit
+coverage
+storybook-static
+packages/tokens/colors.css
+packages/tokens/tokens.css
