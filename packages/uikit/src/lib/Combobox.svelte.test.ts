@@ -44,6 +44,8 @@ describe("Combobox", () => {
     expect(queryByRole("listbox")).toBeNull();
 
     await fireEvent.pointerDown(trigger, { button: 0 });
+    expect(queryByRole("listbox")).toBeNull();
+
     await fireEvent.click(trigger);
 
     expect(document.activeElement).toBe(input);

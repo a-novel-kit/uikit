@@ -223,8 +223,9 @@
   }
 
   function handleTriggerPointerDown(event: PointerEvent) {
+    if (event.button !== 0) return;
+
     event.preventDefault();
-    if (event.button === 0) focusInputAndOpen();
   }
 </script>
 
