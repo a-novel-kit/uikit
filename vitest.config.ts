@@ -23,6 +23,7 @@ export default defineConfig({
     },
     projects: [
       "packages/uikit",
+      "packages/uikit/vitest.browser.config.ts",
       defineProject({
         extends: true,
         root: storybookRoot,
