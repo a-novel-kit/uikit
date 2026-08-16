@@ -12,6 +12,9 @@ const svelteConfig = fileURLToPath(new URL("./svelte.config.js", import.meta.url
 export default defineProject({
   root,
   plugins: [svelte({ configFile: svelteConfig }), svelteTesting()],
+  resolve: {
+    conditions: ["browser"],
+  },
   test: {
     name: "uikit-browser",
     include: ["src/**/*.browser.test.ts"],
