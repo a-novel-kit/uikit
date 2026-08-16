@@ -26,12 +26,13 @@
     "lint:generated": "pnpm --filter @a-novel-kit/uikit-tokens check:colors",
     "lint:stylecheck": "prettier --check . --config prettier.config.ts",
     "lint:typecheck": "pnpm -r --if-present typecheck",
+    "prepare:vitest": "pnpm --filter @a-novel-kit/uikit-storybook build",
     "storybook": "pnpm --filter @a-novel-kit/uikit-storybook build && pnpm --filter @a-novel-kit/uikit-storybook-workbench storybook",
-    "test": "pnpm --filter @a-novel-kit/uikit-storybook build && vitest run",
-    "test:browser": "vitest run --project=uikit-browser --coverage.enabled=false",
+    "test": "pnpm prepare:vitest && vitest run",
+    "test:browser": "pnpm prepare:vitest && vitest run --project=uikit-browser --coverage.enabled=false",
     "test:ci": "pnpm test:unit && pnpm test:browser && pnpm test:storybook",
-    "test:storybook": "pnpm --filter @a-novel-kit/uikit-storybook build && vitest run --project=storybook --coverage.enabled=false",
-    "test:unit": "vitest run --project=uikit-unit"
+    "test:storybook": "pnpm prepare:vitest && vitest run --project=storybook --coverage.enabled=false",
+    "test:unit": "pnpm prepare:vitest && vitest run --project=uikit-unit"
   },
   "devDependencies": {
     "@a-novel-kit/nodelib-config": "catalog:",
