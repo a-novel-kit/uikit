@@ -8,6 +8,7 @@ import { svelteTesting } from "@testing-library/svelte/vite";
 export default defineConfig({
   plugins: [svelte(), svelteTesting()],
   test: {
+    name: "uikit-unit",
     environment: "jsdom",
     include: ["src/**/*.{test,spec}.ts"],
     exclude: ["src/**/*.browser.test.ts"],
