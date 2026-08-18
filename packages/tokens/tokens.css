@@ -272,7 +272,11 @@
     var(--base-pressure) var(--color-mix-10),
     var(--color-surface-subtle)
   );
-  --color-feedback-error-text: var(--base-pressure);
+  --color-feedback-error-text: color-mix(
+    in oklab,
+    var(--color-text-primary) var(--color-mix-2),
+    var(--base-pressure)
+  );
 
   --color-graphic-grid: color-mix(
     in oklab,
