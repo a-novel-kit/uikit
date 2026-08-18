@@ -122,6 +122,16 @@
   </form>
 </Story>
 
+<Story name="Validation on raised surface" asChild>
+  <div class="raised-surface">
+    <Field label="Project name" error="Enter a project name." required>
+      {#snippet children(control)}
+        <Input {...control} invalid />
+      {/snippet}
+    </Field>
+  </div>
+</Story>
+
 <Story name="Adornments" asChild>
   <div class="adornment-grid">
     <Field label="Search">
@@ -238,6 +248,13 @@
   }
   .form > :global(button) {
     justify-self: start;
+  }
+  .raised-surface {
+    border: var(--border-width-thin) solid var(--color-border-subtle);
+    border-radius: var(--radius-md);
+    background: var(--color-surface-raised);
+    padding: var(--space-5);
+    inline-size: min(100%, var(--layout-container-sm));
   }
   .narrow {
     inline-size: min(100%, calc(var(--space-base) * var(--multiplier-80)));
