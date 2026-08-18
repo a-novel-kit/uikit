@@ -1,6 +1,6 @@
 {
   "name": "@a-novel-kit/uikit-fonts",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": false,
   "description": "Self-hosted interface, editorial, and monospace font faces for Agora interfaces",
   "repository": {
