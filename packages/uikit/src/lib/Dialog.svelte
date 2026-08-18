@@ -44,7 +44,7 @@
   const dialogId = $props.id();
   const titleId = `${dialogId}-title`;
   const descriptionId = `${dialogId}-description`;
-  let dialog: HTMLDialogElement;
+  let dialog: HTMLDialogElement | undefined;
 
   $effect(() => {
     if (!dialog) return;
@@ -56,13 +56,15 @@
     }
   });
 
-  function handleClose() {
+  function handleClose(event: Event) {
     open = false;
-    onClose?.(dialog.returnValue);
+    onClose?.((event.currentTarget as HTMLDialogElement).returnValue);
   }
 
   function handleBackdrop(event: MouseEvent) {
-    if (closeOnBackdrop && event.target === dialog) dialog.close();
+    const currentDialog = event.currentTarget as HTMLDialogElement;
+
+    if (closeOnBackdrop && event.target === currentDialog) currentDialog.close();
   }
 </script>
 
