@@ -34,7 +34,8 @@ Use `ResponsiveStoryPair` in an attached MDX page to compare separate desktop an
 exports. Each story renders in its own iframe at the real review viewport, then the documentation
 scales the iframe for a compact side-by-side comparison. Scalar toolbar globals, including locale,
 are forwarded to both subdocuments and stay synchronized when their controls change. Comparison
-frames ignore pointer input and do not run story play functions; use the standalone story canvas to
+frames are covered by an interaction shield, ignore pointer input, do not run story play functions,
+and suppress Storybook's measurement and outline overlays. Use the standalone story canvas to
 inspect hover, focus, or other interactive states.
 
 ```mdx

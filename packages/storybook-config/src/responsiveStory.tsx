@@ -80,15 +80,16 @@ interface ReviewFrameProps {
 function serializedGlobals(globals: Record<string, unknown>) {
   return Object.entries(globals)
     .flatMap(([name, value]) => {
-      if (!["boolean", "number", "string"].includes(typeof value)) return [];
-      return `${encodeURIComponent(name)}:${encodeURIComponent(String(value))}`;
+      if (typeof value !== "boolean" && typeof value !== "number" && typeof value !== "string") return [];
+      const serializedValue = typeof value === "boolean" ? `!${value}` : String(value);
+      return `${encodeURIComponent(name)}:${encodeURIComponent(serializedValue)}`;
     })
     .join(";");
 }
 
 function storyUrl(storyId: string, globals: Record<string, unknown>) {
   const parameters = new URLSearchParams({ embed: "true", id: storyId, viewMode: "story" });
-  const serialized = serializedGlobals(globals);
+  const serialized = serializedGlobals({ ...globals, measureEnabled: false, outline: false });
   if (serialized) parameters.set("globals", serialized);
   return `iframe.html?${parameters.toString()}`;
 }

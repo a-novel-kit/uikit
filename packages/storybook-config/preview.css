@@ -142,7 +142,16 @@ body {
 }
 
 .agora-story-review__viewport {
+  position: relative;
   overflow: hidden;
+}
+
+.agora-story-review__viewport::after {
+  position: absolute;
+  z-index: 1;
+  cursor: default;
+  inset: 0;
+  content: "";
 }
 
 .agora-story-review__document {
