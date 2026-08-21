@@ -37,9 +37,7 @@ scales the iframe for a compact side-by-side comparison.
 ```mdx
 import * as ScreenStories from "./screen.stories.svelte";
 
-import { ResponsiveStoryPair } from "@a-novel-kit/uikit-storybook";
-
-import { Meta } from "@storybook/addon-docs/blocks";
+import { Meta, ResponsiveStoryPair } from "@a-novel-kit/uikit-storybook";
 
 <Meta of={ScreenStories} />
 
