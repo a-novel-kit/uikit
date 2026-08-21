@@ -103,3 +103,46 @@ body {
   max-inline-size: 100%;
   overflow-x: auto;
 }
+
+.agora-story-review {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--space-5);
+  inline-size: 100%;
+}
+
+.agora-story-review__frame {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  min-inline-size: 0;
+}
+
+.agora-story-review__caption {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.agora-story-review__caption strong {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.agora-story-review__scroll {
+  border-radius: var(--radius-md);
+  background: var(--color-surface-sunken);
+  max-inline-size: 100%;
+  overflow: auto;
+}
+
+.agora-story-review__viewport {
+  overflow: hidden;
+}
+
+.agora-story-review__document {
+  transform-origin: top left;
+}

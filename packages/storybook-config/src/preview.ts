@@ -1,4 +1,5 @@
 import "../preview.css";
+import { reviewViewportOptions } from "./responsiveStory.js";
 import { agoraTheme } from "./theme.js";
 
 import "@a-novel-kit/uikit-fonts/fonts.css";
@@ -29,6 +30,9 @@ const preview: Preview = {
     docs: {
       theme: agoraTheme,
       toc: true,
+    },
+    viewport: {
+      options: reviewViewportOptions,
     },
   },
   initialGlobals: {

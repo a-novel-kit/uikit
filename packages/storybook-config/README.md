@@ -27,3 +27,24 @@ export default config;
 
 No manager or preview file is required. Add local configuration only for application-specific story
 ordering or parameters.
+
+## Responsive screen documentation
+
+Use `ResponsiveStoryPair` in an attached MDX page to compare separate desktop and mobile story
+exports. Each story renders in its own iframe at the real review viewport, then the documentation
+scales the iframe for a compact side-by-side comparison.
+
+```mdx
+import * as ScreenStories from "./screen.stories.svelte";
+
+import { ResponsiveStoryPair } from "@a-novel-kit/uikit-storybook";
+
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta of={ScreenStories} />
+
+<ResponsiveStoryPair desktop={ScreenStories.ReadyDesktop} mobile={ScreenStories.ReadyMobile} meta={ScreenStories} />
+```
+
+Apply `reviewStoryGlobals.desktop` and `reviewStoryGlobals.mobile` to the matching CSF exports so
+their standalone canvas routes use the same viewport sizes.
