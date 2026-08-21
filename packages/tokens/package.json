@@ -1,6 +1,6 @@
 {
   "name": "@a-novel-kit/uikit-tokens",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "private": false,
   "description": "Generated color, typography, spacing, shape, and motion tokens for Agora interfaces",
   "repository": {
