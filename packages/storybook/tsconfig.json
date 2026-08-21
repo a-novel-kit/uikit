@@ -3,9 +3,11 @@
   "compilerOptions": {
     "allowJs": true,
     "checkJs": true,
+    "jsx": "react-jsx",
     "paths": {
       "@a-novel-kit/uikit": ["../uikit/src/lib/index.ts"],
-      "@a-novel-kit/uikit-icons": ["../icons/src/lib/index.ts"]
+      "@a-novel-kit/uikit-icons": ["../icons/src/lib/index.ts"],
+      "@a-novel-kit/uikit-storybook": ["../storybook-config/src/index.ts"]
     }
   },
   "include": [".storybook/**/*.ts", "src/**/*.d.ts", "src/**/*.ts", "src/**/*.svelte", "vite.config.ts"]
