@@ -1,4 +1,11 @@
-import { createComboboxController, createOpenController, createSelectController } from "./controllers.svelte";
+import {
+  createCheckedController,
+  createComboboxController,
+  createOpenController,
+  createPressedController,
+  createSelectController,
+  createValueController,
+} from "./controllers.svelte";
 
 import { describe, expect, it, vi } from "vitest";
 
@@ -27,7 +34,8 @@ describe("component controllers", () => {
 
     controller.open();
     controller.select("organization");
-    controller.close();
+    controller.select("organization");
+    controller.toggle();
 
     expect(controller.state).toEqual({ open: false, value: "organization" });
     expect(onOpenChange.mock.calls).toEqual([[true], [false]]);
@@ -39,11 +47,43 @@ describe("component controllers", () => {
     const onQueryChange = vi.fn();
     const controller = createComboboxController<string>({ onQueryChange });
 
-    controller.open();
+    controller.toggle();
+    controller.setQuery("eng");
     controller.setQuery("eng");
     controller.close();
 
     expect(controller.state).toEqual({ open: false, query: "", value: undefined });
     expect(onQueryChange.mock.calls).toEqual([["eng"], [""]]);
+  });
+
+  it("applies checked and pressed transitions through their semantic methods", () => {
+    const onCheckedChange = vi.fn();
+    const checked = createCheckedController({ onCheckedChange });
+    const onPressedChange = vi.fn();
+    const pressed = createPressedController({ initialPressed: true, onPressedChange });
+
+    checked.setChecked(true);
+    checked.setChecked(true);
+    checked.toggle();
+    pressed.setPressed(false);
+    pressed.setPressed(false);
+    pressed.toggle();
+
+    expect(checked.state.checked).toBe(false);
+    expect(pressed.state.pressed).toBe(true);
+    expect(onCheckedChange.mock.calls).toEqual([[true], [false]]);
+    expect(onPressedChange.mock.calls).toEqual([[false], [true]]);
+  });
+
+  it("applies single-value changes once", () => {
+    const onValueChange = vi.fn();
+    const controller = createValueController({ initialValue: 72, onValueChange });
+
+    controller.setValue(90);
+    controller.setValue(90);
+
+    expect(controller.state.value).toBe(90);
+    expect(onValueChange).toHaveBeenCalledOnce();
+    expect(onValueChange).toHaveBeenCalledWith(90);
   });
 });
