@@ -1,5 +1,5 @@
-import { Story, type StoryProps } from "@storybook/addon-docs/blocks";
-import type { CSSProperties } from "react";
+import { DocsContext, type StoryProps, useOf } from "@storybook/addon-docs/blocks";
+import { type CSSProperties, useContext, useEffect, useMemo, useState } from "react";
 
 type StoryExport = Exclude<StoryProps["of"], undefined>;
 
@@ -77,7 +77,37 @@ interface ReviewFrameProps {
   viewport: ReviewViewport;
 }
 
+function serializedGlobals(globals: Record<string, unknown>) {
+  return Object.entries(globals)
+    .flatMap(([name, value]) => {
+      if (!["boolean", "number", "string"].includes(typeof value)) return [];
+      return `${encodeURIComponent(name)}:${encodeURIComponent(String(value))}`;
+    })
+    .join(";");
+}
+
+function storyUrl(storyId: string, globals: Record<string, unknown>) {
+  const parameters = new URLSearchParams({ id: storyId, viewMode: "story" });
+  const serialized = serializedGlobals(globals);
+  if (serialized) parameters.set("globals", serialized);
+  return `iframe.html?${parameters.toString()}`;
+}
+
 function ReviewFrame({ meta, story, viewport }: ReviewFrameProps) {
+  const docsContext = useContext(DocsContext);
+  if (meta) docsContext.referenceMeta(meta, false);
+  const preparedStory = useOf(story, ["story"]).story;
+  const [globals, setGlobals] = useState<Record<string, unknown>>(
+    () => docsContext.getStoryContext(preparedStory).globals
+  );
+  const source = useMemo(() => storyUrl(preparedStory.id, globals), [globals, preparedStory.id]);
+
+  useEffect(() => {
+    const updateGlobals = ({ globals: nextGlobals }: { globals: Record<string, unknown> }) => setGlobals(nextGlobals);
+    docsContext.channel.on("globalsUpdated", updateGlobals);
+    return () => docsContext.channel.off("globalsUpdated", updateGlobals);
+  }, [docsContext.channel]);
+
   const scaledSize = {
     blockSize: viewport.height * viewport.scale,
     inlineSize: viewport.width * viewport.scale,
@@ -99,7 +129,12 @@ function ReviewFrame({ meta, story, viewport }: ReviewFrameProps) {
       <div className="agora-story-review__scroll">
         <div className="agora-story-review__viewport" style={scaledSize}>
           <div className="agora-story-review__document" style={documentSize}>
-            <Story of={story} meta={meta} inline={false} height={`${viewport.height}px`} />
+            <iframe
+              className="agora-story-review__iframe"
+              id={`iframe--${preparedStory.id}--${viewport.id}`}
+              src={source}
+              title={`${viewport.label}: ${preparedStory.name}`}
+            />
           </div>
         </div>
       </div>
