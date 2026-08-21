@@ -33,7 +33,9 @@ ordering or parameters.
 Use `ResponsiveStoryPair` in an attached MDX page to compare separate desktop and mobile story
 exports. Each story renders in its own iframe at the real review viewport, then the documentation
 scales the iframe for a compact side-by-side comparison. Scalar toolbar globals, including locale,
-are forwarded to both subdocuments and stay synchronized when their controls change.
+are forwarded to both subdocuments and stay synchronized when their controls change. Comparison
+frames ignore pointer input and do not run story play functions; use the standalone story canvas to
+inspect hover, focus, or other interactive states.
 
 ```mdx
 import * as ScreenStories from "./screen.stories.svelte";

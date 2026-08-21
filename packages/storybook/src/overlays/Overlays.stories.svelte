@@ -59,8 +59,9 @@
   const dialogMobileController = createLockedOpenController();
   const popoverDesktopController = createLockedOpenController();
   const popoverMobileController = createLockedOpenController();
-  const tooltipDesktopController = createOpenController();
-  const tooltipMobileController = createOpenController();
+  const tooltipDesktopController = createLockedOpenController();
+  const tooltipMobileController = createLockedOpenController();
+  const tooltipInteractiveController = createOpenController();
 </script>
 
 {#snippet dialogExample(controller: OpenController)}
@@ -139,24 +140,16 @@
   {@render popoverExample(popoverMobileController)}
 </Story>
 
-<Story
-  name="Tooltip — desktop"
-  exportName="TooltipDesktop"
-  globals={reviewStoryGlobals.desktop}
-  play={verifyTooltip}
-  asChild
->
+<Story name="Tooltip — desktop" exportName="TooltipDesktop" globals={reviewStoryGlobals.desktop} asChild>
   {@render tooltipExample(tooltipDesktopController)}
 </Story>
 
-<Story
-  name="Tooltip — mobile"
-  exportName="TooltipMobile"
-  globals={reviewStoryGlobals.mobile}
-  play={verifyTooltip}
-  asChild
->
+<Story name="Tooltip — mobile" exportName="TooltipMobile" globals={reviewStoryGlobals.mobile} asChild>
   {@render tooltipExample(tooltipMobileController)}
+</Story>
+
+<Story name="Tooltip interaction" play={verifyTooltip} asChild>
+  {@render tooltipExample(tooltipInteractiveController)}
 </Story>
 
 <style>

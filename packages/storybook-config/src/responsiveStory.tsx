@@ -87,7 +87,7 @@ function serializedGlobals(globals: Record<string, unknown>) {
 }
 
 function storyUrl(storyId: string, globals: Record<string, unknown>) {
-  const parameters = new URLSearchParams({ id: storyId, viewMode: "story" });
+  const parameters = new URLSearchParams({ embed: "true", id: storyId, viewMode: "story" });
   const serialized = serializedGlobals(globals);
   if (serialized) parameters.set("globals", serialized);
   return `iframe.html?${parameters.toString()}`;
