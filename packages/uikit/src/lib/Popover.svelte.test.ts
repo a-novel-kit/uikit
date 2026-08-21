@@ -1,5 +1,6 @@
 import Popover from "./Popover.svelte";
 import type { PopoverTriggerAttributes } from "./Popover.svelte";
+import { createOpenController } from "./controllers.svelte";
 
 import { createRawSnippet } from "svelte";
 
@@ -27,7 +28,9 @@ describe("Popover", () => {
         `<button popovertarget="${attributes().popovertarget}" popovertargetaction="${attributes().popovertargetaction}">Open details</button>`,
     }));
     const children = createRawSnippet(() => ({ render: () => "Popover content" }));
-    const { container, getByRole, getByText } = render(Popover, { props: { trigger, children } });
+    const { container, getByRole, getByText } = render(Popover, {
+      props: { trigger, controller: createOpenController(), children },
+    });
     const button = getByRole("button", { name: "Open details" });
     const content = container.querySelector<HTMLElement>("[popover]");
 

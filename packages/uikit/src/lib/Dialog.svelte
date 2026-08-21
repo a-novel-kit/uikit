@@ -1,13 +1,17 @@
 <script lang="ts" module>
   import type { Content } from "./content";
+  import type { OpenController } from "./controllers.svelte";
 
   import type { Snippet } from "svelte";
   import type { HTMLDialogAttributes } from "svelte/elements";
 
+  /** External state contract for a dialog. */
+  export type DialogController = OpenController;
+
   /** Props for a native modal or non-modal dialog. */
   export interface DialogProps extends Omit<HTMLDialogAttributes, "children" | "open" | "title" | "onclose"> {
-    /** Current dialog visibility. */
-    open?: boolean;
+    /** State owner that decides whether close requests take effect. */
+    controller: DialogController;
     /** Dialog heading. */
     title: Content;
     /** Supporting content shown below the heading. */
@@ -18,8 +22,6 @@
     modal?: boolean;
     /** Closes the dialog when its backdrop is activated. */
     closeOnBackdrop?: boolean;
-    /** Runs after the native dialog closes. */
-    onClose?: (returnValue: string) => void;
     /** Dialog body content. */
     children?: Snippet;
   }
@@ -29,13 +31,12 @@
   import RenderContent from "./Content.svelte";
 
   let {
-    open = $bindable(false),
+    controller,
     title,
     description,
     actions,
     modal = true,
     closeOnBackdrop = true,
-    onClose,
     class: className = "",
     children,
     ...rest
@@ -48,23 +49,38 @@
 
   $effect(() => {
     if (!dialog) return;
-    if (open && !dialog.open) {
+    if (controller.state.open && !dialog.open) {
       if (modal) dialog.showModal();
       else dialog.show();
-    } else if (!open && dialog.open) {
+    } else if (!controller.state.open && dialog.open) {
       dialog.close();
     }
   });
 
-  function handleClose(event: Event) {
-    open = false;
-    onClose?.((event.currentTarget as HTMLDialogElement).returnValue);
+  function requestClose() {
+    controller.close();
+  }
+
+  function handleCancel(event: Event) {
+    event.preventDefault();
+    requestClose();
+  }
+
+  function handleClose() {
+    if (!controller.state.open) return;
+
+    requestClose();
+    if (controller.state.open)
+      queueMicrotask(() => {
+        if (modal) dialog?.showModal();
+        else dialog?.show();
+      });
   }
 
   function handleBackdrop(event: MouseEvent) {
     const currentDialog = event.currentTarget as HTMLDialogElement;
 
-    if (closeOnBackdrop && event.target === currentDialog) currentDialog.close();
+    if (closeOnBackdrop && event.target === currentDialog) requestClose();
   }
 </script>
 
@@ -73,6 +89,7 @@
   class="dialog {className}"
   aria-labelledby={titleId}
   aria-describedby={description ? descriptionId : undefined}
+  oncancel={handleCancel}
   onclose={handleClose}
   onclick={handleBackdrop}
   {...rest}

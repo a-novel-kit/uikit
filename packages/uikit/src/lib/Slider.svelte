@@ -1,12 +1,17 @@
 <script lang="ts" module>
+  import type { ValueController } from "./controllers.svelte";
+
   import type { HTMLInputAttributes } from "svelte/elements";
 
+  /** External state contract for a slider. */
+  export type SliderController = ValueController<number>;
+
   /** Props for a labeled native range input. */
-  export interface SliderProps extends Omit<HTMLInputAttributes, "type" | "value"> {
+  export interface SliderProps extends Omit<HTMLInputAttributes, "type" | "value" | "oninput"> {
     /** Visible label for the range input. */
     label: string;
-    /** Current numeric value. */
-    value?: number;
+    /** State owner that decides whether value requests take effect. */
+    controller: SliderController;
     /** Displays the current value beside the label. */
     showValue?: boolean;
   }
@@ -15,7 +20,7 @@
 <script lang="ts">
   let {
     label,
-    value = $bindable(0),
+    controller,
     showValue = true,
     min = 0,
     max = 100,
@@ -29,16 +34,30 @@
 
     if (!Number.isFinite(range) || range <= 0) return 0;
 
-    return Math.min(100, Math.max(0, ((value - minimum) / range) * 100));
+    return Math.min(100, Math.max(0, ((controller.state.value - minimum) / range) * 100));
   });
+
+  function handleInput(event: Event) {
+    const target = event.currentTarget as HTMLInputElement;
+    controller.setValue(target.valueAsNumber);
+    target.value = String(controller.state.value);
+  }
 </script>
 
 <label class="slider {className}">
   <span class="heading">
     <span>{label}</span>
-    {#if showValue}<output>{value}</output>{/if}
+    {#if showValue}<output>{controller.state.value}</output>{/if}
   </span>
-  <input bind:value type="range" {min} {max} {...rest} style:--slider-progress={`${progress}%`} />
+  <input
+    value={controller.state.value}
+    type="range"
+    {min}
+    {max}
+    oninput={handleInput}
+    {...rest}
+    style:--slider-progress={`${progress}%`}
+  />
 </label>
 
 <style>

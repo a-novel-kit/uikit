@@ -1,4 +1,6 @@
 <script lang="ts" module>
+  import type { OpenController as StateController } from "./controllers.svelte";
+
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
 
@@ -10,31 +12,24 @@
     popovertargetaction: "toggle";
   }
 
+  /** External state contract for a popover. */
+  export type PopoverController = StateController;
+
   /** Props for non-modal content anchored to a composed trigger. */
   export interface PopoverProps extends Omit<HTMLAttributes<HTMLDivElement>, "children" | "popover" | "ontoggle"> {
     /** Renders the trigger with its required native popover attributes. */
     trigger: Snippet<[PopoverTriggerAttributes]>;
     /** Content shown in the popover. */
     children?: Snippet;
-    /** Current popover visibility. */
-    open?: boolean;
+    /** State owner that decides whether visibility requests take effect. */
+    controller: PopoverController;
     /** Preferred side of the trigger. */
     position?: "top" | "right" | "bottom" | "left";
-    /** Runs after the popover visibility changes. */
-    onOpenChange?: (open: boolean) => void;
   }
 </script>
 
 <script lang="ts">
-  let {
-    trigger,
-    children,
-    open = $bindable(false),
-    position = "bottom",
-    onOpenChange,
-    class: className = "",
-    ...rest
-  }: PopoverProps = $props();
+  let { trigger, children, controller, position = "bottom", class: className = "", ...rest }: PopoverProps = $props();
 
   const popoverId = $props.id();
   const triggerAttributes: PopoverTriggerAttributes = {
@@ -48,9 +43,9 @@
     if (!popoverElement) return;
 
     const isOpen = popoverElement.matches(":popover-open");
-    if (open === isOpen) return;
+    if (controller.state.open === isOpen) return;
 
-    if (open) {
+    if (controller.state.open) {
       const source = document.querySelector(`[popovertarget="${CSS.escape(popoverId)}"]`);
       popoverElement.showPopover(source instanceof HTMLElement ? { source } : undefined);
     } else {
@@ -60,8 +55,15 @@
 
   function handleToggle(event: ToggleEvent) {
     const nextOpen = event.newState === "open";
-    open = nextOpen;
-    onOpenChange?.(nextOpen);
+    if (nextOpen) controller.open();
+    else controller.close();
+
+    if (controller.state.open !== nextOpen) {
+      queueMicrotask(() => {
+        if (controller.state.open) popoverElement.showPopover();
+        else popoverElement.hidePopover();
+      });
+    }
   }
 </script>
 

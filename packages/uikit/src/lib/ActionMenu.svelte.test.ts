@@ -1,4 +1,5 @@
 import ActionMenu from "./ActionMenu.svelte";
+import { createOpenController } from "./controllers.svelte";
 
 import { describe, expect, it, vi } from "vitest";
 
@@ -10,6 +11,7 @@ describe("ActionMenu", () => {
     const { getByRole, queryByRole } = render(ActionMenu, {
       props: {
         label: "Item actions",
+        controller: createOpenController(),
         items: [
           { id: "rename", label: "Rename" },
           { id: "archive", label: "Archive", disabled: true },

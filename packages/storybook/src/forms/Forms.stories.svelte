@@ -62,6 +62,28 @@
   });
 </script>
 
+<script lang="ts">
+  import {
+    createCheckedController,
+    createComboboxController,
+    createSelectController,
+    createValueController,
+  } from "@a-novel-kit/uikit";
+
+  type Visibility = (typeof visibilityOptions)[number]["value"];
+  type Language = (typeof languageOptions)[number]["value"];
+
+  const visibilityController = createSelectController<Visibility>();
+  const invalidVisibilityController = createSelectController<Visibility>();
+  const composedVisibilityController = createSelectController<Visibility>();
+  const productUpdatesController = createCheckedController({ initialChecked: true });
+  const desktopAlertsController = createCheckedController({ initialChecked: true });
+  const densityController = createValueController<string | undefined>({ initialValue: "comfortable" });
+  const scaleController = createValueController({ initialValue: 72 });
+  const languageController = createComboboxController<Language>({ initialValue: "en" });
+  const compactNavigationController = createCheckedController();
+</script>
+
 <Story name="Text fields" asChild>
   <form class="form" onsubmit={(event) => event.preventDefault()}>
     <Grid minItemWidth="lg" gap="4">
@@ -72,7 +94,7 @@
       </Field>
       <Field label="Visibility">
         {#snippet children(control)}
-          <Select {...control} options={visibilityOptions} allowDeselect />
+          <Select {...control} controller={visibilityController} options={visibilityOptions} allowDeselect />
         {/snippet}
       </Field>
     </Grid>
@@ -115,7 +137,13 @@
     </Field>
     <Field controlId="invalid-visibility" label="Visibility" error="Choose a visibility" required>
       {#snippet children(control)}
-        <Select {...control} options={visibilityOptions} placeholder="Choose a visibility" invalid />
+        <Select
+          {...control}
+          controller={invalidVisibilityController}
+          options={visibilityOptions}
+          placeholder="Choose a visibility"
+          invalid
+        />
       {/snippet}
     </Field>
     <Button type="submit">Save changes</Button>
@@ -164,12 +192,20 @@
 <Story name="Choices" asChild>
   <Stack gap="6">
     <Fieldset legend="Notifications" description="Choose persistent preferences with native controls.">
-      <Checkbox label="Product updates" description="Occasional release and maintenance notes." checked />
-      <Switch label="Desktop alerts" description="Show an alert while this page is in the background." checked />
+      <Checkbox
+        controller={productUpdatesController}
+        label="Product updates"
+        description="Occasional release and maintenance notes."
+      />
+      <Switch
+        controller={desktopAlertsController}
+        label="Desktop alerts"
+        description="Show an alert while this page is in the background."
+      />
     </Fieldset>
     <RadioGroup
       legend="Density"
-      value="comfortable"
+      controller={densityController}
       orientation="horizontal"
       options={[
         { value: "compact", label: "Compact" },
@@ -177,7 +213,7 @@
         { value: "spacious", label: "Spacious", disabled: true },
       ]}
     />
-    <Slider label="Preview scale" value={72} min={50} max={150} />
+    <Slider controller={scaleController} label="Preview scale" min={50} max={150} />
   </Stack>
 </Story>
 
@@ -189,7 +225,7 @@
           {...control}
           name="language"
           placeholder="Search languages"
-          value="en"
+          controller={languageController}
           options={languageOptions}
           maxMenuHeight="calc(var(--control-height-sm) * var(--multiplier-5))"
         />
@@ -214,7 +250,7 @@
         </span>
       {/snippet}
       {#snippet children(control)}
-        <Select {...control} options={visibilityOptions} allowDeselect>
+        <Select {...control} controller={composedVisibilityController} options={visibilityOptions} allowDeselect>
           {#snippet renderOption(option)}
             <span class="option-with-icon">
               {#if option.value === "private"}
@@ -229,7 +265,7 @@
       {/snippet}
     </Field>
 
-    <Checkbox>
+    <Checkbox controller={compactNavigationController}>
       {#snippet label()}
         <span>Use <strong>compact</strong> navigation</span>
       {/snippet}

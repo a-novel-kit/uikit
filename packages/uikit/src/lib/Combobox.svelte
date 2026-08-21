@@ -1,4 +1,5 @@
 <script lang="ts" module>
+  import type { ComboboxController as SelectionController } from "./controllers.svelte";
   import type { SelectionOption } from "./types";
 
   import type { Snippet } from "svelte";
@@ -7,12 +8,15 @@
   /** A value available to the searchable selection control. */
   export type ComboboxOption<Value extends string> = SelectionOption<Value>;
 
+  /** External state contract for a combobox. */
+  export type ComboboxController<Value extends string> = SelectionController<Value>;
+
   /** Props for a searchable single-value selection control. */
   export interface ComboboxProps<Value extends string> {
     /** Values available for search and selection. */
     options: readonly ComboboxOption<Value>[];
-    /** Currently selected value. */
-    value?: Value | undefined;
+    /** State owner that decides whether visibility, query, or selection requests take effect. */
+    controller: ComboboxController<Value>;
     /** Name used for form submission. */
     name?: string;
     /** Text shown when the search input is empty. */
@@ -39,8 +43,6 @@
     "aria-invalid"?: HTMLInputAttributes["aria-invalid"];
     /** Adds classes to the component root. */
     class?: string;
-    /** Runs after the selected value changes. */
-    onValueChange?: (value: Value | undefined) => void;
     /** Replaces visible option copy while label remains available to filtering and accessibility. */
     renderOption?: Snippet<[ComboboxOption<Value>]>;
   }
@@ -56,7 +58,7 @@
 
   let {
     options,
-    value: externalValue = $bindable(),
+    controller,
     name,
     placeholder = "Search options",
     required = false,
@@ -70,7 +72,6 @@
     "aria-label": ariaLabel,
     "aria-invalid": ariaInvalid,
     class: className = "",
-    onValueChange,
     renderOption,
   }: ComboboxProps<Value> = $props();
 
@@ -78,35 +79,31 @@
   const inputId = $derived(id ?? componentId + "-input");
   const listboxId = componentId + "-listbox";
 
-  let inputValue = $state("");
-  let searchTerm = $state("");
-  let open = $state(false);
   let activeIndex = $state(-1);
   let inputElement = $state<HTMLInputElement | null>(null);
   let listboxElement = $state<HTMLDivElement | null>(null);
   let anchorWidth = $state("0px");
 
-  const selectedOption = $derived(options.find((option) => option.value === externalValue));
+  const selectedOption = $derived(options.find((option) => option.value === controller.state.value));
+  const inputValue = $derived(controller.state.open ? controller.state.query : (selectedOption?.label ?? ""));
   const isInvalid = $derived(resolveInvalidState(invalid, ariaInvalid));
   const filteredOptions = $derived(
-    searchTerm === ""
+    controller.state.query === ""
       ? options
-      : options.filter((option) => option.label.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase()))
+      : options.filter((option) =>
+          option.label.toLocaleLowerCase().includes(controller.state.query.toLocaleLowerCase())
+        )
   );
 
   $effect(() => {
-    if (!open) inputValue = selectedOption?.label ?? "";
-  });
-
-  $effect(() => {
-    if (!open) return;
+    if (!controller.state.open) return;
     if (activeIndex >= 0 && filteredOptions[activeIndex] && !filteredOptions[activeIndex]?.disabled) return;
 
     activeIndex = findEnabledBoundary(filteredOptions, "first");
   });
 
   $effect(() => {
-    if (disabled && open) closeListbox();
+    if (disabled && controller.state.open) closeListbox();
   });
 
   function optionId(index: number) {
@@ -128,30 +125,29 @@
     if (disabled) return;
 
     rememberAnchor();
-    searchTerm = "";
-    const selectedIndex = filteredOptions.findIndex((option) => option.value === externalValue);
+    const selectedIndex = filteredOptions.findIndex((option) => option.value === controller.state.value);
     activeIndex =
       selectedIndex >= 0 && !filteredOptions[selectedIndex]?.disabled
         ? selectedIndex
         : findEnabledBoundary(filteredOptions, "first");
-    open = true;
+    controller.open();
+    if (!controller.state.open) return;
     await tick();
     scrollActiveOption();
   }
 
   function closeListbox(focusInput = false) {
-    open = false;
+    controller.close();
+    if (controller.state.open) return;
     activeIndex = -1;
-    searchTerm = "";
-    inputValue = selectedOption?.label ?? "";
     if (focusInput) inputElement?.focus();
   }
 
   function ensureOpenForInput() {
-    if (open || disabled) return;
+    if (controller.state.open || disabled) return;
 
     rememberAnchor();
-    open = true;
+    controller.open();
   }
 
   function moveActive(direction: -1 | 1) {
@@ -164,52 +160,48 @@
   }
 
   function updateValue(nextValue: Value | undefined) {
-    if (externalValue === nextValue) return;
-
-    externalValue = nextValue;
-    onValueChange?.(nextValue);
+    controller.select(nextValue);
   }
 
   function selectOption(option: ComboboxOption<Value>) {
     if (option.disabled) return;
 
-    updateValue(allowDeselect && externalValue === option.value ? undefined : option.value);
+    updateValue(allowDeselect && controller.state.value === option.value ? undefined : option.value);
     closeListbox(true);
   }
 
   function handleInputFocus() {
-    if (!open) void openListbox();
+    if (!controller.state.open) void openListbox();
   }
 
   function handleInput(event: Event) {
-    inputValue = (event.currentTarget as HTMLInputElement).value;
-    searchTerm = inputValue;
     ensureOpenForInput();
+    controller.setQuery((event.currentTarget as HTMLInputElement).value);
     activeIndex = findEnabledBoundary(filteredOptions, "first");
   }
 
   function handleInputKeyDown(event: KeyboardEvent) {
     if (disabled) return;
 
-    if (event.key === "Tab" && open) {
+    if (event.key === "Tab" && controller.state.open) {
       closeListbox();
       return;
     }
 
     if (event.key === "ArrowDown" || event.key === "ArrowUp") {
       event.preventDefault();
-      if (!open) void openListbox();
+      if (!controller.state.open) void openListbox();
       else moveActive(event.key === "ArrowDown" ? 1 : -1);
       return;
     }
 
-    if (event.key === "Enter" && open && activeIndex >= 0 && filteredOptions[activeIndex]) {
+    if (event.key === "Enter" && controller.state.open && activeIndex >= 0 && filteredOptions[activeIndex]) {
       event.preventDefault();
       selectOption(filteredOptions[activeIndex]);
       return;
     }
 
-    if (event.key === "Escape" && open) {
+    if (event.key === "Escape" && controller.state.open) {
       event.preventDefault();
       closeListbox(true);
     }
@@ -219,7 +211,7 @@
     if (disabled) return;
 
     inputElement?.focus();
-    if (!open) void openListbox();
+    if (!controller.state.open) void openListbox();
   }
 
   function handleTriggerPointerDown(event: PointerEvent) {
@@ -244,10 +236,10 @@
       aria-autocomplete="list"
       aria-controls={listboxId}
       aria-describedby={ariaDescribedBy}
-      aria-expanded={open}
+      aria-expanded={controller.state.open}
       aria-haspopup="listbox"
       aria-label={ariaLabel}
-      aria-activedescendant={open && activeIndex >= 0 ? optionId(activeIndex) : undefined}
+      aria-activedescendant={controller.state.open && activeIndex >= 0 ? optionId(activeIndex) : undefined}
       aria-invalid={isInvalid || undefined}
       aria-required={required || undefined}
       onfocus={handleInputFocus}
@@ -258,7 +250,7 @@
       class="agora-combobox-trigger"
       type="button"
       aria-label="Show options"
-      data-state={open ? "open" : "closed"}
+      data-state={controller.state.open ? "open" : "closed"}
       tabindex={-1}
       {disabled}
       onpointerdown={handleTriggerPointerDown}
@@ -269,11 +261,11 @@
   </div>
 
   {#if name}
-    <input type="hidden" {name} value={externalValue ?? ""} {disabled} />
+    <input type="hidden" {name} value={controller.state.value ?? ""} {disabled} />
   {/if}
 
   <FloatingSurface
-    bind:open
+    open={controller.state.open}
     bind:element={listboxElement}
     source={inputElement}
     id={listboxId}
@@ -284,7 +276,8 @@
       ? '--agora-combobox-menu-max-height: ' + maxMenuHeight
       : ''}"
     onOpenChange={(nextOpen) => {
-      if (!nextOpen) closeListbox();
+      if (nextOpen) controller.open();
+      else closeListbox();
     }}
   >
     {#each filteredOptions as option, index (option.value)}
@@ -295,11 +288,11 @@
         tabindex={-1}
         role="option"
         aria-label={option.label}
-        aria-selected={externalValue === option.value}
+        aria-selected={controller.state.value === option.value}
         aria-disabled={option.disabled || undefined}
         data-option-index={index}
         data-highlighted={activeIndex === index || undefined}
-        data-selected={externalValue === option.value || undefined}
+        data-selected={controller.state.value === option.value || undefined}
         data-disabled={option.disabled || undefined}
         disabled={option.disabled}
         onpointermove={() => {
@@ -311,7 +304,7 @@
         <span
           >{#if renderOption}{@render renderOption(option)}{:else}{option.label}{/if}</span
         >
-        {#if externalValue === option.value}
+        {#if controller.state.value === option.value}
           <CheckIcon size="var(--icon-size-sm)" aria-hidden="true" />
         {/if}
       </button>

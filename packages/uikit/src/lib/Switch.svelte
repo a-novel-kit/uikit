@@ -1,23 +1,33 @@
 <script lang="ts" module>
   import type { Content } from "./content";
+  import type { CheckedController } from "./controllers.svelte";
 
   import type { HTMLInputAttributes } from "svelte/elements";
 
+  /** External state contract for a switch. */
+  export type SwitchController = CheckedController;
+
   /** Props for a native checkbox presented as an immediate on/off switch. */
-  export interface SwitchProps extends Omit<HTMLInputAttributes, "type" | "role" | "checked"> {
+  export interface SwitchProps extends Omit<HTMLInputAttributes, "type" | "role" | "checked" | "onchange"> {
     /** Optional switch label. */
     label?: Content;
     /** Supporting content shown below the label. */
     description?: Content;
-    /** Current on/off state. */
-    checked?: boolean;
+    /** State owner that decides whether toggle requests take effect. */
+    controller: SwitchController;
   }
 </script>
 
 <script lang="ts">
   import RenderContent from "./Content.svelte";
 
-  let { label, description, checked = $bindable(false), class: className = "", ...rest }: SwitchProps = $props();
+  let { label, description, controller, class: className = "", ...rest }: SwitchProps = $props();
+
+  function handleChange(event: Event) {
+    const target = event.currentTarget as HTMLInputElement;
+    controller.setChecked(target.checked);
+    target.checked = controller.state.checked;
+  }
 </script>
 
 <label class="switch {className}">
@@ -27,7 +37,7 @@
       {#if description}<span class="description"><RenderContent content={description} /></span>{/if}
     </span>
   {/if}
-  <input bind:checked type="checkbox" role="switch" {...rest} />
+  <input checked={controller.state.checked} type="checkbox" role="switch" onchange={handleChange} {...rest} />
 </label>
 
 <style>
