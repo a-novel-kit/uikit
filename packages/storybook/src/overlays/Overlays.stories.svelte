@@ -29,39 +29,53 @@
 </script>
 
 <script lang="ts">
-  let dialogOpen = $state(false);
-  let popoverOpen = $state(false);
+  import { createOpenController } from "@a-novel-kit/uikit";
+
+  const firstDisclosureController = createOpenController({ initialOpen: true });
+  const secondDisclosureController = createOpenController();
+  const firstAccordionController = createOpenController({ initialOpen: true });
+  const secondAccordionController = createOpenController();
+  const disabledAccordionController = createOpenController();
+  const dialogController = createOpenController();
+  const popoverController = createOpenController();
+  const tooltipController = createOpenController();
 </script>
 
 <Story name="Disclosure" asChild>
   <div class="narrow">
-    <Disclosure summary="What is stored locally?" open>Drafts and preferences are stored on this device.</Disclosure>
-    <Disclosure summary="Can I export my data?">Open account settings and choose Export data.</Disclosure>
+    <Disclosure controller={firstDisclosureController} summary="What is stored locally?"
+      >Drafts and preferences are stored on this device.</Disclosure
+    >
+    <Disclosure controller={secondDisclosureController} summary="Can I export my data?"
+      >Open account settings and choose Export data.</Disclosure
+    >
   </div>
 </Story>
 
 <Story name="Accordion" asChild>
   <div class="narrow">
     <Accordion>
-      <AccordionItem summary="Keyboard behavior" open>
+      <AccordionItem controller={firstAccordionController} summary="Keyboard behavior">
         Tab reaches each summary. Enter or Space toggles it; arrow keys are not required for native details.
       </AccordionItem>
-      <AccordionItem summary="Multiple panels"
+      <AccordionItem controller={secondAccordionController} summary="Multiple panels"
         >Set multiple on the Accordion when more than one panel may remain open.</AccordionItem
       >
-      <AccordionItem summary="Unavailable section" disabled>This content cannot be expanded.</AccordionItem>
+      <AccordionItem controller={disabledAccordionController} summary="Unavailable section" disabled
+        >This content cannot be expanded.</AccordionItem
+      >
     </Accordion>
   </div>
 </Story>
 
 <Story name="Dialog" asChild>
   <Stack gap="4" align="start">
-    <Button onclick={() => (dialogOpen = true)}>Open dialog</Button>
+    <Button onclick={() => dialogController.open()}>Open dialog</Button>
     <span class="muted">Press Escape or select an action to close the dialog.</span>
-    <Dialog bind:open={dialogOpen} title="Archive item?" description="You can restore an archived item later.">
+    <Dialog controller={dialogController} title="Archive item?" description="You can restore an archived item later.">
       {#snippet actions()}
-        <Button variant="ghost" tone="neutral" onclick={() => (dialogOpen = false)}>Cancel</Button>
-        <Button tone="danger" onclick={() => (dialogOpen = false)}>Archive</Button>
+        <Button variant="ghost" tone="neutral" onclick={() => dialogController.close()}>Cancel</Button>
+        <Button tone="danger" onclick={() => dialogController.close()}>Archive</Button>
       {/snippet}
       <p class="dialog-copy">Other people will lose access until the item is restored.</p>
     </Dialog>
@@ -69,20 +83,20 @@
 </Story>
 
 <Story name="Popover" asChild>
-  <Popover bind:open={popoverOpen} position="bottom">
+  <Popover controller={popoverController} position="bottom">
     {#snippet trigger(props)}
       <Button {...props} variant="outline" tone="neutral">Open popover</Button>
     {/snippet}
     <Stack gap="3" style="inline-size: min(20rem, 80vi)">
       <strong>Preview options</strong>
       <span class="muted">Non-modal supporting content closes on Escape or an outside click.</span>
-      <Button size="sm" onclick={() => (popoverOpen = false)}>Apply</Button>
+      <Button size="sm" onclick={() => popoverController.close()}>Apply</Button>
     </Stack>
   </Popover>
 </Story>
 
 <Story name="Tooltip" asChild>
-  <Tooltip content="Open help" side="right">
+  <Tooltip controller={tooltipController} content="Open help" side="right">
     {#snippet trigger(props)}
       <IconButton {...props} label="Open help" variant="outline" tone="neutral">
         <HelpIcon size="var(--icon-size-md)" />

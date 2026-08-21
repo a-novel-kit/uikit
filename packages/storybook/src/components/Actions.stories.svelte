@@ -59,9 +59,17 @@
 </script>
 
 <script lang="ts">
-  let gridPressed = $state(false);
-  let snapPressed = $state(true);
-  let previewPressed = $state(false);
+  import { createPressedController } from "@a-novel-kit/uikit";
+
+  const gridController = createPressedController();
+  const snapController = createPressedController({ initialPressed: true });
+  const previewController = createPressedController();
+  const idleBrandController = createPressedController();
+  const pressedBrandController = createPressedController({ initialPressed: true });
+  const disabledBrandController = createPressedController();
+  const idleNeutralController = createPressedController();
+  const pressedNeutralController = createPressedController({ initialPressed: true });
+  const disabledNeutralController = createPressedController();
 </script>
 
 <Story name="Groups and links" asChild>
@@ -86,9 +94,9 @@
 
 <Story name="Toggle group" asChild play={verifyToggle}>
   <ToggleGroup label="Canvas options">
-    <ToggleButton bind:pressed={gridPressed} variant="ghost">Grid</ToggleButton>
-    <ToggleButton bind:pressed={snapPressed} variant="ghost">Snap</ToggleButton>
-    <ToggleButton variant="ghost" tone="neutral" disabled>Guides</ToggleButton>
+    <ToggleButton controller={gridController} variant="ghost">Grid</ToggleButton>
+    <ToggleButton controller={snapController} variant="ghost">Snap</ToggleButton>
+    <ToggleButton controller={disabledNeutralController} variant="ghost" tone="neutral" disabled>Guides</ToggleButton>
   </ToggleGroup>
 </Story>
 
@@ -105,15 +113,15 @@
       <tbody>
         <tr>
           <th scope="row">Brand</th>
-          <td><ToggleButton>Grid</ToggleButton></td>
-          <td><ToggleButton pressed>Grid</ToggleButton></td>
-          <td><ToggleButton disabled>Grid</ToggleButton></td>
+          <td><ToggleButton controller={idleBrandController}>Grid</ToggleButton></td>
+          <td><ToggleButton controller={pressedBrandController}>Grid</ToggleButton></td>
+          <td><ToggleButton controller={disabledBrandController} disabled>Grid</ToggleButton></td>
         </tr>
         <tr>
           <th scope="row">Neutral</th>
-          <td><ToggleButton tone="neutral">Grid</ToggleButton></td>
-          <td><ToggleButton tone="neutral" pressed>Grid</ToggleButton></td>
-          <td><ToggleButton tone="neutral" disabled>Grid</ToggleButton></td>
+          <td><ToggleButton controller={idleNeutralController} tone="neutral">Grid</ToggleButton></td>
+          <td><ToggleButton controller={pressedNeutralController} tone="neutral">Grid</ToggleButton></td>
+          <td><ToggleButton controller={disabledNeutralController} tone="neutral" disabled>Grid</ToggleButton></td>
         </tr>
       </tbody>
     </table>
@@ -131,7 +139,7 @@
       </ToolbarButton>
     </ToolbarGroup>
     <span class="toolbar-separator" aria-hidden="true"></span>
-    <ToolbarToggleButton bind:pressed={previewPressed} variant="ghost" size="sm">Preview</ToolbarToggleButton>
+    <ToolbarToggleButton controller={previewController} variant="ghost" size="sm">Preview</ToolbarToggleButton>
     <ToolbarLink href="#toolbar-help" variant="quiet">Help</ToolbarLink>
   </Toolbar>
 </Story>

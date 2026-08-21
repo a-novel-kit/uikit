@@ -1,5 +1,6 @@
 import Combobox from "./Combobox.svelte";
 import type { ComboboxOption } from "./Combobox.svelte";
+import { createComboboxController } from "./controllers.svelte";
 
 import { createRawSnippet } from "svelte";
 
@@ -17,6 +18,7 @@ describe("Combobox", () => {
     const { getByRole, queryByRole } = render(Combobox, {
       props: {
         "aria-label": "Language",
+        controller: createComboboxController<string>(),
         options,
       },
     });
@@ -35,6 +37,7 @@ describe("Combobox", () => {
     const { getByRole, queryByRole } = render(Combobox, {
       props: {
         "aria-label": "Language",
+        controller: createComboboxController<string>(),
         options,
       },
     });
@@ -62,6 +65,7 @@ describe("Combobox", () => {
     const { getByRole } = render(Combobox, {
       props: {
         "aria-label": "Language",
+        controller: createComboboxController<string>(),
         options,
         maxMenuHeight: "8rem",
       },
@@ -81,6 +85,7 @@ describe("Combobox", () => {
     const { getByRole } = render(Combobox, {
       props: {
         "aria-label": "Language",
+        controller: createComboboxController<string>(),
         options,
         renderOption,
       },
@@ -95,6 +100,7 @@ describe("Combobox", () => {
     const { getByRole, queryByRole } = render(Combobox, {
       props: {
         "aria-label": "Language",
+        controller: createComboboxController<string>(),
         options,
       },
     });

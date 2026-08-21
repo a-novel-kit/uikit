@@ -1,5 +1,6 @@
 import Tooltip from "./Tooltip.svelte";
 import type { TooltipTriggerAttributes } from "./Tooltip.svelte";
+import { createOpenController } from "./controllers.svelte";
 
 import { createRawSnippet } from "svelte";
 
@@ -36,6 +37,7 @@ describe("Tooltip", () => {
     const { getByRole, queryByRole } = render(Tooltip, {
       props: {
         content: "Open documentation",
+        controller: createOpenController(),
         trigger,
         delayDuration: 0,
       },

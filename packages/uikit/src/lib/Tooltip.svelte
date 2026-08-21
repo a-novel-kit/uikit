@@ -1,5 +1,6 @@
 <script lang="ts" module>
   import type { Content } from "./content";
+  import type { OpenController as StateController } from "./controllers.svelte";
 
   import type { Snippet } from "svelte";
 
@@ -21,10 +22,15 @@
     onkeydown: (event: KeyboardEvent) => void;
   }
 
+  /** External state contract for a tooltip. */
+  export type TooltipController = StateController;
+
   /** Props for a short description attached to a trigger. */
   export interface TooltipProps {
     /** Description shown in the tooltip. */
     content: Content;
+    /** State owner that decides whether visibility requests take effect. */
+    controller: TooltipController;
     /** Renders the trigger with its required attributes. */
     trigger: Snippet<[TooltipTriggerAttributes]>;
     /** Preferred side of the trigger. */
@@ -42,12 +48,11 @@
 
   import { onDestroy } from "svelte";
 
-  let { content, trigger, side = "top", delayDuration = 400, disabled = false }: TooltipProps = $props();
+  let { content, controller, trigger, side = "top", delayDuration = 400, disabled = false }: TooltipProps = $props();
 
   const componentId = $props.id();
   const tooltipId = componentId + "-tooltip";
 
-  let open = $state(false);
   let hovered = false;
   let focused = false;
   let source = $state<HTMLElement | null>(null);
@@ -55,7 +60,7 @@
 
   const triggerAttributes = $derived<TooltipTriggerAttributes>({
     "aria-describedby": tooltipId,
-    "data-state": open ? "open" : "closed",
+    "data-state": controller.state.open ? "open" : "closed",
     onpointerenter: handlePointerEnter,
     onpointerleave: handlePointerLeave,
     onfocus: handleFocus,
@@ -67,7 +72,7 @@
     if (!disabled) return;
 
     clearTimeout(openTimer);
-    open = false;
+    controller.close();
   });
 
   function scheduleOpen(element: HTMLElement) {
@@ -76,7 +81,7 @@
     source = element;
     clearTimeout(openTimer);
     openTimer = setTimeout(() => {
-      if (hovered || focused) open = true;
+      if (hovered || focused) controller.open();
     }, delayDuration);
   }
 
@@ -84,7 +89,7 @@
     if (hovered || focused) return;
 
     clearTimeout(openTimer);
-    open = false;
+    controller.close();
   }
 
   function handlePointerEnter(event: PointerEvent) {
@@ -108,11 +113,11 @@
   }
 
   function handleKeyDown(event: KeyboardEvent) {
-    if (event.key !== "Escape" || !open) return;
+    if (event.key !== "Escape" || !controller.state.open) return;
 
     event.preventDefault();
     clearTimeout(openTimer);
-    open = false;
+    controller.close();
   }
 
   onDestroy(() => clearTimeout(openTimer));
@@ -120,7 +125,15 @@
 
 {@render trigger(triggerAttributes)}
 
-<FloatingSurface bind:open {source} mode="manual" id={tooltipId} class="agora-tooltip {side}" role="tooltip">
+<FloatingSurface
+  open={controller.state.open}
+  {source}
+  mode="manual"
+  id={tooltipId}
+  class="agora-tooltip {side}"
+  role="tooltip"
+  onOpenChange={(open) => (open ? controller.open() : controller.close())}
+>
   <RenderContent {content} />
 </FloatingSurface>
 

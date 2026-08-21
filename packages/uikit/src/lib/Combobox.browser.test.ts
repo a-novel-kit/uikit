@@ -1,4 +1,5 @@
 import Combobox from "./Combobox.svelte";
+import { createComboboxController } from "./controllers.svelte";
 
 import { describe, expect, it } from "vitest";
 import { page } from "vitest/browser";
@@ -15,6 +16,7 @@ describe("Combobox browser interactions", () => {
     render(Combobox, {
       props: {
         "aria-label": "Language",
+        controller: createComboboxController<string>(),
         options,
       },
     });

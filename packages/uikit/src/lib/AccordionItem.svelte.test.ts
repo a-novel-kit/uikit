@@ -1,4 +1,5 @@
 import AccordionItem from "./AccordionItem.svelte";
+import { createOpenController } from "./controllers.svelte";
 
 import { createRawSnippet } from "svelte";
 
@@ -10,7 +11,7 @@ describe("AccordionItem", () => {
   it("uses native details and summary elements", () => {
     const children = createRawSnippet(() => ({ render: () => "Panel content" }));
     const { container, getByText } = render(AccordionItem, {
-      props: { summary: "Keyboard behavior", open: true, children },
+      props: { summary: "Keyboard behavior", controller: createOpenController({ initialOpen: true }), children },
     });
 
     expect(container.querySelector("details")?.hasAttribute("open")).toBe(true);
@@ -20,7 +21,7 @@ describe("AccordionItem", () => {
 
   it("keeps a disabled summary closed", async () => {
     const { container, getByText } = render(AccordionItem, {
-      props: { summary: "Unavailable", disabled: true },
+      props: { summary: "Unavailable", controller: createOpenController(), disabled: true },
     });
     const summary = getByText("Unavailable").closest("summary");
 

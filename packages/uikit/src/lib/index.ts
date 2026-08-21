@@ -1,14 +1,41 @@
 // Public API of @a-novel-kit/uikit. Platforms consume stable, styled components
 // from this entry point rather than depending on implementation libraries.
 export type { Content } from "./content";
+export {
+  createCheckedController,
+  createComboboxController,
+  createOpenController,
+  createPressedController,
+  createSelectController,
+  createValueController,
+} from "./controllers.svelte";
+export type {
+  CheckedController,
+  CheckedControllerOptions,
+  CheckedState,
+  ComboboxControllerOptions,
+  ComboboxState,
+  OpenController,
+  OpenControllerOptions,
+  OpenState,
+  PressedController,
+  PressedControllerOptions,
+  PressedState,
+  SelectControllerOptions,
+  SelectState,
+  ValueController,
+  ValueControllerOptions,
+  ValueState,
+} from "./controllers.svelte";
 export type { ComponentSize, FeedbackTone, LayoutGap, SelectionOption } from "./types";
 export { default as Accordion } from "./Accordion.svelte";
 export type { AccordionProps } from "./Accordion.svelte";
 export { default as AccordionItem } from "./AccordionItem.svelte";
-export type { AccordionItemProps } from "./AccordionItem.svelte";
+export type { AccordionItemController, AccordionItemProps } from "./AccordionItem.svelte";
 export { default as ActionMenu } from "./ActionMenu.svelte";
 export type {
   ActionMenuAction,
+  ActionMenuController,
   ActionMenuItem,
   ActionMenuProps,
   ActionMenuSeparator,
@@ -29,17 +56,17 @@ export type { ButtonGroupProps } from "./ButtonGroup.svelte";
 export { default as Card } from "./Card.svelte";
 export type { CardProps } from "./Card.svelte";
 export { default as Checkbox } from "./Checkbox.svelte";
-export type { CheckboxProps } from "./Checkbox.svelte";
+export type { CheckboxController, CheckboxProps } from "./Checkbox.svelte";
 export { default as Combobox } from "./Combobox.svelte";
-export type { ComboboxOption, ComboboxProps } from "./Combobox.svelte";
+export type { ComboboxController, ComboboxOption, ComboboxProps } from "./Combobox.svelte";
 export { default as Container } from "./Container.svelte";
 export type { ContainerProps } from "./Container.svelte";
 export { default as Dialog } from "./Dialog.svelte";
-export type { DialogProps } from "./Dialog.svelte";
+export type { DialogController, DialogProps } from "./Dialog.svelte";
 export { default as DescriptionList } from "./DescriptionList.svelte";
 export type { DescriptionListProps } from "./DescriptionList.svelte";
 export { default as Disclosure } from "./Disclosure.svelte";
-export type { DisclosureProps } from "./Disclosure.svelte";
+export type { DisclosureController, DisclosureProps } from "./Disclosure.svelte";
 export { default as EmptyState } from "./EmptyState.svelte";
 export type { EmptyStateProps } from "./EmptyState.svelte";
 export { default as ErrorSummary } from "./ErrorSummary.svelte";
@@ -71,15 +98,15 @@ export type { PageHeaderProps } from "./PageHeader.svelte";
 export { default as Pagination } from "./Pagination.svelte";
 export type { PaginationProps } from "./Pagination.svelte";
 export { default as Popover } from "./Popover.svelte";
-export type { PopoverProps, PopoverTriggerAttributes } from "./Popover.svelte";
+export type { PopoverController, PopoverProps, PopoverTriggerAttributes } from "./Popover.svelte";
 export { default as Progress } from "./Progress.svelte";
 export type { ProgressProps } from "./Progress.svelte";
 export { default as Prose } from "./Prose.svelte";
 export type { ProseProps } from "./Prose.svelte";
 export { default as RadioGroup } from "./RadioGroup.svelte";
-export type { RadioGroupProps, RadioOption } from "./RadioGroup.svelte";
+export type { RadioGroupController, RadioGroupProps, RadioOption } from "./RadioGroup.svelte";
 export { default as Select } from "./Select.svelte";
-export type { SelectOption, SelectProps } from "./Select.svelte";
+export type { SelectController, SelectOption, SelectProps } from "./Select.svelte";
 export { default as Separator } from "./Separator.svelte";
 export type { SeparatorProps } from "./Separator.svelte";
 export { default as Skeleton } from "./Skeleton.svelte";
@@ -87,7 +114,7 @@ export type { SkeletonProps } from "./Skeleton.svelte";
 export { default as SkipLink } from "./SkipLink.svelte";
 export type { SkipLinkProps } from "./SkipLink.svelte";
 export { default as Slider } from "./Slider.svelte";
-export type { SliderProps } from "./Slider.svelte";
+export type { SliderController, SliderProps } from "./Slider.svelte";
 export { default as Spinner } from "./Spinner.svelte";
 export type { SpinnerProps } from "./Spinner.svelte";
 export { default as SplitPane } from "./SplitPane.svelte";
@@ -95,9 +122,9 @@ export type { SplitPaneProps } from "./SplitPane.svelte";
 export { default as Stack } from "./Stack.svelte";
 export type { StackProps } from "./Stack.svelte";
 export { default as Switch } from "./Switch.svelte";
-export type { SwitchProps } from "./Switch.svelte";
+export type { SwitchController, SwitchProps } from "./Switch.svelte";
 export { default as Tabs } from "./Tabs.svelte";
-export type { TabItem, TabsProps } from "./Tabs.svelte";
+export type { TabItem, TabsController, TabsProps } from "./Tabs.svelte";
 export { default as Table } from "./Table.svelte";
 export type { TableProps } from "./Table.svelte";
 export { default as Textarea } from "./Textarea.svelte";
@@ -105,7 +132,7 @@ export type { TextareaProps } from "./Textarea.svelte";
 export { default as ToastRegion } from "./ToastRegion.svelte";
 export type { ToastMessage, ToastRegionProps } from "./ToastRegion.svelte";
 export { default as ToggleButton } from "./ToggleButton.svelte";
-export type { ToggleButtonProps } from "./ToggleButton.svelte";
+export type { ToggleButtonController, ToggleButtonProps } from "./ToggleButton.svelte";
 export { default as ToggleGroup } from "./ToggleGroup.svelte";
 export type { ToggleGroupProps } from "./ToggleGroup.svelte";
 export { default as Toolbar } from "./Toolbar.svelte";
@@ -117,8 +144,8 @@ export type { ToolbarGroupProps } from "./ToolbarGroup.svelte";
 export { default as ToolbarLink } from "./ToolbarLink.svelte";
 export type { ToolbarLinkProps } from "./ToolbarLink.svelte";
 export { default as ToolbarToggleButton } from "./ToolbarToggleButton.svelte";
-export type { ToolbarToggleButtonProps } from "./ToolbarToggleButton.svelte";
+export type { ToolbarToggleButtonController, ToolbarToggleButtonProps } from "./ToolbarToggleButton.svelte";
 export { default as Tooltip } from "./Tooltip.svelte";
-export type { TooltipProps, TooltipTriggerAttributes } from "./Tooltip.svelte";
+export type { TooltipController, TooltipProps, TooltipTriggerAttributes } from "./Tooltip.svelte";
 export { default as VisuallyHidden } from "./VisuallyHidden.svelte";
 export type { VisuallyHiddenProps } from "./VisuallyHidden.svelte";

@@ -1,16 +1,20 @@
 <script lang="ts" module>
   import type { Content } from "./content";
+  import type { CheckedController } from "./controllers.svelte";
 
   import type { HTMLInputAttributes } from "svelte/elements";
 
+  /** External state contract for a checkbox. */
+  export type CheckboxController = CheckedController;
+
   /** Props for a native checkbox with optional supporting content. */
-  export interface CheckboxProps extends Omit<HTMLInputAttributes, "type" | "checked"> {
+  export interface CheckboxProps extends Omit<HTMLInputAttributes, "type" | "checked" | "onchange"> {
     /** Optional label content. */
     label?: Content;
     /** Supporting content shown below the label. */
     description?: Content;
-    /** Current checked state. */
-    checked?: boolean;
+    /** State owner that decides whether selection requests take effect. */
+    controller: CheckboxController;
     /** Displays a mixed state without changing the submitted value. */
     indeterminate?: boolean;
   }
@@ -22,7 +26,7 @@
   let {
     label,
     description,
-    checked = $bindable(false),
+    controller,
     indeterminate = false,
     class: className = "",
     ...rest
@@ -33,10 +37,16 @@
   $effect(() => {
     if (input) input.indeterminate = indeterminate;
   });
+
+  function handleChange(event: Event) {
+    const target = event.currentTarget as HTMLInputElement;
+    controller.setChecked(target.checked);
+    target.checked = controller.state.checked;
+  }
 </script>
 
 <label class="choice {className}">
-  <input bind:this={input} bind:checked type="checkbox" {...rest} />
+  <input bind:this={input} checked={controller.state.checked} type="checkbox" onchange={handleChange} {...rest} />
   {#if label || description}
     <span class="copy">
       {#if label}<span class="label"><RenderContent content={label} /></span>{/if}

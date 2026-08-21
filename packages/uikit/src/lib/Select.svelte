@@ -1,4 +1,5 @@
 <script lang="ts" module>
+  import type { SelectController as SelectionController } from "./controllers.svelte";
   import type { ComponentSize, SelectionOption } from "./types";
 
   import type { Snippet } from "svelte";
@@ -7,12 +8,15 @@
   /** A selectable value and its visible label. */
   export type SelectOption<Value extends string> = SelectionOption<Value>;
 
+  /** External state contract for a select. */
+  export type SelectController<Value extends string> = SelectionController<Value>;
+
   /** Props for a single-value select with a themed listbox. */
   export interface SelectProps<Value extends string> {
     /** Options shown in the menu. */
     options: readonly SelectOption<Value>[];
-    /** Selected option value. */
-    value?: Value | undefined;
+    /** State owner that decides whether visibility or selection requests take effect. */
+    controller: SelectController<Value>;
     /** Text shown before a value is selected. */
     placeholder?: string;
     /** Name used for form submission. */
@@ -39,8 +43,6 @@
     "aria-invalid"?: HTMLInputAttributes["aria-invalid"];
     /** Includes the trigger in sequential keyboard navigation. */
     tabindex?: number;
-    /** Runs after the selected value changes. */
-    onValueChange?: (value: Value | undefined) => void;
     /** Renders an option without changing its accessible text label. */
     renderOption?: Snippet<[SelectOption<Value>]>;
     /** Adds classes to the trigger. */
@@ -58,7 +60,7 @@
 
   let {
     options,
-    value: externalValue = $bindable(),
+    controller,
     placeholder = "Select an option",
     name,
     autocomplete,
@@ -73,7 +75,6 @@
     "aria-invalid": ariaInvalid,
     tabindex,
     class: className = "",
-    onValueChange,
     renderOption,
   }: SelectProps<Value> = $props();
 
@@ -81,7 +82,6 @@
   const triggerId = $derived(id ?? componentId + "-trigger");
   const listboxId = componentId + "-listbox";
 
-  let open = $state(false);
   let activeIndex = $state(-1);
   let triggerElement = $state<HTMLButtonElement | null>(null);
   let listboxElement = $state<HTMLDivElement | null>(null);
@@ -89,12 +89,12 @@
   let typeaheadBuffer = "";
   let typeaheadTimer: ReturnType<typeof setTimeout> | undefined;
 
-  const selectedIndex = $derived(options.findIndex((option) => option.value === externalValue));
+  const selectedIndex = $derived(options.findIndex((option) => option.value === controller.state.value));
   const selectedOption = $derived(selectedIndex >= 0 ? options[selectedIndex] : undefined);
   const isInvalid = $derived(resolveInvalidState(invalid, ariaInvalid));
 
   $effect(() => {
-    if (disabled && open) closeListbox();
+    if (disabled && controller.state.open) closeListbox();
   });
 
   function optionId(index: number) {
@@ -120,13 +120,15 @@
       boundary === undefined && selectedIndex >= 0 && !options[selectedIndex]?.disabled
         ? selectedIndex
         : findEnabledBoundary(options, boundary ?? "first");
-    open = true;
+    controller.open();
+    if (!controller.state.open) return;
     await tick();
     scrollActiveOption();
   }
 
   function closeListbox(focusTrigger = false) {
-    open = false;
+    controller.close();
+    if (controller.state.open) return;
     activeIndex = -1;
     if (focusTrigger) triggerElement?.focus();
   }
@@ -139,22 +141,19 @@
   }
 
   function updateValue(nextValue: Value | undefined) {
-    if (externalValue === nextValue) return;
-
-    externalValue = nextValue;
-    onValueChange?.(nextValue);
+    controller.select(nextValue);
   }
 
   function selectOption(option: SelectOption<Value>) {
     if (option.disabled) return;
 
-    updateValue(allowDeselect && externalValue === option.value ? undefined : option.value);
+    updateValue(allowDeselect && controller.state.value === option.value ? undefined : option.value);
     closeListbox(true);
   }
 
   function handleTriggerClick(event: MouseEvent) {
     const trigger = event.currentTarget as HTMLButtonElement;
-    if (open) closeListbox();
+    if (controller.state.open) closeListbox();
     else void openListbox(trigger);
   }
 
@@ -163,12 +162,12 @@
     typeaheadBuffer += key.toLocaleLowerCase();
     typeaheadTimer = setTimeout(() => (typeaheadBuffer = ""), 500);
 
-    const start = open ? activeIndex : selectedIndex;
+    const start = controller.state.open ? activeIndex : selectedIndex;
     for (let offset = 1; offset <= options.length; offset += 1) {
       const index = (Math.max(start, -1) + offset) % options.length;
       const option = options[index];
       if (!option?.disabled && option.label.toLocaleLowerCase().startsWith(typeaheadBuffer)) {
-        if (open) {
+        if (controller.state.open) {
           activeIndex = index;
           void tick().then(scrollActiveOption);
         } else {
@@ -185,13 +184,13 @@
 
     if (event.key === "ArrowDown" || event.key === "ArrowUp") {
       event.preventDefault();
-      if (!open) void openListbox(trigger, event.key === "ArrowDown" ? undefined : "last");
+      if (!controller.state.open) void openListbox(trigger, event.key === "ArrowDown" ? undefined : "last");
       else moveActive(event.key === "ArrowDown" ? 1 : -1);
       return;
     }
 
     if (event.key === "Home" || event.key === "End") {
-      if (!open) return;
+      if (!controller.state.open) return;
       event.preventDefault();
       activeIndex = findEnabledBoundary(options, event.key === "Home" ? "first" : "last");
       void tick().then(scrollActiveOption);
@@ -200,12 +199,12 @@
 
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
-      if (!open) void openListbox(trigger);
+      if (!controller.state.open) void openListbox(trigger);
       else if (activeIndex >= 0 && options[activeIndex]) selectOption(options[activeIndex]);
       return;
     }
 
-    if (event.key === "Escape" && open) {
+    if (event.key === "Escape" && controller.state.open) {
       event.preventDefault();
       closeListbox(true);
       return;
@@ -230,14 +229,14 @@
     role="combobox"
     aria-controls={listboxId}
     aria-describedby={ariaDescribedBy}
-    aria-expanded={open}
+    aria-expanded={controller.state.open}
     aria-haspopup="listbox"
     aria-label={ariaLabel}
-    aria-activedescendant={open && activeIndex >= 0 ? optionId(activeIndex) : undefined}
+    aria-activedescendant={controller.state.open && activeIndex >= 0 ? optionId(activeIndex) : undefined}
     aria-invalid={isInvalid || undefined}
     aria-required={required || undefined}
     data-placeholder={selectedOption ? undefined : ""}
-    data-state={open ? "open" : "closed"}
+    data-state={controller.state.open ? "open" : "closed"}
     {disabled}
     {tabindex}
     onclick={handleTriggerClick}
@@ -254,11 +253,11 @@
   </button>
 
   {#if name}
-    <input type="hidden" {name} value={externalValue ?? ""} {autocomplete} {disabled} />
+    <input type="hidden" {name} value={controller.state.value ?? ""} {autocomplete} {disabled} />
   {/if}
 
   <FloatingSurface
-    bind:open
+    open={controller.state.open}
     bind:element={listboxElement}
     source={triggerElement}
     id={listboxId}
@@ -267,7 +266,9 @@
     aria-labelledby={triggerId}
     style="--agora-select-anchor-width: {anchorWidth}"
     onOpenChange={(nextOpen) => {
-      if (!nextOpen) activeIndex = -1;
+      if (nextOpen) controller.open();
+      else controller.close();
+      if (!controller.state.open) activeIndex = -1;
     }}
   >
     {#each options as option, index (option.value)}
@@ -278,11 +279,11 @@
         tabindex={-1}
         role="option"
         aria-label={option.label}
-        aria-selected={externalValue === option.value}
+        aria-selected={controller.state.value === option.value}
         aria-disabled={option.disabled || undefined}
         data-option-index={index}
         data-highlighted={activeIndex === index || undefined}
-        data-selected={externalValue === option.value || undefined}
+        data-selected={controller.state.value === option.value || undefined}
         data-disabled={option.disabled || undefined}
         disabled={option.disabled}
         onpointermove={() => {
@@ -294,7 +295,7 @@
         <span
           >{#if renderOption}{@render renderOption(option)}{:else}{option.label}{/if}</span
         >
-        {#if externalValue === option.value}
+        {#if controller.state.value === option.value}
           <CheckIcon size="var(--icon-size-sm)" aria-hidden="true" />
         {/if}
       </button>

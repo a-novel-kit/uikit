@@ -1,5 +1,6 @@
 import Tabs from "./Tabs.svelte";
 import type { TabItem } from "./Tabs.svelte";
+import { createValueController } from "./controllers.svelte";
 
 import { createRawSnippet } from "svelte";
 
@@ -20,13 +21,13 @@ const panel = createRawSnippet<[TabItem]>((tab) => ({
 describe("Tabs", () => {
   it("moves focus, skips disabled tabs, and activates automatically", async () => {
     const onValueChange = vi.fn();
+    const controller = createValueController({ initialValue: "profile", onValueChange });
     const { getByRole } = render(Tabs, {
       props: {
         label: "Account",
         tabs,
-        value: "profile",
+        controller,
         children: panel,
-        onValueChange,
       },
     });
 
@@ -50,7 +51,7 @@ describe("Tabs", () => {
       props: {
         label: "Account",
         tabs,
-        value: "profile",
+        controller: createValueController({ initialValue: "profile" }),
         activationMode: "manual",
         children: panel,
       },

@@ -1,4 +1,6 @@
 <script lang="ts" module>
+  import type { OpenController as StateController } from "./controllers.svelte";
+
   import type { Snippet } from "svelte";
 
   /** An invokable item in an ActionMenu. */
@@ -54,6 +56,9 @@
     onkeydown: (event: KeyboardEvent) => void;
   }
 
+  /** External state contract for an action menu. */
+  export type ActionMenuController = StateController;
+
   /** Props for a composed menu of contextual actions. */
   export interface ActionMenuProps {
     /** Accessible name for the trigger. */
@@ -68,8 +73,8 @@
     trigger?: Snippet<[ActionMenuTriggerAttributes]>;
     /** Replaces visible action content while preserving its text label. */
     renderItem?: Snippet<[ActionMenuAction]>;
-    /** Current menu visibility. */
-    open?: boolean;
+    /** State owner that decides whether visibility requests take effect. */
+    controller: ActionMenuController;
     /** Alignment of the menu against its trigger. */
     align?: "start" | "center" | "end";
     /** Prevents the default trigger from opening the menu. */
@@ -92,7 +97,7 @@
     triggerIcon,
     trigger,
     renderItem,
-    open = $bindable(false),
+    controller,
     align = "end",
     disabled = false,
     class: className = "",
@@ -113,22 +118,22 @@
     id: triggerId,
     "aria-label": label,
     "aria-controls": menuId,
-    "aria-expanded": open,
+    "aria-expanded": controller.state.open,
     "aria-haspopup": "menu",
     disabled,
-    "data-state": open ? "open" : "closed",
+    "data-state": controller.state.open ? "open" : "closed",
     onclick: handleTriggerClick,
     onkeydown: handleTriggerKeyDown,
   });
 
   $effect(() => {
-    if (!open || !triggerElement) return;
+    if (!controller.state.open || !triggerElement) return;
 
     anchorWidth = triggerElement.getBoundingClientRect().width + "px";
   });
 
   $effect(() => {
-    if (disabled && open) closeMenu();
+    if (disabled && controller.state.open) closeMenu();
   });
 
   function rememberTrigger(element: HTMLElement) {
@@ -153,20 +158,22 @@
     if (disabled) return;
 
     rememberTrigger(source);
-    open = true;
+    controller.open();
+    if (!controller.state.open) return;
     await tick();
     focusMenuItem(boundary);
   }
 
   function closeMenu(focusTrigger = false) {
-    open = false;
+    controller.close();
+    if (controller.state.open) return;
     activeItemIndex = -1;
     if (focusTrigger) triggerElement?.focus();
   }
 
   function handleTriggerClick(event: MouseEvent) {
     const source = event.currentTarget as HTMLElement;
-    if (open) closeMenu();
+    if (controller.state.open) closeMenu();
     else void openMenu(source, "first");
   }
 
@@ -258,10 +265,10 @@
     class="agora-menu-trigger {className}"
     type="button"
     aria-controls={menuId}
-    aria-expanded={open}
+    aria-expanded={controller.state.open}
     aria-haspopup="menu"
     aria-label={label}
-    data-state={open ? "open" : "closed"}
+    data-state={controller.state.open ? "open" : "closed"}
     {disabled}
     onclick={handleTriggerClick}
     onkeydown={handleTriggerKeyDown}
@@ -272,7 +279,7 @@
 {/if}
 
 <FloatingSurface
-  bind:open
+  open={controller.state.open}
   bind:element={menuElement}
   source={triggerElement}
   id={menuId}
@@ -286,7 +293,9 @@
     if (item) activeItemIndex = Number(item.dataset.menuIndex);
   }}
   onOpenChange={(nextOpen) => {
-    if (!nextOpen) activeItemIndex = -1;
+    if (nextOpen) controller.open();
+    else controller.close();
+    if (!controller.state.open) activeItemIndex = -1;
   }}
 >
   <div class="agora-menu-group" role="group" aria-label={label}>

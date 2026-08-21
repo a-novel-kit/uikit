@@ -1,21 +1,23 @@
 <script lang="ts" module>
   import type { Content } from "./content";
+  import type { OpenController } from "./controllers.svelte";
 
   import type { Snippet } from "svelte";
   import type { HTMLDetailsAttributes } from "svelte/elements";
+
+  /** External state contract for one accordion item. */
+  export type AccordionItemController = OpenController;
 
   /** Props for one native disclosure within an Accordion. */
   export interface AccordionItemProps extends Omit<HTMLDetailsAttributes, "children" | "name" | "open" | "ontoggle"> {
     /** Content rendered in the disclosure trigger. */
     summary: Content;
-    /** Current expanded state. */
-    open?: boolean;
+    /** State owner that decides whether toggle requests take effect. */
+    controller: AccordionItemController;
     /** Prevents the item from being toggled. */
     disabled?: boolean;
     /** Content revealed while the item is open. */
     children?: Snippet;
-    /** Runs after the expanded state changes. */
-    onOpenChange?: (open: boolean) => void;
   }
 </script>
 
@@ -29,10 +31,9 @@
 
   let {
     summary,
-    open = $bindable(false),
+    controller,
     disabled = false,
     children,
-    onOpenChange,
     class: className = "",
     ...rest
   }: AccordionItemProps = $props();
@@ -40,9 +41,13 @@
   const context = getContext<AccordionContext | undefined>(accordionContextKey);
 
   function handleToggle(event: ToggleEvent) {
+    const details = event.currentTarget as HTMLDetailsElement;
     const nextOpen = event.newState === "open";
-    open = nextOpen;
-    onOpenChange?.(nextOpen);
+    if (nextOpen === controller.state.open) return;
+
+    if (nextOpen) controller.open();
+    else controller.close();
+    if (controller.state.open !== nextOpen) queueMicrotask(() => (details.open = controller.state.open));
   }
 
   function preventDisabledToggle(event: Event) {
@@ -55,7 +60,7 @@
 <details
   class="item {className}"
   name={context?.name}
-  bind:open
+  open={controller.state.open}
   ontoggle={handleToggle}
   data-disabled={disabled || undefined}
   {...rest}

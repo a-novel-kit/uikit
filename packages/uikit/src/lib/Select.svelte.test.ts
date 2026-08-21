@@ -1,5 +1,6 @@
 import Select from "./Select.svelte";
 import type { SelectOption } from "./Select.svelte";
+import { createSelectController } from "./controllers.svelte";
 
 import { createRawSnippet } from "svelte";
 
@@ -18,6 +19,7 @@ describe("Select", () => {
     const { container, getByRole } = render(Select, {
       props: {
         id: "visibility",
+        controller: createSelectController<string>(),
         name: "visibility",
         options,
         placeholder: "Choose visibility",
@@ -35,12 +37,12 @@ describe("Select", () => {
 
   it("opens with the keyboard, skips disabled options, and selects a value", async () => {
     const onValueChange = vi.fn();
+    const controller = createSelectController({ initialValue: "private", onValueChange });
     const { getByRole, queryByRole } = render(Select, {
       props: {
         "aria-label": "Visibility",
-        value: "private",
+        controller,
         options,
-        onValueChange,
       },
     });
 
@@ -65,7 +67,7 @@ describe("Select", () => {
     const { getByRole, getByTestId } = render(Select, {
       props: {
         "aria-label": "Visibility",
-        value: "private",
+        controller: createSelectController({ initialValue: "private" }),
         options,
         renderOption,
       },
@@ -79,13 +81,13 @@ describe("Select", () => {
 
   it("can clear an optional selected value", async () => {
     const onValueChange = vi.fn();
+    const controller = createSelectController({ initialValue: "private", onValueChange });
     const { getByRole } = render(Select, {
       props: {
         "aria-label": "Visibility",
-        value: "private",
+        controller,
         options,
         allowDeselect: true,
-        onValueChange,
       },
     });
 

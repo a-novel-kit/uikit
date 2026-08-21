@@ -1,4 +1,6 @@
 <script lang="ts" module>
+  import type { ValueController as StateController } from "./controllers.svelte";
+
   import type { Snippet } from "svelte";
 
   /** One selectable view in a Tabs component. */
@@ -13,12 +15,15 @@
     icon?: Snippet;
   }
 
+  /** External state contract for tabs. */
+  export type TabsController = StateController<string>;
+
   /** Props for a composed tab list and its associated panels. */
   export interface TabsProps {
     /** Views available for selection. */
     tabs: TabItem[];
-    /** Currently selected tab value. */
-    value?: string;
+    /** State owner that decides whether selection requests take effect. */
+    controller: TabsController;
     /** Accessible name for the tab list. */
     label: string;
     /** Axis along which tabs and keyboard navigation are arranged. */
@@ -29,8 +34,6 @@
     loop?: boolean;
     /** Adds classes to the component root. */
     class?: string;
-    /** Runs after the selected tab changes. */
-    onValueChange?: (value: string) => void;
     /** Replaces visible tab copy while label remains available to accessibility and application logic. */
     renderTab?: Snippet<[TabItem]>;
     /** Renders the panel for each tab while keeping tab data application-owned. */
@@ -43,13 +46,12 @@
 
   let {
     tabs,
-    value = $bindable(""),
+    controller,
     label,
     orientation = "horizontal",
     activationMode = "automatic",
     loop = true,
     class: className = "",
-    onValueChange,
     renderTab,
     children,
   }: TabsProps = $props();
@@ -58,13 +60,15 @@
   let listElement: HTMLDivElement;
   let focusedValue = $state("");
 
-  const tabStopValue = $derived(activationMode === "automatic" ? value : focusedValue || value);
+  const tabStopValue = $derived(
+    activationMode === "automatic" ? controller.state.value : focusedValue || controller.state.value
+  );
 
   $effect(() => {
-    const selected = tabs.find((tab) => tab.value === value && !tab.disabled);
+    const selected = tabs.find((tab) => tab.value === controller.state.value && !tab.disabled);
     if (selected) return;
 
-    value = tabs.find((tab) => !tab.disabled)?.value ?? "";
+    controller.setValue(tabs.find((tab) => !tab.disabled)?.value ?? "");
   });
 
   $effect(() => {
@@ -72,14 +76,15 @@
     if (focused) return;
 
     focusedValue =
-      tabs.find((tab) => tab.value === value && !tab.disabled)?.value ?? tabs.find((tab) => !tab.disabled)?.value ?? "";
+      tabs.find((tab) => tab.value === controller.state.value && !tab.disabled)?.value ??
+      tabs.find((tab) => !tab.disabled)?.value ??
+      "";
   });
 
   function selectTab(tab: TabItem) {
-    if (tab.disabled || value === tab.value) return;
+    if (tab.disabled || controller.state.value === tab.value) return;
 
-    value = tab.value;
-    onValueChange?.(tab.value);
+    controller.setValue(tab.value);
   }
 
   function focusTab(element: HTMLElement) {
@@ -131,10 +136,10 @@
         role="tab"
         aria-label={tab.label}
         aria-controls="{componentId}-panel-{index}"
-        aria-selected={value === tab.value}
+        aria-selected={controller.state.value === tab.value}
         data-composite-item=""
         data-value={tab.value}
-        data-state={value === tab.value ? "active" : "inactive"}
+        data-state={controller.state.value === tab.value ? "active" : "inactive"}
         data-disabled={tab.disabled || undefined}
         tabindex={tabStopValue === tab.value ? 0 : -1}
         disabled={tab.disabled}
@@ -154,7 +159,7 @@
       role="tabpanel"
       aria-labelledby="{componentId}-tab-{index}"
       tabindex={0}
-      hidden={value !== tab.value}
+      hidden={controller.state.value !== tab.value}
     >
       {@render children(tab)}
     </div>

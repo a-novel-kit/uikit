@@ -1,20 +1,35 @@
 <script lang="ts" module>
+  import type { OpenController } from "./controllers.svelte";
+
   import type { HTMLDetailsAttributes } from "svelte/elements";
 
+  /** External state contract for a single disclosure. */
+  export type DisclosureController = OpenController;
+
   /** Props for a single native disclosure. */
-  export interface DisclosureProps extends Omit<HTMLDetailsAttributes, "open"> {
+  export interface DisclosureProps extends Omit<HTMLDetailsAttributes, "open" | "ontoggle"> {
     /** Plain-text disclosure trigger. */
     summary: string;
-    /** Current expanded state. */
-    open?: boolean;
+    /** State owner that decides whether toggle requests take effect. */
+    controller: DisclosureController;
   }
 </script>
 
 <script lang="ts">
-  let { summary, open = $bindable(false), class: className = "", children, ...rest }: DisclosureProps = $props();
+  let { summary, controller, class: className = "", children, ...rest }: DisclosureProps = $props();
+
+  function handleToggle(event: ToggleEvent) {
+    const details = event.currentTarget as HTMLDetailsElement;
+    const nextOpen = event.newState === "open";
+    if (nextOpen === controller.state.open) return;
+
+    if (nextOpen) controller.open();
+    else controller.close();
+    if (controller.state.open !== nextOpen) queueMicrotask(() => (details.open = controller.state.open));
+  }
 </script>
 
-<details class="disclosure {className}" bind:open {...rest}>
+<details class="disclosure {className}" open={controller.state.open} ontoggle={handleToggle} {...rest}>
   <summary>{summary}</summary>
   <div class="content">{@render children?.()}</div>
 </details>

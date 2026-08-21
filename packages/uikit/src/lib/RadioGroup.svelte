@@ -1,5 +1,6 @@
 <script lang="ts" module>
   import type { Content } from "./content";
+  import type { ValueController } from "./controllers.svelte";
   import type { SelectionOption } from "./types";
 
   import type { Snippet } from "svelte";
@@ -11,14 +12,17 @@
     description?: Content;
   }
 
+  /** External state contract for a radio group. */
+  export type RadioGroupController<Value extends string> = ValueController<Value | undefined>;
+
   /** Props for a native single-choice radio group. */
   export interface RadioGroupProps<Value extends string> extends Omit<HTMLFieldsetAttributes, "value"> {
     /** Optional fieldset legend. */
     legend?: Content;
     /** Values available for selection. */
     options: readonly RadioOption<Value>[];
-    /** Currently selected value. */
-    value?: Value;
+    /** State owner that decides whether selection requests take effect. */
+    controller: RadioGroupController<Value>;
     /** Direction in which options are arranged. */
     orientation?: "vertical" | "horizontal";
     /** Shared form name for the radio inputs. */
@@ -36,16 +40,27 @@
   let {
     legend,
     options,
-    value = $bindable(),
+    controller,
     orientation = "vertical",
     name = generatedName,
     renderOption,
     class: className = "",
     ...rest
   }: RadioGroupProps<Value> = $props();
+
+  let fieldset: HTMLFieldSetElement;
+
+  function handleChange(event: Event) {
+    const target = event.currentTarget as HTMLInputElement;
+    controller.setValue(target.value as Value);
+
+    for (const input of fieldset.querySelectorAll<HTMLInputElement>(`input[type="radio"]`)) {
+      input.checked = input.value === controller.state.value;
+    }
+  }
 </script>
 
-<fieldset class="group {orientation} {className}" {...rest}>
+<fieldset bind:this={fieldset} class="group {orientation} {className}" {...rest}>
   {#if legend}<legend><RenderContent content={legend} /></legend>{/if}
   <div class="options">
     {#each options as option (option.value)}
@@ -54,7 +69,8 @@
           type="radio"
           {name}
           value={option.value}
-          bind:group={value}
+          checked={controller.state.value === option.value}
+          onchange={handleChange}
           disabled={option.disabled}
           aria-label={option.label}
         />

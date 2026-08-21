@@ -23,6 +23,13 @@
   });
 </script>
 
+<script lang="ts">
+  import { createOpenController, createValueController } from "@a-novel-kit/uikit";
+
+  const tabsController = createValueController({ initialValue: "profile" });
+  const actionMenuController = createOpenController();
+</script>
+
 {#snippet homeIcon()}<HomeIcon size="var(--icon-size-sm)" />{/snippet}
 {#snippet usersIcon()}<UsersIcon size="var(--icon-size-sm)" />{/snippet}
 {#snippet settingsIcon()}<SettingsIcon size="var(--icon-size-sm)" />{/snippet}
@@ -59,7 +66,7 @@
   <Card>
     <Tabs
       label="Account settings"
-      value="profile"
+      controller={tabsController}
       tabs={[
         { value: "profile", label: "Profile" },
         { value: "security", label: "Security" },
@@ -79,6 +86,7 @@
 <Story name="Action menu" asChild>
   <ActionMenu
     label="Item actions"
+    controller={actionMenuController}
     triggerText="Item actions"
     triggerIcon={moreIcon}
     items={[

@@ -8,7 +8,7 @@
     "children" | "popover" | "ontoggle"
   > {
     /** Current surface visibility. */
-    open?: boolean;
+    open: boolean;
     /** Element used as the positioning anchor and popover invoker. */
     source?: HTMLElement | null;
     /** Native popover dismissal behavior. */
@@ -24,7 +24,7 @@
 
 <script lang="ts">
   let {
-    open = $bindable(false),
+    open,
     source = null,
     mode = "auto",
     element = $bindable(null),
@@ -47,8 +47,12 @@
     const nextOpen = event.newState === "open";
     if (nextOpen === open) return;
 
-    open = nextOpen;
     onOpenChange?.(nextOpen);
+    queueMicrotask(() => {
+      if (!element || open === nextOpen) return;
+      if (open) element.showPopover(source ? { source } : undefined);
+      else element.hidePopover();
+    });
   }
 </script>
 
