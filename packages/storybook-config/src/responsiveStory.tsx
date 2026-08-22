@@ -17,7 +17,7 @@ const reviewViewports = {
     height: 800,
     id: "agoraDesktop",
     label: "Desktop",
-    scale: 0.5,
+    scale: 0.6,
     type: "desktop",
     width: 1280,
   },
@@ -25,7 +25,7 @@ const reviewViewports = {
     height: 844,
     id: "agoraMobile",
     label: "Mobile",
-    scale: 0.62,
+    scale: 0.72,
     type: "mobile",
     width: 390,
   },
@@ -133,6 +133,7 @@ function ReviewFrame({ meta, story, viewport }: ReviewFrameProps) {
             <iframe
               className="agora-story-review__iframe"
               id={`iframe--${preparedStory.id}--${viewport.id}`}
+              loading="lazy"
               src={source}
               title={`${viewport.label}: ${preparedStory.name}`}
             />
