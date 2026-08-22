@@ -32,7 +32,7 @@ ordering or parameters.
 
 Use `ResponsiveStoryPair` in an attached MDX page to compare separate desktop and mobile story
 exports. Each story renders in its own iframe at the real review viewport, then the documentation
-scales the iframe for a compact side-by-side comparison inside the shared large docs container.
+scales the iframe for a side-by-side comparison that uses the available docs width.
 Scalar toolbar globals, including locale, are forwarded to both subdocuments and stay synchronized
 when their controls change. Comparison frames are covered by an interaction shield, ignore pointer
 input, do not run story play functions, and suppress Storybook's measurement and outline overlays.

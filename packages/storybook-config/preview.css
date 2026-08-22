@@ -19,10 +19,10 @@ body {
 
 .sbdocs-wrapper .sbdocs-content {
   box-sizing: border-box;
-  max-width: var(--layout-container-lg);
+  max-width: none;
   inline-size: 100%;
   min-inline-size: 0;
-  max-inline-size: min(100%, var(--layout-container-lg));
+  max-inline-size: 100%;
   font-family: var(--font-family-interface);
 }
 
