@@ -10,13 +10,15 @@
     Stack,
     Tooltip,
   } from "@a-novel-kit/uikit";
+  import type { OpenController } from "@a-novel-kit/uikit";
+  import { reviewStoryGlobals } from "@a-novel-kit/uikit-storybook";
 
   import { CircleHelp as HelpIcon } from "@lucide/svelte";
   import { defineMeta } from "@storybook/addon-svelte-csf";
+  import { expect, userEvent, within } from "storybook/test";
 
   const { Story } = defineMeta({
     title: "Overlays/Disclosure and dialog",
-    tags: ["autodocs"],
     parameters: {
       docs: {
         description: {
@@ -26,20 +28,74 @@
       },
     },
   });
+
+  async function verifyTooltip({ canvasElement }: { canvasElement: HTMLElement }) {
+    const canvas = within(canvasElement);
+    await userEvent.hover(canvas.getByRole("button", { name: "Open help" }));
+    await expect(canvas.getByRole("tooltip", { name: "Open help" })).toBeVisible();
+  }
 </script>
 
 <script lang="ts">
   import { createOpenController } from "@a-novel-kit/uikit";
+
+  function createLockedOpenController(): OpenController {
+    const state = { open: true };
+
+    return {
+      state,
+      open: () => {},
+      close: () => {},
+      toggle: () => {},
+    };
+  }
 
   const firstDisclosureController = createOpenController({ initialOpen: true });
   const secondDisclosureController = createOpenController();
   const firstAccordionController = createOpenController({ initialOpen: true });
   const secondAccordionController = createOpenController();
   const disabledAccordionController = createOpenController();
-  const dialogController = createOpenController();
-  const popoverController = createOpenController();
-  const tooltipController = createOpenController();
+  const dialogDesktopController = createLockedOpenController();
+  const dialogMobileController = createLockedOpenController();
+  const popoverDesktopController = createLockedOpenController();
+  const popoverMobileController = createLockedOpenController();
+  const tooltipDesktopController = createLockedOpenController();
+  const tooltipMobileController = createLockedOpenController();
+  const tooltipInteractiveController = createOpenController();
 </script>
+
+{#snippet dialogExample(controller: OpenController)}
+  <Dialog {controller} title="Archive item?" description="You can restore an archived item later.">
+    {#snippet actions()}
+      <Button variant="ghost" tone="neutral" onclick={() => controller.close()}>Cancel</Button>
+      <Button tone="danger" onclick={() => controller.close()}>Archive</Button>
+    {/snippet}
+    <p class="dialog-copy">Other people will lose access until the item is restored.</p>
+  </Dialog>
+{/snippet}
+
+{#snippet popoverExample(controller: OpenController)}
+  <Popover {controller} position="bottom">
+    {#snippet trigger(props)}
+      <Button {...props} variant="outline" tone="neutral">Open popover</Button>
+    {/snippet}
+    <Stack gap="3" style="inline-size: min(20rem, 80vi)">
+      <strong>Preview options</strong>
+      <span class="muted">Non-modal supporting content closes on Escape or an outside click.</span>
+      <Button size="sm" onclick={() => controller.close()}>Apply</Button>
+    </Stack>
+  </Popover>
+{/snippet}
+
+{#snippet tooltipExample(controller: OpenController)}
+  <Tooltip {controller} content="Open help" side="right" delayDuration={0}>
+    {#snippet trigger(props)}
+      <IconButton {...props} label="Open help" variant="outline" tone="neutral">
+        <HelpIcon size="var(--icon-size-md)" />
+      </IconButton>
+    {/snippet}
+  </Tooltip>
+{/snippet}
 
 <Story name="Disclosure" asChild>
   <div class="narrow">
@@ -68,41 +124,32 @@
   </div>
 </Story>
 
-<Story name="Dialog" asChild>
-  <Stack gap="4" align="start">
-    <Button onclick={() => dialogController.open()}>Open dialog</Button>
-    <span class="muted">Press Escape or select an action to close the dialog.</span>
-    <Dialog controller={dialogController} title="Archive item?" description="You can restore an archived item later.">
-      {#snippet actions()}
-        <Button variant="ghost" tone="neutral" onclick={() => dialogController.close()}>Cancel</Button>
-        <Button tone="danger" onclick={() => dialogController.close()}>Archive</Button>
-      {/snippet}
-      <p class="dialog-copy">Other people will lose access until the item is restored.</p>
-    </Dialog>
-  </Stack>
+<Story name="Dialog — desktop" exportName="DialogDesktop" globals={reviewStoryGlobals.desktop} asChild>
+  {@render dialogExample(dialogDesktopController)}
 </Story>
 
-<Story name="Popover" asChild>
-  <Popover controller={popoverController} position="bottom">
-    {#snippet trigger(props)}
-      <Button {...props} variant="outline" tone="neutral">Open popover</Button>
-    {/snippet}
-    <Stack gap="3" style="inline-size: min(20rem, 80vi)">
-      <strong>Preview options</strong>
-      <span class="muted">Non-modal supporting content closes on Escape or an outside click.</span>
-      <Button size="sm" onclick={() => popoverController.close()}>Apply</Button>
-    </Stack>
-  </Popover>
+<Story name="Dialog — mobile" exportName="DialogMobile" globals={reviewStoryGlobals.mobile} asChild>
+  {@render dialogExample(dialogMobileController)}
 </Story>
 
-<Story name="Tooltip" asChild>
-  <Tooltip controller={tooltipController} content="Open help" side="right">
-    {#snippet trigger(props)}
-      <IconButton {...props} label="Open help" variant="outline" tone="neutral">
-        <HelpIcon size="var(--icon-size-md)" />
-      </IconButton>
-    {/snippet}
-  </Tooltip>
+<Story name="Popover — desktop" exportName="PopoverDesktop" globals={reviewStoryGlobals.desktop} asChild>
+  {@render popoverExample(popoverDesktopController)}
+</Story>
+
+<Story name="Popover — mobile" exportName="PopoverMobile" globals={reviewStoryGlobals.mobile} asChild>
+  {@render popoverExample(popoverMobileController)}
+</Story>
+
+<Story name="Tooltip — desktop" exportName="TooltipDesktop" globals={reviewStoryGlobals.desktop} asChild>
+  {@render tooltipExample(tooltipDesktopController)}
+</Story>
+
+<Story name="Tooltip — mobile" exportName="TooltipMobile" globals={reviewStoryGlobals.mobile} asChild>
+  {@render tooltipExample(tooltipMobileController)}
+</Story>
+
+<Story name="Tooltip interaction" play={verifyTooltip} asChild>
+  {@render tooltipExample(tooltipInteractiveController)}
 </Story>
 
 <style>

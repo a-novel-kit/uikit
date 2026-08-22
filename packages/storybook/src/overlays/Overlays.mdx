@@ -1,0 +1,43 @@
+import * as OverlayStories from "./Overlays.stories.svelte";
+
+import { Canvas, Meta, ResponsiveStoryPair } from "@a-novel-kit/uikit-storybook";
+
+<Meta of={OverlayStories} />
+
+# Disclosure and dialog
+
+Accordion and Disclosure reveal content in the current flow. Popover, Dialog, and Tooltip render
+above that flow and are documented in isolated subdocuments so their top layers stay inside each
+example.
+
+## Disclosure
+
+<Canvas of={OverlayStories.Disclosure} />
+
+## Accordion
+
+<Canvas of={OverlayStories.Accordion} />
+
+## Dialog
+
+<ResponsiveStoryPair
+  desktop={OverlayStories.DialogDesktop}
+  mobile={OverlayStories.DialogMobile}
+  meta={OverlayStories}
+/>
+
+## Popover
+
+<ResponsiveStoryPair
+  desktop={OverlayStories.PopoverDesktop}
+  mobile={OverlayStories.PopoverMobile}
+  meta={OverlayStories}
+/>
+
+## Tooltip
+
+<ResponsiveStoryPair
+  desktop={OverlayStories.TooltipDesktop}
+  mobile={OverlayStories.TooltipMobile}
+  meta={OverlayStories}
+/>

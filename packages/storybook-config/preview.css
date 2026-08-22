@@ -17,8 +17,9 @@ body {
   color: var(--color-text-primary);
 }
 
-.sbdocs-content {
+.sbdocs-wrapper .sbdocs-content {
   box-sizing: border-box;
+  max-width: none;
   inline-size: 100%;
   min-inline-size: 0;
   max-inline-size: 100%;
@@ -102,4 +103,70 @@ body {
 .sbdocs-content .prismjs {
   max-inline-size: 100%;
   overflow-x: auto;
+}
+
+.agora-story-review {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--space-5);
+  padding-block-end: var(--space-2);
+  inline-size: 100%;
+  overflow-x: auto;
+}
+
+.agora-story-review__frame {
+  display: grid;
+  flex: 0 0 auto;
+  gap: var(--space-2);
+  margin: 0;
+  min-inline-size: 0;
+}
+
+.agora-story-review__caption {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.agora-story-review__caption strong {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.agora-story-review__scroll {
+  box-shadow: var(--shadow-sm);
+  border: var(--border-width-thin) solid
+    color-mix(in oklab, var(--color-border-selected) var(--color-mix-6), transparent);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-sunken);
+  max-inline-size: 100%;
+  overflow: auto;
+}
+
+.agora-story-review__viewport {
+  position: relative;
+  overflow: hidden;
+}
+
+.agora-story-review__viewport::after {
+  position: absolute;
+  z-index: 1;
+  cursor: default;
+  inset: 0;
+  content: "";
+}
+
+.agora-story-review__document {
+  transform-origin: top left;
+}
+
+.agora-story-review__iframe {
+  display: block;
+  border: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  pointer-events: none;
 }
