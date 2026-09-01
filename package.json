@@ -32,7 +32,7 @@
     "test:browser": "pnpm prepare:vitest && vitest run --project=uikit-browser --coverage.enabled=false",
     "test:ci": "pnpm test:unit && pnpm test:browser && pnpm test:storybook",
     "test:storybook": "pnpm prepare:vitest && vitest run --project=storybook --coverage.enabled=false",
-    "test:unit": "pnpm prepare:vitest && vitest run --project=uikit-unit"
+    "test:unit": "pnpm prepare:vitest && vitest run --project=storybook-config --project=uikit-unit"
   },
   "devDependencies": {
     "@a-novel-kit/nodelib-config": "catalog:",

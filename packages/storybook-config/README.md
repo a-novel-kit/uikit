@@ -51,4 +51,5 @@ import { Meta, ResponsiveStoryPair } from "@a-novel-kit/uikit-storybook";
 ```
 
 Apply `reviewStoryGlobals.desktop` and `reviewStoryGlobals.mobile` to the matching CSF exports so
-their standalone canvas routes use the same viewport sizes.
+their standalone canvas routes use the same viewport sizes. Long screens can pass `startAt` with an
+element ID to align the relevant section at the top of both review frames.

@@ -22,6 +22,7 @@ export default defineConfig({
       include: ["packages/uikit/src/**/*.{svelte,ts}"],
     },
     projects: [
+      "packages/storybook-config",
       "packages/uikit",
       "packages/uikit/vitest.browser.config.ts",
       defineProject({
