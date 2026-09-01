@@ -106,11 +106,26 @@ export function prepareReviewDocument(frame: HTMLIFrameElement, startAt: string 
   const settle = () => {
     const activeElement = reviewDocument.activeElement;
     if (activeElement && "blur" in activeElement && typeof activeElement.blur === "function") activeElement.blur();
-    if (startAt) reviewDocument.getElementById(startAt)?.scrollIntoView({ block: "start", inline: "nearest" });
+
+    if (!startAt) return true;
+    const target = reviewDocument.getElementById(startAt);
+    if (!target) return false;
+    target.scrollIntoView({ block: "start", inline: "nearest" });
+    return true;
   };
 
-  settle();
+  const aligned = settle();
   reviewWindow.requestAnimationFrame(() => reviewWindow.requestAnimationFrame(settle));
+
+  if (aligned || !startAt) return;
+
+  const observer = new MutationObserver(() => {
+    if (!settle()) return;
+    observer.disconnect();
+    reviewWindow.requestAnimationFrame(() => reviewWindow.requestAnimationFrame(settle));
+  });
+  observer.observe(reviewDocument, { childList: true, subtree: true });
+  reviewWindow.setTimeout(() => observer.disconnect(), 10_000);
 }
 
 function ReviewFrame({ meta, startAt, story, viewport }: ReviewFrameProps) {

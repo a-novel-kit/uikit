@@ -34,4 +34,29 @@ describe("prepareReviewDocument", () => {
     expect(target.scrollIntoView).toHaveBeenCalledWith({ block: "start", inline: "nearest" });
     expect(requestAnimationFrame).toHaveBeenCalledOnce();
   });
+
+  it("aligns a screen section rendered after the iframe load event", async () => {
+    const frame = document.createElement("iframe");
+    document.body.append(frame);
+
+    const reviewDocument = frame.contentDocument;
+    const reviewWindow = frame.contentWindow;
+    expect(reviewDocument).not.toBeNull();
+    expect(reviewWindow).not.toBeNull();
+    if (!reviewDocument || !reviewWindow) return;
+
+    Object.defineProperty(reviewWindow, "requestAnimationFrame", {
+      configurable: true,
+      value: vi.fn(),
+    });
+
+    prepareReviewDocument(frame, "account-email");
+
+    const target = reviewDocument.createElement("section");
+    target.id = "account-email";
+    target.scrollIntoView = vi.fn();
+    reviewDocument.body.append(target);
+
+    await vi.waitFor(() => expect(target.scrollIntoView).toHaveBeenCalledWith({ block: "start", inline: "nearest" }));
+  });
 });
