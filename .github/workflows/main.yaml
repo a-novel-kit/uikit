@@ -110,17 +110,9 @@ jobs:
       contents: read
       packages: read
     steps:
-      - uses: a-novel-kit/workflows/node-actions/setup-node@v1.29.0
-        id: setup
+      - uses: a-novel-kit/workflows/node-actions/build-node@v1.29.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           app_private_key: ${{ secrets.DEPENDENCY_BOT_PRIVATE_KEY }}
           client_id: ${{ vars.DEPENDENCY_BOT_CLIENT_ID }}
-      - uses: actions/checkout@v7
-        with:
-          token: ${{ steps.setup.outputs.token }}
-          clean: false
-          lfs: true
-          persist-credentials: false
-      - name: Build packages
-        run: pnpm run build:ci
+          build_action: "build:ci"

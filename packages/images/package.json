@@ -18,7 +18,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "node ../../scripts/generate-images.mjs"
+    "build": "true"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
