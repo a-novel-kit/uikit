@@ -27,6 +27,8 @@ jobs:
           clean: false
           lfs: true
           persist-credentials: false
+      - name: Materialize LFS sources
+        run: git lfs checkout
       - name: Run lint
         run: pnpm run lint:ci
 
