@@ -15,12 +15,20 @@ jobs:
       contents: read
       packages: read
     steps:
-      - uses: a-novel-kit/workflows/node-actions/lint-node@v1.29.0
+      - uses: a-novel-kit/workflows/node-actions/setup-node@v1.29.0
+        id: setup
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           app_private_key: ${{ secrets.DEPENDENCY_BOT_PRIVATE_KEY }}
           client_id: ${{ vars.DEPENDENCY_BOT_CLIENT_ID }}
-          lint_action: "lint:ci"
+      - uses: actions/checkout@v7
+        with:
+          token: ${{ steps.setup.outputs.token }}
+          clean: false
+          lfs: true
+          persist-credentials: false
+      - name: Run lint
+        run: pnpm run lint:ci
 
   test-unit:
     runs-on: ubuntu-latest
@@ -102,9 +110,17 @@ jobs:
       contents: read
       packages: read
     steps:
-      - uses: a-novel-kit/workflows/node-actions/build-node@v1.29.0
+      - uses: a-novel-kit/workflows/node-actions/setup-node@v1.29.0
+        id: setup
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           app_private_key: ${{ secrets.DEPENDENCY_BOT_PRIVATE_KEY }}
           client_id: ${{ vars.DEPENDENCY_BOT_CLIENT_ID }}
-          build_action: "build:ci"
+      - uses: actions/checkout@v7
+        with:
+          token: ${{ steps.setup.outputs.token }}
+          clean: false
+          lfs: true
+          persist-credentials: false
+      - name: Build packages
+        run: pnpm run build:ci
