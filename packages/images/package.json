@@ -1,0 +1,26 @@
+{
+  "name": "@a-novel-kit/uikit-images",
+  "version": "0.3.1",
+  "private": false,
+  "description": "Generated Agora banners and application icons for web interfaces",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/a-novel-kit/uikit.git"
+  },
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    "./files/*": "./files/*"
+  },
+  "files": [
+    "files",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "true"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  }
+}

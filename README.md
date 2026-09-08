@@ -21,6 +21,7 @@ packages/
 ├── uikit/             composable Svelte components
 ├── tokens/            generated CSS and JavaScript design tokens
 ├── fonts/             self-hosted font faces and licenses
+├── images/            raw artwork and generated banners and application icons
 ├── icons/             custom Svelte icon components
 ├── storybook-config/  reusable Agora Storybook preset and theme
 └── storybook/         private design-system workbench
@@ -36,7 +37,7 @@ Packages are published to GitHub Packages under the `@a-novel-kit` scope. Instal
 package and import the global foundations once in the application shell:
 
 ```bash
-pnpm add @a-novel-kit/uikit @a-novel-kit/uikit-fonts @a-novel-kit/uikit-tokens
+pnpm add @a-novel-kit/uikit @a-novel-kit/uikit-fonts @a-novel-kit/uikit-images @a-novel-kit/uikit-tokens
 ```
 
 ```ts
@@ -61,6 +62,7 @@ import "@a-novel-kit/uikit-tokens/tokens.css";
 | [`@a-novel-kit/uikit`](./packages/uikit)                      | Generic Svelte components and public component types.         |
 | [`@a-novel-kit/uikit-tokens`](./packages/tokens)              | CSS tokens, generated OKLCH palette, and palette metadata.    |
 | [`@a-novel-kit/uikit-fonts`](./packages/fonts)                | Self-hosted interface, editorial, and monospace font faces.   |
+| [`@a-novel-kit/uikit-images`](./packages/images)              | Responsive banners and square application icons.              |
 | [`@a-novel-kit/uikit-icons`](./packages/icons)                | Custom icon components and their shared SVG canvas.           |
 | [`@a-novel-kit/uikit-storybook`](./packages/storybook-config) | Shared Storybook preset, preview defaults, and manager theme. |
 
