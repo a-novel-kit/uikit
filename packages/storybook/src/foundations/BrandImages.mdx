@@ -1,0 +1,89 @@
+import banner320Url from "@a-novel-kit/uikit-images/files/banner/320w/agora-banner.png";
+import banner640Url from "@a-novel-kit/uikit-images/files/banner/640w/agora-banner.png";
+import banner960Url from "@a-novel-kit/uikit-images/files/banner/960w/agora-banner.png";
+import banner1280Url from "@a-novel-kit/uikit-images/files/banner/1280w/agora-banner.png";
+import banner1920Url from "@a-novel-kit/uikit-images/files/banner/1920w/agora-banner.png";
+import banner2560Url from "@a-novel-kit/uikit-images/files/banner/2560w/agora-banner.png";
+import banner3840Url from "@a-novel-kit/uikit-images/files/banner/3840w/agora-banner.png";
+import icon48Url from "@a-novel-kit/uikit-images/files/icon/48x48/agora-icon.png";
+import icon192Url from "@a-novel-kit/uikit-images/files/icon/192x192/agora-icon.png";
+import icon512Url from "@a-novel-kit/uikit-images/files/icon/512x512/agora-icon.png";
+
+import { Meta } from "@storybook/addon-docs/blocks";
+
+import "./BrandImages.css";
+
+<Meta title="Foundations/Brand images" />
+
+export const bannerSrcset = [
+  [banner320Url, 320],
+  [banner640Url, 640],
+  [banner960Url, 960],
+  [banner1280Url, 1280],
+  [banner1920Url, 1920],
+  [banner2560Url, 2560],
+  [banner3840Url, 3840],
+]
+  .map(([url, width]) => `${url} ${width}w`)
+  .join(", ");
+
+export const iconSamples = [
+  { label: "Browser", size: 48, url: icon48Url },
+  { label: "Web app", size: 192, url: icon192Url },
+  { label: "App master", size: 512, url: icon512Url },
+];
+
+# Brand images
+
+Import responsive banners and square application icons from `@a-novel-kit/uikit-images`.
+
+## Banner
+
+Use width descriptors and a `sizes` value that reflects the consuming layout. The browser can then
+select the smallest source that covers the rendered slot and display density.
+
+<figure className="brand-image-sample brand-image-sample--banner">
+  <div className="brand-image-stage">
+    <img
+      alt="Agora"
+      decoding="async"
+      height="321"
+      sizes="(max-width: 48rem) 100vw, 80rem"
+      src={banner1280Url}
+      srcSet={bannerSrcset}
+      width="1280"
+    />
+  </div>
+  <figcaption>
+    <strong>Responsive banner</strong>
+    <code>files/banner/{"{width}"}w/agora-banner.png</code>
+  </figcaption>
+</figure>
+
+## Icon
+
+Choose the file whose intrinsic square size matches the platform surface. Keep the image square and
+let the platform apply its own mask.
+
+<div className="brand-icon-grid">
+  {iconSamples.map((sample) => (
+    <figure className="brand-image-sample" key={sample.size}>
+      <div className="brand-image-stage brand-image-stage--icon">
+        <img
+          alt=""
+          height={sample.size}
+          src={sample.url}
+          style={{ "--brand-image-size": `${sample.size}px` }}
+          width={sample.size}
+        />
+      </div>
+      <figcaption>
+        <strong>{sample.label}</strong>
+        <code>{sample.size + "×" + sample.size}</code>
+      </figcaption>
+    </figure>
+  ))}
+</div>
+
+The icon previews are decorative because their captions already identify each size. Product usage
+needs meaningful alternative text unless adjacent content names Agora.

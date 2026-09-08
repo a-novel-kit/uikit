@@ -7,7 +7,7 @@ const preview: Preview = {
         order: [
           "Overview",
           "Foundations",
-          ["Color system", "Layout & shape", "Typography", "Motion & depth"],
+          ["Color system", "Layout & shape", "Typography", "Brand images", "Motion & depth"],
           "Components",
           ["Catalog", "Button", "Action controls"],
           "Layout",

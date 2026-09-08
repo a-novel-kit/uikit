@@ -1,0 +1,53 @@
+.brand-image-sample {
+  display: grid;
+  gap: var(--space-3);
+  margin-block: var(--space-6);
+  min-inline-size: 0;
+}
+
+.brand-image-stage {
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-island-subtle);
+  padding: var(--space-6);
+  min-block-size: calc(var(--space-16) * var(--multiplier-2));
+  overflow: auto;
+}
+
+.brand-image-stage img {
+  display: block;
+  max-inline-size: 100%;
+  block-size: auto;
+}
+
+.brand-image-sample--banner img {
+  inline-size: 100%;
+}
+
+.brand-image-stage--icon img {
+  inline-size: var(--brand-image-size);
+}
+
+.brand-image-sample figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+  color: var(--color-text-muted);
+}
+
+.brand-image-sample figcaption strong {
+  color: var(--color-text-primary);
+  font-family: var(--font-family-display);
+}
+
+.brand-icon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: var(--space-4);
+}
+
+.brand-icon-grid .brand-image-stage {
+  block-size: calc(var(--space-16) * var(--multiplier-5));
+}
