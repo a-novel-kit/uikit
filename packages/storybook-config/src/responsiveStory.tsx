@@ -69,10 +69,13 @@ export interface ResponsiveStoryPairProps {
   meta?: StoryProps["meta"];
   /** Story export rendered at the mobile review viewport. */
   mobile: StoryExport;
+  /** Element ID aligned with the top of both review viewports. */
+  startAt?: string;
 }
 
 interface ReviewFrameProps {
   meta?: StoryProps["meta"];
+  startAt?: string;
   story: StoryExport;
   viewport: ReviewViewport;
 }
@@ -94,7 +97,38 @@ function storyUrl(storyId: string, globals: Record<string, unknown>) {
   return `iframe.html?${parameters.toString()}`;
 }
 
-function ReviewFrame({ meta, story, viewport }: ReviewFrameProps) {
+/** Prepares a noninteractive review iframe without changing the standalone story's focus behavior. */
+export function prepareReviewDocument(frame: HTMLIFrameElement, startAt: string | undefined) {
+  const reviewDocument = frame.contentDocument;
+  const reviewWindow = frame.contentWindow;
+  if (!reviewDocument || !reviewWindow) return;
+
+  const settle = () => {
+    const activeElement = reviewDocument.activeElement;
+    if (activeElement && "blur" in activeElement && typeof activeElement.blur === "function") activeElement.blur();
+
+    if (!startAt) return true;
+    const target = reviewDocument.getElementById(startAt);
+    if (!target) return false;
+    target.scrollIntoView({ block: "start", inline: "nearest" });
+    return true;
+  };
+
+  const aligned = settle();
+  reviewWindow.requestAnimationFrame(() => reviewWindow.requestAnimationFrame(settle));
+
+  if (aligned || !startAt) return;
+
+  const observer = new MutationObserver(() => {
+    if (!settle()) return;
+    observer.disconnect();
+    reviewWindow.requestAnimationFrame(() => reviewWindow.requestAnimationFrame(settle));
+  });
+  observer.observe(reviewDocument, { childList: true, subtree: true });
+  reviewWindow.setTimeout(() => observer.disconnect(), 10_000);
+}
+
+function ReviewFrame({ meta, startAt, story, viewport }: ReviewFrameProps) {
   const docsContext = useContext(DocsContext);
   if (meta) docsContext.referenceMeta(meta, false);
   const preparedStory = useOf(story, ["story"]).story;
@@ -135,7 +169,9 @@ function ReviewFrame({ meta, story, viewport }: ReviewFrameProps) {
               id={`iframe--${preparedStory.id}--${viewport.id}`}
               loading="lazy"
               src={source}
+              onLoad={(event) => prepareReviewDocument(event.currentTarget, startAt)}
               title={`${viewport.label}: ${preparedStory.name}`}
+              tabIndex={-1}
             />
           </div>
         </div>
@@ -145,11 +181,11 @@ function ReviewFrame({ meta, story, viewport }: ReviewFrameProps) {
 }
 
 /** Renders desktop and mobile story exports in isolated, proportionally scaled subdocuments. */
-export function ResponsiveStoryPair({ desktop, meta, mobile }: ResponsiveStoryPairProps) {
+export function ResponsiveStoryPair({ desktop, meta, mobile, startAt }: ResponsiveStoryPairProps) {
   return (
     <section className="agora-story-review" aria-label="Desktop and mobile previews">
-      <ReviewFrame story={desktop} meta={meta} viewport={reviewViewports.desktop} />
-      <ReviewFrame story={mobile} meta={meta} viewport={reviewViewports.mobile} />
+      <ReviewFrame story={desktop} meta={meta} startAt={startAt} viewport={reviewViewports.desktop} />
+      <ReviewFrame story={mobile} meta={meta} startAt={startAt} viewport={reviewViewports.mobile} />
     </section>
   );
 }
