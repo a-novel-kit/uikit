@@ -31,4 +31,5 @@ catalog:
   vite: ^8.0.0
   vitest: ^4.0.0
 allowBuilds:
+  "@swc/core": true
   esbuild: true

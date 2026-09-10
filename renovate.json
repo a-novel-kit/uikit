@@ -1,24 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "postUpdateOptions": ["pnpmDedupe"],
-  "extends": ["config:recommended"],
   "packageRules": [
-    {
-      "description": "Consolidate non-major npm updates because they share the pnpm lockfile.",
-      "matchManagers": ["npm"],
-      "matchUpdateTypes": ["minor", "patch", "pin", "digest", "lockFileMaintenance"],
-      "groupName": "javascript dependencies"
-    },
-    {
-      "description": "Keep Vite and the Svelte Vite plugin on a compatible release line.",
-      "matchPackageNames": ["vite", "@sveltejs/vite-plugin-svelte"],
-      "groupName": "Svelte Vite toolchain"
-    },
-    {
-      "description": "Keep the Playwright package and CI container on the same version.",
-      "matchPackageNames": ["playwright", "mcr.microsoft.com/playwright"],
-      "groupName": "Playwright runtime"
-    },
     {
       "matchDepTypes": ["peerDependencies"],
       "rangeStrategy": "bump",
