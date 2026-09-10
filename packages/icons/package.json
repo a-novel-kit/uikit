@@ -33,7 +33,7 @@
     "svelte-check": "^4.3.3"
   },
   "peerDependencies": {
-    "svelte": "^5"
+    "svelte": "^5.57.0"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
