@@ -10,6 +10,11 @@
       "groupName": "javascript dependencies"
     },
     {
+      "description": "Keep Vite and the Svelte Vite plugin on a compatible release line.",
+      "matchPackageNames": ["vite", "@sveltejs/vite-plugin-svelte"],
+      "groupName": "Svelte Vite toolchain"
+    },
+    {
       "description": "Keep the Playwright package and CI container on the same version.",
       "matchPackageNames": ["playwright", "mcr.microsoft.com/playwright"],
       "groupName": "Playwright runtime"
