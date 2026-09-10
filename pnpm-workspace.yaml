@@ -20,7 +20,7 @@ catalog:
   eslint-config-prettier: ^10.1.8
   eslint-plugin-prettier: ^5.5.5
   jiti: ^2.6.1
-  playwright: 1.62.0
+  playwright: 1.63.0
   prettier: ^3.7.4
   prettier-plugin-packagejson: ^3.0.0
   storybook: 10.5.8
