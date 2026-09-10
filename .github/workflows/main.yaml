@@ -48,7 +48,7 @@ jobs:
   test-browser:
     runs-on: ubuntu-latest
     container:
-      image: mcr.microsoft.com/playwright:v1.62.0-noble
+      image: mcr.microsoft.com/playwright:v1.63.0-noble
     permissions:
       contents: read
       packages: read
@@ -64,7 +64,7 @@ jobs:
   test-storybook:
     runs-on: ubuntu-latest
     container:
-      image: mcr.microsoft.com/playwright:v1.62.0-noble
+      image: mcr.microsoft.com/playwright:v1.63.0-noble
     permissions:
       contents: read
       packages: read
