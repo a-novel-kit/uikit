@@ -4,6 +4,17 @@
   "extends": ["config:recommended"],
   "packageRules": [
     {
+      "description": "Consolidate non-major npm updates because they share the pnpm lockfile.",
+      "matchManagers": ["npm"],
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest", "lockFileMaintenance"],
+      "groupName": "javascript dependencies"
+    },
+    {
+      "description": "Keep the Playwright package and CI container on the same version.",
+      "matchPackageNames": ["playwright", "mcr.microsoft.com/playwright"],
+      "groupName": "Playwright runtime"
+    },
+    {
       "matchDepTypes": ["peerDependencies"],
       "rangeStrategy": "bump",
       "enabled": true
