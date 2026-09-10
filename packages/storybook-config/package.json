@@ -64,7 +64,7 @@
     "vitest": "catalog:"
   },
   "peerDependencies": {
-    "react": "^19.2.0",
+    "react": "^19.2.8",
     "storybook": "^10.5.8"
   },
   "publishConfig": {
