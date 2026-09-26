@@ -35,10 +35,10 @@ exports. Each story renders in its own iframe at the real review viewport, then 
 scales and flows the previews across the available docs width. The mobile review wraps beneath the
 desktop review when the pair no longer fits, and each isolated document has a subtle brand boundary.
 Scalar toolbar globals, including locale, are forwarded to both subdocuments and stay synchronized
-when their controls change. Comparison frames are covered by an interaction shield, ignore pointer
-input, do not run story play functions, and suppress Storybook's measurement and outline overlays.
-Off-screen frames load lazily so long state catalogues remain responsive. Use the standalone story
-canvas to inspect hover, focus, or other interactive states.
+when their controls change. Comparison frames support native scrolling, text selection, and keyboard
+interaction. Use fixed-state story controllers to keep menus and dialogs open during review.
+Frames do not run story play functions and suppress Storybook's measurement and outline overlays.
+Off-screen frames load lazily so long state catalogues remain responsive.
 
 ```mdx
 import * as ScreenStories from "./screen.stories.svelte";

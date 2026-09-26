@@ -26,6 +26,20 @@ export default defineConfig({
       "packages/uikit",
       "packages/uikit/vitest.browser.config.ts",
       defineProject({
+        optimizeDeps: { include: ["@storybook/addon-docs/blocks", "react", "react/jsx-dev-runtime"] },
+        test: {
+          name: "storybook-config-browser",
+          include: ["packages/storybook-config/test/**/*.browser.test.ts"],
+          browser: {
+            enabled: true,
+            provider: playwright({}),
+            headless: true,
+            instances: [{ browser: "chromium" }],
+          },
+          coverage: { enabled: false },
+        },
+      }),
+      defineProject({
         extends: true,
         root: storybookRoot,
         resolve: { alias: { "@a-novel-kit/uikit": uikitSource } },
