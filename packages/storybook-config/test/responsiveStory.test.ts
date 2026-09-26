@@ -24,14 +24,16 @@ describe("prepareReviewDocument", () => {
     const closeButton = reviewDocument.createElement("button");
     const target = reviewDocument.createElement("section");
     target.id = "account-password";
-    target.scrollIntoView = vi.fn();
+    target.style.scrollMarginTop = "24px";
+    target.getBoundingClientRect = () => new DOMRect(0, 1200, 300, 100);
+    reviewWindow.scrollTo = vi.fn();
     reviewDocument.body.append(closeButton, target);
     closeButton.focus();
 
     prepareReviewDocument(frame, target.id);
 
     expect(reviewDocument.activeElement).not.toBe(closeButton);
-    expect(target.scrollIntoView).toHaveBeenCalledWith({ block: "start", inline: "nearest" });
+    expect(reviewWindow.scrollTo).toHaveBeenCalledWith({ top: 1176, behavior: "instant" });
     expect(requestAnimationFrame).toHaveBeenCalledOnce();
   });
 
@@ -54,9 +56,9 @@ describe("prepareReviewDocument", () => {
 
     const target = reviewDocument.createElement("section");
     target.id = "account-email";
-    target.scrollIntoView = vi.fn();
+    reviewWindow.scrollTo = vi.fn();
     reviewDocument.body.append(target);
 
-    await vi.waitFor(() => expect(target.scrollIntoView).toHaveBeenCalledWith({ block: "start", inline: "nearest" }));
+    await vi.waitFor(() => expect(reviewWindow.scrollTo).toHaveBeenCalledWith({ top: 0, behavior: "instant" }));
   });
 });

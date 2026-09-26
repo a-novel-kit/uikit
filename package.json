@@ -30,7 +30,7 @@
     "prepare:vitest": "pnpm --filter @a-novel-kit/uikit-storybook build",
     "storybook": "pnpm --filter @a-novel-kit/uikit-storybook build && pnpm --filter @a-novel-kit/uikit-storybook-workbench storybook",
     "test": "pnpm prepare:vitest && vitest run",
-    "test:browser": "pnpm prepare:vitest && vitest run --project=uikit-browser --coverage.enabled=false",
+    "test:browser": "pnpm prepare:vitest && vitest run --project='*-browser' --coverage.enabled=false",
     "test:ci": "pnpm test:unit && pnpm test:browser && pnpm test:storybook",
     "test:storybook": "pnpm prepare:vitest && vitest run --project=storybook --coverage.enabled=false",
     "test:unit": "pnpm prepare:vitest && vitest run --project=storybook-config --project=uikit-unit"

@@ -97,7 +97,7 @@ function storyUrl(storyId: string, globals: Record<string, unknown>) {
   return `iframe.html?${parameters.toString()}`;
 }
 
-/** Prepares a noninteractive review iframe without changing the standalone story's focus behavior. */
+/** Clears initial autofocus and aligns the requested section in a review iframe. */
 export function prepareReviewDocument(frame: HTMLIFrameElement, startAt: string | undefined) {
   const reviewDocument = frame.contentDocument;
   const reviewWindow = frame.contentWindow;
@@ -110,7 +110,11 @@ export function prepareReviewDocument(frame: HTMLIFrameElement, startAt: string 
     if (!startAt) return true;
     const target = reviewDocument.getElementById(startAt);
     if (!target) return false;
-    target.scrollIntoView({ block: "start", inline: "nearest" });
+    const margin = Number.parseFloat(reviewWindow.getComputedStyle(target).scrollMarginTop) || 0;
+    reviewWindow.scrollTo({
+      top: reviewWindow.scrollY + target.getBoundingClientRect().top - margin,
+      behavior: "instant",
+    });
     return true;
   };
 
@@ -171,7 +175,6 @@ function ReviewFrame({ meta, startAt, story, viewport }: ReviewFrameProps) {
               src={source}
               onLoad={(event) => prepareReviewDocument(event.currentTarget, startAt)}
               title={`${viewport.label}: ${preparedStory.name}`}
-              tabIndex={-1}
             />
           </div>
         </div>
