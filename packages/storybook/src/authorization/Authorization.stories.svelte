@@ -25,20 +25,20 @@
   <main class="page">
     <Container size="sm">
       <AuthorizationBoundary controller={fixed(status)}>
-        <EmptyState title="Protected content" description="This region is rendered only when access is allowed." />
+        <EmptyState title="Protected content" />
         {#snippet fallback(decision)}
           {#if decision === "anonymous"}
-            <EmptyState title="Login required" description="Log in to return to this page.">
+            <EmptyState title="Account required">
               {#snippet actions()}<Button>Login</Button>{/snippet}
             </EmptyState>
           {:else if decision === "forbidden"}
-            <EmptyState title="Access denied" description="Your account does not have access to this page." />
+            <EmptyState title="Access denied" />
           {:else if decision === "unavailable"}
-            <EmptyState title="Unable to check access" description="The service is temporarily unavailable. Try again.">
+            <EmptyState title="Unable to check access" description="The service is temporarily unavailable.">
               {#snippet actions()}<Button>Try again</Button>{/snippet}
             </EmptyState>
           {:else}
-            <EmptyState title="Checking access" description="Waiting for the application’s authorization decision." />
+            <EmptyState title="Checking access" />
           {/if}
         {/snippet}
       </AuthorizationBoundary>
