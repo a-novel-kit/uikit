@@ -1,15 +1,20 @@
+<!--
+@component
+Renders numbered page controls. The caller updates `currentPage` or supplies URLs through `getHref`.
+Previous and next labels are currently English.
+-->
 <script lang="ts" module>
   import type { HTMLAttributes } from "svelte/elements";
 
   /** Props for navigating a finite set of numbered pages. */
   export interface PaginationProps extends Omit<HTMLAttributes<HTMLElement>, "children"> {
-    /** One-based active page. */
+    /** One-based active page supplied by the caller; use a finite integer within totalPages. */
     currentPage: number;
-    /** Total number of available pages. */
+    /** Number of available pages; supply a positive finite integer. */
     totalPages: number;
     /** Returns an application-owned URL. Without it, controls are buttons. */
     getHref?: (page: number) => string;
-    /** Runs when a button-based page control is activated. */
+    /** Runs for both link and button activation of another in-range page; does not cancel navigation. */
     onPageChange?: (page: number) => void;
     /** Accessible name for the navigation landmark. */
     label?: string;

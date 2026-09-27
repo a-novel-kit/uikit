@@ -1,3 +1,8 @@
+<!--
+@component
+Renders a labeled native range input driven by a numeric value controller.
+The default range is 0–100; the caller owns persistence and value validation.
+-->
 <script lang="ts" module>
   import type { ValueController } from "./controllers.svelte";
 

@@ -1,3 +1,15 @@
+<!--
+@component
+Renders a styled native button. Defaults to `type="button"`; use `type="submit"` for form submission.
+
+```svelte
+<script lang="ts">
+  import { Button } from "@a-novel-kit/uikit";
+</script>
+
+<Button type="submit">Save</Button>
+```
+-->
 <script lang="ts" module>
   import type { ComponentSize } from "./types";
 
@@ -8,11 +20,11 @@
   export interface ButtonProps extends Omit<HTMLButtonAttributes, "children"> {
     /** Content rendered inside the button. */
     children?: Snippet;
-    /** Visual treatment. Choose importance with variant and meaning with tone. */
+    /** Visual importance; defaults to "solid". Use tone for semantic intent. */
     variant?: "solid" | "outline" | "ghost";
-    /** Semantic intent; danger is reserved for destructive or irreversible actions. */
+    /** Semantic intent; defaults to "brand". Reserve danger for destructive actions. */
     tone?: "brand" | "neutral" | "danger";
-    /** Control size. */
+    /** Control size on the shared height and typography scales; defaults to "md". */
     size?: ComponentSize;
     /** Removes inline padding and makes the control square. Used by IconButton. */
     square?: boolean;

@@ -1,3 +1,7 @@
+<!--
+@component
+Applies readable editorial typography to semantic article content supplied by the caller.
+-->
 <script lang="ts" module>
   import type { HTMLAttributes } from "svelte/elements";
 

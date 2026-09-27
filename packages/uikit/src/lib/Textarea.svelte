@@ -1,3 +1,8 @@
+<!--
+@component
+Styles a native multiline input. Native attributes and events target the textarea;
+`class` styles the surrounding surface and adornments render below the input.
+-->
 <script lang="ts" module>
   import type { ComponentSize } from "./types";
 

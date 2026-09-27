@@ -19,6 +19,16 @@ SyntaxHighlighter.registerLanguage(
   )
 );
 
+/**
+ * Shared dark preview with token/font styles, responsive viewports, and failing accessibility checks.
+ * Importing this entry also registers Svelte code fences with markup and embedded script/style highlighting.
+ *
+ * @example
+ * ```ts
+ * import preview from "@a-novel-kit/uikit-storybook/preview";
+ * export default preview;
+ * ```
+ */
 const preview: Preview = {
   parameters: {
     a11y: {

@@ -1,3 +1,7 @@
+<!--
+@component
+Composes a page heading, supporting copy, and actions. Defaults to a header containing an h1.
+-->
 <script lang="ts" module>
   import type { Content } from "./content";
 

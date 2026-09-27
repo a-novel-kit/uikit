@@ -1,3 +1,8 @@
+<!--
+@component
+Switches between labeled panels using an external value controller.
+Every panel stays mounted; inactive panels are hidden. Initialize the controller with an enabled tab value.
+-->
 <script lang="ts" module>
   import type { ValueController as StateController } from "./controllers.svelte";
 
@@ -28,7 +33,7 @@
     label: string;
     /** Axis along which tabs and keyboard navigation are arranged. */
     orientation?: "horizontal" | "vertical";
-    /** Selects on focus automatically or waits for explicit activation. */
+    /** Defaults to "automatic" selection on focus; manual waits for Enter, Space, or a click. */
     activationMode?: "automatic" | "manual";
     /** Wraps keyboard navigation from the last tab to the first. */
     loop?: boolean;
@@ -36,7 +41,7 @@
     class?: string;
     /** Replaces visible tab copy while label remains available to accessibility and application logic. */
     renderTab?: Snippet<[TabItem]>;
-    /** Renders the panel for each tab while keeping tab data application-owned. */
+    /** Renders every panel, including hidden ones; inactive content remains mounted. */
     children: Snippet<[TabItem]>;
   }
 </script>

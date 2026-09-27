@@ -1,3 +1,7 @@
+<!--
+@component
+Reveals a bypass link on keyboard focus. Provide link text and a matching content target.
+-->
 <script lang="ts" module>
   import type { HTMLAnchorAttributes } from "svelte/elements";
 

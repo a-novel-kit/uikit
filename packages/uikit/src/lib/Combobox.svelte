@@ -1,3 +1,8 @@
+<!--
+@component
+Filters labeled options and renders a single selection from an external combobox controller.
+The hidden named input submits the selected value. The caller validates required selection.
+-->
 <script lang="ts" module>
   import type { ComboboxController as SelectionController } from "./controllers.svelte";
   import type { SelectionOption } from "./types";
@@ -17,23 +22,23 @@
     options: readonly ComboboxOption<Value>[];
     /** State owner that decides whether visibility, query, or selection requests take effect. */
     controller: ComboboxController<Value>;
-    /** Name used for form submission. */
+    /** Creates a hidden input with this form name; an unset value submits an empty string. */
     name?: string;
-    /** Text shown when the search input is empty. */
+    /** Empty search input text; defaults to "Search options". */
     placeholder?: string;
-    /** Requires a value during form validation. */
+    /** Sets aria-required; the caller validates selection before submitting. Defaults to false. */
     required?: boolean;
     /** Prevents searching or changing the value. */
     disabled?: boolean;
     /** Applies the invalid surface and focus treatment. */
     invalid?: boolean;
-    /** Lets an optional combobox return to its unset state. */
+    /** Selecting the current option clears its value when true; defaults to false. */
     allowDeselect?: boolean;
     /** Maximum height of the options menu before it scrolls. Defaults to the menu-height token. */
     maxMenuHeight?: string;
     /** Identifies the input and connects it to a label. */
     id?: string;
-    /** Browser autofill hint for the search input. */
+    /** Browser autofill hint for the search input; defaults to "off". */
     autocomplete?: HTMLInputAttributes["autocomplete"];
     /** Identifies elements that describe the input. */
     "aria-describedby"?: string;

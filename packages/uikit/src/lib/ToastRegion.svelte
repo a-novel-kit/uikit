@@ -1,3 +1,8 @@
+<!--
+@component
+Displays application-owned notifications at the viewport's lower inline-end corner.
+The caller manages their lifetime and removes dismissed entries; no automatic timeout runs here.
+-->
 <script lang="ts" module>
   import type { Content } from "./content";
   import type { FeedbackTone } from "./types";
@@ -17,17 +22,17 @@
     tone?: FeedbackTone;
     /** Optional action rendered after the message. */
     action?: Snippet;
-    /** Accessible name for the dismiss control. */
+    /** Accessible dismiss name; defaults to "Dismiss notification". Visible button text remains "Dismiss". */
     dismissLabel?: string;
   }
 
   /** Props for the live region that displays transient messages. */
   export interface ToastRegionProps extends Omit<HTMLAttributes<HTMLElement>, "children"> {
-    /** Messages currently shown in the region. */
+    /** Messages to display, keyed by unique IDs; the caller manages expiry and removal. */
     toasts: ToastMessage[];
     /** Accessible name for the notification region. */
     label?: string;
-    /** Runs when a toast requests dismissal. */
+    /** Shows dismiss controls and receives the requested toast ID. The caller removes that entry. */
     onDismiss?: (id: string) => void;
   }
 </script>

@@ -1,11 +1,15 @@
+<!--
+@component
+Centers content within a tokenized maximum width and optional responsive page gutters.
+-->
 <script lang="ts" module>
   import type { HTMLAttributes } from "svelte/elements";
 
   /** Props for a centered content container with responsive gutters. */
   export interface ContainerProps extends HTMLAttributes<HTMLDivElement> {
-    /** Maximum inline size. Readable uses the prose measure. */
+    /** Maximum inline size; defaults to "lg". Readable uses the prose measure, full removes the limit. */
     size?: "sm" | "md" | "lg" | "readable" | "full";
-    /** Applies the standard responsive page gutter. */
+    /** Applies the standard responsive page gutter; defaults to true. */
     gutter?: boolean;
   }
 </script>

@@ -1,3 +1,8 @@
+<!--
+@component
+Registers a ToggleButton with its containing Toolbar's roving focus.
+Use only inside Toolbar and supply a pressed-state controller.
+-->
 <script lang="ts" module>
   import type { ToggleButtonController, ToggleButtonProps } from "./ToggleButton.svelte";
 

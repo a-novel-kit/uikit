@@ -1,3 +1,15 @@
+<!--
+@component
+Frames custom 24×24 SVG geometry with inherited text color. Icons are decorative unless labeled.
+
+```svelte
+<script lang="ts">
+  import { IconBase } from "@a-novel-kit/uikit-icons";
+</script>
+
+<IconBase label="Add"><path d="M12 5v14M5 12h14" /></IconBase>
+```
+-->
 <script lang="ts" module>
   import type { Snippet } from "svelte";
   import type { SVGAttributes } from "svelte/elements";

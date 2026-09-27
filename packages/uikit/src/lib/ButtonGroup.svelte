@@ -1,3 +1,7 @@
+<!--
+@component
+Groups related buttons under one accessible name without changing their individual tab stops.
+-->
 <script lang="ts" module>
   import type { HTMLAttributes } from "svelte/elements";
 

@@ -1,3 +1,7 @@
+<!--
+@component
+Lays out equal-width items in an intrinsic grid that wraps when its minimum item width no longer fits.
+-->
 <script lang="ts" module>
   import type { ComponentSize, LayoutGap } from "./types";
 

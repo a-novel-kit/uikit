@@ -1,3 +1,7 @@
+<!--
+@component
+Registers a Button with its containing Toolbar's roving focus. Use only inside Toolbar.
+-->
 <script lang="ts" module>
   import type { ButtonProps } from "./Button.svelte";
 

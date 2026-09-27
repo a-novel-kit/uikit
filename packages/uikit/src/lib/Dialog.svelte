@@ -1,3 +1,24 @@
+<!--
+@component
+Renders a native modal dialog driven by `createOpenController` or a compatible controller.
+Escape and backdrop interaction request closure; the controller decides whether it closes.
+Supply close controls in the content or actions snippet when needed.
+
+```svelte
+<script lang="ts">
+  import { Button, Dialog, createOpenController } from "@a-novel-kit/uikit";
+  const dialog = createOpenController();
+</script>
+
+<Button onclick={dialog.open}>Details</Button>
+<Dialog controller={dialog} title="Details">
+  <p>Additional information.</p>
+  {#snippet actions()}
+    <Button onclick={dialog.close}>Close</Button>
+  {/snippet}
+</Dialog>
+```
+-->
 <script lang="ts" module>
   import type { Content } from "./content";
   import type { OpenController } from "./controllers.svelte";
@@ -18,9 +39,9 @@
     description?: Content;
     /** Optional controls rendered after the dialog body. */
     actions?: Snippet;
-    /** Uses modal focus and interaction behavior when true. */
+    /** Uses native modal focus trapping and an inert background; defaults to true. */
     modal?: boolean;
-    /** Closes the dialog when its backdrop is activated. */
+    /** Requests controller.close() on backdrop clicks; defaults to true. The controller may refuse. */
     closeOnBackdrop?: boolean;
     /** Dialog body content. */
     children?: Snippet;

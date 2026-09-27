@@ -1,3 +1,7 @@
+<!--
+@component
+Arranges content vertically with tokenized spacing and cross-axis alignment.
+-->
 <script lang="ts" module>
   import type { LayoutGap } from "./types";
 

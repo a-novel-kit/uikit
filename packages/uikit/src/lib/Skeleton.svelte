@@ -1,3 +1,8 @@
+<!--
+@component
+Reserves space while content loads. Hidden from assistive technology;
+announce loading once in the surrounding region.
+-->
 <script lang="ts" module>
   import type { HTMLAttributes } from "svelte/elements";
 

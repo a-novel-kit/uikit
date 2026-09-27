@@ -1,3 +1,7 @@
+<!--
+@component
+Renders a native anchor with inline or quiet styling. The caller owns the destination URL.
+-->
 <script lang="ts" module>
   import type { HTMLAnchorAttributes } from "svelte/elements";
 

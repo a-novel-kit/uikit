@@ -1,3 +1,8 @@
+<!--
+@component
+Groups related controls into one tab stop with arrow-key navigation.
+Compose ToolbarButton, ToolbarToggleButton, and ToolbarLink inside it.
+-->
 <script lang="ts" module>
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
@@ -15,9 +20,9 @@
     loop?: boolean;
     /** Toolbar controls and groups. */
     children: Snippet;
-    /** Runs before the toolbar handles a key. */
+    /** Runs before keyboard navigation; call preventDefault() to suppress that navigation. */
     onkeydown?: (event: KeyboardEvent) => void;
-    /** Runs before the toolbar updates its active tab stop. */
+    /** Runs before updating the active tab stop; preventDefault() suppresses the update. */
     onfocusin?: (event: FocusEvent) => void;
   }
 </script>

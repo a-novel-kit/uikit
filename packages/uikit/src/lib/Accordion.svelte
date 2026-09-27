@@ -1,10 +1,15 @@
+<!--
+@component
+Groups AccordionItem disclosures with native single-open behavior by default.
+Each item owns its controller; set `multiple` to allow independent open items.
+-->
 <script lang="ts" module>
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
 
   /** Props for a composed group of native disclosure items. */
   export interface AccordionProps extends Omit<HTMLAttributes<HTMLDivElement>, "children"> {
-    /** Lets more than one item remain open. */
+    /** Allows independent open items; defaults to false (native exclusive grouping). */
     multiple?: boolean;
     /** AccordionItem children. */
     children: Snippet;

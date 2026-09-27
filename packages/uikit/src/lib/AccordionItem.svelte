@@ -1,3 +1,8 @@
+<!--
+@component
+Renders a native disclosure inside Accordion. Use `createOpenController` for its state.
+Controller methods may reject a toggle; the rendered disclosure follows the accepted state.
+-->
 <script lang="ts" module>
   import type { Content } from "./content";
   import type { OpenController } from "./controllers.svelte";

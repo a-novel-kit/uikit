@@ -1,3 +1,8 @@
+<!--
+@component
+Adds a short, non-interactive description to a focusable trigger.
+Spread all trigger attributes onto that element; an open controller owns visibility.
+-->
 <script lang="ts" module>
   import type { Content } from "./content";
   import type { OpenController as StateController } from "./controllers.svelte";
@@ -31,11 +36,11 @@
     content: Content;
     /** State owner that decides whether visibility requests take effect. */
     controller: TooltipController;
-    /** Renders the trigger with its required attributes. */
+    /** Renders a focusable element with all supplied attributes spread onto it. */
     trigger: Snippet<[TooltipTriggerAttributes]>;
     /** Preferred side of the trigger. */
     side?: "top" | "right" | "bottom" | "left";
-    /** Delay in milliseconds before the tooltip opens. */
+    /** Delay before requesting visibility for pointer entry or focus; defaults to 400 milliseconds. */
     delayDuration?: number;
     /** Prevents the tooltip from opening. */
     disabled?: boolean;

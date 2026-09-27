@@ -1,3 +1,20 @@
+<!--
+@component
+Composes a label, control, hint, and error. Spread the child snippet attributes onto the control
+so its accessible name, description, required state, and invalid state stay connected.
+
+```svelte
+<script lang="ts">
+  import { Field, Input } from "@a-novel-kit/uikit";
+</script>
+
+<Field label="Email" required>
+  {#snippet children(attributes)}
+    <Input {...attributes} name="email" type="email" />
+  {/snippet}
+</Field>
+```
+-->
 <script lang="ts" module>
   import type { Content } from "./content";
 
@@ -20,15 +37,15 @@
   export interface FieldProps extends Omit<HTMLAttributes<HTMLDivElement>, "children"> {
     /** Optional control label. */
     label?: Content;
-    /** Optional supporting content shown before an error. */
+    /** Supporting content rendered below the control, before any error. */
     hint?: Content;
     /** Optional validation message. */
     error?: Content;
     /** Marks the composed control as required. */
     required?: boolean;
-    /** Stable identifier used by the label and supporting content. */
+    /** Control identifier; defaults to a generated ID stable across server rendering and hydration. */
     controlId?: string;
-    /** Renders the control with generated accessibility attributes. */
+    /** Renders the control; spread all supplied attributes onto its native input or trigger. */
     children: Snippet<[FieldControlProps]>;
   }
 </script>

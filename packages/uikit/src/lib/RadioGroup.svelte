@@ -1,3 +1,8 @@
+<!--
+@component
+Renders native radio inputs sharing one form name and an external value controller.
+Use `createValueController` with a selected option value or `undefined`.
+-->
 <script lang="ts" module>
   import type { Content } from "./content";
   import type { ValueController } from "./controllers.svelte";

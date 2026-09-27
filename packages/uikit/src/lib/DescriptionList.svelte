@@ -1,3 +1,7 @@
+<!--
+@component
+Renders a responsive description list. Wrap each related `dt` and `dd` pair in a `div`.
+-->
 <script lang="ts" module>
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
@@ -8,7 +12,7 @@
     columns?: 1 | 2 | 3;
     /** Vertical spacing between entries. */
     density?: "compact" | "default";
-    /** Native term and description content. */
+    /** Term-description pairs, each grouped in a div containing dt and dd elements. */
     children: Snippet;
   }
 </script>

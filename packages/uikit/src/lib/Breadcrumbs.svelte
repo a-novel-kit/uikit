@@ -1,3 +1,7 @@
+<!--
+@component
+Renders an ordered navigation trail; the final item is always the current, unlinked location.
+-->
 <script lang="ts" module>
   import type { Content } from "./content";
 

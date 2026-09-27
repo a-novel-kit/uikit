@@ -1,3 +1,7 @@
+<!--
+@component
+Shows labeled task progress against `max` (100 by default). Omit `value` for indeterminate work.
+-->
 <script lang="ts" module>
   import type { HTMLProgressAttributes } from "svelte/elements";
 

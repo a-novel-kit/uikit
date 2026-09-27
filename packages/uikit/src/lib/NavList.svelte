@@ -1,3 +1,8 @@
+<!--
+@component
+Renders application-owned navigation destinations. Wrap it in a named `nav` landmark;
+URLs and the current destination are supplied by the caller.
+-->
 <script lang="ts" module>
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";

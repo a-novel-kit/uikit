@@ -1,3 +1,8 @@
+<!--
+@component
+Styles a native file picker. Read selected files from the native change event;
+file selection remains owned by the browser.
+-->
 <script lang="ts" module>
   import type { ComponentSize } from "./types";
 
