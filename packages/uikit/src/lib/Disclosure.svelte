@@ -1,3 +1,7 @@
+<!--
+@component
+Renders a standalone native disclosure. Use `createOpenController` to own its visibility.
+-->
 <script lang="ts" module>
   import type { OpenController } from "./controllers.svelte";
 

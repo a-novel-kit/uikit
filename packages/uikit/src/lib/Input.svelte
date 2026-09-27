@@ -1,3 +1,8 @@
+<!--
+@component
+Styles a native single-line input with optional edge adornments.
+Native attributes and events target the input; `class` styles the surrounding surface.
+-->
 <script lang="ts" module>
   import type { ComponentSize } from "./types";
 

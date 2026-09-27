@@ -1,3 +1,7 @@
+<!--
+@component
+Renders a square Button with a required accessible name. Keep its icon decorative.
+-->
 <script lang="ts" module>
   import type { ButtonProps } from "./Button.svelte";
 

@@ -1,3 +1,29 @@
+<!--
+@component
+Instantiates protected content only when the scoped controller allows access.
+Inherits the nearest provider unless `controller` is supplied. Throws when neither exists.
+Descendants inherit the restricted decision; the application owns fallback UI and redirects.
+Server-side authorization is still required.
+
+Within an AuthorizationProvider:
+
+```svelte
+<script lang="ts">
+  import { AuthorizationBoundary, StatusState } from "@a-novel-kit/uikit";
+</script>
+
+<AuthorizationBoundary>
+  <p>Protected content.</p>
+  {#snippet fallback(status)}
+    {#if status === "pending"}
+      <StatusState tone="loading" title="Checking access" />
+    {:else}
+      <StatusState title="Content unavailable" />
+    {/if}
+  {/snippet}
+</AuthorizationBoundary>
+```
+-->
 <script lang="ts" module>
   import type { AuthorizationController, AuthorizationStatus } from "./authorizationController";
 

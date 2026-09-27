@@ -1,3 +1,7 @@
+<!--
+@component
+Places primary and secondary content side by side when space permits, stacking in DOM order on narrow screens.
+-->
 <script lang="ts" module>
   import type { LayoutGap } from "./types";
 

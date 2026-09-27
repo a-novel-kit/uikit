@@ -1,3 +1,8 @@
+<!--
+@component
+Renders a single-choice listbox with an external select controller and keyboard typeahead.
+The hidden named input submits the selected value. The caller validates required selection.
+-->
 <script lang="ts" module>
   import type { SelectController as SelectionController } from "./controllers.svelte";
   import type { ComponentSize, SelectionOption } from "./types";
@@ -17,9 +22,9 @@
     options: readonly SelectOption<Value>[];
     /** State owner that decides whether visibility or selection requests take effect. */
     controller: SelectController<Value>;
-    /** Text shown before a value is selected. */
+    /** Text shown without a selected option; defaults to "Select an option". */
     placeholder?: string;
-    /** Name used for form submission. */
+    /** Creates a hidden input with this form name; an unset value submits an empty string. */
     name?: string;
     /** Browser autofill hint forwarded to the hidden form input. */
     autocomplete?: HTMLInputAttributes["autocomplete"];
@@ -27,11 +32,11 @@
     controlSize?: ComponentSize;
     /** Applies the invalid surface and focus treatment. */
     invalid?: boolean;
-    /** Requires a value during form validation. */
+    /** Sets aria-required; the caller validates selection before submitting. Defaults to false. */
     required?: boolean;
     /** Prevents opening or changing the select. */
     disabled?: boolean;
-    /** Lets an optional select return to its unset state. */
+    /** Selecting the current option clears its value when true; defaults to false. */
     allowDeselect?: boolean;
     /** Identifies the trigger and connects it to a label. */
     id?: string;

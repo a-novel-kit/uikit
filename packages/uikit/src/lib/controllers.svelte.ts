@@ -40,7 +40,7 @@ export interface OpenState {
   open: boolean;
 }
 
-/** Pure state transitions for content that can be open or closed. */
+/** A component requests visibility changes through these methods; custom controllers may reject them. */
 export interface OpenController {
   /** State rendered by the component. */
   readonly state: OpenState;
@@ -54,13 +54,23 @@ export interface OpenController {
 
 /** Configuration for the default open-state controller. */
 export interface OpenControllerOptions {
-  /** Initial visibility. */
+  /** Visibility when created; defaults to false. */
   initialOpen?: boolean;
   /** Runs after the default controller changes visibility. */
   onOpenChange?: (open: boolean) => void;
 }
 
-/** Creates a controller with standard open, close, and toggle transitions. */
+/**
+ * Creates local reactive visibility state. Repeated open or close requests do not notify again.
+ * Create the controller per component instance and update it through its methods.
+ *
+ * @example
+ * ```ts
+ * import { createOpenController } from "@a-novel-kit/uikit";
+ * const dialog = createOpenController({ initialOpen: true });
+ * dialog.close();
+ * ```
+ */
 export function createOpenController({
   initialOpen = false,
   onOpenChange,
@@ -102,13 +112,22 @@ export interface CheckedController {
 
 /** Configuration for the default checked-state controller. */
 export interface CheckedControllerOptions {
-  /** Initial checked state. */
+  /** Checked state when created; defaults to false. */
   initialChecked?: boolean;
   /** Runs after the default controller changes the checked state. */
   onCheckedChange?: (checked: boolean) => void;
 }
 
-/** Creates a controller with standard checked-state transitions. */
+/**
+ * Creates local reactive state for a Checkbox or Switch. Unchanged requests do not notify.
+ *
+ * @example
+ * ```ts
+ * import { createCheckedController } from "@a-novel-kit/uikit";
+ * const notifications = createCheckedController({ initialChecked: true });
+ * notifications.setChecked(false);
+ * ```
+ */
 export function createCheckedController({
   initialChecked = false,
   onCheckedChange,
@@ -147,13 +166,22 @@ export interface PressedController {
 
 /** Configuration for the default pressed-state controller. */
 export interface PressedControllerOptions {
-  /** Initial pressed state. */
+  /** Pressed state when created; defaults to false. */
   initialPressed?: boolean;
   /** Runs after the default controller changes the pressed state. */
   onPressedChange?: (pressed: boolean) => void;
 }
 
-/** Creates a controller with standard pressed-state transitions. */
+/**
+ * Creates local reactive state for a ToggleButton. Unchanged requests do not notify.
+ *
+ * @example
+ * ```ts
+ * import { createPressedController } from "@a-novel-kit/uikit";
+ * const bold = createPressedController();
+ * bold.toggle();
+ * ```
+ */
 export function createPressedController({
   initialPressed = false,
   onPressedChange,
@@ -196,7 +224,17 @@ export interface ValueControllerOptions<Value> {
   onValueChange?: (value: Value) => void;
 }
 
-/** Creates a controller for a single-value control. */
+/**
+ * Creates local reactive value state; requests equal under Object.is do not notify.
+ * Values are accepted as supplied. The caller owns validation and persistence.
+ *
+ * @example
+ * ```ts
+ * import { createValueController } from "@a-novel-kit/uikit";
+ * const tab = createValueController({ initialValue: "overview" });
+ * tab.setValue("details");
+ * ```
+ */
 export function createValueController<Value>({
   initialValue,
   onValueChange,
@@ -240,9 +278,9 @@ export interface SelectController<Value> {
 
 /** Configuration for the default single-value popup controller. */
 export interface SelectControllerOptions<Value> {
-  /** Initial selected value. */
+  /** Selected value when created; undefined means no selection. */
   initialValue?: Value;
-  /** Initial popup visibility. */
+  /** Popup visibility when created; defaults to false. */
   initialOpen?: boolean;
   /** Runs after the default controller changes popup visibility. */
   onOpenChange?: (open: boolean) => void;
@@ -250,7 +288,18 @@ export interface SelectControllerOptions<Value> {
   onValueChange?: (value: Value | undefined) => void;
 }
 
-/** Creates a controller for a single-value popup control. */
+/**
+ * Creates independent reactive selection and visibility state.
+ * Selecting a value does not close the popup; components request closure separately.
+ * Unchanged requests do not notify. Values are accepted without checking available options.
+ *
+ * @example
+ * ```ts
+ * import { createSelectController } from "@a-novel-kit/uikit";
+ * const language = createSelectController<"en" | "fr">({ initialValue: "en" });
+ * language.select("fr");
+ * ```
+ */
 export function createSelectController<Value>({
   initialValue,
   initialOpen = false,
@@ -306,13 +355,25 @@ export interface ComboboxController<Value> {
 
 /** Configuration for the default filterable popup controller. */
 export interface ComboboxControllerOptions<Value> extends SelectControllerOptions<Value> {
-  /** Initial filter query. */
+  /** Filter query when created; defaults to an empty string. */
   initialQuery?: string;
   /** Runs after the default controller changes the filter query. */
   onQueryChange?: (query: string) => void;
 }
 
-/** Creates a controller for a filterable single-value popup control. */
+/**
+ * Creates reactive selection, query, and visibility state for a Combobox.
+ * Closing clears the query; selecting a value neither closes nor clears it.
+ * Unchanged requests do not notify. The component owns filtering the available options.
+ *
+ * @example
+ * ```ts
+ * import { createComboboxController } from "@a-novel-kit/uikit";
+ * const country = createComboboxController<string>();
+ * country.setQuery("fr");
+ * country.open();
+ * ```
+ */
 export function createComboboxController<Value>({
   initialValue,
   initialOpen = false,

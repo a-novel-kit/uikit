@@ -1,3 +1,7 @@
+<!--
+@component
+Names a related subset of controls within Toolbar without creating a separate focus model.
+-->
 <script lang="ts" module>
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";

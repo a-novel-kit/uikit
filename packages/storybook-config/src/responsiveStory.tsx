@@ -31,12 +31,24 @@ const reviewViewports = {
   },
 } as const satisfies Record<string, ReviewViewport>;
 
-/** Viewport globals for stories that must retain their review size in the canvas. */
+/**
+ * Pins a story's canvas viewport to the dimensions installed by the shared preview.
+ *
+ * @example
+ * ```ts
+ * import { reviewStoryGlobals } from "@a-novel-kit/uikit-storybook";
+ * const mobileGlobals = reviewStoryGlobals.mobile;
+ * ```
+ */
 export const reviewStoryGlobals = {
+  /** Desktop viewport (1280×800), without rotation. */
   desktop: {
+    /** Storybook viewport-addon state for the desktop preset. */
     viewport: { value: reviewViewports.desktop.id, isRotated: false },
   },
+  /** Mobile viewport (390×844), without rotation. */
   mobile: {
+    /** Storybook viewport-addon state for the mobile preset. */
     viewport: { value: reviewViewports.mobile.id, isRotated: false },
   },
 } as const;
@@ -63,13 +75,13 @@ export const reviewViewportOptions = {
 
 /** Stories and metadata rendered by a responsive documentation comparison. */
 export interface ResponsiveStoryPairProps {
-  /** Story export rendered at the desktop review viewport. */
+  /** Named CSF story export rendered at 1280×800; a component or module object is invalid. */
   desktop: StoryExport;
   /** CSF module exports when the documentation page is not attached to the stories. */
   meta?: StoryProps["meta"];
-  /** Story export rendered at the mobile review viewport. */
+  /** Named CSF story export rendered at 390×844; may be the same story as desktop. */
   mobile: StoryExport;
-  /** Element ID aligned with the top of both review viewports. */
+  /** Element ID (without #) to scroll into view after each iframe loads, honoring scroll-margin-top. */
   startAt?: string;
 }
 
@@ -183,7 +195,20 @@ function ReviewFrame({ meta, startAt, story, viewport }: ReviewFrameProps) {
   );
 }
 
-/** Renders desktop and mobile story exports in isolated, proportionally scaled subdocuments. */
+/**
+ * Renders desktop and mobile stories in separate iframes at 85% scale, wrapping on narrower docs pages.
+ * Requires the shared preview styles. Primitive toolbar globals such as locale follow the docs page;
+ * initial autofocus is cleared while scrolling, text selection, and story interactions remain available.
+ *
+ * @example
+ * ```mdx
+ * import { Meta, ResponsiveStoryPair } from "@a-novel-kit/uikit-storybook";
+ * import * as Stories from "./Screen.stories.svelte";
+ *
+ * <Meta of={Stories} />
+ * <ResponsiveStoryPair desktop={Stories.Default} mobile={Stories.Default} />
+ * ```
+ */
 export function ResponsiveStoryPair({ desktop, meta, mobile, startAt }: ResponsiveStoryPairProps) {
   return (
     <section className="agora-story-review" aria-label="Desktop and mobile previews">

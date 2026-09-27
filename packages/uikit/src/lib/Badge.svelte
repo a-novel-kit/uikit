@@ -1,3 +1,7 @@
+<!--
+@component
+Labels a category or status compactly. Use InlineMessage when changes need live announcements.
+-->
 <script lang="ts" module>
   import type { HTMLAttributes } from "svelte/elements";
 

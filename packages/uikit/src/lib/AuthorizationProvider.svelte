@@ -1,3 +1,8 @@
+<!--
+@component
+Provides one application-owned authorization controller to a component subtree.
+Set it up once in the owning layout; all children render regardless of access status.
+-->
 <script lang="ts" module>
   import type { AuthorizationController } from "./authorizationController";
 

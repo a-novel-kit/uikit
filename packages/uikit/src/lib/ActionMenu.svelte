@@ -1,3 +1,8 @@
+<!--
+@component
+Renders a keyboard-navigable popup of actions with an external open controller.
+For a custom trigger, spread the snippet attributes onto a native button.
+-->
 <script lang="ts" module>
   import type { OpenController as StateController } from "./controllers.svelte";
 
@@ -17,9 +22,9 @@
     tone?: "neutral" | "danger";
     /** Optional leading graphic. */
     icon?: Snippet;
-    /** Optional keyboard shortcut hint. */
+    /** Visual shortcut hint; the caller registers the keyboard shortcut. */
     shortcut?: string;
-    /** Runs when the item is selected. */
+    /** Runs synchronously before closure is requested for an enabled action. */
     onSelect?: () => void;
   }
 
@@ -65,21 +70,21 @@
     label: string;
     /** Actions and separators shown in the menu. */
     items: ActionMenuItem[];
-    /** Default trigger text. */
+    /** Text in the default trigger; defaults to "Actions". */
     triggerText?: string;
     /** Optional graphic in the default trigger. */
     triggerIcon?: Snippet;
-    /** Replaces the default trigger and receives its required attributes. */
+    /** Replaces the default trigger; spread all supplied attributes onto a native button. */
     trigger?: Snippet<[ActionMenuTriggerAttributes]>;
     /** Replaces visible action content while preserving its text label. */
     renderItem?: Snippet<[ActionMenuAction]>;
     /** State owner that decides whether visibility requests take effect. */
     controller: ActionMenuController;
-    /** Alignment of the menu against its trigger. */
+    /** Alignment against the trigger; defaults to "end". */
     align?: "start" | "center" | "end";
     /** Prevents the default trigger from opening the menu. */
     disabled?: boolean;
-    /** Adds classes to the component root. */
+    /** Adds classes to the default trigger; unused when a custom trigger is supplied. */
     class?: string;
   }
 </script>

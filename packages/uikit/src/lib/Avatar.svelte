@@ -1,3 +1,8 @@
+<!--
+@component
+Displays an image or initials when `src` is omitted. Image load failures do not switch to initials.
+Provide a meaningful `label` for either representation.
+-->
 <script lang="ts" module>
   import type { ComponentSize } from "./types";
 
@@ -9,9 +14,9 @@
     src?: string;
     /** Accessible name and image alternative. */
     label: string;
-    /** Fallback characters shown when no image is available. */
+    /** Characters shown when src is absent; defaults to the first character of the first two label words. */
     initials?: string;
-    /** Avatar diameter. */
+    /** Avatar diameter on the control-height scale; defaults to "md". */
     size?: ComponentSize;
   }
 </script>

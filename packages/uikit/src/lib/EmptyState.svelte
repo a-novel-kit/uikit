@@ -1,3 +1,7 @@
+<!--
+@component
+Presents an empty result with an h2 heading and optional guidance or recovery actions.
+-->
 <script lang="ts" module>
   import type { Content } from "./content";
 
@@ -10,7 +14,7 @@
     title: Content;
     /** Supporting guidance. */
     description?: Content;
-    /** Optional leading graphic. */
+    /** Decorative leading graphic, hidden from assistive technology. */
     illustration?: Snippet;
     /** Optional controls that resolve the empty state. */
     actions?: Snippet;

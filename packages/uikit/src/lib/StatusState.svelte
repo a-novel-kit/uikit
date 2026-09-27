@@ -1,3 +1,9 @@
+<!--
+@component
+Presents centered loading or outcome feedback with a heading and optional actions.
+The surrounding layout owns page height and vertical centering. Errors use an alert live region;
+other tones use status. Override `role` for static content.
+-->
 <script lang="ts" module>
   import type { Content } from "./content";
   import type { FeedbackState } from "./types";

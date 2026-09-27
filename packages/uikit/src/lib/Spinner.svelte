@@ -1,3 +1,8 @@
+<!--
+@component
+Announces pending work with a hidden label and a motion-aware indicator.
+Inside an existing live region, use `role="presentation"` and `aria-hidden="true"` to avoid duplicate announcements.
+-->
 <script lang="ts" module>
   import type { ComponentSize } from "./types";
 

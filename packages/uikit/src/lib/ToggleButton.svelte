@@ -1,3 +1,8 @@
+<!--
+@component
+Renders a persistent pressed state using `createPressedController` or a compatible controller.
+Keep the accessible label stable as the state changes.
+-->
 <script lang="ts" module>
   import type { ButtonProps } from "./Button.svelte";
   import type { PressedController } from "./controllers.svelte";
@@ -13,7 +18,7 @@
     controller: ToggleButtonController;
     /** Semantic treatment of the toggle. */
     tone?: "brand" | "neutral";
-    /** Native click handler run before the controller request. */
+    /** Runs before controller.toggle(); call preventDefault() to suppress the request. */
     onclick?: HTMLButtonAttributes["onclick"];
   }
 </script>

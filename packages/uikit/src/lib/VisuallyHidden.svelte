@@ -1,3 +1,7 @@
+<!--
+@component
+Keeps text available to assistive technology while removing it from the visible layout.
+-->
 <script lang="ts" module>
   import type { HTMLAttributes } from "svelte/elements";
 

@@ -1,9 +1,13 @@
+<!--
+@component
+Arranges content horizontally with tokenized spacing. Enable `wrap` for narrow containers.
+-->
 <script lang="ts" module>
   import type { LayoutGap } from "./types";
 
   import type { HTMLAttributes } from "svelte/elements";
 
-  /** Props for a wrapping horizontal layout with tokenized spacing. */
+  /** Props for a horizontal layout with optional wrapping and tokenized spacing. */
   export interface InlineProps extends HTMLAttributes<HTMLDivElement> {
     /** Space between direct children, expressed on the public spacing scale. */
     gap?: LayoutGap;
@@ -11,7 +15,7 @@
     align?: "start" | "center" | "end" | "stretch";
     /** Main-axis distribution. */
     justify?: "start" | "center" | "end" | "between";
-    /** Allows children to wrap when the container narrows. */
+    /** Allows children to wrap when the container narrows; defaults to false. */
     wrap?: boolean;
   }
 </script>

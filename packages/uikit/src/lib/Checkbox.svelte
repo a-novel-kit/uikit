@@ -1,3 +1,8 @@
+<!--
+@component
+Renders a native checkbox driven by `createCheckedController` or a compatible controller.
+Provide `label` or an accessible name; native input attributes are forwarded to the checkbox.
+-->
 <script lang="ts" module>
   import type { Content } from "./content";
   import type { CheckedController } from "./controllers.svelte";

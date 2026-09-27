@@ -1,3 +1,8 @@
+<!--
+@component
+Announces form errors and links each message to its control.
+Mount after validation and enable `focusOnMount` when focus should move to the summary.
+-->
 <script lang="ts" module>
   import type { Content } from "./content";
 
@@ -15,7 +20,7 @@
 
   /** Props for a focusable summary of form validation errors. */
   export interface ErrorSummaryProps extends Omit<HTMLAttributes<HTMLElement>, "title" | "children"> {
-    /** Summary heading. */
+    /** Summary heading; defaults to "There is a problem". Supply localized copy when needed. */
     title?: Content;
     /** Optional guidance shown before the error list. */
     description?: Content;
@@ -23,7 +28,7 @@
     errors: readonly ErrorSummaryItem[];
     /** Semantic level of the generated heading. */
     headingLevel?: 2 | 3 | 4 | 5 | 6;
-    /** Moves focus to the summary when it mounts. */
+    /** Focuses once when enabled; defaults to false. Mount after validation to announce the new errors. */
     focusOnMount?: boolean;
   }
 </script>

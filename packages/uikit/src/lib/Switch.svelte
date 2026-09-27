@@ -1,3 +1,8 @@
+<!--
+@component
+Renders an immediate on/off control driven by `createCheckedController` or a compatible controller.
+Provide a visible label or an accessible name.
+-->
 <script lang="ts" module>
   import type { Content } from "./content";
   import type { CheckedController } from "./controllers.svelte";

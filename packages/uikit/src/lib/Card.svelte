@@ -1,3 +1,7 @@
+<!--
+@component
+Groups content on a tokenized surface with optional header and footer snippets.
+-->
 <script lang="ts" module>
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";

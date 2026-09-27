@@ -1,3 +1,7 @@
+<!--
+@component
+Groups independent ToggleButton controls. Each toggle retains its own controller and tab stop.
+-->
 <script lang="ts" module>
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";

@@ -1,3 +1,22 @@
+<!--
+@component
+Renders non-modal content using the native popover API and an external open controller.
+Spread the trigger snippet attributes onto a native button to connect it to the popup.
+
+```svelte
+<script lang="ts">
+  import { Button, Popover, createOpenController } from "@a-novel-kit/uikit";
+  const popover = createOpenController();
+</script>
+
+<Popover controller={popover}>
+  {#snippet trigger(attributes)}
+    <Button {...attributes}>Details</Button>
+  {/snippet}
+  <p>Additional information.</p>
+</Popover>
+```
+-->
 <script lang="ts" module>
   import type { OpenController as StateController } from "./controllers.svelte";
 
@@ -17,13 +36,13 @@
 
   /** Props for non-modal content anchored to a composed trigger. */
   export interface PopoverProps extends Omit<HTMLAttributes<HTMLDivElement>, "children" | "popover" | "ontoggle"> {
-    /** Renders the trigger with its required native popover attributes. */
+    /** Renders a native button with all supplied attributes spread onto it. */
     trigger: Snippet<[PopoverTriggerAttributes]>;
     /** Content shown in the popover. */
     children?: Snippet;
     /** State owner that decides whether visibility requests take effect. */
     controller: PopoverController;
-    /** Preferred side of the trigger. */
+    /** Preferred side; defaults to "bottom". Without CSS anchor positioning, the popup is centered. */
     position?: "top" | "right" | "bottom" | "left";
   }
 </script>

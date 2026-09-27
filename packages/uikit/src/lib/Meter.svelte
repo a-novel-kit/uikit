@@ -1,3 +1,8 @@
+<!--
+@component
+Shows a labeled scalar measurement, with a default range of 0–100.
+Use Progress for task completion.
+-->
 <script lang="ts" module>
   import type { HTMLMeterAttributes } from "svelte/elements";
 

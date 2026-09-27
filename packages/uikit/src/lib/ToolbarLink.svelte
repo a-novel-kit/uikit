@@ -1,3 +1,8 @@
+<!--
+@component
+Registers a Link with its containing Toolbar's roving focus. Defaults to the quiet variant;
+use only inside Toolbar.
+-->
 <script lang="ts" module>
   import type { LinkProps } from "./Link.svelte";
 

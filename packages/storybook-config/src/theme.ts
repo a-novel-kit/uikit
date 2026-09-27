@@ -24,7 +24,17 @@ const fonts = {
   mono: '"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace',
 } as const;
 
-/** Dark Storybook manager and documentation theme derived from Agora tokens. */
+/**
+ * Dark manager and documentation theme derived from the published palette.
+ * Colors are converted to sRGB; runtime CSS token overrides do not change this object.
+ *
+ * @example
+ * ```ts
+ * import { agoraTheme } from "@a-novel-kit/uikit-storybook";
+ * import { addons } from "storybook/manager-api";
+ * addons.setConfig({ theme: agoraTheme });
+ * ```
+ */
 export const agoraTheme = create({
   base: "dark",
   brandTitle: "Agora UI",

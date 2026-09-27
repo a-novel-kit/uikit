@@ -1,3 +1,8 @@
+<!--
+@component
+Wraps a native table in a keyboard-scrollable region. Supply semantic table sections and header cells;
+`caption` names the table and its scrolling region.
+-->
 <script lang="ts" module>
   import type { HTMLTableAttributes } from "svelte/elements";
 

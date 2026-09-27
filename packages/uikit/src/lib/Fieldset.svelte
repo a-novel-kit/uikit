@@ -1,3 +1,7 @@
+<!--
+@component
+Groups related native form controls with an optional legend and supporting description.
+-->
 <script lang="ts" module>
   import type { Content } from "./content";
 

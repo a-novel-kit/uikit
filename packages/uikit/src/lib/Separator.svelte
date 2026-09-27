@@ -1,3 +1,7 @@
+<!--
+@component
+Divides adjacent content visually and semantically. Set `decorative` when the division has no meaning.
+-->
 <script lang="ts" module>
   import type { HTMLAttributes } from "svelte/elements";
 
