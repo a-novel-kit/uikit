@@ -47,6 +47,7 @@ Errors use an alert live region; other tones use status. Override `role` for sta
     align-items: flex-start;
     gap: var(--space-3);
     border-radius: var(--radius-lg);
+    border-inline-start: var(--border-width-strong) solid var(--alert-accent);
     background: var(--alert-surface);
     padding-inline: var(--space-4);
     padding-block: var(--space-4);
@@ -57,18 +58,22 @@ Errors use an alert live region; other tones use status. Override `role` for sta
   .info,
   .loading {
     --alert-surface: var(--color-feedback-info-surface);
+    --alert-accent: var(--color-feedback-info-text);
   }
 
   .success {
     --alert-surface: var(--color-feedback-success-surface);
+    --alert-accent: var(--color-feedback-success-text);
   }
 
   .warning {
     --alert-surface: var(--color-feedback-warning-surface);
+    --alert-accent: var(--color-feedback-warning-text);
   }
 
   .error {
     --alert-surface: var(--color-feedback-error-surface);
+    --alert-accent: var(--color-feedback-error-text);
   }
 
   .content {
