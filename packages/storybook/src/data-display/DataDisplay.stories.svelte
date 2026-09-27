@@ -1,5 +1,16 @@
 <script module lang="ts">
-  import { Avatar, Badge, Card, DescriptionList, Inline, Prose, Separator, Stack, Table } from "@a-novel-kit/uikit";
+  import {
+    Avatar,
+    Badge,
+    Card,
+    DescriptionList,
+    Inline,
+    InlineMessage,
+    Prose,
+    Separator,
+    Stack,
+    Table,
+  } from "@a-novel-kit/uikit";
 
   import { defineMeta } from "@storybook/addon-svelte-csf";
 
@@ -34,6 +45,20 @@
       >Review</Badge
     ><Badge tone="danger">Failed</Badge>
   </Inline>
+</Story>
+
+{#snippet roles()}
+  <Stack gap="4">
+    <Inline gap="2" wrap><Badge tone="brand">Member</Badge><Badge tone="brand">Administrator</Badge></Inline>
+    <InlineMessage tone="loading">Loading account</InlineMessage>
+  </Stack>
+{/snippet}
+
+<Story name="Roles and loading" asChild>
+  <Stack gap="6">
+    {@render roles()}
+    <Card>{@render roles()}</Card>
+  </Stack>
 </Story>
 
 <Story name="Description list" asChild>

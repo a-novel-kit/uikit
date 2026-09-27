@@ -16,6 +16,8 @@ export type ColorScale = readonly [
 
 /** Public metadata describing how the generated palette is derived and validated. */
 export interface ColorSystem {
+  /** Default dark canvas as a CSS oklch() string, shared by CSS tokens and Storybook chrome. */
+  readonly canvas: string;
   /** WCAG contrast targets and generated measurements. */
   readonly contrast: {
     /** One-based accent step used for the text contrast measurements. */
