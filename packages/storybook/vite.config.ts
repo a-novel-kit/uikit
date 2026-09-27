@@ -9,6 +9,14 @@ const svelteConfig = fileURLToPath(new URL("./svelte.config.js", import.meta.url
 
 export default defineConfig({
   // Stories keep consumer-shaped imports while resolving live workspace source during development.
-  resolve: { alias: { "@a-novel-kit/uikit": uikitSource } },
+  resolve: {
+    alias: [
+      { find: /^@a-novel-kit\/uikit$/, replacement: uikitSource },
+      {
+        find: /^@a-novel-kit\/uikit\/authorization$/,
+        replacement: fileURLToPath(new URL("../uikit/src/lib/authorization.ts", import.meta.url)),
+      },
+    ],
+  },
   plugins: [svelte({ configFile: svelteConfig })],
 });

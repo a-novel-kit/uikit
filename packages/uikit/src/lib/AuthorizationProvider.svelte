@@ -1,5 +1,5 @@
 <script lang="ts" module>
-  import type { AuthorizationController } from "./authorization.svelte";
+  import type { AuthorizationController } from "./authorizationController";
 
   import type { Snippet } from "svelte";
 
@@ -20,9 +20,6 @@
   setAuthorization({
     get state() {
       return controller.state;
-    },
-    resolve(status) {
-      controller.resolve(status);
     },
   });
 </script>

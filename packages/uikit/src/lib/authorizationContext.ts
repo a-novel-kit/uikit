@@ -1,13 +1,14 @@
-import type { AuthorizationController } from "./authorization.svelte";
+import { type AuthorizationController, createAuthorizationController } from "./authorizationController.js";
 
 import { createContext } from "svelte";
 
 /** Internal tree-local context shared by authorization components. */
 export const [getAuthorization, setAuthorization, hasAuthorization] = createContext<AuthorizationController>();
 
-/** Reads the nearest provider during component initialization; throws when none exists. */
-export function useAuthorization(): AuthorizationController {
+/** Reads scoped access during initialization, optionally restricting it with a reactive rule. */
+export function useAuthorization(when?: () => boolean): AuthorizationController {
   if (!hasAuthorization())
     throw new Error("Authorization requires an AuthorizationProvider or an explicit controller.");
-  return getAuthorization();
+  const controller = getAuthorization();
+  return when ? createAuthorizationController({ getStatus: () => controller.state.status, when }) : controller;
 }

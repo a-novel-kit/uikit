@@ -27,21 +27,22 @@ Page fallbacks use the shared `StatusState` presentation for loading, guidance, 
 
 ## Setup
 
-Mount one `AuthorizationProvider` in the app or layout. Descendants share its controller through
-[Svelte context](https://svelte.dev/docs/svelte/context).
+Initialize your authentication client in application code, outside UIKit. When it handles tokens,
+keep it on the server. Pass a safe access decision to the UI, not credentials or protected data.
 
-Create the controller with `createAuthorizationController`. Set `initialStatus` from the server decision;
-it defaults to `pending`. Apply later decisions with `resolve(status)`. Keep SSR instances request-local
-to isolate users.
+Mount one `AuthorizationProvider` in the app or layout. The controller needs only a synchronous
+`getStatus` reader; it follows changes to that reactive source without fetching or copying state.
+Create it per layout instance, never as a server-wide singleton.
 
 ```svelte
 <script lang="ts">
   import type { Snippet } from "svelte";
 
-  import type { AuthorizationController } from "@a-novel-kit/uikit";
   import { AuthorizationProvider } from "@a-novel-kit/uikit";
+  import { type AuthorizationStatus, createAuthorizationController } from "@a-novel-kit/uikit/authorization";
 
-  let { authorization, children }: { authorization: AuthorizationController; children: Snippet } = $props();
+  let { data, children }: { data: { access: AuthorizationStatus }; children: Snippet } = $props();
+  const authorization = createAuthorizationController({ getStatus: () => data.access });
 </script>
 
 <AuthorizationProvider controller={authorization}>
@@ -49,29 +50,39 @@ to isolate users.
 </AuthorizationProvider>
 ```
 
-The provider renders all children; visibility belongs to the boundaries below.
-Replacing its controller updates existing consumers.
+Your adapter maps a verified signed-in session to `allowed`, no session to `anonymous`, denied
+permission to `forbidden`, an unfinished check to `pending`, and a failed check to `unavailable`.
+Do not infer identity from a successful HTTP response: the auth service also supports anonymous sessions.
+
+The headless `/authorization` entry imports no visual components or auth-service package. The provider
+shares its controller through [Svelte context](https://svelte.dev/docs/svelte/context); it does not hide
+children. Replacing the controller updates existing consumers.
 
 ## Usage
 
 ### Render conditional content
 
-`AuthorizationBoundary` inherits the nearest controller. It renders children for `allowed`,
-or `fallback(status)` otherwise. Without a fallback, the region disappears.
+`AuthorizationBoundary` inherits the nearest controller and renders children only for `allowed`.
+Use `when` for an additional permission; it defaults to `true`.
 
 ```svelte
 <script lang="ts">
   import { AuthorizationBoundary, Button } from "@a-novel-kit/uikit";
+
+  let { canEdit }: { canEdit: boolean } = $props();
 </script>
 
-<AuthorizationBoundary>
+<AuthorizationBoundary when={canEdit}>
   <Button>Edit document</Button>
 </AuthorizationBoundary>
 ```
 
-Page fallbacks distinguish an unfinished check (`pending`), a missing session (`anonymous`),
-denied permission (`forbidden`), and a failed check (`unavailable`). The application handles login,
-HTTP 403, retry, and accessible feedback; an outage should not send the user to login.
+A false `when` changes allowed access to `forbidden`; other states are preserved. Descendants,
+including the fallback, inherit this effective decision. Siblings are unaffected.
+
+For non-allowed states, `fallback(status)` replaces the content; without one, the region disappears.
+The application owns page feedback, login with a return destination, HTTP 403, and retry. An outage
+must not redirect to login. Server loads and actions must enforce access independently of these views.
 
 ### Read the decision with the hook
 
@@ -80,24 +91,43 @@ initialization and read state reactively:
 
 ```svelte
 <script lang="ts">
-  import { Button, useAuthorization } from "@a-novel-kit/uikit";
+  import { Button } from "@a-novel-kit/uikit";
+  import { useAuthorization } from "@a-novel-kit/uikit/authorization";
 
-  const authorization = useAuthorization();
+  let { isOwner }: { isOwner: boolean } = $props();
+  const authorization = useAuthorization(() => isOwner);
   const canEdit = $derived(authorization.state.status === "allowed");
 </script>
 
 <Button disabled={!canEdit}>Edit document</Button>
 ```
 
-Both consumers throw when context is missing, unless the boundary receives an explicit controller.
+Omit the callback to read the inherited decision unchanged. Rules are synchronous and only run when
+the source allows access. Both consumers throw when context is missing, unless the boundary receives
+an explicit controller.
 
 ## Local overrides
 
-Pass `controller` to a boundary for resource-specific permissions or an isolated story/test.
-Its descendants, including the fallback, inherit that decision; siblings keep the app decision.
+For a default rule shared by every consumer, pass `when: () => canUseWorkspace` to the controller
+factory. Boundary props and hook rules can further restrict it, never bypass a denial.
 
-An override replaces the inherited decision. Include all required permissions when computing it.
-These stories use fixed controllers to keep review states stable.
+To replace the whole decision, pass another `controller` to a boundary. Include all required checks
+in that controller; its descendants use the replacement while siblings keep the app decision.
+
+An isolated story needs only read-only state—no auth client or dummy methods:
+
+```svelte
+<script lang="ts">
+  import { AuthorizationBoundary, Button } from "@a-novel-kit/uikit";
+  import type { AuthorizationController } from "@a-novel-kit/uikit/authorization";
+
+  const authorization: AuthorizationController = { state: { status: "allowed" } };
+</script>
+
+<AuthorizationBoundary controller={authorization}>
+  <Button>Edit document</Button>
+</AuthorizationBoundary>
+```
 
 ## API
 

@@ -29,6 +29,12 @@ Components are exported from the package root.
 Component prop types and shared contracts such as `ComponentSize`, `FeedbackTone`, `LayoutGap`,
 and `SelectionOption` are exported from the same package root.
 
+For authorization, mount `AuthorizationProvider` once with an app-owned controller. Boundaries
+inherit it; an optional `when` prop restricts access further. Import the headless controller and
+hook from `@a-novel-kit/uikit/authorization`. UIKit does not import an authentication client:
+your adapter supplies safe, server-derived decisions, and server endpoints still enforce access.
+See [authorization setup and usage](https://a-novel-kit.github.io/uikit/?path=/docs/access-authorization--documentation).
+
 Components use semantic color tokens and generated metric tokens. Applications can adjust a base
 token at their root to change the corresponding scale without rewriting component styles.
 

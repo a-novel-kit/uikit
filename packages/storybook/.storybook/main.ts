@@ -13,6 +13,10 @@ const config: StorybookConfig = {
       resolve: {
         alias: [
           {
+            find: /^@a-novel-kit\/uikit\/authorization$/,
+            replacement: fileURLToPath(new URL("../../uikit/src/lib/authorization.ts", import.meta.url)),
+          },
+          {
             find: /^@a-novel-kit\/uikit$/,
             replacement: fileURLToPath(new URL("../../uikit/src/lib/index.ts", import.meta.url)),
           },

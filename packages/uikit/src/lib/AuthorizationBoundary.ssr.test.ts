@@ -1,5 +1,5 @@
 import AuthorizationContextFixture from "../../test/AuthorizationContextFixture.svelte";
-import { type AuthorizationStatus, createAuthorizationController } from "./authorization.svelte";
+import type { AuthorizationStatus } from "./authorization";
 
 import { render } from "svelte/server";
 
@@ -10,7 +10,7 @@ describe("authorization SSR", () => {
     "withholds protected HTML when %s",
     (initialStatus) => {
       const result = render(AuthorizationContextFixture, {
-        props: { controller: createAuthorizationController({ initialStatus }) },
+        props: { controller: { state: { status: initialStatus } } },
       });
       expect(result.body).not.toContain("Protected content");
       expect(result.body).toContain(`Fallback: ${initialStatus}`);
@@ -19,10 +19,18 @@ describe("authorization SSR", () => {
 
   it("isolates decisions between render trees", () => {
     const allowed = render(AuthorizationContextFixture, {
-      props: { controller: createAuthorizationController({ initialStatus: "allowed" }) },
+      props: { controller: { state: { status: "allowed" } } },
     });
-    const pending = render(AuthorizationContextFixture, { props: { controller: createAuthorizationController() } });
+    const pending = render(AuthorizationContextFixture, { props: { controller: { state: { status: "pending" } } } });
     expect(allowed.body).toContain("Protected content");
     expect(pending.body).not.toContain("Protected content");
+  });
+
+  it("withholds protected HTML when a local rule denies access", () => {
+    const result = render(AuthorizationContextFixture, {
+      props: { controller: { state: { status: "allowed" } }, when: false },
+    });
+    expect(result.body).not.toContain("Protected content");
+    expect(result.body).toContain("Fallback: forbidden");
   });
 });

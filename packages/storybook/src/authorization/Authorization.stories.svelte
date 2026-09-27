@@ -1,12 +1,20 @@
 <script module lang="ts">
-  import type { AuthorizationController, AuthorizationStatus } from "@a-novel-kit/uikit";
-  import { AuthorizationBoundary, Button, Container, EmptyState, Stack, StatusState } from "@a-novel-kit/uikit";
+  import {
+    AuthorizationBoundary,
+    AuthorizationProvider,
+    Button,
+    Container,
+    EmptyState,
+    Stack,
+    StatusState,
+  } from "@a-novel-kit/uikit";
   import { reviewStoryGlobals } from "@a-novel-kit/uikit-storybook";
+  import type { AuthorizationController, AuthorizationStatus } from "@a-novel-kit/uikit/authorization";
 
   import { defineMeta } from "@storybook/addon-svelte-csf";
   import { expect, within } from "storybook/test";
 
-  const fixed = (status: AuthorizationStatus): AuthorizationController => ({ state: { status }, resolve() {} });
+  const fixed = (status: AuthorizationStatus): AuthorizationController => ({ state: { status } });
   const { Story } = defineMeta({
     title: "Access/Authorization",
     component: AuthorizationBoundary,
@@ -84,11 +92,13 @@
   <Container size="sm">
     <Stack gap="4">
       <h2>Document actions</h2>
-      <AuthorizationBoundary controller={fixed("allowed")}><Button>Edit document</Button></AuthorizationBoundary>
-      <AuthorizationBoundary controller={fixed("forbidden")}>
-        <Button tone="danger">Delete document</Button>
-        {#snippet fallback()}<p>Only the document owner can delete it.</p>{/snippet}
-      </AuthorizationBoundary>
+      <AuthorizationProvider controller={fixed("allowed")}>
+        <AuthorizationBoundary><Button>Edit document</Button></AuthorizationBoundary>
+        <AuthorizationBoundary when={false}>
+          <Button tone="danger">Delete document</Button>
+          {#snippet fallback()}<p>Only the document owner can delete it.</p>{/snippet}
+        </AuthorizationBoundary>
+      </AuthorizationProvider>
     </Stack>
   </Container>
 </Story>

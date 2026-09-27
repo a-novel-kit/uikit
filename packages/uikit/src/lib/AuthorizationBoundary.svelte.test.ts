@@ -1,7 +1,7 @@
 import AuthorizationContextFixture from "../../test/AuthorizationContextFixture.svelte";
 import AuthorizationProbe from "../../test/AuthorizationProbe.svelte";
 import AuthorizationBoundary from "./AuthorizationBoundary.svelte";
-import { type AuthorizationStatus, createAuthorizationController } from "./authorization.svelte";
+import { type AuthorizationStatus, createAuthorizationController } from "./authorization";
 
 import { createRawSnippet, tick } from "svelte";
 
@@ -16,7 +16,7 @@ describe("AuthorizationBoundary", () => {
     "omits protected content when %s",
     (initialStatus) => {
       const { container } = render(AuthorizationBoundary, {
-        props: { controller: createAuthorizationController({ initialStatus }), children },
+        props: { controller: { state: { status: initialStatus } }, children, when: true },
       });
       expect(container.textContent).toBe("");
       expect(container.children).toHaveLength(0);
@@ -24,39 +24,41 @@ describe("AuthorizationBoundary", () => {
   );
 
   it("reacts to loss and recovery of authorization", async () => {
-    const controller = createAuthorizationController({ initialStatus: "allowed" });
+    let status: AuthorizationStatus = $state("allowed");
+    const controller = createAuthorizationController({ getStatus: () => status });
     const { queryByText } = render(AuthorizationBoundary, { props: { controller, children } });
     expect(queryByText("Protected content")).not.toBeNull();
-    controller.resolve("forbidden");
+    status = "forbidden";
     await tick();
     expect(queryByText("Protected content")).toBeNull();
-    controller.resolve("allowed");
+    status = "allowed";
     await tick();
     expect(queryByText("Protected content")).not.toBeNull();
   });
 
   it("inherits the provider and exposes fallback decisions through the hook", async () => {
-    const controller = createAuthorizationController();
+    let status: AuthorizationStatus = $state("pending");
+    const controller = createAuthorizationController({ getStatus: () => status });
     const { queryByText, rerender } = render(AuthorizationContextFixture, { props: { controller } });
     expect(queryByText("outer: pending")).not.toBeNull();
     expect(queryByText("Fallback: pending")).not.toBeNull();
     expect(queryByText("inner: pending")).not.toBeNull();
     expect(queryByText("Protected content")).toBeNull();
 
-    controller.resolve("allowed");
+    status = "allowed";
     await tick();
     expect(queryByText("Protected content")).not.toBeNull();
     expect(queryByText("inner: allowed")).not.toBeNull();
 
-    await rerender({ controller: createAuthorizationController({ initialStatus: "unavailable" }) });
+    await rerender({ controller: { state: { status: "unavailable" } } });
     expect(queryByText("outer: unavailable")).not.toBeNull();
     expect(queryByText("inner: unavailable")).not.toBeNull();
     expect(queryByText("Protected content")).toBeNull();
   });
 
   it("scopes explicit overrides to the boundary's descendants", async () => {
-    const controller = createAuthorizationController({ initialStatus: "allowed" });
-    const override = createAuthorizationController({ initialStatus: "forbidden" });
+    const controller = createAuthorizationController({ getStatus: () => "allowed" });
+    const override = createAuthorizationController({ getStatus: () => "forbidden" });
     const { queryByText, rerender } = render(AuthorizationContextFixture, { props: { controller, override } });
     expect(queryByText("outer: allowed")).not.toBeNull();
     expect(queryByText("inner: forbidden")).not.toBeNull();
@@ -64,6 +66,33 @@ describe("AuthorizationBoundary", () => {
     await rerender({ controller, override: undefined });
     expect(queryByText("inner: allowed")).not.toBeNull();
     expect(queryByText("Protected content")).not.toBeNull();
+  });
+
+  it("applies local rules to descendants without changing siblings or bypassing the provider", async () => {
+    const controller = createAuthorizationController({ getStatus: () => "allowed" });
+    const { queryByText, rerender } = render(AuthorizationContextFixture, { props: { controller, when: false } });
+    expect(queryByText("outer: allowed")).not.toBeNull();
+    expect(queryByText("inner: forbidden")).not.toBeNull();
+    expect(queryByText("Protected content")).toBeNull();
+    await rerender({ when: true });
+    expect(queryByText("inner: allowed")).not.toBeNull();
+    expect(queryByText("Protected content")).not.toBeNull();
+    await rerender({ controller: { state: { status: "forbidden" } } });
+    expect(queryByText("inner: forbidden")).not.toBeNull();
+    expect(queryByText("Protected content")).toBeNull();
+  });
+
+  it("lets the hook narrow access reactively without changing its surrounding boundary", async () => {
+    const controller = createAuthorizationController({ getStatus: () => "allowed" });
+    const { queryByText, rerender } = render(AuthorizationContextFixture, {
+      props: { controller, probeAllowed: false },
+    });
+    expect(queryByText("inner: forbidden")).not.toBeNull();
+    expect(queryByText("Protected content")).not.toBeNull();
+    await rerender({ probeAllowed: true });
+    expect(queryByText("inner: allowed")).not.toBeNull();
+    await rerender({ when: false });
+    expect(queryByText("inner: forbidden")).not.toBeNull();
   });
 
   it("requires context when no explicit controller is supplied", () => {

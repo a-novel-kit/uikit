@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { useAuthorization } from "../src/lib/authorizationContext";
+  import { useAuthorization } from "../src/lib/authorization";
 
-  const authorization = useAuthorization();
-  let { label }: { label: string } = $props();
+  let { label, allowed = true }: { label: string; allowed?: boolean } = $props();
+  const authorization = useAuthorization(() => allowed);
 </script>
 
 <p>{label}: {authorization.state.status}</p>

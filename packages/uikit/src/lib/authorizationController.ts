@@ -7,31 +7,29 @@ export interface AuthorizationState {
   readonly status: AuthorizationStatus;
 }
 
-/** External state owner for an authorization boundary. */
+/** Read-only access view consumed by authorization components. */
 export interface AuthorizationController {
   /** Decision rendered by the component. */
   readonly state: AuthorizationState;
-  /** Applies the decision supplied by the application's trusted adapter. */
-  resolve(status: AuthorizationStatus): void;
 }
 
 /** Configuration for the default authorization controller. */
 export interface AuthorizationControllerOptions {
-  /** Decision available before the first update; defaults to pending. */
-  initialStatus?: AuthorizationStatus;
+  /** Reads the application's reactive, server-derived decision; never fetches during rendering. */
+  getStatus: () => AuthorizationStatus;
+  /** Additional synchronous permission check. Omitted means no further restriction. */
+  when?: () => boolean;
 }
 
-/** Creates isolated reactive authorization state without routing, storage, or network effects. */
+/** Derives access without storing a second decision. A rule can restrict, never grant denied access. */
 export function createAuthorizationController({
-  initialStatus = "pending",
-}: AuthorizationControllerOptions = {}): AuthorizationController {
-  let status = $state(initialStatus);
+  getStatus,
+  when = () => true,
+}: AuthorizationControllerOptions): AuthorizationController {
   return {
     get state() {
-      return { status };
-    },
-    resolve(nextStatus) {
-      status = nextStatus;
+      const status = getStatus();
+      return { status: status === "allowed" && !when() ? "forbidden" : status };
     },
   };
 }

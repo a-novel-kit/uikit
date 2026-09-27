@@ -1,14 +1,13 @@
 // Public API of @a-novel-kit/uikit. Platforms consume stable, styled components
 // from this entry point rather than depending on implementation libraries.
 export type { Content } from "./content";
-export { createAuthorizationController } from "./authorization.svelte";
+export { createAuthorizationController, useAuthorization } from "./authorization";
 export type {
   AuthorizationController,
   AuthorizationControllerOptions,
   AuthorizationState,
   AuthorizationStatus,
-} from "./authorization.svelte";
-export { useAuthorization } from "./authorizationContext";
+} from "./authorization";
 export { default as AuthorizationBoundary } from "./AuthorizationBoundary.svelte";
 export type { AuthorizationBoundaryProps } from "./AuthorizationBoundary.svelte";
 export { default as AuthorizationProvider } from "./AuthorizationProvider.svelte";
