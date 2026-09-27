@@ -1,6 +1,6 @@
 import * as Stories from "./Authorization.stories.svelte";
 
-import { Canvas, Meta, ResponsiveStoryPair } from "@a-novel-kit/uikit-storybook";
+import { Meta, ResponsiveStoryPair } from "@a-novel-kit/uikit-storybook";
 
 import { ArgTypes } from "@storybook/addon-docs/blocks";
 
@@ -13,17 +13,13 @@ Server endpoints must enforce permissions independently.
 
 ## Page states
 
-Page fallbacks use the shared `StatusState` presentation for loading, guidance, and errors.
+The boundary has no appearance of its own. These application-owned fallback examples use `StatusState`
+for loading, guidance, and errors. Access decisions and transitions are covered by component and SSR tests.
 
-<ResponsiveStoryPair desktop={Stories.Allowed} mobile={Stories.Allowed} meta={Stories} />
 <ResponsiveStoryPair desktop={Stories.Anonymous} mobile={Stories.Anonymous} meta={Stories} />
-<ResponsiveStoryPair desktop={Stories.ForbiddenDesktop} mobile={Stories.ForbiddenMobile} meta={Stories} />
+<ResponsiveStoryPair desktop={Stories.Forbidden} mobile={Stories.Forbidden} meta={Stories} />
 <ResponsiveStoryPair desktop={Stories.Pending} mobile={Stories.Pending} meta={Stories} />
 <ResponsiveStoryPair desktop={Stories.Unavailable} mobile={Stories.Unavailable} meta={Stories} />
-
-## Conditional content
-
-<Canvas of={Stories.ConditionalContent} />
 
 ## Setup
 

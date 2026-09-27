@@ -1,106 +1,52 @@
 <script module lang="ts">
-  import {
-    AuthorizationBoundary,
-    AuthorizationProvider,
-    Button,
-    Container,
-    EmptyState,
-    Stack,
-    StatusState,
-  } from "@a-novel-kit/uikit";
-  import { reviewStoryGlobals } from "@a-novel-kit/uikit-storybook";
-  import type { AuthorizationController, AuthorizationStatus } from "@a-novel-kit/uikit/authorization";
+  import type { StatusStateProps } from "@a-novel-kit/uikit";
+  import { AuthorizationBoundary, Button, Container, StatusState } from "@a-novel-kit/uikit";
 
   import { defineMeta } from "@storybook/addon-svelte-csf";
-  import { expect, within } from "storybook/test";
 
-  const fixed = (status: AuthorizationStatus): AuthorizationController => ({ state: { status } });
   const { Story } = defineMeta({
     title: "Access/Authorization",
     component: AuthorizationBoundary,
     tags: ["!autodocs"],
     parameters: { layout: "fullscreen" },
   });
-
-  async function verifyDenied({ canvasElement }: { canvasElement: HTMLElement }) {
-    const canvas = within(canvasElement);
-    await expect(canvas.queryByText("Protected content")).not.toBeInTheDocument();
-    await expect(canvas.getByRole("heading", { name: "Access denied" })).toBeVisible();
-  }
 </script>
 
-{#snippet page(status: AuthorizationStatus)}
+{#snippet login()}<Button>Login</Button>{/snippet}
+{#snippet retry()}<Button>Try again</Button>{/snippet}
+
+{#snippet page(props: StatusStateProps)}
   <main class="page">
     <Container size="sm">
-      <AuthorizationBoundary controller={fixed(status)}>
-        <EmptyState title="Protected content" />
-        {#snippet fallback(decision)}
-          {#if decision === "anonymous"}
-            <StatusState
-              title="Agora account required"
-              description="Only signed-in users can view this page."
-              role="presentation"
-              headingLevel={1}
-            >
-              {#snippet actions()}<Button>Login</Button>{/snippet}
-            </StatusState>
-          {:else if decision === "forbidden"}
-            <StatusState
-              tone="error"
-              title="Access denied"
-              description="You do not have permission to view this page."
-              role="presentation"
-              headingLevel={1}
-            />
-          {:else if decision === "unavailable"}
-            <StatusState
-              tone="error"
-              title="Unable to check access"
-              description="The service is temporarily unavailable."
-              headingLevel={1}
-            >
-              {#snippet actions()}<Button>Try again</Button>{/snippet}
-            </StatusState>
-          {:else}
-            <StatusState tone="loading" title="Checking access" headingLevel={1} />
-          {/if}
-        {/snippet}
-      </AuthorizationBoundary>
+      <StatusState {...props} headingLevel={1} />
     </Container>
   </main>
 {/snippet}
 
-<Story name="Allowed" asChild>{@render page("allowed")}</Story>
-<Story name="Anonymous" asChild>{@render page("anonymous")}</Story>
-<Story
-  name="Forbidden — desktop"
-  exportName="ForbiddenDesktop"
-  globals={reviewStoryGlobals.desktop}
-  asChild
-  play={verifyDenied}>{@render page("forbidden")}</Story
->
-<Story
-  name="Forbidden — mobile"
-  exportName="ForbiddenMobile"
-  globals={reviewStoryGlobals.mobile}
-  asChild
-  play={verifyDenied}>{@render page("forbidden")}</Story
->
-<Story name="Pending" asChild>{@render page("pending")}</Story>
-<Story name="Unavailable" asChild>{@render page("unavailable")}</Story>
-<Story name="Conditional content" asChild>
-  <Container size="sm">
-    <Stack gap="4">
-      <h2>Document actions</h2>
-      <AuthorizationProvider controller={fixed("allowed")}>
-        <AuthorizationBoundary><Button>Edit document</Button></AuthorizationBoundary>
-        <AuthorizationBoundary when={false}>
-          <Button tone="danger">Delete document</Button>
-          {#snippet fallback()}<p>Only the document owner can delete it.</p>{/snippet}
-        </AuthorizationBoundary>
-      </AuthorizationProvider>
-    </Stack>
-  </Container>
+<Story name="Anonymous" asChild>
+  {@render page({
+    title: "Agora account required",
+    description: "Only signed-in users can view this page.",
+    role: "presentation",
+    actions: login,
+  })}
+</Story>
+<Story name="Forbidden" asChild>
+  {@render page({
+    tone: "error",
+    title: "Access denied",
+    description: "You do not have permission to view this page.",
+    role: "presentation",
+  })}
+</Story>
+<Story name="Pending" asChild>{@render page({ tone: "loading", title: "Checking access" })}</Story>
+<Story name="Unavailable" asChild>
+  {@render page({
+    tone: "error",
+    title: "Unable to check access",
+    description: "The service is temporarily unavailable.",
+    actions: retry,
+  })}
 </Story>
 
 <style>

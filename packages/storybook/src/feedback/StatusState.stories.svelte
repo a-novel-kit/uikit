@@ -3,7 +3,6 @@
   import { Button, Container, StatusState } from "@a-novel-kit/uikit";
 
   import { defineMeta } from "@storybook/addon-svelte-csf";
-  import { expect, within } from "storybook/test";
 
   const { Story } = defineMeta({
     title: "Feedback/Status state",
@@ -23,15 +22,7 @@
   </main>
 {/snippet}
 
-<Story
-  name="Loading"
-  asChild
-  play={async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    await expect(canvas.getAllByRole("status")).toHaveLength(1);
-    await expect(canvas.getByRole("heading", { name: "Loading account" })).toBeVisible();
-  }}>{@render page("loading", "Loading account")}</Story
->
+<Story name="Loading" asChild>{@render page("loading", "Loading account")}</Story>
 <Story name="Error" asChild>{@render page("error", "Account unavailable", "The service could not be reached.")}</Story>
 <Story name="Success" asChild
   >{@render page("success", "Password updated", "Use your new password next time you log in.")}</Story
@@ -45,8 +36,8 @@
 <Story name="Long content" asChild>
   {@render page(
     "error",
-    "Your account information is temporarily unavailable",
-    "Your changes have been saved. You can try again without filling out the form a second time."
+    "Your reference files could not be uploaded to the workspace",
+    "The connection was interrupted. Your original files are still on this device and can be uploaded again."
   )}
 </Story>
 
