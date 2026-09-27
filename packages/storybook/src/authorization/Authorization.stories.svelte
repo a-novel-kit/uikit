@@ -28,7 +28,12 @@
         <EmptyState title="Protected content" />
         {#snippet fallback(decision)}
           {#if decision === "anonymous"}
-            <StatusState title="Account required" role="presentation" headingLevel={1}>
+            <StatusState
+              title="Agora account required"
+              description="Sign in to access this protected page."
+              role="presentation"
+              headingLevel={1}
+            >
               {#snippet actions()}<Button>Login</Button>{/snippet}
             </StatusState>
           {:else if decision === "forbidden"}
