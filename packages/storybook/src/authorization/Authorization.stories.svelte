@@ -30,7 +30,7 @@
           {#if decision === "anonymous"}
             <StatusState
               title="Agora account required"
-              description="Sign in to access this protected page."
+              description="Only signed-in users can view this page."
               role="presentation"
               headingLevel={1}
             >
