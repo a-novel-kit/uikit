@@ -1,4 +1,4 @@
-import { palette } from "@a-novel-kit/uikit-tokens/palette";
+import { colorSystem, palette } from "@a-novel-kit/uikit-tokens/palette";
 
 import Color from "colorjs.io";
 import { create } from "storybook/theming";
@@ -11,7 +11,7 @@ const colors = {
   accent: toManagerColor(palette.brand[11]),
   accentHover: toManagerColor(palette.brand[10]),
   border: toManagerColor(palette.neutral[5]),
-  canvas: toManagerColor(palette.neutral[0]),
+  canvas: toManagerColor(colorSystem.canvas),
   chrome: toManagerColor(palette.neutral[2]),
   control: toManagerColor(palette.neutral[3]),
   hover: toManagerColor(palette.neutral[4]),

@@ -12,6 +12,7 @@ const scaleMultipliers = Array.from({ length: scaleLength }, (_, index) => index
 
 // Compact authoring inputs; generated scales and public metadata derive from these values.
 const bases = Object.freeze({
+  canvas: "oklch(0.14478796 0 0)",
   harmony: Object.freeze({
     halfTurn: 180,
     brandHue: 232,
@@ -196,6 +197,7 @@ const gamutChromaRatios = Object.freeze(
 );
 
 const colorSystem = {
+  canvas: bases.canvas,
   contrast: {
     ...bases.contrast,
     actionValues: actionContrast,
@@ -266,6 +268,7 @@ const accentColorLines = chromaticFamilies.flatMap((family, familyIndex) => [
 const cssLines = [
   "/* Generated from one OKLCH basis and gamut-relative coefficients. Do not edit. */",
   ":root {",
+  `  --base-canvas: ${bases.canvas};`,
   `  --color-hue-brand: ${bases.harmony.brandHue};`,
   `  --color-harmony-half-turn: ${bases.harmony.halfTurn};`,
   `  --color-harmony-opposition-bias: ${bases.harmony.oppositionBias};`,

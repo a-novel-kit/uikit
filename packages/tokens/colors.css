@@ -1,5 +1,6 @@
 /* Generated from one OKLCH basis and gamut-relative coefficients. Do not edit. */
 :root {
+  --base-canvas: oklch(0.14478796 0 0);
   --color-hue-brand: 232;
   --color-harmony-half-turn: 180;
   --color-harmony-opposition-bias: -10;

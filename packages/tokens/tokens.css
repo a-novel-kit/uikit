@@ -99,9 +99,7 @@
   --color-mix-11: calc(var(--color-mix-base) * var(--multiplier-11));
   --color-mix-12: calc(var(--color-mix-base) * var(--multiplier-12));
 
-  --color-surface-canvas: oklch(
-    from var(--color-neutral-1) calc(l / var(--ratio-hierarchy)) c h
-  );
+  --color-surface-canvas: var(--base-canvas);
   --color-surface-sunken: var(--color-neutral-2);
   --color-surface-subtle: color-mix(
     in oklab,
@@ -231,7 +229,7 @@
 
   --color-feedback-info-surface: color-mix(
     in oklab,
-    var(--base-brand) var(--color-mix-2),
+    var(--base-brand) var(--color-mix-4),
     var(--color-surface-canvas)
   );
   --color-feedback-info-border: color-mix(
