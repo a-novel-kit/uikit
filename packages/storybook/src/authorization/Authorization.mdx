@@ -8,9 +8,8 @@ import { ArgTypes } from "@storybook/addon-docs/blocks";
 
 # Authorization
 
-Render a region only when its controller allows access. The boundary adds no DOM element.
-Applications own login redirects, HTTP status codes, permission checks, and localized fallback content.
-Enforce authorization on the server before returning protected data or performing an action.
+Control UI visibility from a server-derived access decision, without adding wrapper elements.
+Server endpoints must enforce permissions independently.
 
 ## Page states
 
@@ -24,19 +23,14 @@ Enforce authorization on the server before returning protected data or performin
 
 <Canvas of={Stories.ConditionalContent} />
 
-## Setup — once in the app or layout
+## Setup
 
-Mount one `AuthorizationProvider` above the pages and components that share an access decision.
-It exposes the application's controller through [Svelte context](https://svelte.dev/docs/svelte/context);
-it does not hide content or fetch a session. Consumers do not repeat this setup.
+Mount one `AuthorizationProvider` in the app or layout. Descendants share its controller through
+[Svelte context](https://svelte.dev/docs/svelte/context).
 
-The application adapter calls `createAuthorizationController` once per component tree and passes that
-controller to the layout below. Set `initialStatus` to the sanitized server decision for the initial
-render, or leave the default `pending` while it is unknown.
-Keep the controller instance and call `resolve(nextDecision)` when the decision changes.
-During SSR, create it per request; never share a module-level controller between users.
-
-**App or layout:**
+Create the controller with `createAuthorizationController`. Set `initialStatus` from the server decision;
+it defaults to `pending`. Apply later decisions with `resolve(status)`. Keep SSR instances request-local
+to isolate users.
 
 ```svelte
 <script lang="ts">
@@ -53,12 +47,15 @@ During SSR, create it per request; never share a module-level controller between
 </AuthorizationProvider>
 ```
 
-## Usage — inside descendant components
+The provider renders all children; visibility belongs to the boundaries below.
+Replacing its controller updates existing consumers.
+
+## Usage
 
 ### Render conditional content
 
-Use `AuthorizationBoundary` without a controller prop to consume the shared decision. Only `allowed`
-instantiates its children. Omit the fallback to hide a small region in every other state.
+`AuthorizationBoundary` inherits the nearest controller. It renders children for `allowed`,
+or `fallback(status)` otherwise. Without a fallback, the region disappears.
 
 ```svelte
 <script lang="ts">
@@ -70,14 +67,14 @@ instantiates its children. Omit the fallback to hide a small region in every oth
 </AuthorizationBoundary>
 ```
 
-For a page composition, supply a fallback that distinguishes `pending`, `anonymous`, `forbidden`, and
-`unavailable`. The application owns its localized headings, status announcements, recovery actions,
-login redirects, and HTTP responses. The boundary does not move focus or navigate.
+Page fallbacks distinguish an unfinished check (`pending`), a missing session (`anonymous`),
+denied permission (`forbidden`), and a failed check (`unavailable`). The application handles login,
+HTTP 403, retry, and accessible feedback; an outage should not send the user to login.
 
 ### Read the decision with the hook
 
-Call `useAuthorization()` during a descendant component's initialization. It reads the existing
-controller; it does not create a provider or perform another authorization check.
+Use `useAuthorization()` for custom presentation, such as disabling a control. Call it during component
+initialization and read state reactively:
 
 ```svelte
 <script lang="ts">
@@ -90,19 +87,15 @@ controller; it does not create a provider or perform another authorization check
 <Button disabled={!canEdit}>Edit document</Button>
 ```
 
-Read `authorization.state.status` in a template or derivation so it stays reactive. A missing provider
-throws; this is a setup error. Replacing the provider's controller also updates existing consumers.
+Both consumers throw when context is missing, unless the boundary receives an explicit controller.
 
-## Advanced — local overrides and isolated stories
+## Local overrides
 
-Supply `controller` directly to a boundary only when that region uses a separate access decision, or
-when an isolated story/test has no app provider. A resource-specific decision must include all relevant
-permissions; an override replaces the inherited decision rather than combining permission rules.
+Pass `controller` to a boundary for resource-specific permissions or an isolated story/test.
+Its descendants, including the fallback, inherit that decision; siblings keep the app decision.
 
-The boundary makes its active controller available to descendants, including `useAuthorization()` in
-the fallback. With an inherited controller this shares the same state, without creating another state
-owner. With an explicit override, only that subtree sees the override; siblings keep the app decision.
-The standalone page stories use fixed controllers to pin each review state.
+An override replaces the inherited decision. Include all required permissions when computing it.
+These stories use fixed controllers to keep review states stable.
 
 ## API
 
