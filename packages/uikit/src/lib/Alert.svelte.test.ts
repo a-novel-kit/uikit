@@ -9,6 +9,12 @@ import { describe, expect, it } from "vitest";
 import { render } from "@testing-library/svelte";
 
 describe("feedback composition", () => {
+  it("supports a named icon-only status without an empty text region", () => {
+    const { getByRole } = render(InlineMessage, { tone: "error", "aria-label": "Account unavailable" });
+    const status = getByRole("alert", { name: "Account unavailable" });
+    expect(status.children).toHaveLength(1);
+  });
+
   it("gives an inline loader one visible, announced message", () => {
     const { getAllByRole } = render(InlineMessage, {
       tone: "loading",

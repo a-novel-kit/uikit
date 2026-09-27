@@ -52,6 +52,13 @@
   </Stack>
 </Story>
 
+<Story name="Compact indicators" asChild>
+  <Inline gap="3">
+    <InlineMessage tone="loading" aria-label="Loading account" />
+    <InlineMessage tone="error" aria-label="Account unavailable" />
+  </Inline>
+</Story>
+
 <Story name="Section messages" asChild>
   <Stack gap="4">
     <Alert tone="loading" title="Loading account" />

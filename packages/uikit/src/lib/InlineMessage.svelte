@@ -18,7 +18,7 @@
 
 <span class="message {className}" role={tone === "error" ? "alert" : "status"} {...rest}>
   <FeedbackIcon {tone} size="sm" />
-  <span class="content">{@render children?.()}</span>
+  {#if children}<span class="content">{@render children()}</span>{/if}
 </span>
 
 <style>
