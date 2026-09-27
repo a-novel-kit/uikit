@@ -1,0 +1,53 @@
+import * as Stories from "./StatusState.stories.svelte";
+
+import { Meta, ResponsiveStoryPair } from "@a-novel-kit/uikit-storybook";
+
+import { ArgTypes } from "@storybook/addon-docs/blocks";
+
+<Meta of={Stories} />
+
+# Status state
+
+Show waiting or an outcome in a page or dialog. The surrounding layout owns page height and centering.
+
+<ResponsiveStoryPair desktop={Stories.Loading} mobile={Stories.Loading} meta={Stories} />
+<ResponsiveStoryPair desktop={Stories.Error} mobile={Stories.Error} meta={Stories} />
+<ResponsiveStoryPair desktop={Stories.Success} mobile={Stories.Success} meta={Stories} />
+<ResponsiveStoryPair desktop={Stories.Warning} mobile={Stories.Warning} meta={Stories} />
+<ResponsiveStoryPair desktop={Stories.Information} mobile={Stories.Information} meta={Stories} />
+<ResponsiveStoryPair desktop={Stories.LongContent} mobile={Stories.LongContent} meta={Stories} />
+
+## Usage
+
+```svelte
+<script lang="ts">
+  import { StatusState } from "@a-novel-kit/uikit";
+</script>
+
+<StatusState tone="loading" title="Loading account" />
+```
+
+The title and description accept text or Svelte snippets. Add an `actions` snippet when the user can
+recover or continue. Omit descriptions that repeat the title, and actions that serve no purpose.
+Use `headingLevel` to fit the document outline.
+
+## Related feedback
+
+`InlineMessage` provides a compact icon and label. `Alert` adds supporting text and actions within a
+section. Both accept `tone="loading"` and share the same spinner and status graphics with `StatusState`.
+`ToastRegion` and `ErrorSummary` use these graphics for notifications and linked validation errors.
+
+Use `Progress` for measurable progress, `Skeleton` to reserve the shape of pending content, and
+`EmptyState` for absent data. Pair placeholders with one loading message. Form submission buttons
+can communicate progress with their action label alone.
+
+## Accessibility
+
+The message owns one live region: errors use `alert`; other tones use `status`. Icons are decorative,
+and loading animation stops under reduced motion. On a static route where navigation announces the
+page, pass `role="presentation"` to retain the heading without a live announcement. Mark the region
+being refreshed with `aria-busy`; keep the loading message outside that busy region.
+
+## API
+
+<ArgTypes of={Stories} />

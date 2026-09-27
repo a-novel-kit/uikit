@@ -1,0 +1,48 @@
+import * as Stories from "./Feedback.stories.svelte";
+
+import { Canvas, Meta, ResponsiveStoryPair } from "@a-novel-kit/uikit-storybook";
+
+<Meta of={Stories} />
+
+# Feedback
+
+Use the smallest presentation that makes the state and next action clear.
+
+## Inline messages
+
+<Canvas of={Stories.Messages} />
+
+## Section messages
+
+<Canvas of={Stories.SectionMessages} />
+
+## Progress and placeholders
+
+<Canvas of={Stories.ProgressAndLoading} />
+
+## Empty content
+
+<Canvas of={Stories.EmptyState} />
+
+## Notifications
+
+<ResponsiveStoryPair desktop={Stories.ToastRegion} mobile={Stories.ToastRegion} meta={Stories} />
+
+## Usage
+
+```svelte
+<script lang="ts">
+  import { Alert, InlineMessage } from "@a-novel-kit/uikit";
+</script>
+
+<InlineMessage tone="loading">Loading account</InlineMessage>
+
+<Alert tone="error" title="Account unavailable">The service could not be reached.</Alert>
+```
+
+The same status graphic and neutral text hierarchy appear at every size. `Alert` supports an `icon`
+snippet for domain-specific graphics and an `actions` snippet for recovery controls.
+`StatusState` provides the centered page/dialog composition.
+
+Messages announce updates once; their graphics are decorative. Use `role="presentation"` for static
+content already announced by navigation. Keep loading messages outside the region marked `aria-busy`.

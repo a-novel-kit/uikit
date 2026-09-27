@@ -1,6 +1,6 @@
 <script module lang="ts">
   import type { AuthorizationController, AuthorizationStatus } from "@a-novel-kit/uikit";
-  import { AuthorizationBoundary, Button, Container, EmptyState, Stack } from "@a-novel-kit/uikit";
+  import { AuthorizationBoundary, Button, Container, EmptyState, Stack, StatusState } from "@a-novel-kit/uikit";
   import { reviewStoryGlobals } from "@a-novel-kit/uikit-storybook";
 
   import { defineMeta } from "@storybook/addon-svelte-csf";
@@ -28,17 +28,28 @@
         <EmptyState title="Protected content" />
         {#snippet fallback(decision)}
           {#if decision === "anonymous"}
-            <EmptyState title="Account required">
+            <StatusState title="Account required" role="presentation" headingLevel={1}>
               {#snippet actions()}<Button>Login</Button>{/snippet}
-            </EmptyState>
+            </StatusState>
           {:else if decision === "forbidden"}
-            <EmptyState title="Access denied" />
+            <StatusState
+              tone="error"
+              title="Access denied"
+              description="You do not have permission to view this page."
+              role="presentation"
+              headingLevel={1}
+            />
           {:else if decision === "unavailable"}
-            <EmptyState title="Unable to check access" description="The service is temporarily unavailable.">
+            <StatusState
+              tone="error"
+              title="Unable to check access"
+              description="The service is temporarily unavailable."
+              headingLevel={1}
+            >
               {#snippet actions()}<Button>Try again</Button>{/snippet}
-            </EmptyState>
+            </StatusState>
           {:else}
-            <EmptyState title="Checking access" />
+            <StatusState tone="loading" title="Checking access" headingLevel={1} />
           {/if}
         {/snippet}
       </AuthorizationBoundary>
@@ -81,6 +92,7 @@
   .page {
     display: grid;
     align-items: center;
+    box-sizing: border-box;
     background: var(--color-surface-canvas);
     padding-block: var(--space-6);
     min-block-size: 100dvb;
