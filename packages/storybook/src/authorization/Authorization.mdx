@@ -1,0 +1,59 @@
+import * as Stories from "./Authorization.stories.svelte";
+
+import { Canvas, Meta, ResponsiveStoryPair } from "@a-novel-kit/uikit-storybook";
+
+import { ArgTypes } from "@storybook/addon-docs/blocks";
+
+<Meta of={Stories} />
+
+# Authorization
+
+Render a region only when its controller allows access. The boundary adds no DOM element.
+Applications own login redirects, HTTP status codes, permission checks, and localized fallback content.
+Enforce authorization on the server before returning protected data or performing an action.
+
+## Page states
+
+<ResponsiveStoryPair desktop={Stories.Allowed} mobile={Stories.Allowed} meta={Stories} />
+<ResponsiveStoryPair desktop={Stories.Anonymous} mobile={Stories.Anonymous} meta={Stories} />
+<ResponsiveStoryPair desktop={Stories.ForbiddenDesktop} mobile={Stories.ForbiddenMobile} meta={Stories} />
+<ResponsiveStoryPair desktop={Stories.Pending} mobile={Stories.Pending} meta={Stories} />
+<ResponsiveStoryPair desktop={Stories.Unavailable} mobile={Stories.Unavailable} meta={Stories} />
+
+## Conditional content
+
+<Canvas of={Stories.ConditionalContent} />
+
+## Composition
+
+Create a controller per request or component tree. Feed it sanitized server decisions through
+`resolve(status)`. The default is `pending`; only `allowed` instantiates the protected snippet.
+`anonymous`, `forbidden`, and `unavailable` keep distinct meanings for recovery and routing.
+
+```svelte
+<script lang="ts">
+  import { AuthorizationBoundary, AuthorizationProvider, createAuthorizationController } from "@a-novel-kit/uikit";
+
+  const authorization = createAuthorizationController({ initialStatus: "pending" });
+</script>
+
+<AuthorizationProvider controller={authorization}>
+  <AuthorizationBoundary>
+    <p>Protected content</p>
+    {#snippet fallback(status)}<p>Access: {status}</p>{/snippet}
+  </AuthorizationBoundary>
+</AuthorizationProvider>
+```
+
+Inside a descendant's initialization, `const authorization = useAuthorization()` reads the same controller.
+Read `authorization.state.status` reactively; do not destructure it into a stale snapshot. An explicit
+boundary controller overrides the context for that region and its descendants. Replacing a provider's
+controller updates existing consumers. A missing provider throws when no explicit controller is supplied.
+
+Use a required fallback in a page composition to show pending, login, denied, or unavailable content.
+Small conditional regions may omit it. Fallbacks own their headings, accessible status announcements,
+and keyboard-operable recovery actions; the boundary does not move focus or navigate.
+
+## API
+
+<ArgTypes of={Stories} />

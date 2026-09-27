@@ -25,6 +25,7 @@ export default defineConfig({
       "packages/storybook-config",
       "packages/uikit",
       "packages/uikit/vitest.browser.config.ts",
+      "packages/uikit/vitest.ssr.config.ts",
       defineProject({
         optimizeDeps: { include: ["@storybook/addon-docs/blocks", "react", "react/jsx-dev-runtime"] },
         test: {
