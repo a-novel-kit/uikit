@@ -24,35 +24,85 @@ Enforce authorization on the server before returning protected data or performin
 
 <Canvas of={Stories.ConditionalContent} />
 
-## Composition
+## Setup — once in the app or layout
 
-Create a controller per request or component tree. Feed it sanitized server decisions through
-`resolve(status)`. The default is `pending`; only `allowed` instantiates the protected snippet.
-`anonymous`, `forbidden`, and `unavailable` keep distinct meanings for recovery and routing.
+Mount one `AuthorizationProvider` above the pages and components that share an access decision.
+It exposes the application's controller through [Svelte context](https://svelte.dev/docs/svelte/context);
+it does not hide content or fetch a session. Consumers do not repeat this setup.
+
+The application adapter calls `createAuthorizationController` once per component tree and passes that
+controller to the layout below. Set `initialStatus` to the sanitized server decision for the initial
+render, or leave the default `pending` while it is unknown.
+Keep the controller instance and call `resolve(nextDecision)` when the decision changes.
+During SSR, create it per request; never share a module-level controller between users.
+
+**App or layout:**
 
 ```svelte
 <script lang="ts">
-  import { AuthorizationBoundary, AuthorizationProvider, createAuthorizationController } from "@a-novel-kit/uikit";
+  import type { Snippet } from "svelte";
 
-  const authorization = createAuthorizationController({ initialStatus: "pending" });
+  import type { AuthorizationController } from "@a-novel-kit/uikit";
+  import { AuthorizationProvider } from "@a-novel-kit/uikit";
+
+  let { authorization, children }: { authorization: AuthorizationController; children: Snippet } = $props();
 </script>
 
 <AuthorizationProvider controller={authorization}>
-  <AuthorizationBoundary>
-    <p>Protected content</p>
-    {#snippet fallback(status)}<p>Access: {status}</p>{/snippet}
-  </AuthorizationBoundary>
+  {@render children()}
 </AuthorizationProvider>
 ```
 
-Inside a descendant's initialization, `const authorization = useAuthorization()` reads the same controller.
-Read `authorization.state.status` reactively; do not destructure it into a stale snapshot. An explicit
-boundary controller overrides the context for that region and its descendants. Replacing a provider's
-controller updates existing consumers. A missing provider throws when no explicit controller is supplied.
+## Usage — inside descendant components
 
-Use a required fallback in a page composition to show pending, login, denied, or unavailable content.
-Small conditional regions may omit it. Fallbacks own their headings, accessible status announcements,
-and keyboard-operable recovery actions; the boundary does not move focus or navigate.
+### Render conditional content
+
+Use `AuthorizationBoundary` without a controller prop to consume the shared decision. Only `allowed`
+instantiates its children. Omit the fallback to hide a small region in every other state.
+
+```svelte
+<script lang="ts">
+  import { AuthorizationBoundary, Button } from "@a-novel-kit/uikit";
+</script>
+
+<AuthorizationBoundary>
+  <Button>Edit document</Button>
+</AuthorizationBoundary>
+```
+
+For a page composition, supply a fallback that distinguishes `pending`, `anonymous`, `forbidden`, and
+`unavailable`. The application owns its localized headings, status announcements, recovery actions,
+login redirects, and HTTP responses. The boundary does not move focus or navigate.
+
+### Read the decision with the hook
+
+Call `useAuthorization()` during a descendant component's initialization. It reads the existing
+controller; it does not create a provider or perform another authorization check.
+
+```svelte
+<script lang="ts">
+  import { Button, useAuthorization } from "@a-novel-kit/uikit";
+
+  const authorization = useAuthorization();
+  const canEdit = $derived(authorization.state.status === "allowed");
+</script>
+
+<Button disabled={!canEdit}>Edit document</Button>
+```
+
+Read `authorization.state.status` in a template or derivation so it stays reactive. A missing provider
+throws; this is a setup error. Replacing the provider's controller also updates existing consumers.
+
+## Advanced — local overrides and isolated stories
+
+Supply `controller` directly to a boundary only when that region uses a separate access decision, or
+when an isolated story/test has no app provider. A resource-specific decision must include all relevant
+permissions; an override replaces the inherited decision rather than combining permission rules.
+
+The boundary makes its active controller available to descendants, including `useAuthorization()` in
+the fallback. With an inherited controller this shares the same state, without creating another state
+owner. With an explicit override, only that subtree sees the override; siblings keep the app decision.
+The standalone page stories use fixed controllers to pin each review state.
 
 ## API
 
