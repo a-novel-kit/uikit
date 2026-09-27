@@ -43,16 +43,26 @@ Errors use an alert live region; other tones use status. Override `role` for sta
 
 <style>
   .alert {
+    --alert-direction: to right;
+
     display: flex;
     align-items: flex-start;
     gap: var(--space-3);
     border-radius: var(--radius-lg);
-    border-inline-start: var(--border-width-strong) solid var(--alert-accent);
-    background: var(--alert-surface);
+    background-image: linear-gradient(
+      var(--alert-direction),
+      var(--alert-accent) var(--space-1),
+      transparent var(--space-1)
+    );
+    background-color: var(--alert-surface);
     padding-inline: var(--space-4);
     padding-block: var(--space-4);
     color: var(--color-text-primary);
     overflow-wrap: anywhere;
+  }
+
+  .alert:dir(rtl) {
+    --alert-direction: to left;
   }
 
   .info,
