@@ -1,3 +1,4 @@
+import { execFileSync } from "node:child_process";
 import { access, readFile, readdir } from "node:fs/promises";
 import { dirname, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -206,3 +207,17 @@ for (const filename of publicModules) {
 if (issues.length > 0) {
   throw new Error("Package contract violations:\n" + issues.join("\n"));
 }
+
+// The headless entry must resolve without a Svelte compiler, CSS loader, or auth client.
+execFileSync(
+  process.execPath,
+  [
+    "--input-type=module",
+    "--eval",
+    `import assert from "node:assert/strict";
+     import { createAuthorizationController, useAuthorization } from "@a-novel-kit/uikit/authorization";
+     assert.equal(createAuthorizationController({ getStatus: () => "allowed" }).state.status, "allowed");
+     assert.equal(typeof useAuthorization, "function");`,
+  ],
+  { cwd: resolve(packagesRoot, "uikit"), stdio: "pipe" }
+);

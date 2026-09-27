@@ -1,6 +1,17 @@
 // Public API of @a-novel-kit/uikit. Platforms consume stable, styled components
 // from this entry point rather than depending on implementation libraries.
 export type { Content } from "./content";
+export { createAuthorizationController, useAuthorization } from "./authorization";
+export type {
+  AuthorizationController,
+  AuthorizationControllerOptions,
+  AuthorizationState,
+  AuthorizationStatus,
+} from "./authorization";
+export { default as AuthorizationBoundary } from "./AuthorizationBoundary.svelte";
+export type { AuthorizationBoundaryProps } from "./AuthorizationBoundary.svelte";
+export { default as AuthorizationProvider } from "./AuthorizationProvider.svelte";
+export type { AuthorizationProviderProps } from "./AuthorizationProvider.svelte";
 export {
   createCheckedController,
   createComboboxController,
@@ -27,7 +38,7 @@ export type {
   ValueControllerOptions,
   ValueState,
 } from "./controllers.svelte";
-export type { ComponentSize, FeedbackTone, LayoutGap, SelectionOption } from "./types";
+export type { ComponentSize, FeedbackState, FeedbackTone, LayoutGap, SelectionOption } from "./types";
 export { default as Accordion } from "./Accordion.svelte";
 export type { AccordionProps } from "./Accordion.svelte";
 export { default as AccordionItem } from "./AccordionItem.svelte";
@@ -121,6 +132,8 @@ export { default as SplitPane } from "./SplitPane.svelte";
 export type { SplitPaneProps } from "./SplitPane.svelte";
 export { default as Stack } from "./Stack.svelte";
 export type { StackProps } from "./Stack.svelte";
+export { default as StatusState } from "./StatusState.svelte";
+export type { StatusStateProps } from "./StatusState.svelte";
 export { default as Switch } from "./Switch.svelte";
 export type { SwitchController, SwitchProps } from "./Switch.svelte";
 export { default as Tabs } from "./Tabs.svelte";

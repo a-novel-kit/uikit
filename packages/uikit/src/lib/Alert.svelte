@@ -1,6 +1,6 @@
 <script lang="ts" module>
   import type { Content } from "./content";
-  import type { FeedbackTone } from "./types";
+  import type { FeedbackState } from "./types";
 
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
@@ -8,10 +8,10 @@
   /** Props for a prominent status message with optional actions. */
   export interface AlertProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
     /** Semantic status conveyed by the alert. */
-    tone?: FeedbackTone;
+    tone?: FeedbackState;
     /** Alert heading. */
     title: Content;
-    /** Optional leading graphic. */
+    /** Replaces the default status graphic. */
     icon?: Snippet;
     /** Optional controls rendered after the message. */
     actions?: Snippet;
@@ -20,6 +20,7 @@
 
 <script lang="ts">
   import RenderContent from "./Content.svelte";
+  import FeedbackIcon from "./internal/FeedbackIcon.svelte";
 
   let { tone = "info", title, icon, actions, class: className = "", children, ...rest }: AlertProps = $props();
 
@@ -27,10 +28,10 @@
 </script>
 
 <div class="alert {tone} {className}" role={liveRole} {...rest}>
-  {#if icon}<div class="icon" aria-hidden="true">{@render icon()}</div>{/if}
+  <FeedbackIcon {tone} children={icon} />
   <div class="content">
     <strong><RenderContent content={title} /></strong>
-    <div class="message">{@render children?.()}</div>
+    {#if children}<div class="message">{@render children()}</div>{/if}
     {#if actions}<div class="actions">{@render actions()}</div>{/if}
   </div>
 </div>
@@ -38,57 +39,42 @@
 <style>
   .alert {
     display: flex;
-    position: relative;
+    align-items: flex-start;
     gap: var(--space-3);
     border-radius: var(--radius-lg);
     background: var(--alert-surface);
-    padding-inline: var(--space-5) var(--space-4);
+    padding-inline: var(--space-4);
     padding-block: var(--space-4);
-    overflow: clip;
     color: var(--color-text-primary);
+    overflow-wrap: anywhere;
   }
 
-  .alert::before {
-    position: absolute;
-    inset-block: 0;
-    inset-inline-start: 0;
-    background: var(--alert-accent);
-    inline-size: var(--border-width-strong);
-    content: "";
-  }
-
-  .info {
+  .info,
+  .loading {
     --alert-surface: var(--color-feedback-info-surface);
-    --alert-accent: var(--color-feedback-info-text);
   }
 
   .success {
     --alert-surface: var(--color-feedback-success-surface);
-    --alert-accent: var(--color-feedback-success-text);
   }
 
   .warning {
     --alert-surface: var(--color-feedback-warning-surface);
-    --alert-accent: var(--color-feedback-warning-text);
   }
 
   .error {
     --alert-surface: var(--color-feedback-error-surface);
-    --alert-accent: var(--color-feedback-error-text);
   }
 
-  .icon {
-    flex: none;
-    color: var(--alert-accent);
-  }
   .content {
     display: grid;
+    align-self: center;
     gap: var(--space-2);
     min-inline-size: 0;
   }
   strong {
-    color: var(--alert-accent);
     font-size: var(--font-size-sm);
+    line-height: var(--line-height-compact);
   }
   .message {
     color: var(--color-text-secondary);

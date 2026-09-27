@@ -25,6 +25,7 @@ export default defineConfig({
       "packages/storybook-config",
       "packages/uikit",
       "packages/uikit/vitest.browser.config.ts",
+      "packages/uikit/vitest.ssr.config.ts",
       defineProject({
         optimizeDeps: { include: ["@storybook/addon-docs/blocks", "react", "react/jsx-dev-runtime"] },
         test: {
@@ -42,7 +43,15 @@ export default defineConfig({
       defineProject({
         extends: true,
         root: storybookRoot,
-        resolve: { alias: { "@a-novel-kit/uikit": uikitSource } },
+        resolve: {
+          alias: [
+            { find: /^@a-novel-kit\/uikit$/, replacement: uikitSource },
+            {
+              find: /^@a-novel-kit\/uikit\/authorization$/,
+              replacement: fileURLToPath(new URL("./packages/uikit/src/lib/authorization.ts", import.meta.url)),
+            },
+          ],
+        },
         plugins: [
           svelte({ configFile: storybookSvelteConfig }),
           storybookTest({

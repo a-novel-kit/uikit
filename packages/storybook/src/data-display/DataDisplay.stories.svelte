@@ -28,6 +28,14 @@
   </Card>
 </Story>
 
+<Story name="Status labels" asChild>
+  <Inline gap="2" wrap>
+    <Badge>Draft</Badge><Badge tone="brand">Active</Badge><Badge tone="success">Ready</Badge><Badge tone="warning"
+      >Review</Badge
+    ><Badge tone="danger">Failed</Badge>
+  </Inline>
+</Story>
+
 <Story name="Description list" asChild>
   <DescriptionList columns={3}>
     <div><dt>Owner</dt><dd>Ada Lovelace</dd></div>

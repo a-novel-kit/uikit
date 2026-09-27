@@ -25,6 +25,7 @@
 <style>
   .spinner {
     display: inline-block;
+    flex: none;
     animation: spin var(--duration-slow) linear infinite;
     box-sizing: border-box;
     border: var(--border-width-strong) solid var(--color-border-default);
@@ -53,6 +54,13 @@
   @media (prefers-reduced-motion: reduce) {
     .spinner {
       animation: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .spinner {
+      border-color: GrayText;
+      border-block-start-color: CanvasText;
     }
   }
 </style>

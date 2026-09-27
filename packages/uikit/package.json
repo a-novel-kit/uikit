@@ -13,6 +13,10 @@
     ".": {
       "types": "./dist/index.d.ts",
       "svelte": "./dist/index.js"
+    },
+    "./authorization": {
+      "types": "./dist/authorization.d.ts",
+      "default": "./dist/authorization.js"
     }
   },
   "svelte": "./dist/index.js",

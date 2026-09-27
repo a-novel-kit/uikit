@@ -1,0 +1,130 @@
+import * as Stories from "./Authorization.stories.svelte";
+
+import { Meta, ResponsiveStoryPair } from "@a-novel-kit/uikit-storybook";
+
+import { ArgTypes } from "@storybook/addon-docs/blocks";
+
+<Meta of={Stories} />
+
+# Authorization
+
+Control UI visibility from a server-derived access decision, without adding wrapper elements.
+Server endpoints must enforce permissions independently.
+
+## Page states
+
+The boundary has no appearance of its own. These application-owned fallback examples use `StatusState`
+for loading, guidance, and errors. Access decisions and transitions are covered by component and SSR tests.
+
+<ResponsiveStoryPair desktop={Stories.Anonymous} mobile={Stories.Anonymous} meta={Stories} />
+<ResponsiveStoryPair desktop={Stories.Forbidden} mobile={Stories.Forbidden} meta={Stories} />
+<ResponsiveStoryPair desktop={Stories.Pending} mobile={Stories.Pending} meta={Stories} />
+<ResponsiveStoryPair desktop={Stories.Unavailable} mobile={Stories.Unavailable} meta={Stories} />
+
+## Setup
+
+Initialize your authentication client in application code, outside UIKit. When it handles tokens,
+keep it on the server. Pass a safe access decision to the UI, not credentials or protected data.
+
+Mount one `AuthorizationProvider` in the app or layout. The controller needs only a synchronous
+`getStatus` reader; it follows changes to that reactive source without fetching or copying state.
+Create it per layout instance, never as a server-wide singleton.
+
+```svelte
+<script lang="ts">
+  import type { Snippet } from "svelte";
+
+  import { AuthorizationProvider } from "@a-novel-kit/uikit";
+  import { type AuthorizationStatus, createAuthorizationController } from "@a-novel-kit/uikit/authorization";
+
+  let { data, children }: { data: { access: AuthorizationStatus }; children: Snippet } = $props();
+  const authorization = createAuthorizationController({ getStatus: () => data.access });
+</script>
+
+<AuthorizationProvider controller={authorization}>
+  {@render children()}
+</AuthorizationProvider>
+```
+
+Your adapter maps a verified signed-in session to `allowed`, no session to `anonymous`, denied
+permission to `forbidden`, an unfinished check to `pending`, and a failed check to `unavailable`.
+Do not infer identity from a successful HTTP response: the auth service also supports anonymous sessions.
+
+The headless `/authorization` entry imports no visual components or auth-service package. The provider
+shares its controller through [Svelte context](https://svelte.dev/docs/svelte/context); it does not hide
+children. Replacing the controller updates existing consumers.
+
+## Usage
+
+### Render conditional content
+
+`AuthorizationBoundary` inherits the nearest controller and renders children only for `allowed`.
+Use `when` for an additional permission; it defaults to `true`.
+
+```svelte
+<script lang="ts">
+  import { AuthorizationBoundary, Button } from "@a-novel-kit/uikit";
+
+  let { canEdit }: { canEdit: boolean } = $props();
+</script>
+
+<AuthorizationBoundary when={canEdit}>
+  <Button>Edit document</Button>
+</AuthorizationBoundary>
+```
+
+A false `when` changes allowed access to `forbidden`; other states are preserved. Descendants,
+including the fallback, inherit this effective decision. Siblings are unaffected.
+
+For non-allowed states, `fallback(status)` replaces the content; without one, the region disappears.
+The application owns page feedback, login with a return destination, HTTP 403, and retry. An outage
+must not redirect to login. Server loads and actions must enforce access independently of these views.
+
+### Read the decision with the hook
+
+Use `useAuthorization()` for custom presentation, such as disabling a control. Call it during component
+initialization and read state reactively:
+
+```svelte
+<script lang="ts">
+  import { Button } from "@a-novel-kit/uikit";
+  import { useAuthorization } from "@a-novel-kit/uikit/authorization";
+
+  let { isOwner }: { isOwner: boolean } = $props();
+  const authorization = useAuthorization(() => isOwner);
+  const canEdit = $derived(authorization.state.status === "allowed");
+</script>
+
+<Button disabled={!canEdit}>Edit document</Button>
+```
+
+Omit the callback to read the inherited decision unchanged. Rules are synchronous and only run when
+the source allows access. Both consumers throw when context is missing, unless the boundary receives
+an explicit controller.
+
+## Local overrides
+
+For a default rule shared by every consumer, pass `when: () => canUseWorkspace` to the controller
+factory. Boundary props and hook rules can further restrict it, never bypass a denial.
+
+To replace the whole decision, pass another `controller` to a boundary. Include all required checks
+in that controller; its descendants use the replacement while siblings keep the app decision.
+
+An isolated story needs only read-only state—no auth client or dummy methods:
+
+```svelte
+<script lang="ts">
+  import { AuthorizationBoundary, Button } from "@a-novel-kit/uikit";
+  import type { AuthorizationController } from "@a-novel-kit/uikit/authorization";
+
+  const authorization: AuthorizationController = { state: { status: "allowed" } };
+</script>
+
+<AuthorizationBoundary controller={authorization}>
+  <Button>Edit document</Button>
+</AuthorizationBoundary>
+```
+
+## API
+
+<ArgTypes of={Stories} />

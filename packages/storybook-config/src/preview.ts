@@ -6,6 +6,18 @@ import "@a-novel-kit/uikit-fonts/fonts.css";
 import "@a-novel-kit/uikit-tokens/tokens.css";
 
 import type { Preview } from "@storybook/svelte-vite";
+import { SyntaxHighlighter } from "storybook/internal/components";
+
+// Storybook has no Svelte grammar; reuse markup and its embedded script/style highlighting.
+SyntaxHighlighter.registerLanguage(
+  "svelte",
+  Object.assign(
+    (highlighter: { alias: (language: string, alias: string) => void }) => highlighter.alias("markup", "svelte"),
+    {
+      displayName: "svelte",
+    }
+  )
+);
 
 const preview: Preview = {
   parameters: {

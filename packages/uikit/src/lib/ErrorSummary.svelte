@@ -30,6 +30,7 @@
 
 <script lang="ts">
   import RenderContent from "./Content.svelte";
+  import FeedbackIcon from "./internal/FeedbackIcon.svelte";
 
   import { tick } from "svelte";
 
@@ -63,22 +64,28 @@
   tabindex="-1"
   {...rest}
 >
-  <svelte:element this={`h${headingLevel}`} id={titleId}><RenderContent content={title} /></svelte:element>
-  {#if description}<p><RenderContent content={description} /></p>{/if}
-  <ul>
-    {#each errors as error (error.id)}
-      <li><a href={error.href}><RenderContent content={error.message} /></a></li>
-    {/each}
-  </ul>
+  <FeedbackIcon tone="error" />
+  <div class="content">
+    <svelte:element this={`h${headingLevel}`} id={titleId} class="title"
+      ><RenderContent content={title} /></svelte:element
+    >
+    {#if description}<p><RenderContent content={description} /></p>{/if}
+    <ul>
+      {#each errors as error (error.id)}
+        <li><a href={error.href}><RenderContent content={error.message} /></a></li>
+      {/each}
+    </ul>
+  </div>
 </section>
 
 <style>
   .error-summary {
-    display: grid;
+    display: flex;
+    align-items: flex-start;
     gap: var(--space-3);
     border-radius: var(--radius-lg);
     background: var(--color-feedback-error-surface);
-    padding: var(--space-5);
+    padding: var(--space-4);
     color: var(--color-text-primary);
   }
 
@@ -87,28 +94,28 @@
     outline-offset: var(--focus-ring-offset);
   }
 
-  :global(.error-summary > h2),
-  :global(.error-summary > h3),
-  :global(.error-summary > h4),
-  :global(.error-summary > h5),
-  :global(.error-summary > h6),
+  .content {
+    display: grid;
+    gap: var(--space-2);
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .title,
   p,
   ul {
     margin: 0;
   }
 
-  :global(.error-summary > h2),
-  :global(.error-summary > h3),
-  :global(.error-summary > h4),
-  :global(.error-summary > h5),
-  :global(.error-summary > h6) {
-    color: var(--color-feedback-error-text);
-    font-size: var(--font-size-lg);
-    font-family: var(--font-family-display);
+  .title {
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-compact);
   }
 
   p {
     color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
     line-height: var(--line-height-normal);
   }
 
@@ -116,6 +123,7 @@
     display: grid;
     gap: var(--space-2);
     padding-inline-start: var(--space-5);
+    font-size: var(--font-size-sm);
   }
 
   a {

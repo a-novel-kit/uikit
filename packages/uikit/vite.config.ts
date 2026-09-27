@@ -11,6 +11,6 @@ export default defineConfig({
     name: "uikit-unit",
     environment: "jsdom",
     include: ["src/**/*.{test,spec}.ts"],
-    exclude: ["src/**/*.browser.test.ts"],
+    exclude: ["src/**/*.browser.test.ts", "src/**/*.ssr.test.ts"],
   },
 });

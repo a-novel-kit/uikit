@@ -4,6 +4,9 @@ export type ComponentSize = "sm" | "md" | "lg";
 /** Semantic roles shared by status and feedback components. */
 export type FeedbackTone = "info" | "success" | "warning" | "error";
 
+/** Feedback for pending work or a completed outcome. */
+export type FeedbackState = FeedbackTone | "loading";
+
 /** Spacing steps supported by the layout primitives. */
 export type LayoutGap = "0" | "1" | "2" | "3" | "4" | "6" | "8" | "12" | "16";
 

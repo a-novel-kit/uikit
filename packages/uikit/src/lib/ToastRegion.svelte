@@ -34,13 +34,15 @@
 
 <script lang="ts">
   import RenderContent from "./Content.svelte";
+  import FeedbackIcon from "./internal/FeedbackIcon.svelte";
 
   let { toasts, label = "Notifications", onDismiss, class: className = "", ...rest }: ToastRegionProps = $props();
 </script>
 
 <section class="region {className}" aria-label={label} {...rest}>
   {#each toasts as toast (toast.id)}
-    <div class="toast {toast.tone ?? 'info'}" role={toast.tone === "error" ? "alert" : "status"}>
+    <div class="toast" role={toast.tone === "error" ? "alert" : "status"}>
+      <FeedbackIcon tone={toast.tone ?? "info"} />
       <div class="message">
         {#if toast.title}<strong><RenderContent content={toast.title} /></strong>{/if}
         <p><RenderContent content={toast.message} /></p>
@@ -70,46 +72,27 @@
   }
   .toast {
     display: flex;
-    position: relative;
     align-items: flex-start;
     gap: var(--space-3);
     box-shadow: var(--shadow-lg);
     border-radius: var(--radius-lg);
     background: var(--color-surface-island-strong);
-    padding-inline: var(--space-5) var(--space-4);
+    padding-inline: var(--space-4);
     padding-block: var(--space-4);
-    overflow: clip;
     pointer-events: auto;
     color: var(--color-text-primary);
   }
-  .toast::before {
-    position: absolute;
-    inset-block: 0;
-    inset-inline-start: 0;
-    background: var(--toast-accent);
-    inline-size: var(--border-width-strong);
-    content: "";
-  }
-  .info {
-    --toast-accent: var(--color-feedback-info-text);
-  }
-  .success {
-    --toast-accent: var(--color-feedback-success-text);
-  }
-  .warning {
-    --toast-accent: var(--color-feedback-warning-text);
-  }
-  .error {
-    --toast-accent: var(--color-feedback-error-text);
-  }
   .message {
     flex: 1;
+    align-self: center;
     min-inline-size: 0;
+    overflow-wrap: anywhere;
   }
   strong {
     display: block;
     margin-block-end: var(--space-1);
     font-size: var(--font-size-sm);
+    line-height: var(--line-height-compact);
     font-family: var(--font-family-interface);
   }
   p {
@@ -126,7 +109,7 @@
     border: 0;
     border-radius: var(--radius-sm);
     background: transparent;
-    padding: var(--space-1);
+    padding: var(--space-2);
     color: var(--color-text-muted);
     font: inherit;
     font-size: var(--font-size-xs);
