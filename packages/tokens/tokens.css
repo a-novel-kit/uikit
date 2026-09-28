@@ -259,7 +259,7 @@
 
   --color-feedback-info-surface: color-mix(
     in oklab,
-    var(--base-brand) var(--color-mix-4),
+    var(--base-brand) var(--color-mix-2),
     var(--color-surface-canvas)
   );
   --color-feedback-info-border: color-mix(
@@ -292,7 +292,7 @@
   --color-feedback-warning-text: var(--base-pressure);
   --color-feedback-error-surface: color-mix(
     in oklab,
-    var(--base-pressure) var(--color-mix-3),
+    var(--base-pressure) var(--color-mix-2),
     var(--color-surface-canvas)
   );
   --color-feedback-error-border: color-mix(

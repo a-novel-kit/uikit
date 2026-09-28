@@ -34,15 +34,10 @@ describe("shared dark theme", () => {
     }
   });
 
-  it("keeps the shared role and loader tint visible above raised surfaces", () => {
-    expect(sample("--color-feedback-info-surface").background.oklch.l).toBeGreaterThan(
-      sample("--color-surface-island-strong").background.oklch.l
-    );
-  });
-
-  it.each(["info", "success", "warning", "error"])("keeps %s feedback readable on its tinted surface", (tone) => {
+  it.each(["info", "success", "warning", "error"])("keeps %s feedback readable on a subdued surface", (tone) => {
     const { background, foreground } = sample(`--color-feedback-${tone}-surface`, `--color-feedback-${tone}-text`);
     expect(foreground.contrast(background, "WCAG21")).toBeGreaterThanOrEqual(colorSystem.contrast.minimumNormalText);
     expect(background.oklch.l).toBeGreaterThan(sample("--color-surface-canvas").background.oklch.l);
+    expect(background.oklch.l).toBeLessThan(sample("--color-surface-island-strong").background.oklch.l);
   });
 });
