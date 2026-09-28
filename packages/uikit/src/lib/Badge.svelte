@@ -22,13 +22,14 @@ Labels a category or status compactly. Use InlineMessage when changes need live 
   .badge {
     display: inline-block;
     box-sizing: border-box;
+    box-shadow: 0 0 var(--space-3) color-mix(in oklab, var(--badge-accent) var(--color-mix-2), transparent);
     border-radius: var(--radius-md);
-    background: color-mix(in oklab, var(--badge-accent) var(--color-mix-3), var(--color-surface-raised));
+    background: var(--badge-accent);
     padding-inline: var(--space-3);
     padding-block: var(--space-1);
     inline-size: fit-content;
     max-inline-size: 100%;
-    color: color-mix(in oklab, var(--badge-accent) var(--color-mix-12), var(--color-text-primary));
+    color: var(--color-text-inverse);
     font-weight: var(--font-weight-bold);
     font-size: var(--font-size-sm);
     line-height: var(--line-height-compact);
