@@ -46,7 +46,7 @@ Errors use an alert live region; other tones use status. Override `role` for sta
     --alert-direction: to right;
 
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: var(--space-3);
     border-radius: var(--radius-lg);
     background-image: linear-gradient(
@@ -88,7 +88,6 @@ Errors use an alert live region; other tones use status. Override `role` for sta
 
   .content {
     display: grid;
-    align-self: center;
     gap: var(--space-2);
     min-inline-size: 0;
   }
