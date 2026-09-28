@@ -1,5 +1,6 @@
 <script module lang="ts">
   import { defineMeta } from "@storybook/addon-svelte-csf";
+  import { expect } from "storybook/test";
 
   const { Story } = defineMeta({
     title: "Foundations/Motion & depth",
@@ -31,11 +32,54 @@
   </div>
 </Story>
 
-<Story name="Glow" asChild>
+<Story
+  name="Glow"
+  asChild
+  parameters={{
+    docs: {
+      description: {
+        story:
+          "Three faint layers create a gradual falloff behind the surface. Glow is decorative; text and focus indicators remain independent.",
+      },
+    },
+  }}
+  play={({ canvas }) => {
+    for (const name of ["Brand", "Pressure", "Signal"]) {
+      const sample = canvas.getByText(name).parentElement!;
+      expect(getComputedStyle(sample).boxShadow).toContain("0px 0px 16px 0px");
+      expect(getComputedStyle(sample).boxShadow).toContain("0px 0px 40px -4px");
+      expect(getComputedStyle(sample).boxShadow).toContain("0px 0px 80px -8px");
+      expect(getComputedStyle(sample).boxShadow).not.toContain("0px 0px 0px");
+      expect(getComputedStyle(sample).textShadow).toBe("none");
+    }
+  }}
+>
   <div class="glow-grid">
     <div class="glow brand"><strong>Brand</strong><span>Selected or focused</span></div>
     <div class="glow pressure"><strong>Pressure</strong><span>Destructive confirmation</span></div>
     <div class="glow signal"><strong>Signal</strong><span>Positive confirmation</span></div>
+  </div>
+</Story>
+
+<Story
+  name="Strong glow"
+  asChild
+  parameters={{
+    docs: { description: { story: "The same soft falloff with slightly more emphasis for accent surfaces." } },
+  }}
+  play={({ canvas }) => {
+    for (const name of ["Brand", "Pressure"]) {
+      const sample = canvas.getByText(name).parentElement!;
+      expect(getComputedStyle(sample).boxShadow).toContain("0px 0px 16px 0px");
+      expect(getComputedStyle(sample).boxShadow).toContain("0px 0px 40px -4px");
+      expect(getComputedStyle(sample).boxShadow).toContain("0px 0px 80px -8px");
+      expect(getComputedStyle(sample).textShadow).toBe("none");
+    }
+  }}
+>
+  <div class="glow-grid">
+    <div class="glow brand strong"><strong>Brand</strong><code>shadow-glow-brand-strong</code></div>
+    <div class="glow pressure strong"><strong>Pressure</strong><code>shadow-glow-pressure-strong</code></div>
   </div>
 </Story>
 
@@ -47,6 +91,11 @@
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
     gap: var(--space-5);
     inline-size: 100%;
+  }
+  .glow-grid {
+    gap: var(--space-12);
+    box-sizing: border-box;
+    padding: var(--space-8);
   }
   .surface,
   .glow {
@@ -135,6 +184,12 @@
   .signal {
     box-shadow: var(--shadow-glow-signal);
     background: color-mix(in oklab, var(--base-signal) var(--color-mix-2), var(--color-surface-island));
+  }
+  .brand.strong {
+    box-shadow: var(--shadow-glow-brand-strong);
+  }
+  .pressure.strong {
+    box-shadow: var(--shadow-glow-pressure-strong);
   }
   @media (prefers-reduced-motion: reduce) {
     .motion span {

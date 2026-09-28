@@ -22,7 +22,7 @@ function sample(background: string, foreground = "--color-text-primary") {
 }
 
 describe("shared dark theme", () => {
-  it("renders the agreed neutral canvas in CSS, palette metadata, and Storybook chrome", () => {
+  it("renders the agreed grey-blue canvas in CSS, palette metadata, and Storybook chrome", () => {
     const canvas = sample("--color-surface-canvas").background;
     const colors = [canvas, new Color(colorSystem.canvas)];
     for (const value of [agoraTheme.appBg, agoraTheme.appContentBg, agoraTheme.appPreviewBg]) {
@@ -30,19 +30,14 @@ describe("shared dark theme", () => {
       colors.push(new Color(value!));
     }
     for (const color of colors) {
-      expect(color.to("srgb").coords.map((channel) => Math.round(channel * 255))).toEqual([10, 10, 10]);
+      expect(color.to("srgb").coords.map((channel) => Math.round(channel * 255))).toEqual([6, 11, 14]);
     }
   });
 
-  it("keeps the shared role and loader tint visible above raised surfaces", () => {
-    expect(sample("--color-feedback-info-surface").background.oklch.l).toBeGreaterThan(
-      sample("--color-surface-island-strong").background.oklch.l
-    );
-  });
-
-  it.each(["info", "success", "warning", "error"])("keeps %s feedback readable on its tinted surface", (tone) => {
+  it.each(["info", "success", "warning", "error"])("keeps %s feedback readable on a subdued surface", (tone) => {
     const { background, foreground } = sample(`--color-feedback-${tone}-surface`, `--color-feedback-${tone}-text`);
     expect(foreground.contrast(background, "WCAG21")).toBeGreaterThanOrEqual(colorSystem.contrast.minimumNormalText);
     expect(background.oklch.l).toBeGreaterThan(sample("--color-surface-canvas").background.oklch.l);
+    expect(background.oklch.l).toBeLessThan(sample("--color-surface-island-strong").background.oklch.l);
   });
 });

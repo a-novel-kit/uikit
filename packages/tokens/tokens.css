@@ -103,10 +103,14 @@
   --color-surface-sunken: var(--color-neutral-2);
   --color-surface-subtle: color-mix(
     in oklab,
-    var(--color-neutral-3) var(--color-mix-12),
+    var(--color-neutral-3) var(--color-mix-8),
     var(--color-neutral-4)
   );
-  --color-surface-raised: var(--color-neutral-4);
+  --color-surface-raised: color-mix(
+    in oklab,
+    var(--color-neutral-5) var(--color-mix-2),
+    var(--color-neutral-4)
+  );
   --color-surface-overlay: color-mix(
     in oklab,
     var(--color-neutral-4) var(--color-mix-8),
@@ -154,7 +158,7 @@
 
   --color-control-surface: color-mix(
     in oklab,
-    var(--color-neutral-5) var(--color-mix-4),
+    var(--color-neutral-5) var(--color-mix-5),
     var(--color-surface-sunken)
   );
   --color-control-surface-hover: color-mix(
@@ -185,7 +189,15 @@
   --color-action-primary-active: var(--color-brand-8);
   --color-action-primary-selected: var(--base-brand);
   --color-action-primary-text: var(--color-text-inverse);
-  --color-action-neutral: var(--color-neutral-4);
+  --color-action-primary-foreground: color-mix(
+    in oklab,
+    var(--base-brand) var(--color-mix-12),
+    var(--color-text-primary)
+  );
+  --color-action-primary-foreground-hover: oklch(
+    from var(--color-action-primary-foreground) calc(l + (1 - l) * var(--opacity-base)) c h
+  );
+  --color-action-neutral: var(--color-surface-raised);
   --color-action-neutral-hover: var(--color-neutral-5);
   --color-action-neutral-active: var(--color-neutral-3);
   --color-action-neutral-selected: var(--color-neutral-6);
@@ -199,9 +211,27 @@
   --color-action-danger-active: var(--color-pressure-8);
   --color-action-danger-selected: var(--base-pressure);
   --color-action-danger-text: var(--color-text-inverse);
-  --color-action-ghost-text: var(--color-action-primary);
-  --color-action-ghost-hover: var(--color-surface-glass-hover);
-  --color-action-ghost-hover-text: var(--color-brand-11);
+  --color-action-danger-foreground: color-mix(
+    in oklab,
+    var(--base-pressure) var(--color-mix-12),
+    var(--color-text-primary)
+  );
+  --color-action-danger-foreground-hover: oklch(
+    from var(--color-action-danger-foreground) calc(l + (1 - l) * var(--opacity-base)) c h
+  );
+  --color-action-ghost-text: var(--color-action-primary-foreground);
+  --color-action-subtle-hover: color-mix(
+    in oklab,
+    currentColor var(--color-mix-2),
+    transparent
+  );
+  --color-action-subtle-active: color-mix(
+    in oklab,
+    currentColor var(--color-mix-3),
+    transparent
+  );
+  --color-action-ghost-hover: var(--color-action-subtle-hover);
+  --color-action-ghost-hover-text: var(--color-action-primary-foreground-hover);
   --color-action-ghost-selected: var(--color-surface-selected);
   --color-action-ghost-selected-border: color-mix(
     in oklab,
@@ -229,7 +259,7 @@
 
   --color-feedback-info-surface: color-mix(
     in oklab,
-    var(--base-brand) var(--color-mix-4),
+    var(--base-brand) var(--color-mix-2),
     var(--color-surface-canvas)
   );
   --color-feedback-info-border: color-mix(
@@ -262,7 +292,7 @@
   --color-feedback-warning-text: var(--base-pressure);
   --color-feedback-error-surface: color-mix(
     in oklab,
-    var(--base-pressure) var(--color-mix-3),
+    var(--base-pressure) var(--color-mix-2),
     var(--color-surface-canvas)
   );
   --color-feedback-error-border: color-mix(
@@ -289,6 +319,21 @@
   --color-graphic-brand: var(--base-brand);
   --color-graphic-pressure: var(--base-pressure);
   --color-graphic-signal: var(--base-signal);
+  --color-glow-brand: color-mix(
+    in oklab,
+    var(--color-neutral-12) var(--color-mix-2),
+    var(--base-brand)
+  );
+  --color-glow-pressure: color-mix(
+    in oklab,
+    var(--color-neutral-12) var(--color-mix-2),
+    var(--base-pressure)
+  );
+  --color-glow-signal: color-mix(
+    in oklab,
+    var(--color-neutral-12) var(--color-mix-2),
+    var(--base-signal)
+  );
 
   --shadow-sm: 0 var(--space-1) var(--space-3)
     color-mix(in oklab, var(--color-neutral-1) var(--color-mix-8), transparent);
@@ -298,31 +343,45 @@
     color-mix(in oklab, var(--color-neutral-1) var(--color-mix-11), transparent);
   --shadow-island: var(--shadow-md);
   --shadow-glow-brand:
-    0 0 var(--space-2) color-mix(in oklab, var(--base-brand) var(--color-mix-7), transparent),
-    0 0 var(--space-4) color-mix(in oklab, var(--base-brand) var(--color-mix-3), transparent);
+    0 0 var(--space-4)
+      color-mix(in oklab, var(--color-glow-brand) var(--color-mix-4), transparent),
+    0 0 var(--space-10) calc(-1 * var(--space-1))
+      color-mix(in oklab, var(--color-glow-brand) var(--color-mix-4), transparent),
+    0 0 var(--space-20) calc(-1 * var(--space-2))
+      color-mix(in oklab, var(--color-glow-brand) var(--color-mix-3), transparent);
   --shadow-glow-pressure:
-    0 0 var(--space-2) color-mix(in oklab, var(--base-pressure) var(--color-mix-7), transparent),
-    0 0 var(--space-4) color-mix(in oklab, var(--base-pressure) var(--color-mix-3), transparent);
+    0 0 var(--space-4)
+      color-mix(in oklab, var(--color-glow-pressure) var(--color-mix-4), transparent),
+    0 0 var(--space-10) calc(-1 * var(--space-1))
+      color-mix(in oklab, var(--color-glow-pressure) var(--color-mix-4), transparent),
+    0 0 var(--space-20) calc(-1 * var(--space-2))
+      color-mix(in oklab, var(--color-glow-pressure) var(--color-mix-3), transparent);
   --shadow-glow-neutral:
     0 0 var(--space-2)
       color-mix(in oklab, var(--color-neutral-12) var(--color-mix-4), transparent),
     0 0 var(--space-4)
       color-mix(in oklab, var(--color-neutral-12) var(--color-mix-1), transparent);
   --shadow-glow-brand-strong:
-    0 0 0 var(--border-width-thin)
-      color-mix(in oklab, var(--base-brand) var(--color-mix-8), transparent),
-    0 0 var(--space-3) color-mix(in oklab, var(--base-brand) var(--color-mix-9), transparent),
-    0 0 var(--space-6) color-mix(in oklab, var(--base-brand) var(--color-mix-4), transparent);
+    0 0 var(--space-4)
+      color-mix(in oklab, var(--color-glow-brand) var(--color-mix-5), transparent),
+    0 0 var(--space-10) calc(-1 * var(--space-1))
+      color-mix(in oklab, var(--color-glow-brand) var(--color-mix-5), transparent),
+    0 0 var(--space-20) calc(-1 * var(--space-2))
+      color-mix(in oklab, var(--color-glow-brand) var(--color-mix-4), transparent);
   --shadow-glow-pressure-strong:
-    0 0 0 var(--border-width-thin)
-      color-mix(in oklab, var(--base-pressure) var(--color-mix-8), transparent),
-    0 0 var(--space-3)
-      color-mix(in oklab, var(--base-pressure) var(--color-mix-9), transparent),
-    0 0 var(--space-6)
-      color-mix(in oklab, var(--base-pressure) var(--color-mix-4), transparent);
+    0 0 var(--space-4)
+      color-mix(in oklab, var(--color-glow-pressure) var(--color-mix-5), transparent),
+    0 0 var(--space-10) calc(-1 * var(--space-1))
+      color-mix(in oklab, var(--color-glow-pressure) var(--color-mix-5), transparent),
+    0 0 var(--space-20) calc(-1 * var(--space-2))
+      color-mix(in oklab, var(--color-glow-pressure) var(--color-mix-4), transparent);
   --shadow-glow-signal:
-    0 0 var(--space-2) color-mix(in oklab, var(--base-signal) var(--color-mix-7), transparent),
-    0 0 var(--space-4) color-mix(in oklab, var(--base-signal) var(--color-mix-3), transparent);
+    0 0 var(--space-4)
+      color-mix(in oklab, var(--color-glow-signal) var(--color-mix-4), transparent),
+    0 0 var(--space-10) calc(-1 * var(--space-1))
+      color-mix(in oklab, var(--color-glow-signal) var(--color-mix-4), transparent),
+    0 0 var(--space-20) calc(-1 * var(--space-2))
+      color-mix(in oklab, var(--color-glow-signal) var(--color-mix-3), transparent);
   --shadow-indicator-brand:
     0 0 var(--space-2) color-mix(in oklab, var(--base-brand) var(--color-mix-8), transparent),
     0 0 var(--space-4) color-mix(in oklab, var(--base-brand) var(--color-mix-3), transparent);

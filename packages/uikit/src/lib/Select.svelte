@@ -99,6 +99,10 @@ The hidden named input submits the selected value. The caller validates required
   const isInvalid = $derived(resolveInvalidState(invalid, ariaInvalid));
 
   $effect(() => {
+    if (controller.state.open && triggerElement) anchorWidth = triggerElement.getBoundingClientRect().width + "px";
+  });
+
+  $effect(() => {
     if (disabled && controller.state.open) closeListbox();
   });
 

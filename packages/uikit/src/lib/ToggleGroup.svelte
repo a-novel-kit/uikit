@@ -31,7 +31,7 @@ Groups independent ToggleButton controls. Each toggle retains its own controller
     align-items: stretch;
     gap: var(--space-1);
     border-radius: var(--radius-lg);
-    background: var(--color-surface-sunken);
+    background: var(--color-surface-island);
     padding: var(--space-1);
   }
 

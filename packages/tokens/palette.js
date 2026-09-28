@@ -1,7 +1,7 @@
 /* Generated from one OKLCH basis and gamut-relative coefficients. Do not edit. */
 // prettier-ignore
 export const colorSystem = Object.freeze({
-  "canvas": "oklch(0.14478796 0 0)",
+  "canvas": "oklch(0.14478796 0.012 232)",
   "contrast": {
     "accentStep": 10,
     "inverseStep": 1,
@@ -41,7 +41,7 @@ export const colorSystem = Object.freeze({
   },
   "model": "relative OKLCH",
   "neutral": {
-    "chroma": 0.008,
+    "chroma": 0.012,
     "lightnessCurve": 1.6,
     "lightnessFloor": 0.11,
     "lightnessPeak": 0.96
@@ -95,7 +95,7 @@ export const colorSystem = Object.freeze({
 
 // prettier-ignore
 export const palette = Object.freeze({
-  neutral: Object.freeze(["oklch(0.11 0.008 232)","oklch(0.12833 0.008 232)","oklch(0.16557 0.008 232)","oklch(0.21631 0.008 232)","oklch(0.27846 0.008 232)","oklch(0.35074 0.008 232)","oklch(0.43228 0.008 232)","oklch(0.52243 0.008 232)","oklch(0.62066 0.008 232)","oklch(0.72656 0.008 232)","oklch(0.83978 0.008 232)","oklch(0.96 0.008 232)"]),
+  neutral: Object.freeze(["oklch(0.11 0.012 232)","oklch(0.12833 0.012 232)","oklch(0.16557 0.012 232)","oklch(0.21631 0.012 232)","oklch(0.27846 0.012 232)","oklch(0.35074 0.012 232)","oklch(0.43228 0.012 232)","oklch(0.52243 0.012 232)","oklch(0.62066 0.012 232)","oklch(0.72656 0.012 232)","oklch(0.83978 0.012 232)","oklch(0.96 0.012 232)"]),
   brand: Object.freeze(["oklch(0.26 0.05581 232)","oklch(0.27067 0.05843 232)","oklch(0.29992 0.06578 232)","oklch(0.34362 0.07712 232)","oklch(0.39764 0.09176 232)","oklch(0.45786 0.10889 232)","oklch(0.52014 0.1275 232)","oklch(0.58036 0.14635 232)","oklch(0.63438 0.16399 232)","oklch(0.67808 0.17876 232)","oklch(0.70733 0.18889 232)","oklch(0.718 0.19264 232)"]),
   pressure: Object.freeze(["oklch(0.26 0.09386 16)","oklch(0.26922 0.09776 16)","oklch(0.29451 0.10864 16)","oklch(0.3323 0.12544 16)","oklch(0.37901 0.14711 16)","oklch(0.43107 0.17243 16)","oklch(0.48493 0.19992 16)","oklch(0.53699 0.22776 16)","oklch(0.5837 0.25379 16)","oklch(0.62149 0.27557 16)","oklch(0.64678 0.29051 16)","oklch(0.656 0.29603 16)"]),
   signal: Object.freeze(["oklch(0.26 0.05233 68)","oklch(0.27251 0.05517 68)","oklch(0.3068 0.0631 68)","oklch(0.35804 0.07536 68)","oklch(0.42138 0.09119 68)","oklch(0.49199 0.10972 68)","oklch(0.56501 0.12988 68)","oklch(0.63562 0.15031 68)","oklch(0.69896 0.16944 68)","oklch(0.7502 0.18546 68)","oklch(0.78449 0.19646 68)","oklch(0.797 0.20053 68)"]),

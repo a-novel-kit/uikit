@@ -41,7 +41,7 @@
     const grid = canvas.getByRole("button", { name: "Grid" });
     await expect(grid).toHaveAttribute("aria-pressed", "false");
     await userEvent.click(grid);
-    await expect(grid).toHaveAttribute("aria-pressed", "true");
+    await expect(grid).toHaveAttribute("aria-pressed", "false");
   }
 
   async function verifyToolbar({ canvasElement }: { canvasElement: HTMLElement }) {
@@ -59,17 +59,10 @@
 </script>
 
 <script lang="ts">
-  import { createPressedController } from "@a-novel-kit/uikit";
+  import { fixedPressed } from "../controllers";
 
-  const gridController = createPressedController();
-  const snapController = createPressedController({ initialPressed: true });
-  const previewController = createPressedController();
-  const idleBrandController = createPressedController();
-  const pressedBrandController = createPressedController({ initialPressed: true });
-  const disabledBrandController = createPressedController();
-  const idleNeutralController = createPressedController();
-  const pressedNeutralController = createPressedController({ initialPressed: true });
-  const disabledNeutralController = createPressedController();
+  const unpressed = fixedPressed();
+  const pressed = fixedPressed(true);
 </script>
 
 <Story name="Groups and links" asChild>
@@ -94,9 +87,9 @@
 
 <Story name="Toggle group" asChild play={verifyToggle}>
   <ToggleGroup label="Canvas options">
-    <ToggleButton controller={gridController} variant="ghost">Grid</ToggleButton>
-    <ToggleButton controller={snapController} variant="ghost">Snap</ToggleButton>
-    <ToggleButton controller={disabledNeutralController} variant="ghost" tone="neutral" disabled>Guides</ToggleButton>
+    <ToggleButton controller={unpressed} variant="ghost">Grid</ToggleButton>
+    <ToggleButton controller={pressed} variant="ghost">Snap</ToggleButton>
+    <ToggleButton controller={unpressed} variant="ghost" tone="neutral" disabled>Guides</ToggleButton>
   </ToggleGroup>
 </Story>
 
@@ -113,15 +106,15 @@
       <tbody>
         <tr>
           <th scope="row">Brand</th>
-          <td><ToggleButton controller={idleBrandController}>Grid</ToggleButton></td>
-          <td><ToggleButton controller={pressedBrandController}>Grid</ToggleButton></td>
-          <td><ToggleButton controller={disabledBrandController} disabled>Grid</ToggleButton></td>
+          <td><ToggleButton controller={unpressed}>Grid</ToggleButton></td>
+          <td><ToggleButton controller={pressed}>Grid</ToggleButton></td>
+          <td><ToggleButton controller={unpressed} disabled>Grid</ToggleButton></td>
         </tr>
         <tr>
           <th scope="row">Neutral</th>
-          <td><ToggleButton controller={idleNeutralController} tone="neutral">Grid</ToggleButton></td>
-          <td><ToggleButton controller={pressedNeutralController} tone="neutral">Grid</ToggleButton></td>
-          <td><ToggleButton controller={disabledNeutralController} tone="neutral" disabled>Grid</ToggleButton></td>
+          <td><ToggleButton controller={unpressed} tone="neutral">Grid</ToggleButton></td>
+          <td><ToggleButton controller={pressed} tone="neutral">Grid</ToggleButton></td>
+          <td><ToggleButton controller={unpressed} tone="neutral" disabled>Grid</ToggleButton></td>
         </tr>
       </tbody>
     </table>
@@ -139,12 +132,74 @@
       </ToolbarButton>
     </ToolbarGroup>
     <span class="toolbar-separator" aria-hidden="true"></span>
-    <ToolbarToggleButton controller={previewController} variant="ghost" size="sm">Preview</ToolbarToggleButton>
+    <ToolbarToggleButton controller={unpressed} variant="ghost" size="sm">Preview</ToolbarToggleButton>
     <ToolbarLink href="#toolbar-help" variant="quiet">Help</ToolbarLink>
   </Toolbar>
 </Story>
 
+<Story
+  name="Surface comparison"
+  asChild
+  parameters={{
+    docs: {
+      description: {
+        story:
+          "Outline buttons, ghost buttons, and quiet links tint hover and active backgrounds with their own text color. Pressed controls retain their tone and emphasis on every surface.",
+      },
+    },
+  }}
+>
+  <div class="surface-grid">
+    {#each ["Canvas", "Island", "Glass", "Overlay"] as surface (surface)}
+      <section class="surface-sample {surface.toLowerCase()}" aria-label={surface}>
+        <h3>{surface}</h3>
+        <ButtonGroup label="Document actions">
+          <Button>Save</Button>
+          <Button variant="outline" tone="neutral">Save as</Button>
+          <Button variant="ghost">Edit</Button>
+          <Button variant="outline" tone="danger">Delete</Button>
+          <IconButton label="Refresh preview" variant="ghost" tone="neutral">
+            <RefreshIcon size="var(--icon-size-sm)" aria-hidden="true" />
+          </IconButton>
+          <ToggleButton controller={pressed} variant="outline">Preview</ToggleButton>
+          <ToggleButton controller={pressed} variant="ghost" tone="neutral">Guides</ToggleButton>
+        </ButtonGroup>
+        <Link href="#surface-help" variant="quiet">Help</Link>
+      </section>
+    {/each}
+  </div>
+</Story>
+
 <style>
+  .surface-grid {
+    display: grid;
+    gap: var(--space-4);
+  }
+  .surface-sample {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+  }
+  .surface-sample h3 {
+    margin: 0;
+    inline-size: 100%;
+    font-size: var(--font-size-md);
+  }
+  .canvas {
+    background: var(--color-surface-canvas);
+  }
+  .island {
+    background: var(--color-surface-island);
+  }
+  .glass {
+    background: var(--color-surface-glass);
+  }
+  .overlay {
+    background: var(--color-surface-island-strong);
+  }
   .examples {
     display: grid;
     gap: var(--space-6);

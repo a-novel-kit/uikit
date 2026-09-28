@@ -2,19 +2,22 @@
 @component
 Renders a native modal dialog driven by `createOpenController` or a compatible controller.
 Escape and backdrop interaction request closure; the controller decides whether it closes.
-Supply close controls in the content or actions snippet when needed.
+Supply a localized close control through `headerActions`.
 
 ```svelte
 <script lang="ts">
-  import { Button, Dialog, createOpenController } from "@a-novel-kit/uikit";
+  import { Button, Dialog, IconButton, createOpenController } from "@a-novel-kit/uikit";
+  import { X } from "@lucide/svelte";
   const dialog = createOpenController();
 </script>
 
 <Button onclick={dialog.open}>Details</Button>
 <Dialog controller={dialog} title="Details">
   <p>Additional information.</p>
-  {#snippet actions()}
-    <Button onclick={dialog.close}>Close</Button>
+  {#snippet headerActions()}
+    <IconButton label="Close dialog" variant="ghost" tone="neutral" size="sm" onclick={dialog.close}>
+      <X size="var(--icon-size-sm)" />
+    </IconButton>
   {/snippet}
 </Dialog>
 ```
@@ -37,8 +40,12 @@ Supply close controls in the content or actions snippet when needed.
     title: Content;
     /** Supporting content shown below the heading. */
     description?: Content;
+    /** Controls beside the heading, such as a localized close button. */
+    headerActions?: Snippet;
     /** Optional controls rendered after the dialog body. */
     actions?: Snippet;
+    /** Centered by default; fullscreen fills the viewport with a scrollable body. */
+    presentation?: "centered" | "fullscreen";
     /** Uses native modal focus trapping and an inert background; defaults to true. */
     modal?: boolean;
     /** Requests controller.close() on backdrop clicks; defaults to true. The controller may refuse. */
@@ -49,13 +56,16 @@ Supply close controls in the content or actions snippet when needed.
 </script>
 
 <script lang="ts">
-  import RenderContent from "./Content.svelte";
+  import ActionGroup from "./ActionGroup.svelte";
+  import PanelHeader from "./PanelHeader.svelte";
 
   let {
     controller,
     title,
     description,
+    headerActions,
     actions,
+    presentation = "centered",
     modal = true,
     closeOnBackdrop = true,
     class: className = "",
@@ -107,7 +117,7 @@ Supply close controls in the content or actions snippet when needed.
 
 <dialog
   bind:this={dialog}
-  class="dialog {className}"
+  class="dialog {presentation} {className}"
   aria-labelledby={titleId}
   aria-describedby={description ? descriptionId : undefined}
   oncancel={handleCancel}
@@ -116,25 +126,26 @@ Supply close controls in the content or actions snippet when needed.
   {...rest}
 >
   <div class="panel">
-    <header>
-      <h2 id={titleId}><RenderContent content={title} /></h2>
-      {#if description}<p id={descriptionId}><RenderContent content={description} /></p>{/if}
-    </header>
-    <div class="content">{@render children?.()}</div>
-    {#if actions}<footer>{@render actions()}</footer>{/if}
+    <PanelHeader {title} {description} {titleId} {descriptionId} actions={headerActions} />
+    {#if children}<div class="content">{@render children()}</div>{/if}
+    {#if actions}<footer><ActionGroup align="end" children={actions} /></footer>{/if}
   </div>
 </dialog>
 
 <style>
   .dialog {
+    --dialog-padding: var(--space-4);
+    --dialog-margin: var(--space-2);
+    box-sizing: border-box;
     margin: auto;
     box-shadow: var(--shadow-lg);
     border: 0;
     border-radius: var(--radius-xl);
     background: var(--color-surface-island-strong);
     padding: 0;
-    max-inline-size: min(calc(100vi - var(--space-8)), var(--layout-container-sm));
-    max-block-size: calc(100dvb - var(--space-8));
+    inline-size: min(calc(100vi - 2 * var(--dialog-margin)), var(--layout-container-sm));
+    max-inline-size: none;
+    max-block-size: calc(100dvb - 2 * var(--dialog-margin));
     overflow: auto;
     color: var(--color-text-primary);
   }
@@ -143,40 +154,49 @@ Supply close controls in the content or actions snippet when needed.
     background: var(--color-overlay-backdrop);
   }
   .panel {
-    display: grid;
-    min-inline-size: min(80vi, calc(var(--layout-container-sm) - var(--space-8)));
-  }
-  header,
-  .content,
-  footer {
-    padding: var(--space-5);
-  }
-  footer {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    gap: var(--space-2);
+    flex-direction: column;
+    gap: var(--space-5);
+    box-sizing: border-box;
+    padding: var(--dialog-padding);
+    min-inline-size: 0;
+    max-block-size: calc(100dvb - 2 * var(--dialog-margin));
   }
-  h2 {
-    margin: 0;
-    color: var(--color-text-primary);
-    font-size: var(--font-size-xl);
-    line-height: var(--line-height-tight);
-    font-family: var(--font-family-display);
+  .content {
+    /* Keep child focus outlines inside the independently scrolling body. */
+    margin: calc(-1 * var(--space-2));
+    padding: var(--space-2);
+    min-inline-size: 0;
+    min-block-size: var(--control-height-md);
+    overflow: auto;
   }
-  p {
-    margin: var(--space-2) 0 0;
-    color: var(--color-text-muted);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-normal);
+  footer {
+    flex: none;
+    padding-block-start: var(--space-1);
   }
 
-  @supports (backdrop-filter: blur(0)) or (-webkit-backdrop-filter: blur(0)) {
+  @media (min-width: 48rem) {
     .dialog {
-      -webkit-backdrop-filter: blur(var(--blur-lg));
-      backdrop-filter: blur(var(--blur-lg));
-      background: var(--color-surface-glass);
+      --dialog-padding: var(--space-5);
+      --dialog-margin: var(--space-4);
     }
+  }
+
+  .fullscreen {
+    --dialog-margin: var(--space-0);
+    margin: 0;
+    box-shadow: none;
+    border-radius: 0;
+    inline-size: 100vi;
+    block-size: 100dvb;
+    max-block-size: none;
+  }
+  .fullscreen .panel {
+    block-size: 100%;
+  }
+  .fullscreen .content {
+    display: grid;
+    flex: 1;
   }
 
   @media (forced-colors: active) {

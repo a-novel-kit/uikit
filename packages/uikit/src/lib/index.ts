@@ -43,6 +43,8 @@ export { default as Accordion } from "./Accordion.svelte";
 export type { AccordionProps } from "./Accordion.svelte";
 export { default as AccordionItem } from "./AccordionItem.svelte";
 export type { AccordionItemController, AccordionItemProps } from "./AccordionItem.svelte";
+export { default as ActionGroup } from "./ActionGroup.svelte";
+export type { ActionGroupProps } from "./ActionGroup.svelte";
 export { default as ActionMenu } from "./ActionMenu.svelte";
 export type {
   ActionMenuAction,
@@ -88,6 +90,8 @@ export { default as Fieldset } from "./Fieldset.svelte";
 export type { FieldsetProps } from "./Fieldset.svelte";
 export { default as FileInput } from "./FileInput.svelte";
 export type { FileInputProps } from "./FileInput.svelte";
+export { default as FormActions } from "./FormActions.svelte";
+export type { FormActionsProps } from "./FormActions.svelte";
 export { default as Grid } from "./Grid.svelte";
 export type { GridProps } from "./Grid.svelte";
 export { default as IconButton } from "./IconButton.svelte";
@@ -106,6 +110,8 @@ export { default as NavList } from "./NavList.svelte";
 export type { NavigationItem, NavListProps } from "./NavList.svelte";
 export { default as PageHeader } from "./PageHeader.svelte";
 export type { PageHeaderProps } from "./PageHeader.svelte";
+export { default as PanelHeader } from "./PanelHeader.svelte";
+export type { PanelHeaderProps } from "./PanelHeader.svelte";
 export { default as Pagination } from "./Pagination.svelte";
 export type { PaginationProps } from "./Pagination.svelte";
 export { default as Popover } from "./Popover.svelte";

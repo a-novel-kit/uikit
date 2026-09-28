@@ -39,12 +39,30 @@
   </Card>
 </Story>
 
-<Story name="Status labels" asChild>
+{#snippet statusLabels()}
   <Inline gap="2" wrap>
     <Badge>Draft</Badge><Badge tone="brand">Active</Badge><Badge tone="success">Ready</Badge><Badge tone="warning"
       >Review</Badge
     ><Badge tone="danger">Failed</Badge>
   </Inline>
+{/snippet}
+
+<Story
+  name="Status labels"
+  parameters={{
+    docs: {
+      description: {
+        story:
+          "Read-only labels on the canvas and a raised surface. Labels preserve casing and wrap within their container.",
+      },
+    },
+  }}
+  asChild
+>
+  <Stack gap="6">
+    {@render statusLabels()}
+    <Card>{@render statusLabels()}</Card>
+  </Stack>
 </Story>
 
 {#snippet roles()}
@@ -70,6 +88,15 @@
     <div><dt>Words</dt><dd>84,210</dd></div>
     <div><dt>Status</dt><dd><Badge tone="success">Ready</Badge></dd></div>
   </DescriptionList>
+</Story>
+
+<Story name="Long status labels" asChild>
+  <div style="max-inline-size: calc(var(--layout-container-sm) / 2)">
+    <Inline gap="2" wrap>
+      <Badge tone="brand">Collaborative workspace administrator</Badge>
+      <Badge tone="neutral">workspace:collaborative-story-creator</Badge>
+    </Inline>
+  </div>
 </Story>
 
 <Story name="Table" asChild>

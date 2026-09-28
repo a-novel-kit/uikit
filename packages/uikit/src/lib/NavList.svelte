@@ -29,33 +29,59 @@ URLs and the current destination are supplied by the caller.
     items: NavigationItem[];
     /** Direction in which destinations are arranged. */
     orientation?: "horizontal" | "vertical";
-    /** Replaces visible item copy while preserving link semantics. */
+    /** Shows icon destinations without visible labels; text-only destinations remain readable. */
+    compact?: boolean;
+    /** Replaces expanded labels; compact icon destinations use the item's plain label. */
     renderItem?: Snippet<[NavigationItem]>;
   }
 </script>
 
 <script lang="ts">
-  let { items, orientation = "vertical", renderItem, class: className = "", ...rest }: NavListProps = $props();
+  import VisuallyHidden from "./VisuallyHidden.svelte";
+
+  let {
+    items,
+    orientation = "vertical",
+    compact = false,
+    renderItem,
+    class: className = "",
+    ...rest
+  }: NavListProps = $props();
 </script>
+
+{#snippet itemContent(item: NavigationItem)}
+  {#if item.icon}<span class="icon" aria-hidden="true">{@render item.icon()}</span>{/if}
+  {#if compact && item.icon}
+    <VisuallyHidden>{item.label}{item.badge === undefined ? "" : ` ${item.badge}`}</VisuallyHidden>
+  {:else}
+    <span class="label"
+      >{#if renderItem}{@render renderItem(item)}{:else}{item.label}{/if}</span
+    >
+    {#if item.badge !== undefined}<span class="badge">{item.badge}</span>{/if}
+  {/if}
+{/snippet}
 
 <ul class="nav {orientation} {className}" {...rest}>
   {#each items as item (item.href)}
     <li>
       {#if item.disabled}
-        <span class="item" aria-disabled="true">
-          {#if item.icon}<span class="icon" aria-hidden="true">{@render item.icon()}</span>{/if}
-          <span class="label"
-            >{#if renderItem}{@render renderItem(item)}{:else}{item.label}{/if}</span
-          >
-          {#if item.badge !== undefined}<span class="badge">{item.badge}</span>{/if}
+        <span
+          class="item"
+          class:compact={compact && Boolean(item.icon)}
+          aria-disabled="true"
+          title={compact ? item.label : undefined}
+        >
+          {@render itemContent(item)}
         </span>
       {:else}
-        <a class="item" href={item.href} aria-current={item.current ? "page" : undefined}>
-          {#if item.icon}<span class="icon" aria-hidden="true">{@render item.icon()}</span>{/if}
-          <span class="label"
-            >{#if renderItem}{@render renderItem(item)}{:else}{item.label}{/if}</span
-          >
-          {#if item.badge !== undefined}<span class="badge">{item.badge}</span>{/if}
+        <a
+          class="item"
+          class:compact={compact && Boolean(item.icon)}
+          href={item.href}
+          aria-current={item.current ? "page" : undefined}
+          title={compact ? item.label : undefined}
+        >
+          {@render itemContent(item)}
         </a>
       {/if}
     </li>
@@ -68,6 +94,7 @@ URLs and the current destination are supplied by the caller.
     gap: var(--space-1);
     margin: 0;
     padding: 0;
+    min-inline-size: 0;
     font-family: var(--font-family-interface);
     list-style: none;
   }
@@ -136,6 +163,14 @@ URLs and the current destination are supplied by the caller.
   .icon {
     display: inline-flex;
     flex: none;
+    justify-content: center;
+    align-items: center;
+    inline-size: var(--control-height-sm);
+  }
+  .compact {
+    justify-content: center;
+    padding: 0;
+    min-inline-size: var(--control-height-sm);
   }
   .label {
     min-inline-size: 0;

@@ -12,7 +12,7 @@ const scaleMultipliers = Array.from({ length: scaleLength }, (_, index) => index
 
 // Compact authoring inputs; generated scales and public metadata derive from these values.
 const bases = Object.freeze({
-  canvas: "oklch(0.14478796 0 0)",
+  canvasLightness: 0.14478796,
   harmony: Object.freeze({
     halfTurn: 180,
     brandHue: 232,
@@ -37,7 +37,7 @@ const bases = Object.freeze({
     lightnessStep: 0.001,
   }),
   neutral: Object.freeze({
-    chroma: 0.008,
+    chroma: 0.012,
     lightnessCurve: 1.6,
     lightnessFloor: 0.11,
     lightnessPeak: 0.96,
@@ -57,6 +57,8 @@ const familyHues = Object.freeze({
   pressure: round(normalizeHue(oppositionCenter - bases.harmony.oppositionSpread / 2), 2),
   signal: round(normalizeHue(oppositionCenter + bases.harmony.oppositionSpread / 2), 2),
 });
+
+const canvas = `oklch(${bases.canvasLightness} ${bases.neutral.chroma} ${familyHues.brand})`;
 
 /** Finds the highest Display P3 chroma reachable for a hue within the authored lightness range. */
 const findGamutCusp = (hue) => {
@@ -197,7 +199,7 @@ const gamutChromaRatios = Object.freeze(
 );
 
 const colorSystem = {
-  canvas: bases.canvas,
+  canvas,
   contrast: {
     ...bases.contrast,
     actionValues: actionContrast,
@@ -268,7 +270,7 @@ const accentColorLines = chromaticFamilies.flatMap((family, familyIndex) => [
 const cssLines = [
   "/* Generated from one OKLCH basis and gamut-relative coefficients. Do not edit. */",
   ":root {",
-  `  --base-canvas: ${bases.canvas};`,
+  `  --base-canvas: oklch(${bases.canvasLightness} var(--color-neutral-chroma) var(--color-hue-brand));`,
   `  --color-hue-brand: ${bases.harmony.brandHue};`,
   `  --color-harmony-half-turn: ${bases.harmony.halfTurn};`,
   `  --color-harmony-opposition-bias: ${bases.harmony.oppositionBias};`,

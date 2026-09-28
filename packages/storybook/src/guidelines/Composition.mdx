@@ -4,7 +4,7 @@ import { Meta } from "@storybook/addon-docs/blocks";
 
 # Composition
 
-Build interfaces from small semantic parts. Components own behavior and shared styling; applications own their content and arrangement.
+Build interfaces from small semantic parts. Components render UI; controllers own state and transitions. Applications own content and arrangement.
 
 ## Choose the smallest brick
 
@@ -25,5 +25,25 @@ Prefer children and named snippets over adding presentation-only options. Promot
 ## Ownership
 
 - Components own focus, keyboard behavior, state attributes, and token use.
+- Controllers expose state and semantic methods through a typed contract. Instantiate the default factory outside the component, or supply a compatible implementation. Compose controllers by injecting child controllers or deriving views of shared state.
 - Applications own routing, landmarks, page shells, data loading, validation rules, and domain workflows.
-- Stories show common assemblies without defining application architecture.
+- Visual stories inject fixed-state controllers. Buttons still receive focus and content remains scrollable and selectable, but clicks cannot change the scenario. Live transitions are covered in controller and component tests.
+
+```ts
+import { type DialogController, createOpenController } from "@a-novel-kit/uikit";
+
+// Application setup
+const dialog = createOpenController();
+
+// Visual-review fixture using the same contract
+const preview: DialogController = {
+  state: { open: true },
+  open() {},
+  close() {},
+  toggle() {},
+};
+```
+
+```svelte
+<Dialog controller={dialog} title="Details">Additional information.</Dialog>
+```

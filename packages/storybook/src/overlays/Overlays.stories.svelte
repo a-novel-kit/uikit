@@ -2,10 +2,17 @@
   import {
     Accordion,
     AccordionItem,
+    ActionGroup,
+    Badge,
     Button,
     Dialog,
     Disclosure,
+    Field,
+    FormActions,
     IconButton,
+    Input,
+    NavList,
+    PanelHeader,
     Popover,
     Stack,
     Tooltip,
@@ -13,12 +20,13 @@
   import type { OpenController } from "@a-novel-kit/uikit";
   import { reviewStoryGlobals } from "@a-novel-kit/uikit-storybook";
 
-  import { CircleHelp as HelpIcon } from "@lucide/svelte";
+  import { X as CloseIcon, CircleHelp as HelpIcon, House as HomeIcon } from "@lucide/svelte";
   import { defineMeta } from "@storybook/addon-svelte-csf";
   import { expect, userEvent, within } from "storybook/test";
 
   const { Story } = defineMeta({
     title: "Overlays/Disclosure and dialog",
+    component: Dialog,
     parameters: {
       docs: {
         description: {
@@ -29,43 +37,55 @@
     },
   });
 
-  async function verifyTooltip({ canvasElement }: { canvasElement: HTMLElement }) {
+  async function verifyPinnedDialog({ canvasElement }: { canvasElement: HTMLElement }) {
     const canvas = within(canvasElement);
-    await userEvent.hover(canvas.getByRole("button", { name: "Open help" }));
-    await expect(canvas.getByRole("tooltip", { name: "Open help" })).toBeVisible();
+    await userEvent.click(canvas.getByRole("button", { name: "Close dialog" }));
+    await userEvent.keyboard("{Escape}");
+    await expect(canvas.getByRole("dialog", { name: "Archive item?" })).toBeVisible();
   }
 </script>
 
 <script lang="ts">
-  import { createOpenController } from "@a-novel-kit/uikit";
+  import { fixedOpen } from "../controllers";
 
-  function createLockedOpenController(): OpenController {
-    const state = { open: true };
-
-    return {
-      state,
-      open: () => {},
-      close: () => {},
-      toggle: () => {},
-    };
-  }
-
-  const firstDisclosureController = createOpenController({ initialOpen: true });
-  const secondDisclosureController = createOpenController();
-  const firstAccordionController = createOpenController({ initialOpen: true });
-  const secondAccordionController = createOpenController();
-  const disabledAccordionController = createOpenController();
-  const dialogDesktopController = createLockedOpenController();
-  const dialogMobileController = createLockedOpenController();
-  const popoverDesktopController = createLockedOpenController();
-  const popoverMobileController = createLockedOpenController();
-  const tooltipDesktopController = createLockedOpenController();
-  const tooltipMobileController = createLockedOpenController();
-  const tooltipInteractiveController = createOpenController();
+  const opened = fixedOpen(true);
+  const closed = fixedOpen();
+  const preferenceSections = [
+    {
+      title: "Sharing",
+      description: "Only invited people can view this workspace. Invitations remain private until accepted.",
+    },
+    {
+      title: "Exports",
+      description: "Exported copies include the latest saved changes. Your original project stays in the workspace.",
+    },
+    {
+      title: "Notifications",
+      description: "Project updates appear in your inbox. Muted projects remain available in your workspace.",
+    },
+    {
+      title: "Version history",
+      description: "Saved versions let you revisit earlier work without replacing your current draft.",
+    },
+    {
+      title: "Storage",
+      description:
+        "Original files stay available while a project is archived. Removing a copy leaves the original intact.",
+    },
+    {
+      title: "Accessibility",
+      description: "The interface follows your device preferences for reduced motion and increased contrast.",
+    },
+  ];
 </script>
 
 {#snippet dialogExample(controller: OpenController)}
   <Dialog {controller} title="Archive item?" description="You can restore an archived item later.">
+    {#snippet headerActions()}
+      <IconButton label="Close dialog" variant="ghost" tone="neutral" size="sm" onclick={controller.close}>
+        <CloseIcon size="var(--icon-size-sm)" />
+      </IconButton>
+    {/snippet}
     {#snippet actions()}
       <Button variant="ghost" tone="neutral" onclick={() => controller.close()}>Cancel</Button>
       <Button tone="danger" onclick={() => controller.close()}>Archive</Button>
@@ -74,15 +94,48 @@
   </Dialog>
 {/snippet}
 
+{#snippet longDialogExample(controller: OpenController)}
+  <Dialog
+    {controller}
+    title="Review workspace access and sharing preferences"
+    description="These settings apply to everyone who can access this workspace, including people invited through a shared link."
+  >
+    {#snippet headerActions()}
+      <IconButton label="Close dialog" variant="ghost" tone="neutral" size="sm" onclick={controller.close}>
+        <CloseIcon size="var(--icon-size-sm)" />
+      </IconButton>
+    {/snippet}
+  </Dialog>
+{/snippet}
+
+{#snippet fullscreenExample(controller: OpenController)}
+  <Dialog {controller} title="Workspace" presentation="fullscreen">
+    {#snippet headerActions()}
+      <IconButton label="Close navigation" variant="ghost" tone="neutral" size="sm" onclick={controller.close}>
+        <CloseIcon size="var(--icon-size-sm)" />
+      </IconButton>
+    {/snippet}
+    <div class="fullscreen-content">
+      <nav aria-label="Workspace">
+        <NavList items={[{ href: "#home", label: "Home", current: true, icon: homeIcon }]} />
+      </nav>
+      <Button variant="ghost" tone="neutral">Manage account</Button>
+    </div>
+  </Dialog>
+{/snippet}
+
+{#snippet homeIcon()}<HomeIcon size="var(--icon-size-sm)" />{/snippet}
+
 {#snippet popoverExample(controller: OpenController)}
   <Popover {controller} position="bottom">
     {#snippet trigger(props)}
-      <Button {...props} variant="outline" tone="neutral">Open popover</Button>
+      <Button {...props} variant="outline" tone="neutral">Export options</Button>
     {/snippet}
-    <Stack gap="3" style="inline-size: min(20rem, 80vi)">
-      <strong>Preview options</strong>
-      <span class="muted">Non-modal supporting content closes on Escape or an outside click.</span>
-      <Button size="sm" onclick={() => controller.close()}>Apply</Button>
+    <Stack gap="4" style="inline-size: min(20rem, 75vi)">
+      <PanelHeader title="Export a copy" description="The original stays in your workspace." />
+      <ActionGroup align="end">
+        <Button onclick={controller.close}>Export</Button>
+      </ActionGroup>
     </Stack>
   </Popover>
 {/snippet}
@@ -98,71 +151,151 @@
 {/snippet}
 
 <Story name="Disclosure" asChild>
-  <div class="narrow">
-    <Disclosure controller={firstDisclosureController} summary="What is stored locally?"
-      >Drafts and preferences are stored on this device.</Disclosure
-    >
-    <Disclosure controller={secondDisclosureController} summary="Can I export my data?"
-      >Open account settings and choose Export data.</Disclosure
-    >
-  </div>
+  <div class="narrow"
+    ><Stack gap="2">
+      <Disclosure controller={opened} summary="What is stored locally?"
+        >Drafts and preferences are stored on this device.</Disclosure
+      >
+      <Disclosure controller={closed} summary="Can I export my data?"
+        >Open account settings and choose Export data.</Disclosure
+      >
+    </Stack></div
+  >
 </Story>
 
 <Story name="Accordion" asChild>
   <div class="narrow">
     <Accordion>
-      <AccordionItem controller={firstAccordionController} summary="Keyboard behavior">
-        Tab reaches each summary. Enter or Space toggles it; arrow keys are not required for native details.
+      <AccordionItem controller={opened}>
+        {#snippet summary()}Sharing <Badge>Private</Badge>{/snippet}
+        Only people you invite can view this workspace.
       </AccordionItem>
-      <AccordionItem controller={secondAccordionController} summary="Multiple panels"
-        >Set multiple on the Accordion when more than one panel may remain open.</AccordionItem
+      <AccordionItem controller={closed} summary="Export preferences"
+        >Choose a format and image quality for exported copies.</AccordionItem
       >
-      <AccordionItem controller={disabledAccordionController} summary="Unavailable section" disabled
-        >This content cannot be expanded.</AccordionItem
-      >
+      <AccordionItem controller={closed} summary="Version history" disabled>No saved versions yet.</AccordionItem>
     </Accordion>
   </div>
 </Story>
 
-<Story name="Dialog — desktop" exportName="DialogDesktop" globals={reviewStoryGlobals.desktop} asChild>
-  {@render dialogExample(dialogDesktopController)}
+{#snippet formExample(controller: OpenController)}
+  <Dialog {controller} title="Create workspace" description="A shared place for your next project.">
+    {#snippet headerActions()}
+      <IconButton label="Close dialog" variant="ghost" tone="neutral" size="sm" onclick={controller.close}>
+        <CloseIcon size="var(--icon-size-sm)" />
+      </IconButton>
+    {/snippet}
+    <form onsubmit={(event) => event.preventDefault()}>
+      <Stack gap="4">
+        <Field label="Workspace name">
+          {#snippet children(control)}<Input {...control} value="Summer sketches" />{/snippet}
+        </Field>
+        <Disclosure controller={opened} summary="Sharing">
+          <p class="dialog-copy">Your workspace is private until you invite someone.</p>
+        </Disclosure>
+        <FormActions><Button type="submit">Create workspace</Button></FormActions>
+      </Stack>
+    </form>
+  </Dialog>
+{/snippet}
+
+{#snippet scrollExample(controller: OpenController)}
+  <Dialog {controller} title="Workspace preferences" description="Settings for everyone in this workspace.">
+    {#snippet headerActions()}
+      <IconButton label="Close dialog" variant="ghost" tone="neutral" size="sm" onclick={controller.close}>
+        <CloseIcon size="var(--icon-size-sm)" />
+      </IconButton>
+    {/snippet}
+    <Stack gap="4">
+      {#each preferenceSections as section (section.title)}
+        <Disclosure controller={opened} summary={section.title}>
+          <p class="dialog-copy">{section.description}</p>
+        </Disclosure>
+      {/each}
+    </Stack>
+    {#snippet actions()}
+      <Button variant="ghost" tone="neutral" onclick={controller.close}>Cancel</Button>
+      <Button onclick={controller.close}>Save preferences</Button>
+    {/snippet}
+  </Dialog>
+{/snippet}
+
+<Story name="Form — desktop" exportName="FormDesktop" globals={reviewStoryGlobals.desktop} asChild>
+  {@render formExample(opened)}
+</Story>
+<Story name="Form — mobile" exportName="FormMobile" globals={reviewStoryGlobals.mobile} asChild>
+  {@render formExample(opened)}
+</Story>
+<Story name="Long content — desktop" exportName="LongContentDesktop" globals={reviewStoryGlobals.desktop} asChild>
+  {@render scrollExample(opened)}
+</Story>
+<Story name="Long content — mobile" exportName="LongContentMobile" globals={reviewStoryGlobals.mobile} asChild>
+  {@render scrollExample(opened)}
+</Story>
+
+<Story
+  name="Dialog — desktop"
+  exportName="DialogDesktop"
+  globals={reviewStoryGlobals.desktop}
+  asChild
+  play={verifyPinnedDialog}
+>
+  {@render dialogExample(opened)}
 </Story>
 
 <Story name="Dialog — mobile" exportName="DialogMobile" globals={reviewStoryGlobals.mobile} asChild>
-  {@render dialogExample(dialogMobileController)}
+  {@render dialogExample(opened)}
+</Story>
+
+<Story name="Long heading — desktop" exportName="LongHeadingDesktop" globals={reviewStoryGlobals.desktop} asChild>
+  {@render longDialogExample(opened)}
+</Story>
+
+<Story name="Long heading — mobile" exportName="LongHeadingMobile" globals={reviewStoryGlobals.mobile} asChild>
+  {@render longDialogExample(opened)}
+</Story>
+
+<Story name="Fullscreen — desktop" exportName="FullscreenDesktop" globals={reviewStoryGlobals.desktop} asChild>
+  {@render fullscreenExample(opened)}
+</Story>
+
+<Story name="Fullscreen — mobile" exportName="FullscreenMobile" globals={reviewStoryGlobals.mobile} asChild>
+  {@render fullscreenExample(opened)}
 </Story>
 
 <Story name="Popover — desktop" exportName="PopoverDesktop" globals={reviewStoryGlobals.desktop} asChild>
-  {@render popoverExample(popoverDesktopController)}
+  {@render popoverExample(opened)}
 </Story>
 
 <Story name="Popover — mobile" exportName="PopoverMobile" globals={reviewStoryGlobals.mobile} asChild>
-  {@render popoverExample(popoverMobileController)}
+  {@render popoverExample(opened)}
 </Story>
 
 <Story name="Tooltip — desktop" exportName="TooltipDesktop" globals={reviewStoryGlobals.desktop} asChild>
-  {@render tooltipExample(tooltipDesktopController)}
+  {@render tooltipExample(opened)}
 </Story>
 
 <Story name="Tooltip — mobile" exportName="TooltipMobile" globals={reviewStoryGlobals.mobile} asChild>
-  {@render tooltipExample(tooltipMobileController)}
+  {@render tooltipExample(opened)}
 </Story>
 
-<Story name="Tooltip interaction" play={verifyTooltip} asChild>
-  {@render tooltipExample(tooltipInteractiveController)}
+<Story name="Tooltip closed" asChild>
+  {@render tooltipExample(closed)}
 </Story>
 
 <style>
+  .fullscreen-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--space-6);
+  }
   .narrow {
     inline-size: min(100%, var(--layout-container-sm));
   }
-  .muted,
   .dialog-copy {
     margin: 0;
     color: var(--color-text-muted);
     line-height: var(--line-height-normal);
-  }
-  strong {
-    color: var(--color-text-primary);
   }
 </style>

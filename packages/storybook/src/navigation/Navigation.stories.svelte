@@ -1,5 +1,6 @@
 <script module lang="ts">
   import { ActionMenu, Breadcrumbs, Card, NavList, Pagination, Stack, Tabs } from "@a-novel-kit/uikit";
+  import type { OpenController } from "@a-novel-kit/uikit";
 
   import {
     Pencil as EditIcon,
@@ -12,11 +13,13 @@
 
   const { Story } = defineMeta({
     title: "Navigation/Patterns",
+    component: NavList,
     tags: ["autodocs"],
     parameters: {
       docs: {
         description: {
-          component: "Patterns for primary navigation, route context, tabs, pagination, and action menus.",
+          component:
+            "Wrap NavList in a named nav landmark. Compact mode hides icon labels visually while preserving accessible names; text-only destinations stay visible. URLs and current state belong to the caller.",
         },
       },
     },
@@ -24,10 +27,11 @@
 </script>
 
 <script lang="ts">
-  import { createOpenController, createValueController } from "@a-novel-kit/uikit";
+  import { fixedOpen, fixedValue } from "../controllers";
 
-  const tabsController = createValueController({ initialValue: "profile" });
-  const actionMenuController = createOpenController();
+  const tabsController = fixedValue("profile");
+  const actionMenuController = fixedOpen(true);
+  const closedActionMenuController = fixedOpen();
 </script>
 
 {#snippet homeIcon()}<HomeIcon size="var(--icon-size-sm)" />{/snippet}
@@ -47,6 +51,19 @@
       ]}
     />
   </div>
+</Story>
+
+<Story name="Compact navigation" asChild>
+  <nav aria-label="Workspace" class="compact-demo">
+    <NavList
+      compact
+      items={[
+        { href: "#home", label: "Home", current: true, icon: homeIcon },
+        { href: "#team", label: "Team", badge: 8, icon: usersIcon },
+        { href: "#settings", label: "Settings", disabled: true, icon: settingsIcon },
+      ]}
+    />
+  </nav>
 </Story>
 
 <Story name="Route context" asChild>
@@ -76,17 +93,17 @@
       {#snippet children(tab)}
         <Stack gap="2">
           <strong>{tab.label}</strong>
-          <span class="muted">The panel follows the selected tab.</span>
+          <span class="muted">Personal details and display preferences.</span>
         </Stack>
       {/snippet}
     </Tabs>
   </Card>
 </Story>
 
-<Story name="Action menu" asChild>
+{#snippet actionMenu(controller: OpenController)}
   <ActionMenu
     label="Item actions"
-    controller={actionMenuController}
+    {controller}
     triggerText="Item actions"
     triggerIcon={moreIcon}
     items={[
@@ -96,15 +113,25 @@
       { id: "delete", label: "Delete", tone: "danger" },
     ]}
   />
+{/snippet}
+
+<Story name="Action menu" parameters={{ docs: { story: { inline: false, height: "360px" } } }} asChild>
+  {@render actionMenu(actionMenuController)}
+</Story>
+
+<Story name="Action menu closed" asChild>
+  {@render actionMenu(closedActionMenuController)}
 </Story>
 
 <style>
   .nav-demo {
-    border: var(--border-width-thin) solid var(--color-border-subtle);
     border-radius: var(--radius-lg);
     background: var(--color-surface-sunken);
     padding: var(--space-3);
     inline-size: min(100%, var(--layout-sidebar));
+  }
+  .compact-demo {
+    inline-size: var(--control-height-lg);
   }
   strong {
     color: var(--color-text-primary);
