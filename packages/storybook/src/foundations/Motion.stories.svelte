@@ -46,9 +46,9 @@
   play={({ canvas }) => {
     for (const name of ["Brand", "Pressure", "Signal"]) {
       const sample = canvas.getByText(name).parentElement!;
-      expect(getComputedStyle(sample).boxShadow).toContain("0px 0px 24px -8px");
-      expect(getComputedStyle(sample).boxShadow).toContain("0px 0px 48px -12px");
-      expect(getComputedStyle(sample).boxShadow).toContain("0px 0px 96px -16px");
+      expect(getComputedStyle(sample).boxShadow).toContain("0px 0px 16px 0px");
+      expect(getComputedStyle(sample).boxShadow).toContain("0px 0px 40px -4px");
+      expect(getComputedStyle(sample).boxShadow).toContain("0px 0px 80px -8px");
       expect(getComputedStyle(sample).boxShadow).not.toContain("0px 0px 0px");
       expect(getComputedStyle(sample).textShadow).toBe("none");
     }
@@ -70,9 +70,9 @@
   play={({ canvas }) => {
     for (const name of ["Brand", "Pressure"]) {
       const sample = canvas.getByText(name).parentElement!;
-      expect(getComputedStyle(sample).boxShadow).toContain("0px 0px 24px -8px");
-      expect(getComputedStyle(sample).boxShadow).toContain("0px 0px 48px -12px");
-      expect(getComputedStyle(sample).boxShadow).toContain("0px 0px 96px -16px");
+      expect(getComputedStyle(sample).boxShadow).toContain("0px 0px 16px 0px");
+      expect(getComputedStyle(sample).boxShadow).toContain("0px 0px 40px -4px");
+      expect(getComputedStyle(sample).boxShadow).toContain("0px 0px 80px -8px");
       expect(getComputedStyle(sample).textShadow).toBe("none");
     }
   }}
