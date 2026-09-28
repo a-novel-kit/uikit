@@ -11,11 +11,10 @@ import "@a-novel-kit/uikit-tokens/tokens.css";
 
 import { render } from "@testing-library/svelte";
 
-function resolveColor(value: string, foreground = "") {
+function resolveColor(value: string, parent: HTMLElement = document.body) {
   const sample = document.createElement("span");
   sample.style.backgroundColor = value;
-  sample.style.color = foreground;
-  document.body.append(sample);
+  parent.append(sample);
   const color = getComputedStyle(sample).backgroundColor;
   sample.remove();
   return color;
@@ -23,8 +22,9 @@ function resolveColor(value: string, foreground = "") {
 
 async function expectFeedback(element: HTMLElement, opacity: string) {
   await Promise.all(element.getAnimations().map((animation) => animation.finished));
-  const { backgroundColor, color } = getComputedStyle(element);
-  expect(backgroundColor).toBe(resolveColor(`color-mix(in oklab, currentColor var(${opacity}), transparent)`, color));
+  expect(getComputedStyle(element).backgroundColor).toBe(
+    resolveColor(`color-mix(in oklab, currentColor var(${opacity}), transparent)`, element)
+  );
 }
 
 function appearance(element: HTMLElement) {
@@ -41,9 +41,11 @@ describe("low-emphasis action feedback", () => {
       async (tone) => {
         const { getByRole, rerender } = render(Button, { variant, tone, "aria-label": "Save" });
         const button = getByRole("button");
+        const restingChromaticity = resolveColor("oklch(from currentColor 0.5 c h)", button);
         await userEvent.hover(button);
         await expectFeedback(button, "--color-mix-2");
         const activeForeground = getComputedStyle(button).color;
+        expect(resolveColor("oklch(from currentColor 0.5 c h)", button)).toBe(restingChromaticity);
 
         await userEvent.unhover(button);
         button.focus();

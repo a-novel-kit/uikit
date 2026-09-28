@@ -123,7 +123,7 @@ Compose ToolbarButton, ToolbarToggleButton, and ToolbarLink inside it.
     align-items: center;
     gap: var(--space-1);
     border-radius: var(--radius-lg);
-    background: var(--color-surface-island-subtle);
+    background: var(--color-surface-island);
     padding: var(--space-1);
     max-inline-size: 100%;
   }

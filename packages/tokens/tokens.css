@@ -190,10 +190,8 @@
     var(--base-brand) var(--color-mix-12),
     var(--color-text-primary)
   );
-  --color-action-primary-foreground-hover: color-mix(
-    in oklab,
-    var(--base-brand) var(--color-mix-8),
-    var(--color-text-primary)
+  --color-action-primary-foreground-hover: oklch(
+    from var(--color-action-primary-foreground) calc(l + (1 - l) * var(--opacity-base)) c h
   );
   --color-action-neutral: var(--color-neutral-4);
   --color-action-neutral-hover: var(--color-neutral-5);
@@ -214,10 +212,8 @@
     var(--base-pressure) var(--color-mix-12),
     var(--color-text-primary)
   );
-  --color-action-danger-foreground-hover: color-mix(
-    in oklab,
-    var(--base-pressure) var(--color-mix-8),
-    var(--color-text-primary)
+  --color-action-danger-foreground-hover: oklch(
+    from var(--color-action-danger-foreground) calc(l + (1 - l) * var(--opacity-base)) c h
   );
   --color-action-ghost-text: var(--color-action-primary-foreground);
   --color-action-subtle-hover: color-mix(
