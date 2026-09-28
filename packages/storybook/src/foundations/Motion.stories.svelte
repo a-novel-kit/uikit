@@ -39,15 +39,16 @@
     docs: {
       description: {
         story:
-          "Broad halos fade into the surrounding canvas. Glow is decorative; text and focus indicators remain independent.",
+          "Three faint layers create a gradual falloff behind the surface. Glow is decorative; text and focus indicators remain independent.",
       },
     },
   }}
   play={({ canvas }) => {
     for (const name of ["Brand", "Pressure", "Signal"]) {
       const sample = canvas.getByText(name).parentElement!;
-      expect(getComputedStyle(sample).boxShadow).toContain("0px 0px 48px 0px");
-      expect(getComputedStyle(sample).boxShadow).toContain("0px 0px 96px 0px");
+      expect(getComputedStyle(sample).boxShadow).toContain("0px 0px 24px -8px");
+      expect(getComputedStyle(sample).boxShadow).toContain("0px 0px 48px -12px");
+      expect(getComputedStyle(sample).boxShadow).toContain("0px 0px 96px -16px");
       expect(getComputedStyle(sample).boxShadow).not.toContain("0px 0px 0px");
       expect(getComputedStyle(sample).textShadow).toBe("none");
     }
@@ -64,13 +65,14 @@
   name="Strong glow"
   asChild
   parameters={{
-    docs: { description: { story: "Wider, brighter halos give large accent surfaces more emphasis." } },
+    docs: { description: { story: "The same soft falloff with slightly more emphasis for accent surfaces." } },
   }}
   play={({ canvas }) => {
     for (const name of ["Brand", "Pressure"]) {
       const sample = canvas.getByText(name).parentElement!;
-      expect(getComputedStyle(sample).boxShadow).toContain("0px 0px 64px 0px");
-      expect(getComputedStyle(sample).boxShadow).toContain("0px 0px 128px 0px");
+      expect(getComputedStyle(sample).boxShadow).toContain("0px 0px 24px -8px");
+      expect(getComputedStyle(sample).boxShadow).toContain("0px 0px 48px -12px");
+      expect(getComputedStyle(sample).boxShadow).toContain("0px 0px 96px -16px");
       expect(getComputedStyle(sample).textShadow).toBe("none");
     }
   }}
