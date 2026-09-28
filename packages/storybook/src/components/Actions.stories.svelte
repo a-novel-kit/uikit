@@ -137,7 +137,69 @@
   </Toolbar>
 </Story>
 
+<Story
+  name="Surface comparison"
+  asChild
+  parameters={{
+    docs: {
+      description: {
+        story:
+          "Outline buttons, ghost buttons, and quiet links share hover and active layers. Pressed controls retain their tone and emphasis on every surface.",
+      },
+    },
+  }}
+>
+  <div class="surface-grid">
+    {#each ["Canvas", "Island", "Glass", "Overlay"] as surface (surface)}
+      <section class="surface-sample {surface.toLowerCase()}" aria-label={surface}>
+        <h3>{surface}</h3>
+        <ButtonGroup label="Document actions">
+          <Button>Save</Button>
+          <Button variant="outline" tone="neutral">Save as</Button>
+          <Button variant="ghost">Edit</Button>
+          <Button variant="outline" tone="danger">Delete</Button>
+          <IconButton label="Refresh preview" variant="ghost" tone="neutral">
+            <RefreshIcon size="var(--icon-size-sm)" aria-hidden="true" />
+          </IconButton>
+          <ToggleButton controller={pressed} variant="outline">Preview</ToggleButton>
+          <ToggleButton controller={pressed} variant="ghost" tone="neutral">Guides</ToggleButton>
+        </ButtonGroup>
+        <Link href="#surface-help" variant="quiet">Help</Link>
+      </section>
+    {/each}
+  </div>
+</Story>
+
 <style>
+  .surface-grid {
+    display: grid;
+    gap: var(--space-4);
+  }
+  .surface-sample {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+  }
+  .surface-sample h3 {
+    margin: 0;
+    inline-size: 100%;
+    font-size: var(--font-size-md);
+  }
+  .canvas {
+    background: var(--color-surface-canvas);
+  }
+  .island {
+    background: var(--color-surface-island);
+  }
+  .glass {
+    background: var(--color-surface-glass);
+  }
+  .overlay {
+    background: var(--color-surface-island-strong);
+  }
   .examples {
     display: grid;
     gap: var(--space-6);

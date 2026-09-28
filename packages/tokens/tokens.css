@@ -185,6 +185,16 @@
   --color-action-primary-active: var(--color-brand-8);
   --color-action-primary-selected: var(--base-brand);
   --color-action-primary-text: var(--color-text-inverse);
+  --color-action-primary-foreground: color-mix(
+    in oklab,
+    var(--base-brand) var(--color-mix-12),
+    var(--color-text-primary)
+  );
+  --color-action-primary-foreground-hover: color-mix(
+    in oklab,
+    var(--base-brand) var(--color-mix-8),
+    var(--color-text-primary)
+  );
   --color-action-neutral: var(--color-neutral-4);
   --color-action-neutral-hover: var(--color-neutral-5);
   --color-action-neutral-active: var(--color-neutral-3);
@@ -199,9 +209,25 @@
   --color-action-danger-active: var(--color-pressure-8);
   --color-action-danger-selected: var(--base-pressure);
   --color-action-danger-text: var(--color-text-inverse);
-  --color-action-ghost-text: var(--color-action-primary);
-  --color-action-ghost-hover: var(--color-surface-glass-hover);
-  --color-action-ghost-hover-text: var(--color-brand-11);
+  --color-action-danger-foreground: color-mix(
+    in oklab,
+    var(--base-pressure) var(--color-mix-12),
+    var(--color-text-primary)
+  );
+  --color-action-danger-foreground-hover: color-mix(
+    in oklab,
+    var(--base-pressure) var(--color-mix-8),
+    var(--color-text-primary)
+  );
+  --color-action-ghost-text: var(--color-action-primary-foreground);
+  --color-action-subtle-hover: var(--color-surface-glass-hover);
+  --color-action-subtle-active: color-mix(
+    in oklab,
+    var(--color-text-primary) var(--color-mix-3),
+    transparent
+  );
+  --color-action-ghost-hover: var(--color-action-subtle-hover);
+  --color-action-ghost-hover-text: var(--color-action-primary-foreground-hover);
   --color-action-ghost-selected: var(--color-surface-selected);
   --color-action-ghost-selected-border: color-mix(
     in oklab,

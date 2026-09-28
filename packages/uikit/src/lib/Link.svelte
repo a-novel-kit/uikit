@@ -36,6 +36,7 @@ Renders a native anchor with inline or quiet styling. The caller owns the destin
   }
   .quiet {
     padding: var(--space-1) var(--space-2);
+    color: var(--color-action-primary-foreground);
     text-decoration: none;
   }
 
@@ -45,7 +46,12 @@ Renders a native anchor with inline or quiet styling. The caller owns the destin
   }
 
   .quiet:hover {
-    background: var(--color-navigation-hover-surface);
+    background: var(--color-action-subtle-hover);
+    color: var(--color-action-primary-foreground-hover);
+  }
+
+  .quiet:active {
+    background: var(--color-action-subtle-active);
   }
 
   .link:focus-visible {

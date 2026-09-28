@@ -50,6 +50,9 @@ Renders a styled native button. Defaults to `type="button"`; use `type="submit"`
 
 <style>
   .button {
+    --button-border: var(--button-rest);
+    --button-border-hover: var(--button-hover);
+    --button-selected-border: var(--button-selected);
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -74,10 +77,10 @@ Renders a styled native button. Defaults to `type="button"`; use `type="submit"`
     --button-hover: var(--color-action-primary-hover);
     --button-active: var(--color-action-primary-active);
     --button-selected: var(--color-action-primary-selected);
-    --button-selected-foreground: var(--color-action-primary-selected);
+    --button-selected-foreground: var(--color-action-primary-foreground);
     --button-text: var(--color-action-primary-text);
-    --button-foreground: var(--color-action-primary);
-    --button-foreground-hover: var(--color-action-primary-hover);
+    --button-foreground: var(--color-action-primary-foreground);
+    --button-foreground-hover: var(--color-action-primary-foreground-hover);
     --button-glow: var(--shadow-glow-brand-strong);
   }
 
@@ -90,6 +93,9 @@ Renders a styled native button. Defaults to `type="button"`; use `type="submit"`
     --button-text: var(--color-action-neutral-text);
     --button-foreground: var(--color-text-secondary);
     --button-foreground-hover: var(--color-text-primary);
+    --button-border: var(--color-border-default);
+    --button-border-hover: var(--color-border-strong);
+    --button-selected-border: var(--color-border-strong);
     --button-glow: var(--shadow-glow-neutral);
   }
 
@@ -98,10 +104,10 @@ Renders a styled native button. Defaults to `type="button"`; use `type="submit"`
     --button-hover: var(--color-action-danger-hover);
     --button-active: var(--color-action-danger-active);
     --button-selected: var(--color-action-danger-selected);
-    --button-selected-foreground: var(--color-action-danger-selected);
+    --button-selected-foreground: var(--color-action-danger-foreground);
     --button-text: var(--color-action-danger-text);
-    --button-foreground: var(--color-action-danger);
-    --button-foreground-hover: var(--color-action-danger-hover);
+    --button-foreground: var(--color-action-danger-foreground);
+    --button-foreground-hover: var(--color-action-danger-foreground-hover);
     --button-glow: var(--shadow-glow-pressure-strong);
   }
 
@@ -166,46 +172,32 @@ Renders a styled native button. Defaults to `type="button"`; use `type="submit"`
   }
 
   .outline {
-    border-color: var(--button-rest);
-    background-color: transparent;
-    color: var(--button-foreground);
+    border-color: var(--button-border);
   }
 
   .outline:hover:not(:disabled):not([aria-pressed="true"]) {
-    border-color: var(--button-hover);
-    background-color: color-mix(in oklab, var(--button-selected) var(--color-mix-2), transparent);
-    color: var(--button-foreground-hover);
+    border-color: var(--button-border-hover);
   }
 
-  .outline:active:not(:disabled):not([aria-pressed="true"]) {
-    background-color: color-mix(in oklab, var(--button-active) var(--color-mix-3), transparent);
-  }
-
-  .outline[aria-pressed="true"] {
-    box-shadow: var(--button-glow);
-    border-color: var(--button-selected);
-    background-color: color-mix(in oklab, var(--button-selected) var(--color-mix-2), transparent);
-    color: var(--button-selected-foreground);
-  }
-
+  .outline,
   .ghost {
     background-color: transparent;
     color: var(--button-foreground);
   }
 
-  .ghost:hover:not(:disabled):not([aria-pressed="true"]) {
-    background-color: var(--color-action-ghost-hover);
+  :is(.outline, .ghost):hover:not(:disabled):not([aria-pressed="true"]) {
+    background-color: var(--color-action-subtle-hover);
     color: var(--button-foreground-hover);
   }
 
-  .ghost:active:not(:disabled):not([aria-pressed="true"]) {
-    background-color: var(--color-surface-subtle);
+  :is(.outline, .ghost):active:not(:disabled):not([aria-pressed="true"]) {
+    background-color: var(--color-action-subtle-active);
   }
 
-  .ghost[aria-pressed="true"] {
+  :is(.outline, .ghost)[aria-pressed="true"] {
     box-shadow: var(--button-glow);
-    border-color: var(--button-selected);
-    background-color: color-mix(in oklab, var(--button-selected) var(--color-mix-2), var(--color-surface-raised));
+    border-color: var(--button-selected-border);
+    background-color: color-mix(in oklab, var(--button-selected-foreground) var(--color-mix-3), transparent);
     color: var(--button-selected-foreground);
   }
 
