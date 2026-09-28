@@ -103,10 +103,14 @@
   --color-surface-sunken: var(--color-neutral-2);
   --color-surface-subtle: color-mix(
     in oklab,
-    var(--color-neutral-3) var(--color-mix-12),
+    var(--color-neutral-3) var(--color-mix-8),
     var(--color-neutral-4)
   );
-  --color-surface-raised: var(--color-neutral-4);
+  --color-surface-raised: color-mix(
+    in oklab,
+    var(--color-neutral-5) var(--color-mix-2),
+    var(--color-neutral-4)
+  );
   --color-surface-overlay: color-mix(
     in oklab,
     var(--color-neutral-4) var(--color-mix-8),
@@ -154,7 +158,7 @@
 
   --color-control-surface: color-mix(
     in oklab,
-    var(--color-neutral-5) var(--color-mix-4),
+    var(--color-neutral-5) var(--color-mix-5),
     var(--color-surface-sunken)
   );
   --color-control-surface-hover: color-mix(
@@ -193,7 +197,7 @@
   --color-action-primary-foreground-hover: oklch(
     from var(--color-action-primary-foreground) calc(l + (1 - l) * var(--opacity-base)) c h
   );
-  --color-action-neutral: var(--color-neutral-4);
+  --color-action-neutral: var(--color-surface-raised);
   --color-action-neutral-hover: var(--color-neutral-5);
   --color-action-neutral-active: var(--color-neutral-3);
   --color-action-neutral-selected: var(--color-neutral-6);
