@@ -2,7 +2,7 @@
 @component
 Renders a native modal dialog driven by `createOpenController` or a compatible controller.
 Escape and backdrop interaction request closure; the controller decides whether it closes.
-Supply close controls in the content or actions snippet when needed.
+Supply a localized close control through `headerActions`.
 
 ```svelte
 <script lang="ts">
@@ -37,8 +37,12 @@ Supply close controls in the content or actions snippet when needed.
     title: Content;
     /** Supporting content shown below the heading. */
     description?: Content;
+    /** Controls beside the heading, such as a localized close button. */
+    headerActions?: Snippet;
     /** Optional controls rendered after the dialog body. */
     actions?: Snippet;
+    /** Centered by default; fullscreen fills the viewport with a scrollable body. */
+    presentation?: "centered" | "fullscreen";
     /** Uses native modal focus trapping and an inert background; defaults to true. */
     modal?: boolean;
     /** Requests controller.close() on backdrop clicks; defaults to true. The controller may refuse. */
@@ -55,7 +59,9 @@ Supply close controls in the content or actions snippet when needed.
     controller,
     title,
     description,
+    headerActions,
     actions,
+    presentation = "centered",
     modal = true,
     closeOnBackdrop = true,
     class: className = "",
@@ -107,7 +113,7 @@ Supply close controls in the content or actions snippet when needed.
 
 <dialog
   bind:this={dialog}
-  class="dialog {className}"
+  class="dialog {presentation} {className}"
   aria-labelledby={titleId}
   aria-describedby={description ? descriptionId : undefined}
   oncancel={handleCancel}
@@ -117,24 +123,31 @@ Supply close controls in the content or actions snippet when needed.
 >
   <div class="panel">
     <header>
-      <h2 id={titleId}><RenderContent content={title} /></h2>
-      {#if description}<p id={descriptionId}><RenderContent content={description} /></p>{/if}
+      <div class="heading">
+        <h2 id={titleId}><span><RenderContent content={title} /></span></h2>
+        {#if description}<p id={descriptionId}><RenderContent content={description} /></p>{/if}
+      </div>
+      {#if headerActions}<div class="header-actions">{@render headerActions()}</div>{/if}
     </header>
-    <div class="content">{@render children?.()}</div>
+    {#if children}<div class="content">{@render children()}</div>{/if}
     {#if actions}<footer>{@render actions()}</footer>{/if}
   </div>
 </dialog>
 
 <style>
   .dialog {
+    --dialog-padding: var(--space-4);
+    --dialog-margin: var(--space-2);
+    box-sizing: border-box;
     margin: auto;
     box-shadow: var(--shadow-lg);
     border: 0;
     border-radius: var(--radius-xl);
     background: var(--color-surface-island-strong);
     padding: 0;
-    max-inline-size: min(calc(100vi - var(--space-8)), var(--layout-container-sm));
-    max-block-size: calc(100dvb - var(--space-8));
+    inline-size: min(calc(100vi - 2 * var(--dialog-margin)), var(--layout-container-sm));
+    max-inline-size: none;
+    max-block-size: calc(100dvb - 2 * var(--dialog-margin));
     overflow: auto;
     color: var(--color-text-primary);
   }
@@ -144,21 +157,41 @@ Supply close controls in the content or actions snippet when needed.
   }
   .panel {
     display: grid;
-    min-inline-size: min(80vi, calc(var(--layout-container-sm) - var(--space-8)));
+    gap: var(--space-4);
+    box-sizing: border-box;
+    padding: var(--dialog-padding);
+    min-inline-size: 0;
   }
-  header,
-  .content,
-  footer {
-    padding: var(--space-5);
+  header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+  .heading {
+    flex: 1;
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+  }
+  .header-actions {
+    display: flex;
+    flex: none;
+    gap: var(--space-2);
+  }
+  .content {
+    min-inline-size: 0;
   }
   footer {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-end;
     gap: var(--space-2);
+    padding-block-start: var(--space-2);
   }
   h2 {
+    display: flex;
+    align-items: center;
     margin: 0;
+    min-block-size: var(--control-height-sm);
     color: var(--color-text-primary);
     font-size: var(--font-size-xl);
     line-height: var(--line-height-tight);
@@ -171,12 +204,39 @@ Supply close controls in the content or actions snippet when needed.
     line-height: var(--line-height-normal);
   }
 
-  @supports (backdrop-filter: blur(0)) or (-webkit-backdrop-filter: blur(0)) {
+  @media (min-width: 48rem) {
     .dialog {
-      -webkit-backdrop-filter: blur(var(--blur-lg));
-      backdrop-filter: blur(var(--blur-lg));
-      background: var(--color-surface-glass);
+      --dialog-padding: var(--space-5);
+      --dialog-margin: var(--space-4);
     }
+  }
+
+  .fullscreen {
+    margin: 0;
+    box-shadow: none;
+    border-radius: 0;
+    inline-size: 100vi;
+    block-size: 100dvb;
+    max-block-size: none;
+    overflow: hidden;
+  }
+  .fullscreen .panel {
+    display: flex;
+    flex-direction: column;
+    block-size: 100%;
+  }
+  .fullscreen header,
+  .fullscreen footer {
+    flex: none;
+  }
+  .fullscreen .content {
+    display: grid;
+    flex: 1;
+    /* Leave room inside the scrollport for child focus outlines. */
+    margin: calc(-1 * var(--space-2));
+    padding: var(--space-2);
+    min-block-size: 0;
+    overflow: auto;
   }
 
   @media (forced-colors: active) {

@@ -1,0 +1,40 @@
+import * as Stories from "./FormActions.stories.svelte";
+
+import { Meta, ResponsiveStoryPair } from "@a-novel-kit/uikit-storybook";
+
+import { ArgTypes } from "@storybook/addon-docs/blocks";
+
+<Meta of={Stories} />
+
+# Form actions
+
+Groups submit controls and form-level feedback, with extra space after fields. Actions fill the
+available width below 35rem; on larger viewports they use their natural width and wrap when needed.
+
+<ResponsiveStoryPair desktop={Stories.ReadyDesktop} mobile={Stories.ReadyMobile} meta={Stories} />
+<ResponsiveStoryPair desktop={Stories.ErrorDesktop} mobile={Stories.ErrorMobile} meta={Stories} />
+
+## Usage
+
+Import `FormActions` alongside the form controls from `@a-novel-kit/uikit`. Put fields and actions
+in a `Stack` with `gap="4"`. Omit `feedback` when there is no form-level message. Field-specific
+errors stay with their `Field`.
+
+```svelte
+<form method="POST">
+  <Stack gap="4">
+    <Field label="Display name">
+      {#snippet children(control)}<Input {...control} name="displayName" />{/snippet}
+    </Field>
+    <FormActions>
+      <Button type="submit">Save changes</Button>
+    </FormActions>
+  </Stack>
+</form>
+```
+
+`FormActions` adds no form or live-region semantics. The caller owns submission, pending state,
+and feedback announcements through components such as `Alert`. It adds no leading space when it
+is the first element in its parent, which also supports action-only forms.
+
+<ArgTypes of={Stories} />

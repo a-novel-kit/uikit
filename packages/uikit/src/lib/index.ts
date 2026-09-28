@@ -88,6 +88,8 @@ export { default as Fieldset } from "./Fieldset.svelte";
 export type { FieldsetProps } from "./Fieldset.svelte";
 export { default as FileInput } from "./FileInput.svelte";
 export type { FileInputProps } from "./FileInput.svelte";
+export { default as FormActions } from "./FormActions.svelte";
+export type { FormActionsProps } from "./FormActions.svelte";
 export { default as Grid } from "./Grid.svelte";
 export type { GridProps } from "./Grid.svelte";
 export { default as IconButton } from "./IconButton.svelte";

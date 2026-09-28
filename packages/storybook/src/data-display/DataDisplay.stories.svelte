@@ -72,6 +72,15 @@
   </DescriptionList>
 </Story>
 
+<Story name="Long status labels" asChild>
+  <div style="max-inline-size: calc(var(--layout-container-sm) / 2)">
+    <Inline gap="2" wrap>
+      <Badge tone="brand">Collaborative workspace administrator</Badge>
+      <Badge tone="neutral">workspace:collaborative-story-creator</Badge>
+    </Inline>
+  </div>
+</Story>
+
 <Story name="Table" asChild>
   <Table caption="Recent environments">
     <thead>

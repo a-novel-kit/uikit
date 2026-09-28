@@ -2,6 +2,8 @@ import * as OverlayStories from "./Overlays.stories.svelte";
 
 import { Canvas, Meta, ResponsiveStoryPair } from "@a-novel-kit/uikit-storybook";
 
+import { ArgTypes } from "@storybook/addon-docs/blocks";
+
 <Meta of={OverlayStories} />
 
 # Disclosure and dialog
@@ -25,6 +27,33 @@ example.
   mobile={OverlayStories.DialogMobile}
   meta={OverlayStories}
 />
+
+The header accepts caller-owned controls. Escape, backdrop clicks, and close controls ask the same
+controller to close; a fixed Storybook controller can keep the preview open.
+
+```svelte
+<Dialog controller={dialog} title="Details">
+  {#snippet headerActions()}
+    <IconButton label="Close dialog" variant="ghost" tone="neutral" size="sm" onclick={dialog.close}>
+      <CloseIcon size="var(--icon-size-sm)" />
+    </IconButton>
+  {/snippet}
+  <p>Additional information.</p>
+</Dialog>
+```
+
+### Fullscreen
+
+`presentation="fullscreen"` fills the viewport and lets the body scroll independently. The caller
+owns navigation and content layout. The header and optional footer remain visible.
+
+<ResponsiveStoryPair
+  desktop={OverlayStories.FullscreenDesktop}
+  mobile={OverlayStories.FullscreenMobile}
+  meta={OverlayStories}
+/>
+
+<ArgTypes of={OverlayStories} />
 
 ## Popover
 

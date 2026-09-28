@@ -6,6 +6,7 @@
     Dialog,
     Disclosure,
     IconButton,
+    NavList,
     Popover,
     Stack,
     Tooltip,
@@ -13,12 +14,13 @@
   import type { OpenController } from "@a-novel-kit/uikit";
   import { reviewStoryGlobals } from "@a-novel-kit/uikit-storybook";
 
-  import { CircleHelp as HelpIcon } from "@lucide/svelte";
+  import { X as CloseIcon, CircleHelp as HelpIcon, House as HomeIcon } from "@lucide/svelte";
   import { defineMeta } from "@storybook/addon-svelte-csf";
   import { expect, userEvent, within } from "storybook/test";
 
   const { Story } = defineMeta({
     title: "Overlays/Disclosure and dialog",
+    component: Dialog,
     parameters: {
       docs: {
         description: {
@@ -66,6 +68,11 @@
 
 {#snippet dialogExample(controller: OpenController)}
   <Dialog {controller} title="Archive item?" description="You can restore an archived item later.">
+    {#snippet headerActions()}
+      <IconButton label="Close dialog" variant="ghost" tone="neutral" size="sm" onclick={controller.close}>
+        <CloseIcon size="var(--icon-size-sm)" />
+      </IconButton>
+    {/snippet}
     {#snippet actions()}
       <Button variant="ghost" tone="neutral" onclick={() => controller.close()}>Cancel</Button>
       <Button tone="danger" onclick={() => controller.close()}>Archive</Button>
@@ -73,6 +80,24 @@
     <p class="dialog-copy">Other people will lose access until the item is restored.</p>
   </Dialog>
 {/snippet}
+
+{#snippet fullscreenExample(controller: OpenController)}
+  <Dialog {controller} title="Workspace" presentation="fullscreen">
+    {#snippet headerActions()}
+      <IconButton label="Close navigation" variant="ghost" tone="neutral" size="sm" onclick={controller.close}>
+        <CloseIcon size="var(--icon-size-sm)" />
+      </IconButton>
+    {/snippet}
+    <div class="fullscreen-content">
+      <nav aria-label="Workspace">
+        <NavList items={[{ href: "#home", label: "Home", current: true, icon: homeIcon }]} />
+      </nav>
+      <Button variant="ghost" tone="neutral">Manage account</Button>
+    </div>
+  </Dialog>
+{/snippet}
+
+{#snippet homeIcon()}<HomeIcon size="var(--icon-size-sm)" />{/snippet}
 
 {#snippet popoverExample(controller: OpenController)}
   <Popover {controller} position="bottom">
@@ -132,6 +157,14 @@
   {@render dialogExample(dialogMobileController)}
 </Story>
 
+<Story name="Fullscreen — desktop" exportName="FullscreenDesktop" globals={reviewStoryGlobals.desktop} asChild>
+  {@render fullscreenExample(dialogDesktopController)}
+</Story>
+
+<Story name="Fullscreen — mobile" exportName="FullscreenMobile" globals={reviewStoryGlobals.mobile} asChild>
+  {@render fullscreenExample(dialogMobileController)}
+</Story>
+
 <Story name="Popover — desktop" exportName="PopoverDesktop" globals={reviewStoryGlobals.desktop} asChild>
   {@render popoverExample(popoverDesktopController)}
 </Story>
@@ -153,6 +186,12 @@
 </Story>
 
 <style>
+  .fullscreen-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--space-6);
+  }
   .narrow {
     inline-size: min(100%, var(--layout-container-sm));
   }

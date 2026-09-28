@@ -22,17 +22,21 @@ Labels a category or status compactly. Use InlineMessage when changes need live 
   .badge {
     display: inline-flex;
     align-items: center;
+    box-sizing: border-box;
     border-radius: var(--radius-xl);
     background: var(--badge-surface);
     padding-inline: var(--space-2);
+    padding-block: var(--space-1);
+    max-inline-size: 100%;
     min-block-size: var(--space-5);
     color: var(--badge-text);
     font-weight: var(--font-weight-bold);
     font-size: var(--font-size-xs);
-    line-height: var(--line-height-tight);
+    line-height: var(--line-height-compact);
     font-family: var(--font-family-interface);
     letter-spacing: var(--letter-spacing-wide);
     text-transform: uppercase;
+    overflow-wrap: anywhere;
   }
 
   .neutral {

@@ -7,6 +7,7 @@
     Field,
     Fieldset,
     FileInput,
+    FormActions,
     Grid,
     Input,
     RadioGroup,
@@ -108,7 +109,7 @@
         <Input {...control} value="example" invalid />
       {/snippet}
     </Field>
-    <Button type="submit">Save changes</Button>
+    <FormActions><Button type="submit">Save changes</Button></FormActions>
   </form>
 </Story>
 
@@ -146,7 +147,7 @@
         />
       {/snippet}
     </Field>
-    <Button type="submit">Save changes</Button>
+    <FormActions><Button type="submit">Save changes</Button></FormActions>
   </form>
 </Story>
 
@@ -279,11 +280,8 @@
 <style>
   .form {
     display: grid;
-    gap: var(--space-5);
+    gap: var(--space-4);
     inline-size: min(100%, var(--layout-container-sm));
-  }
-  .form > :global(button) {
-    justify-self: start;
   }
   .raised-surface {
     border: var(--border-width-thin) solid var(--color-border-subtle);

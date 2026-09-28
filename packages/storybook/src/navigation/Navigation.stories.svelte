@@ -12,11 +12,13 @@
 
   const { Story } = defineMeta({
     title: "Navigation/Patterns",
+    component: NavList,
     tags: ["autodocs"],
     parameters: {
       docs: {
         description: {
-          component: "Patterns for primary navigation, route context, tabs, pagination, and action menus.",
+          component:
+            "Wrap NavList in a named nav landmark. Compact mode hides icon labels visually while preserving accessible names; text-only destinations stay visible. URLs and current state belong to the caller.",
         },
       },
     },
@@ -47,6 +49,19 @@
       ]}
     />
   </div>
+</Story>
+
+<Story name="Compact navigation" asChild>
+  <nav aria-label="Workspace" class="compact-demo">
+    <NavList
+      compact
+      items={[
+        { href: "#home", label: "Home", current: true, icon: homeIcon },
+        { href: "#team", label: "Team", badge: 8, icon: usersIcon },
+        { href: "#settings", label: "Settings", disabled: true, icon: settingsIcon },
+      ]}
+    />
+  </nav>
 </Story>
 
 <Story name="Route context" asChild>
@@ -100,11 +115,13 @@
 
 <style>
   .nav-demo {
-    border: var(--border-width-thin) solid var(--color-border-subtle);
     border-radius: var(--radius-lg);
     background: var(--color-surface-sunken);
     padding: var(--space-3);
     inline-size: min(100%, var(--layout-sidebar));
+  }
+  .compact-demo {
+    inline-size: var(--control-height-lg);
   }
   strong {
     color: var(--color-text-primary);
