@@ -43,8 +43,10 @@ other tones use status. Override `role` for static content.
 
 <div class="status {className}" role={tone === "error" ? "alert" : "status"} {...rest}>
   <FeedbackIcon {tone} size="lg" />
-  <svelte:element this={`h${headingLevel}`} class="title"><RenderContent content={title} /></svelte:element>
-  {#if description}<p><RenderContent content={description} /></p>{/if}
+  <div class="copy">
+    <svelte:element this={`h${headingLevel}`} class="title"><RenderContent content={title} /></svelte:element>
+    {#if description}<p><RenderContent content={description} /></p>{/if}
+  </div>
   {#if actions}<div class="actions">{@render actions()}</div>{/if}
 </div>
 
@@ -52,10 +54,16 @@ other tones use status. Override `role` for static content.
   .status {
     display: grid;
     justify-items: center;
-    gap: var(--space-3);
+    gap: var(--space-4);
     min-inline-size: 0;
     text-align: center;
     overflow-wrap: anywhere;
+  }
+  .copy {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-2);
+    min-inline-size: 0;
   }
   .title,
   p {
@@ -66,7 +74,7 @@ other tones use status. Override `role` for static content.
     color: var(--color-text-primary);
     font-weight: var(--font-weight-bold);
     font-size: var(--font-size-lg);
-    line-height: var(--line-height-tight);
+    line-height: var(--line-height-compact);
   }
   p {
     color: var(--color-text-secondary);
@@ -77,7 +85,7 @@ other tones use status. Override `role` for static content.
     flex-wrap: wrap;
     justify-content: center;
     gap: var(--space-2);
-    margin-block-start: var(--space-2);
+    margin-block-start: var(--space-1);
     max-inline-size: 100%;
   }
 </style>

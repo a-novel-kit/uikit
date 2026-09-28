@@ -31,6 +31,14 @@ example.
 The header accepts caller-owned controls. Escape, backdrop clicks, and close controls ask the same
 controller to close; a fixed Storybook controller can keep the preview open.
 
+Long headings wrap beside header controls; supporting copy uses the full header width.
+
+<ResponsiveStoryPair
+  desktop={OverlayStories.LongHeadingDesktop}
+  mobile={OverlayStories.LongHeadingMobile}
+  meta={OverlayStories}
+/>
+
 ```svelte
 <Dialog controller={dialog} title="Details">
   {#snippet headerActions()}

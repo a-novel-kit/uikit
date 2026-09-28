@@ -11,7 +11,12 @@
 </script>
 
 <Button onclick={controller.open}>Open details</Button>
-<Dialog {controller} {presentation} title="Workspace details and sharing preferences">
+<Dialog
+  {controller}
+  {presentation}
+  title="Workspace details and sharing preferences"
+  description="These settings apply to everyone who can access this workspace."
+>
   {#snippet headerActions()}
     <IconButton label="Close details" variant="ghost" tone="neutral" size="sm" onclick={controller.close}>
       <X size="var(--icon-size-sm)" />

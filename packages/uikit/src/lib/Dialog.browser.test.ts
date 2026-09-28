@@ -21,11 +21,18 @@ describe("Dialog browser lifecycle", () => {
       const dialog = getByRole("dialog");
       const heading = getByRole("heading");
       const close = getByRole("button", { name: "Close details" });
+      const description = dialog.querySelector<HTMLElement>(`#${dialog.getAttribute("aria-describedby")}`)!;
       const rect = dialog.getBoundingClientRect();
       expect(rect.left).toBe(presentation === "fullscreen" ? 0 : 8);
       expect(rect.width).toBe(presentation === "fullscreen" ? 320 : 304);
       expect(rect.height).toBeLessThanOrEqual(480);
       expect(heading.getBoundingClientRect().right).toBeLessThanOrEqual(close.getBoundingClientRect().left - 12);
+      expect(description.getBoundingClientRect().left).toBe(heading.getBoundingClientRect().left);
+      expect(description.getBoundingClientRect().right).toBe(close.getBoundingClientRect().right);
+      expect(description.getBoundingClientRect().top - heading.getBoundingClientRect().bottom).toBe(8);
+      expect(parseFloat(getComputedStyle(heading).lineHeight) / parseFloat(getComputedStyle(heading).fontSize)).toBe(
+        1.25
+      );
       expect(dialog.scrollWidth).toBe(dialog.clientWidth);
       await page.getByRole("button", { name: "Last action" }).click();
       if (presentation === "fullscreen") {

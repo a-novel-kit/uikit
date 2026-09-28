@@ -122,12 +122,10 @@ Supply a localized close control through `headerActions`.
   {...rest}
 >
   <div class="panel">
-    <header>
-      <div class="heading">
-        <h2 id={titleId}><span><RenderContent content={title} /></span></h2>
-        {#if description}<p id={descriptionId}><RenderContent content={description} /></p>{/if}
-      </div>
+    <header class:has-actions={Boolean(headerActions)}>
+      <h2 id={titleId}><span><RenderContent content={title} /></span></h2>
       {#if headerActions}<div class="header-actions">{@render headerActions()}</div>{/if}
+      {#if description}<p id={descriptionId}><RenderContent content={description} /></p>{/if}
     </header>
     {#if children}<div class="content">{@render children()}</div>{/if}
     {#if actions}<footer>{@render actions()}</footer>{/if}
@@ -163,18 +161,17 @@ Supply a localized close control through `headerActions`.
     min-inline-size: 0;
   }
   header {
-    display: flex;
-    align-items: flex-start;
-    gap: var(--space-3);
-  }
-  .heading {
-    flex: 1;
+    display: grid;
+    align-items: start;
+    gap: var(--space-2) var(--space-3);
     min-inline-size: 0;
     overflow-wrap: anywhere;
   }
+  header.has-actions {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
   .header-actions {
     display: flex;
-    flex: none;
     gap: var(--space-2);
   }
   .content {
@@ -194,11 +191,12 @@ Supply a localized close control through `headerActions`.
     min-block-size: var(--control-height-sm);
     color: var(--color-text-primary);
     font-size: var(--font-size-xl);
-    line-height: var(--line-height-tight);
+    line-height: var(--line-height-compact);
     font-family: var(--font-family-display);
   }
   p {
-    margin: var(--space-2) 0 0;
+    grid-column: 1 / -1;
+    margin: 0;
     color: var(--color-text-muted);
     font-size: var(--font-size-sm);
     line-height: var(--line-height-normal);

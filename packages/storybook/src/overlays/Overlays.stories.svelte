@@ -61,6 +61,20 @@
   </Dialog>
 {/snippet}
 
+{#snippet longDialogExample(controller: OpenController)}
+  <Dialog
+    {controller}
+    title="Review workspace access and sharing preferences"
+    description="These settings apply to everyone who can access this workspace, including people invited through a shared link."
+  >
+    {#snippet headerActions()}
+      <IconButton label="Close dialog" variant="ghost" tone="neutral" size="sm" onclick={controller.close}>
+        <CloseIcon size="var(--icon-size-sm)" />
+      </IconButton>
+    {/snippet}
+  </Dialog>
+{/snippet}
+
 {#snippet fullscreenExample(controller: OpenController)}
   <Dialog {controller} title="Workspace" presentation="fullscreen">
     {#snippet headerActions()}
@@ -141,6 +155,14 @@
 
 <Story name="Dialog — mobile" exportName="DialogMobile" globals={reviewStoryGlobals.mobile} asChild>
   {@render dialogExample(opened)}
+</Story>
+
+<Story name="Long heading — desktop" exportName="LongHeadingDesktop" globals={reviewStoryGlobals.desktop} asChild>
+  {@render longDialogExample(opened)}
+</Story>
+
+<Story name="Long heading — mobile" exportName="LongHeadingMobile" globals={reviewStoryGlobals.mobile} asChild>
+  {@render longDialogExample(opened)}
 </Story>
 
 <Story name="Fullscreen — desktop" exportName="FullscreenDesktop" globals={reviewStoryGlobals.desktop} asChild>

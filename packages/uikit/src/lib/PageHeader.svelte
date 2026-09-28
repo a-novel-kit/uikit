@@ -75,7 +75,7 @@ Composes a page heading, supporting copy, and actions. Defaults to a header cont
   .title {
     color: var(--color-text-primary);
     font-size: clamp(var(--font-size-2xl), 4vw, var(--font-size-4xl));
-    line-height: var(--line-height-tight);
+    line-height: var(--line-height-compact);
     font-family: var(--font-family-display);
     letter-spacing: var(--letter-spacing-tight);
   }
