@@ -23,19 +23,19 @@ Labels a category or status compactly. Use InlineMessage when changes need live 
     display: inline-flex;
     align-items: center;
     box-sizing: border-box;
-    border-radius: var(--radius-xl);
+    border-radius: var(--radius-md);
     background: var(--badge-surface);
-    padding-inline: var(--space-2);
+    padding-inline: var(--space-3);
     padding-block: var(--space-1);
+    inline-size: fit-content;
     max-inline-size: 100%;
-    min-block-size: var(--space-5);
     color: var(--badge-text);
     font-weight: var(--font-weight-bold);
-    font-size: var(--font-size-xs);
+    font-size: var(--font-size-sm);
     line-height: var(--line-height-compact);
     font-family: var(--font-family-interface);
-    letter-spacing: var(--letter-spacing-wide);
-    text-transform: uppercase;
+    letter-spacing: var(--letter-spacing-normal);
+    text-transform: none;
     overflow-wrap: anywhere;
   }
 

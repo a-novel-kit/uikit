@@ -39,7 +39,15 @@
   </Card>
 </Story>
 
-<Story name="Status labels" asChild>
+<Story
+  name="Status labels"
+  parameters={{
+    docs: {
+      description: { story: "Read-only labels preserve the supplied casing and wrap within their container." },
+    },
+  }}
+  asChild
+>
   <Inline gap="2" wrap>
     <Badge>Draft</Badge><Badge tone="brand">Active</Badge><Badge tone="success">Ready</Badge><Badge tone="warning"
       >Review</Badge
