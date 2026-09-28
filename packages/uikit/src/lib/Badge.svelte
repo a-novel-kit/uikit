@@ -23,12 +23,12 @@ Labels a category or status compactly. Use InlineMessage when changes need live 
     display: inline-block;
     box-sizing: border-box;
     border-radius: var(--radius-md);
-    background: color-mix(in oklab, var(--badge-accent) var(--color-mix-6), var(--color-surface-raised));
+    background: color-mix(in oklab, var(--badge-accent) var(--color-mix-3), var(--color-surface-raised));
     padding-inline: var(--space-3);
     padding-block: var(--space-1);
     inline-size: fit-content;
     max-inline-size: 100%;
-    color: color-mix(in oklab, var(--badge-accent) var(--color-mix-8), var(--color-text-primary));
+    color: color-mix(in oklab, var(--badge-accent) var(--color-mix-12), var(--color-text-primary));
     font-weight: var(--font-weight-bold);
     font-size: var(--font-size-sm);
     line-height: var(--line-height-compact);
