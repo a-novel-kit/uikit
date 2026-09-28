@@ -39,14 +39,15 @@
     docs: {
       description: {
         story:
-          "Two soft halos spread light from behind selected surfaces. Glow is decorative; text and focus indicators remain independent.",
+          "Broad halos fade into the surrounding canvas. Glow is decorative; text and focus indicators remain independent.",
       },
     },
   }}
   play={({ canvas }) => {
     for (const name of ["Brand", "Pressure", "Signal"]) {
       const sample = canvas.getByText(name).parentElement!;
-      expect(getComputedStyle(sample).boxShadow).toContain("0px 0px 16px 2px");
+      expect(getComputedStyle(sample).boxShadow).toContain("0px 0px 48px 0px");
+      expect(getComputedStyle(sample).boxShadow).toContain("0px 0px 96px 0px");
       expect(getComputedStyle(sample).boxShadow).not.toContain("0px 0px 0px");
       expect(getComputedStyle(sample).textShadow).toBe("none");
     }
@@ -59,6 +60,27 @@
   </div>
 </Story>
 
+<Story
+  name="Strong glow"
+  asChild
+  parameters={{
+    docs: { description: { story: "Wider, brighter halos give large accent surfaces more emphasis." } },
+  }}
+  play={({ canvas }) => {
+    for (const name of ["Brand", "Pressure"]) {
+      const sample = canvas.getByText(name).parentElement!;
+      expect(getComputedStyle(sample).boxShadow).toContain("0px 0px 64px 0px");
+      expect(getComputedStyle(sample).boxShadow).toContain("0px 0px 128px 0px");
+      expect(getComputedStyle(sample).textShadow).toBe("none");
+    }
+  }}
+>
+  <div class="glow-grid">
+    <div class="glow brand strong"><strong>Brand</strong><code>shadow-glow-brand-strong</code></div>
+    <div class="glow pressure strong"><strong>Pressure</strong><code>shadow-glow-pressure-strong</code></div>
+  </div>
+</Story>
+
 <style>
   .surface-grid,
   .duration-grid,
@@ -67,6 +89,11 @@
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
     gap: var(--space-5);
     inline-size: 100%;
+  }
+  .glow-grid {
+    gap: var(--space-12);
+    box-sizing: border-box;
+    padding: var(--space-8);
   }
   .surface,
   .glow {
@@ -155,6 +182,12 @@
   .signal {
     box-shadow: var(--shadow-glow-signal);
     background: color-mix(in oklab, var(--base-signal) var(--color-mix-2), var(--color-surface-island));
+  }
+  .brand.strong {
+    box-shadow: var(--shadow-glow-brand-strong);
+  }
+  .pressure.strong {
+    box-shadow: var(--shadow-glow-pressure-strong);
   }
   @media (prefers-reduced-motion: reduce) {
     .motion span {

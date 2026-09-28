@@ -313,31 +313,32 @@
     color-mix(in oklab, var(--color-neutral-1) var(--color-mix-11), transparent);
   --shadow-island: var(--shadow-md);
   --shadow-glow-brand:
-    0 0 var(--space-4) var(--border-width-strong)
+    0 0 var(--space-12)
       color-mix(in oklab, var(--color-glow-brand) var(--color-mix-9), transparent),
-    0 0 var(--space-8) color-mix(in oklab, var(--color-glow-brand) var(--color-mix-4), transparent);
+    0 0 var(--space-24) color-mix(in oklab, var(--color-glow-brand) var(--color-mix-4), transparent);
   --shadow-glow-pressure:
-    0 0 var(--space-4) var(--border-width-strong)
+    0 0 var(--space-12)
       color-mix(in oklab, var(--color-glow-pressure) var(--color-mix-9), transparent),
-    0 0 var(--space-8) color-mix(in oklab, var(--color-glow-pressure) var(--color-mix-4), transparent);
+    0 0 var(--space-24) color-mix(in oklab, var(--color-glow-pressure) var(--color-mix-4), transparent);
   --shadow-glow-neutral:
     0 0 var(--space-2)
       color-mix(in oklab, var(--color-neutral-12) var(--color-mix-4), transparent),
     0 0 var(--space-4)
       color-mix(in oklab, var(--color-neutral-12) var(--color-mix-1), transparent);
   --shadow-glow-brand-strong:
-    0 0 var(--space-6) var(--border-width-strong)
+    0 0 var(--space-16)
       color-mix(in oklab, var(--color-glow-brand) var(--color-mix-12), transparent),
-    0 0 var(--space-10) color-mix(in oklab, var(--color-glow-brand) var(--color-mix-6), transparent);
+    0 0 calc(var(--space-16) * var(--multiplier-2))
+      color-mix(in oklab, var(--color-glow-brand) var(--color-mix-6), transparent);
   --shadow-glow-pressure-strong:
-    0 0 var(--space-6) var(--border-width-strong)
+    0 0 var(--space-16)
       color-mix(in oklab, var(--color-glow-pressure) var(--color-mix-12), transparent),
-    0 0 var(--space-10)
+    0 0 calc(var(--space-16) * var(--multiplier-2))
       color-mix(in oklab, var(--color-glow-pressure) var(--color-mix-6), transparent);
   --shadow-glow-signal:
-    0 0 var(--space-4) var(--border-width-strong)
+    0 0 var(--space-12)
       color-mix(in oklab, var(--color-glow-signal) var(--color-mix-9), transparent),
-    0 0 var(--space-8) color-mix(in oklab, var(--color-glow-signal) var(--color-mix-4), transparent);
+    0 0 var(--space-24) color-mix(in oklab, var(--color-glow-signal) var(--color-mix-4), transparent);
   --shadow-indicator-brand:
     0 0 var(--space-2) color-mix(in oklab, var(--base-brand) var(--color-mix-8), transparent),
     0 0 var(--space-4) color-mix(in oklab, var(--base-brand) var(--color-mix-3), transparent);
