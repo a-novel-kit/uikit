@@ -39,14 +39,15 @@
     docs: {
       description: {
         story:
-          "A bright edge and two soft halos give selected surfaces a luminous outline. Glow is decorative; text and focus indicators remain independent.",
+          "Two soft halos spread light from behind selected surfaces. Glow is decorative; text and focus indicators remain independent.",
       },
     },
   }}
   play={({ canvas }) => {
     for (const name of ["Brand", "Pressure", "Signal"]) {
       const sample = canvas.getByText(name).parentElement!;
-      expect(getComputedStyle(sample).boxShadow).toContain("0px 0px 0px 1px");
+      expect(getComputedStyle(sample).boxShadow).toContain("0px 0px 16px 2px");
+      expect(getComputedStyle(sample).boxShadow).not.toContain("0px 0px 0px");
       expect(getComputedStyle(sample).textShadow).toBe("none");
     }
   }}
