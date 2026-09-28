@@ -1,6 +1,6 @@
 /* Generated from one OKLCH basis and gamut-relative coefficients. Do not edit. */
 :root {
-  --base-canvas: oklch(0.14478796 0 0);
+  --base-canvas: oklch(0.14478796 var(--color-neutral-chroma) var(--color-hue-brand));
   --color-hue-brand: 232;
   --color-harmony-half-turn: 180;
   --color-harmony-opposition-bias: -10;
@@ -44,7 +44,7 @@
   --color-neutral-lightness-floor: 0.11;
   --color-neutral-lightness-peak: 0.96;
   --color-neutral-lightness-curve: 1.6;
-  --color-neutral-chroma: 0.008;
+  --color-neutral-chroma: 0.012;
   --color-scale-divisions: var(--multiplier-11);
   --color-scale-progress-1: calc(var(--multiplier-0) / var(--color-scale-divisions));
   --color-scale-tone-1: calc(var(--color-scale-progress-1) * var(--color-scale-progress-1) * (var(--multiplier-3) - var(--multiplier-2) * var(--color-scale-progress-1)));
