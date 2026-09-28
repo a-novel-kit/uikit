@@ -22,7 +22,7 @@ describe("Badge reflow", () => {
     expect(css.textTransform).toBe("none");
     expect(css.letterSpacing).toBe("normal");
     expect(parseFloat(css.fontSize)).toBeGreaterThan(14);
-    expect(badge.getBoundingClientRect().width).toBeCloseTo(content.getBoundingClientRect().width + 24);
+    expect(badge.getBoundingClientRect().width).toBeCloseTo(content.getBoundingClientRect().width + 16);
   });
 
   it("keeps internal padding when a long role wraps", async () => {
@@ -35,10 +35,10 @@ describe("Badge reflow", () => {
     const content = getByText(text);
     const badge = content.parentElement!;
     const css = getComputedStyle(badge);
-    expect(parseFloat(css.paddingBlockStart)).toBe(4);
-    expect(parseFloat(css.paddingBlockEnd)).toBe(4);
-    expect(parseFloat(css.paddingInlineStart)).toBe(12);
-    expect(parseFloat(css.paddingInlineEnd)).toBe(12);
+    expect(parseFloat(css.paddingBlockStart)).toBe(2);
+    expect(parseFloat(css.paddingBlockEnd)).toBe(2);
+    expect(parseFloat(css.paddingInlineStart)).toBe(8);
+    expect(parseFloat(css.paddingInlineEnd)).toBe(8);
     expect(content.getBoundingClientRect().height).toBeGreaterThan(parseFloat(css.lineHeight));
     expect(badge.scrollWidth).toBeLessThanOrEqual(badge.clientWidth);
   });
