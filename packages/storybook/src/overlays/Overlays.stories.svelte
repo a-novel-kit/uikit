@@ -2,11 +2,17 @@
   import {
     Accordion,
     AccordionItem,
+    ActionGroup,
+    Badge,
     Button,
     Dialog,
     Disclosure,
+    Field,
+    FormActions,
     IconButton,
+    Input,
     NavList,
+    PanelHeader,
     Popover,
     Stack,
     Tooltip,
@@ -44,6 +50,33 @@
 
   const opened = fixedOpen(true);
   const closed = fixedOpen();
+  const preferenceSections = [
+    {
+      title: "Sharing",
+      description: "Only invited people can view this workspace. Invitations remain private until accepted.",
+    },
+    {
+      title: "Exports",
+      description: "Exported copies include the latest saved changes. Your original project stays in the workspace.",
+    },
+    {
+      title: "Notifications",
+      description: "Project updates appear in your inbox. Muted projects remain available in your workspace.",
+    },
+    {
+      title: "Version history",
+      description: "Saved versions let you revisit earlier work without replacing your current draft.",
+    },
+    {
+      title: "Storage",
+      description:
+        "Original files stay available while a project is archived. Removing a copy leaves the original intact.",
+    },
+    {
+      title: "Accessibility",
+      description: "The interface follows your device preferences for reduced motion and increased contrast.",
+    },
+  ];
 </script>
 
 {#snippet dialogExample(controller: OpenController)}
@@ -96,12 +129,13 @@
 {#snippet popoverExample(controller: OpenController)}
   <Popover {controller} position="bottom">
     {#snippet trigger(props)}
-      <Button {...props} variant="outline" tone="neutral">Open popover</Button>
+      <Button {...props} variant="outline" tone="neutral">Export options</Button>
     {/snippet}
-    <Stack gap="3" style="inline-size: min(20rem, 80vi)">
-      <strong>Preview options</strong>
-      <span class="muted">Non-modal supporting content closes on Escape or an outside click.</span>
-      <Button size="sm" onclick={() => controller.close()}>Apply</Button>
+    <Stack gap="4" style="inline-size: min(20rem, 75vi)">
+      <PanelHeader title="Export a copy" description="The original stays in your workspace." />
+      <ActionGroup align="end">
+        <Button onclick={controller.close}>Export</Button>
+      </ActionGroup>
     </Stack>
   </Popover>
 {/snippet}
@@ -117,30 +151,86 @@
 {/snippet}
 
 <Story name="Disclosure" asChild>
-  <div class="narrow">
-    <Disclosure controller={opened} summary="What is stored locally?"
-      >Drafts and preferences are stored on this device.</Disclosure
-    >
-    <Disclosure controller={closed} summary="Can I export my data?"
-      >Open account settings and choose Export data.</Disclosure
-    >
-  </div>
+  <div class="narrow"
+    ><Stack gap="2">
+      <Disclosure controller={opened} summary="What is stored locally?"
+        >Drafts and preferences are stored on this device.</Disclosure
+      >
+      <Disclosure controller={closed} summary="Can I export my data?"
+        >Open account settings and choose Export data.</Disclosure
+      >
+    </Stack></div
+  >
 </Story>
 
 <Story name="Accordion" asChild>
   <div class="narrow">
     <Accordion>
-      <AccordionItem controller={opened} summary="Keyboard behavior">
-        Tab reaches each summary. Enter or Space toggles it; arrow keys are not required for native details.
+      <AccordionItem controller={opened}>
+        {#snippet summary()}Sharing <Badge>Private</Badge>{/snippet}
+        Only people you invite can view this workspace.
       </AccordionItem>
-      <AccordionItem controller={closed} summary="Multiple panels"
-        >Set multiple on the Accordion when more than one panel may remain open.</AccordionItem
+      <AccordionItem controller={closed} summary="Export preferences"
+        >Choose a format and image quality for exported copies.</AccordionItem
       >
-      <AccordionItem controller={closed} summary="Unavailable section" disabled
-        >This content cannot be expanded.</AccordionItem
-      >
+      <AccordionItem controller={closed} summary="Version history" disabled>No saved versions yet.</AccordionItem>
     </Accordion>
   </div>
+</Story>
+
+{#snippet formExample(controller: OpenController)}
+  <Dialog {controller} title="Create workspace" description="A shared place for your next project.">
+    {#snippet headerActions()}
+      <IconButton label="Close dialog" variant="ghost" tone="neutral" size="sm" onclick={controller.close}>
+        <CloseIcon size="var(--icon-size-sm)" />
+      </IconButton>
+    {/snippet}
+    <form onsubmit={(event) => event.preventDefault()}>
+      <Stack gap="4">
+        <Field label="Workspace name">
+          {#snippet children(control)}<Input {...control} value="Summer sketches" />{/snippet}
+        </Field>
+        <Disclosure controller={opened} summary="Sharing">
+          <p class="dialog-copy">Your workspace is private until you invite someone.</p>
+        </Disclosure>
+        <FormActions><Button type="submit">Create workspace</Button></FormActions>
+      </Stack>
+    </form>
+  </Dialog>
+{/snippet}
+
+{#snippet scrollExample(controller: OpenController)}
+  <Dialog {controller} title="Workspace preferences" description="Settings for everyone in this workspace.">
+    {#snippet headerActions()}
+      <IconButton label="Close dialog" variant="ghost" tone="neutral" size="sm" onclick={controller.close}>
+        <CloseIcon size="var(--icon-size-sm)" />
+      </IconButton>
+    {/snippet}
+    <Stack gap="4">
+      {#each preferenceSections as section (section.title)}
+        <Disclosure controller={opened} summary={section.title}>
+          <p class="dialog-copy">{section.description}</p>
+        </Disclosure>
+      {/each}
+    </Stack>
+    {#snippet actions()}
+      <Button variant="ghost" tone="neutral" onclick={controller.close}>Cancel</Button>
+      <Button onclick={controller.close}>Save preferences</Button>
+    {/snippet}
+  </Dialog>
+{/snippet}
+
+<Story name="Form — desktop" exportName="FormDesktop" globals={reviewStoryGlobals.desktop} asChild>
+  {@render formExample(opened)}
+</Story>
+<Story name="Form — mobile" exportName="FormMobile" globals={reviewStoryGlobals.mobile} asChild>
+  {@render formExample(opened)}
+</Story>
+<Story name="Long content — desktop" exportName="LongContentDesktop" globals={reviewStoryGlobals.desktop} asChild>
+  {@render scrollExample(opened)}
+</Story>
+<Story name="Long content — mobile" exportName="LongContentMobile" globals={reviewStoryGlobals.mobile} asChild>
+  {@render scrollExample(opened)}
 </Story>
 
 <Story
@@ -203,13 +293,9 @@
   .narrow {
     inline-size: min(100%, var(--layout-container-sm));
   }
-  .muted,
   .dialog-copy {
     margin: 0;
     color: var(--color-text-muted);
     line-height: var(--line-height-normal);
-  }
-  strong {
-    color: var(--color-text-primary);
   }
 </style>

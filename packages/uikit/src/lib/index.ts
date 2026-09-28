@@ -43,6 +43,8 @@ export { default as Accordion } from "./Accordion.svelte";
 export type { AccordionProps } from "./Accordion.svelte";
 export { default as AccordionItem } from "./AccordionItem.svelte";
 export type { AccordionItemController, AccordionItemProps } from "./AccordionItem.svelte";
+export { default as ActionGroup } from "./ActionGroup.svelte";
+export type { ActionGroupProps } from "./ActionGroup.svelte";
 export { default as ActionMenu } from "./ActionMenu.svelte";
 export type {
   ActionMenuAction,
@@ -108,6 +110,8 @@ export { default as NavList } from "./NavList.svelte";
 export type { NavigationItem, NavListProps } from "./NavList.svelte";
 export { default as PageHeader } from "./PageHeader.svelte";
 export type { PageHeaderProps } from "./PageHeader.svelte";
+export { default as PanelHeader } from "./PanelHeader.svelte";
+export type { PanelHeaderProps } from "./PanelHeader.svelte";
 export { default as Pagination } from "./Pagination.svelte";
 export type { PaginationProps } from "./Pagination.svelte";
 export { default as Popover } from "./Popover.svelte";

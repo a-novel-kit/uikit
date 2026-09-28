@@ -29,12 +29,14 @@ the additional spacing separates inputs from actions. Direct children stretch on
 </script>
 
 <script lang="ts">
+  import ActionGroup from "./ActionGroup.svelte";
+
   let { feedback, children, class: className = "", ...rest }: FormActionsProps = $props();
 </script>
 
 <div class="form-actions {className}" {...rest}>
   {#if feedback}{@render feedback()}{/if}
-  {#if children}<div class="controls">{@render children()}</div>{/if}
+  {#if children}<ActionGroup {children} />{/if}
 </div>
 
 <style>
@@ -45,16 +47,5 @@ the additional spacing separates inputs from actions. Direct children stretch on
   }
   .form-actions:not(:first-child) {
     margin-block-start: var(--space-4);
-  }
-  .controls {
-    display: grid;
-    gap: var(--space-3);
-    min-inline-size: 0;
-  }
-  @media (min-width: 35rem) {
-    .controls {
-      display: flex;
-      flex-wrap: wrap;
-    }
   }
 </style>

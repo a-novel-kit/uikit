@@ -34,7 +34,11 @@ describe("Dialog browser lifecycle", () => {
         1.25
       );
       expect(dialog.scrollWidth).toBe(dialog.clientWidth);
+      const closeTop = close.getBoundingClientRect().top;
+      const doneTop = getByRole("button", { name: "Done" }).getBoundingClientRect().top;
       await page.getByRole("button", { name: "Last action" }).click();
+      expect(close.getBoundingClientRect().top).toBe(closeTop);
+      expect(getByRole("button", { name: "Done" }).getBoundingClientRect().top).toBe(doneTop);
       if (presentation === "fullscreen") {
         expect(close.getBoundingClientRect().top).toBe(16);
         const lastAction = getByRole("button", { name: "Last action" });
@@ -54,6 +58,16 @@ describe("Dialog browser lifecycle", () => {
       expect(controller.state.open).toBe(false);
     }
   );
+
+  it("keeps content and dismissal reachable on exceptionally short viewports", async () => {
+    await page.viewport(320, 200);
+    const controller = createOpenController();
+    render(Fixture, { controller, long: true });
+    await page.getByRole("button", { name: "Open details" }).click();
+    await page.getByRole("button", { name: "Last action" }).click();
+    await page.getByRole("button", { name: "Done" }).click();
+    await expect.element(page.getByRole("button", { name: "Open details" })).toHaveFocus();
+  });
 
   it("survives a queued native close after teardown", async () => {
     const view = render(Dialog, {

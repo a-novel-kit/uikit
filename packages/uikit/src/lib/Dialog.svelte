@@ -6,15 +6,18 @@ Supply a localized close control through `headerActions`.
 
 ```svelte
 <script lang="ts">
-  import { Button, Dialog, createOpenController } from "@a-novel-kit/uikit";
+  import { Button, Dialog, IconButton, createOpenController } from "@a-novel-kit/uikit";
+  import { X } from "@lucide/svelte";
   const dialog = createOpenController();
 </script>
 
 <Button onclick={dialog.open}>Details</Button>
 <Dialog controller={dialog} title="Details">
   <p>Additional information.</p>
-  {#snippet actions()}
-    <Button onclick={dialog.close}>Close</Button>
+  {#snippet headerActions()}
+    <IconButton label="Close dialog" variant="ghost" tone="neutral" size="sm" onclick={dialog.close}>
+      <X size="var(--icon-size-sm)" />
+    </IconButton>
   {/snippet}
 </Dialog>
 ```
@@ -53,7 +56,8 @@ Supply a localized close control through `headerActions`.
 </script>
 
 <script lang="ts">
-  import RenderContent from "./Content.svelte";
+  import ActionGroup from "./ActionGroup.svelte";
+  import PanelHeader from "./PanelHeader.svelte";
 
   let {
     controller,
@@ -122,13 +126,9 @@ Supply a localized close control through `headerActions`.
   {...rest}
 >
   <div class="panel">
-    <header class:has-actions={Boolean(headerActions)}>
-      <h2 id={titleId}><span><RenderContent content={title} /></span></h2>
-      {#if headerActions}<div class="header-actions">{@render headerActions()}</div>{/if}
-      {#if description}<p id={descriptionId}><RenderContent content={description} /></p>{/if}
-    </header>
+    <PanelHeader {title} {description} {titleId} {descriptionId} actions={headerActions} />
     {#if children}<div class="content">{@render children()}</div>{/if}
-    {#if actions}<footer>{@render actions()}</footer>{/if}
+    {#if actions}<footer><ActionGroup align="end" children={actions} /></footer>{/if}
   </div>
 </dialog>
 
@@ -154,52 +154,25 @@ Supply a localized close control through `headerActions`.
     background: var(--color-overlay-backdrop);
   }
   .panel {
-    display: grid;
-    gap: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
     box-sizing: border-box;
     padding: var(--dialog-padding);
     min-inline-size: 0;
-  }
-  header {
-    display: grid;
-    align-items: start;
-    gap: var(--space-2) var(--space-3);
-    min-inline-size: 0;
-    overflow-wrap: anywhere;
-  }
-  header.has-actions {
-    grid-template-columns: minmax(0, 1fr) auto;
-  }
-  .header-actions {
-    display: flex;
-    gap: var(--space-2);
+    max-block-size: calc(100dvb - 2 * var(--dialog-margin));
   }
   .content {
+    /* Keep child focus outlines inside the independently scrolling body. */
+    margin: calc(-1 * var(--space-2));
+    padding: var(--space-2);
     min-inline-size: 0;
+    min-block-size: var(--control-height-md);
+    overflow: auto;
   }
   footer {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    gap: var(--space-2);
-    padding-block-start: var(--space-2);
-  }
-  h2 {
-    display: flex;
-    align-items: center;
-    margin: 0;
-    min-block-size: var(--control-height-sm);
-    color: var(--color-text-primary);
-    font-size: var(--font-size-xl);
-    line-height: var(--line-height-compact);
-    font-family: var(--font-family-display);
-  }
-  p {
-    grid-column: 1 / -1;
-    margin: 0;
-    color: var(--color-text-muted);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-normal);
+    flex: none;
+    padding-block-start: var(--space-1);
   }
 
   @media (min-width: 48rem) {
@@ -210,31 +183,20 @@ Supply a localized close control through `headerActions`.
   }
 
   .fullscreen {
+    --dialog-margin: var(--space-0);
     margin: 0;
     box-shadow: none;
     border-radius: 0;
     inline-size: 100vi;
     block-size: 100dvb;
     max-block-size: none;
-    overflow: hidden;
   }
   .fullscreen .panel {
-    display: flex;
-    flex-direction: column;
     block-size: 100%;
-  }
-  .fullscreen header,
-  .fullscreen footer {
-    flex: none;
   }
   .fullscreen .content {
     display: grid;
     flex: 1;
-    /* Leave room inside the scrollport for child focus outlines. */
-    margin: calc(-1 * var(--space-2));
-    padding: var(--space-2);
-    min-block-size: 0;
-    overflow: auto;
   }
 
   @media (forced-colors: active) {

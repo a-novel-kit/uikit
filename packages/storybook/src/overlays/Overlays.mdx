@@ -1,5 +1,6 @@
 import * as OverlayStories from "./Overlays.stories.svelte";
 
+import { ActionGroup, Disclosure, PanelHeader, Popover } from "@a-novel-kit/uikit";
 import { Canvas, Meta, ResponsiveStoryPair } from "@a-novel-kit/uikit-storybook";
 
 import { ArgTypes } from "@storybook/addon-docs/blocks";
@@ -16,9 +17,17 @@ example.
 
 <Canvas of={OverlayStories.Disclosure} />
 
+The summary accepts text or an inline snippet, including an icon or badge. Keep interactive controls
+in the revealed content so the summary remains one clear toggle target.
+
+<ArgTypes of={Disclosure} />
+
 ## Accordion
 
 <Canvas of={OverlayStories.Accordion} />
+
+`AccordionItem` uses the disclosure props and presentation above. `Accordion` supplies single-open
+grouping; set `multiple` to allow independent panels. Each item receives its own controller.
 
 ## Dialog
 
@@ -50,6 +59,23 @@ Long headings wrap beside header controls; supporting copy uses the full header 
 </Dialog>
 ```
 
+### Forms and long content
+
+Compose fields and `FormActions` inside the body for native form submission. Use `actions` for
+controls that belong outside the scrolling content. On narrow screens, action groups stack at full
+width in source order; desktop actions keep their natural width.
+
+<ResponsiveStoryPair desktop={OverlayStories.FormDesktop} mobile={OverlayStories.FormMobile} meta={OverlayStories} />
+
+Long bodies scroll independently, with space for focus outlines. The whole panel can scroll on an
+exceptionally short viewport so headings and actions remain reachable.
+
+<ResponsiveStoryPair
+  desktop={OverlayStories.LongContentDesktop}
+  mobile={OverlayStories.LongContentMobile}
+  meta={OverlayStories}
+/>
+
 ### Fullscreen
 
 `presentation="fullscreen"` fills the viewport and lets the body scroll independently. The caller
@@ -70,6 +96,31 @@ owns navigation and content layout. The header and optional footer remain visibl
   mobile={OverlayStories.PopoverMobile}
   meta={OverlayStories}
 />
+
+### Shared panel composition
+
+`PanelHeader` supplies a compact heading, optional description and trailing controls. `ActionGroup`
+owns responsive action spacing; `FormActions` adds form feedback and separation from inputs.
+Compose the body with ordinary markup, `Stack`, and existing controls. These layout components own
+no state or surface. A popover remains non-modal; use `Dialog` when background interaction must stop.
+
+```svelte
+<Stack gap="4">
+  <PanelHeader title="Export a copy" description="The original stays in your workspace." />
+  <ActionGroup align="end">
+    <Button onclick={exportCopy}>Export</Button>
+  </ActionGroup>
+</Stack>
+```
+
+Import `PanelHeader`, `ActionGroup`, `Stack`, and `Button` from `@a-novel-kit/uikit`. Supply
+`titleId` and `descriptionId` when a containing region needs to reference the header through ARIA.
+`Dialog` supplies these associations automatically. Use the description for a short explanation;
+put structured content in the body.
+
+<ArgTypes of={PanelHeader} />
+<ArgTypes of={ActionGroup} />
+<ArgTypes of={Popover} />
 
 ## Tooltip
 
