@@ -401,6 +401,7 @@ For a custom trigger, spread the snippet attributes onto a native button.
     justify-self: center;
   }
   :global(.agora-menu-content.end) {
+    position-area: block-end span-inline-start;
     justify-self: end;
   }
   :global(.agora-menu-group) {

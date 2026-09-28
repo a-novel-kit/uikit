@@ -1,5 +1,6 @@
 <script module lang="ts">
   import { ActionMenu, Breadcrumbs, Card, NavList, Pagination, Stack, Tabs } from "@a-novel-kit/uikit";
+  import type { OpenController } from "@a-novel-kit/uikit";
 
   import {
     Pencil as EditIcon,
@@ -26,10 +27,11 @@
 </script>
 
 <script lang="ts">
-  import { createOpenController, createValueController } from "@a-novel-kit/uikit";
+  import { fixedOpen, fixedValue } from "../controllers";
 
-  const tabsController = createValueController({ initialValue: "profile" });
-  const actionMenuController = createOpenController();
+  const tabsController = fixedValue("profile");
+  const actionMenuController = fixedOpen(true);
+  const closedActionMenuController = fixedOpen();
 </script>
 
 {#snippet homeIcon()}<HomeIcon size="var(--icon-size-sm)" />{/snippet}
@@ -91,17 +93,17 @@
       {#snippet children(tab)}
         <Stack gap="2">
           <strong>{tab.label}</strong>
-          <span class="muted">The panel follows the selected tab.</span>
+          <span class="muted">Personal details and display preferences.</span>
         </Stack>
       {/snippet}
     </Tabs>
   </Card>
 </Story>
 
-<Story name="Action menu" asChild>
+{#snippet actionMenu(controller: OpenController)}
   <ActionMenu
     label="Item actions"
-    controller={actionMenuController}
+    {controller}
     triggerText="Item actions"
     triggerIcon={moreIcon}
     items={[
@@ -111,6 +113,14 @@
       { id: "delete", label: "Delete", tone: "danger" },
     ]}
   />
+{/snippet}
+
+<Story name="Action menu" parameters={{ docs: { story: { inline: false, height: "360px" } } }} asChild>
+  {@render actionMenu(actionMenuController)}
+</Story>
+
+<Story name="Action menu closed" asChild>
+  {@render actionMenu(closedActionMenuController)}
 </Story>
 
 <style>

@@ -64,25 +64,21 @@
 </script>
 
 <script lang="ts">
-  import {
-    createCheckedController,
-    createComboboxController,
-    createSelectController,
-    createValueController,
-  } from "@a-novel-kit/uikit";
+  import { fixedChecked, fixedCombobox, fixedSelect, fixedValue } from "../controllers";
 
   type Visibility = (typeof visibilityOptions)[number]["value"];
   type Language = (typeof languageOptions)[number]["value"];
 
-  const visibilityController = createSelectController<Visibility>();
-  const invalidVisibilityController = createSelectController<Visibility>();
-  const composedVisibilityController = createSelectController<Visibility>();
-  const productUpdatesController = createCheckedController({ initialChecked: true });
-  const desktopAlertsController = createCheckedController({ initialChecked: true });
-  const densityController = createValueController<string | undefined>({ initialValue: "comfortable" });
-  const scaleController = createValueController({ initialValue: 72 });
-  const languageController = createComboboxController<Language>({ initialValue: "en" });
-  const compactNavigationController = createCheckedController();
+  const visibilityController = fixedSelect<Visibility>();
+  const openVisibilityController = fixedSelect<Visibility>("private", true);
+  const invalidVisibilityController = fixedSelect<Visibility>();
+  const composedVisibilityController = fixedSelect<Visibility>("private");
+  const productUpdatesController = fixedChecked(true);
+  const desktopAlertsController = fixedChecked(true);
+  const densityController = fixedValue<string | undefined>("comfortable");
+  const scaleController = fixedValue(72);
+  const languageController = fixedCombobox<Language>("en", true);
+  const compactNavigationController = fixedChecked();
 </script>
 
 <Story name="Text fields" asChild>
@@ -218,7 +214,7 @@
   </Stack>
 </Story>
 
-<Story name="Searchable selection" asChild>
+<Story name="Searchable selection" parameters={{ docs: { story: { inline: false, height: "440px" } } }} asChild>
   <div class="narrow">
     <Field label="Language" hint="Type to filter the available options.">
       {#snippet children(control)}
@@ -230,6 +226,16 @@
           options={languageOptions}
           maxMenuHeight="calc(var(--control-height-sm) * var(--multiplier-5))"
         />
+      {/snippet}
+    </Field>
+  </div>
+</Story>
+
+<Story name="Open selection" parameters={{ docs: { story: { inline: false, height: "360px" } } }} asChild>
+  <div class="narrow">
+    <Field label="Visibility">
+      {#snippet children(control)}
+        <Select {...control} controller={openVisibilityController} options={visibilityOptions} allowDeselect />
       {/snippet}
     </Field>
   </div>

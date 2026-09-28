@@ -31,39 +31,19 @@
     },
   });
 
-  async function verifyTooltip({ canvasElement }: { canvasElement: HTMLElement }) {
+  async function verifyPinnedDialog({ canvasElement }: { canvasElement: HTMLElement }) {
     const canvas = within(canvasElement);
-    await userEvent.hover(canvas.getByRole("button", { name: "Open help" }));
-    await expect(canvas.getByRole("tooltip", { name: "Open help" })).toBeVisible();
+    await userEvent.click(canvas.getByRole("button", { name: "Close dialog" }));
+    await userEvent.keyboard("{Escape}");
+    await expect(canvas.getByRole("dialog", { name: "Archive item?" })).toBeVisible();
   }
 </script>
 
 <script lang="ts">
-  import { createOpenController } from "@a-novel-kit/uikit";
+  import { fixedOpen } from "../controllers";
 
-  function createLockedOpenController(): OpenController {
-    const state = { open: true };
-
-    return {
-      state,
-      open: () => {},
-      close: () => {},
-      toggle: () => {},
-    };
-  }
-
-  const firstDisclosureController = createOpenController({ initialOpen: true });
-  const secondDisclosureController = createOpenController();
-  const firstAccordionController = createOpenController({ initialOpen: true });
-  const secondAccordionController = createOpenController();
-  const disabledAccordionController = createOpenController();
-  const dialogDesktopController = createLockedOpenController();
-  const dialogMobileController = createLockedOpenController();
-  const popoverDesktopController = createLockedOpenController();
-  const popoverMobileController = createLockedOpenController();
-  const tooltipDesktopController = createLockedOpenController();
-  const tooltipMobileController = createLockedOpenController();
-  const tooltipInteractiveController = createOpenController();
+  const opened = fixedOpen(true);
+  const closed = fixedOpen();
 </script>
 
 {#snippet dialogExample(controller: OpenController)}
@@ -124,10 +104,10 @@
 
 <Story name="Disclosure" asChild>
   <div class="narrow">
-    <Disclosure controller={firstDisclosureController} summary="What is stored locally?"
+    <Disclosure controller={opened} summary="What is stored locally?"
       >Drafts and preferences are stored on this device.</Disclosure
     >
-    <Disclosure controller={secondDisclosureController} summary="Can I export my data?"
+    <Disclosure controller={closed} summary="Can I export my data?"
       >Open account settings and choose Export data.</Disclosure
     >
   </div>
@@ -136,53 +116,59 @@
 <Story name="Accordion" asChild>
   <div class="narrow">
     <Accordion>
-      <AccordionItem controller={firstAccordionController} summary="Keyboard behavior">
+      <AccordionItem controller={opened} summary="Keyboard behavior">
         Tab reaches each summary. Enter or Space toggles it; arrow keys are not required for native details.
       </AccordionItem>
-      <AccordionItem controller={secondAccordionController} summary="Multiple panels"
+      <AccordionItem controller={closed} summary="Multiple panels"
         >Set multiple on the Accordion when more than one panel may remain open.</AccordionItem
       >
-      <AccordionItem controller={disabledAccordionController} summary="Unavailable section" disabled
+      <AccordionItem controller={closed} summary="Unavailable section" disabled
         >This content cannot be expanded.</AccordionItem
       >
     </Accordion>
   </div>
 </Story>
 
-<Story name="Dialog — desktop" exportName="DialogDesktop" globals={reviewStoryGlobals.desktop} asChild>
-  {@render dialogExample(dialogDesktopController)}
+<Story
+  name="Dialog — desktop"
+  exportName="DialogDesktop"
+  globals={reviewStoryGlobals.desktop}
+  asChild
+  play={verifyPinnedDialog}
+>
+  {@render dialogExample(opened)}
 </Story>
 
 <Story name="Dialog — mobile" exportName="DialogMobile" globals={reviewStoryGlobals.mobile} asChild>
-  {@render dialogExample(dialogMobileController)}
+  {@render dialogExample(opened)}
 </Story>
 
 <Story name="Fullscreen — desktop" exportName="FullscreenDesktop" globals={reviewStoryGlobals.desktop} asChild>
-  {@render fullscreenExample(dialogDesktopController)}
+  {@render fullscreenExample(opened)}
 </Story>
 
 <Story name="Fullscreen — mobile" exportName="FullscreenMobile" globals={reviewStoryGlobals.mobile} asChild>
-  {@render fullscreenExample(dialogMobileController)}
+  {@render fullscreenExample(opened)}
 </Story>
 
 <Story name="Popover — desktop" exportName="PopoverDesktop" globals={reviewStoryGlobals.desktop} asChild>
-  {@render popoverExample(popoverDesktopController)}
+  {@render popoverExample(opened)}
 </Story>
 
 <Story name="Popover — mobile" exportName="PopoverMobile" globals={reviewStoryGlobals.mobile} asChild>
-  {@render popoverExample(popoverMobileController)}
+  {@render popoverExample(opened)}
 </Story>
 
 <Story name="Tooltip — desktop" exportName="TooltipDesktop" globals={reviewStoryGlobals.desktop} asChild>
-  {@render tooltipExample(tooltipDesktopController)}
+  {@render tooltipExample(opened)}
 </Story>
 
 <Story name="Tooltip — mobile" exportName="TooltipMobile" globals={reviewStoryGlobals.mobile} asChild>
-  {@render tooltipExample(tooltipMobileController)}
+  {@render tooltipExample(opened)}
 </Story>
 
-<Story name="Tooltip interaction" play={verifyTooltip} asChild>
-  {@render tooltipExample(tooltipInteractiveController)}
+<Story name="Tooltip closed" asChild>
+  {@render tooltipExample(closed)}
 </Story>
 
 <style>

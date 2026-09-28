@@ -101,6 +101,10 @@ The hidden named input submits the selected value. The caller validates required
   );
 
   $effect(() => {
+    if (controller.state.open && inputElement) anchorWidth = inputElement.getBoundingClientRect().width + "px";
+  });
+
+  $effect(() => {
     if (!controller.state.open) return;
     if (activeIndex >= 0 && filteredOptions[activeIndex] && !filteredOptions[activeIndex]?.disabled) return;
 
@@ -180,8 +184,10 @@ The hidden named input submits the selected value. The caller validates required
   }
 
   function handleInput(event: Event) {
+    const target = event.currentTarget as HTMLInputElement;
     ensureOpenForInput();
-    controller.setQuery((event.currentTarget as HTMLInputElement).value);
+    controller.setQuery(target.value);
+    target.value = inputValue;
     activeIndex = findEnabledBoundary(filteredOptions, "first");
   }
 
