@@ -25,13 +25,13 @@ Labels a category or status compactly. Use InlineMessage when changes need live 
     box-shadow: 0 0 var(--space-3) color-mix(in oklab, var(--badge-accent) var(--color-mix-2), transparent);
     border-radius: var(--radius-sm);
     background: var(--badge-accent);
-    padding-inline: var(--space-2);
+    padding-inline: var(--space-1-5);
     padding-block: calc(var(--space-1) / var(--multiplier-2));
     inline-size: fit-content;
     max-inline-size: 100%;
     color: var(--color-text-inverse);
     font-weight: var(--font-weight-bold);
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-xs);
     line-height: var(--line-height-compact);
     font-family: var(--font-family-interface);
     letter-spacing: var(--letter-spacing-normal);
