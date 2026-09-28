@@ -289,6 +289,21 @@
   --color-graphic-brand: var(--base-brand);
   --color-graphic-pressure: var(--base-pressure);
   --color-graphic-signal: var(--base-signal);
+  --color-glow-brand: color-mix(
+    in oklab,
+    var(--color-neutral-12) var(--color-mix-2),
+    var(--base-brand)
+  );
+  --color-glow-pressure: color-mix(
+    in oklab,
+    var(--color-neutral-12) var(--color-mix-2),
+    var(--base-pressure)
+  );
+  --color-glow-signal: color-mix(
+    in oklab,
+    var(--color-neutral-12) var(--color-mix-2),
+    var(--base-signal)
+  );
 
   --shadow-sm: 0 var(--space-1) var(--space-3)
     color-mix(in oklab, var(--color-neutral-1) var(--color-mix-8), transparent);
@@ -299,28 +314,30 @@
   --shadow-island: var(--shadow-md);
   --shadow-glow-brand:
     0 0 var(--space-4) var(--border-width-strong)
-      color-mix(in oklab, var(--base-brand) var(--color-mix-12), transparent),
-    0 0 var(--space-8) color-mix(in oklab, var(--base-brand) var(--color-mix-6), transparent);
+      color-mix(in oklab, var(--color-glow-brand) var(--color-mix-9), transparent),
+    0 0 var(--space-8) color-mix(in oklab, var(--color-glow-brand) var(--color-mix-4), transparent);
   --shadow-glow-pressure:
     0 0 var(--space-4) var(--border-width-strong)
-      color-mix(in oklab, var(--base-pressure) var(--color-mix-12), transparent),
-    0 0 var(--space-8) color-mix(in oklab, var(--base-pressure) var(--color-mix-6), transparent);
+      color-mix(in oklab, var(--color-glow-pressure) var(--color-mix-9), transparent),
+    0 0 var(--space-8) color-mix(in oklab, var(--color-glow-pressure) var(--color-mix-4), transparent);
   --shadow-glow-neutral:
     0 0 var(--space-2)
       color-mix(in oklab, var(--color-neutral-12) var(--color-mix-4), transparent),
     0 0 var(--space-4)
       color-mix(in oklab, var(--color-neutral-12) var(--color-mix-1), transparent);
   --shadow-glow-brand-strong:
-    0 0 var(--space-6) var(--border-width-strong) var(--base-brand),
-    0 0 var(--space-10) color-mix(in oklab, var(--base-brand) var(--color-mix-8), transparent);
+    0 0 var(--space-6) var(--border-width-strong)
+      color-mix(in oklab, var(--color-glow-brand) var(--color-mix-12), transparent),
+    0 0 var(--space-10) color-mix(in oklab, var(--color-glow-brand) var(--color-mix-6), transparent);
   --shadow-glow-pressure-strong:
-    0 0 var(--space-6) var(--border-width-strong) var(--base-pressure),
+    0 0 var(--space-6) var(--border-width-strong)
+      color-mix(in oklab, var(--color-glow-pressure) var(--color-mix-12), transparent),
     0 0 var(--space-10)
-      color-mix(in oklab, var(--base-pressure) var(--color-mix-8), transparent);
+      color-mix(in oklab, var(--color-glow-pressure) var(--color-mix-6), transparent);
   --shadow-glow-signal:
     0 0 var(--space-4) var(--border-width-strong)
-      color-mix(in oklab, var(--base-signal) var(--color-mix-12), transparent),
-    0 0 var(--space-8) color-mix(in oklab, var(--base-signal) var(--color-mix-6), transparent);
+      color-mix(in oklab, var(--color-glow-signal) var(--color-mix-9), transparent),
+    0 0 var(--space-8) color-mix(in oklab, var(--color-glow-signal) var(--color-mix-4), transparent);
   --shadow-indicator-brand:
     0 0 var(--space-2) color-mix(in oklab, var(--base-brand) var(--color-mix-8), transparent),
     0 0 var(--space-4) color-mix(in oklab, var(--base-brand) var(--color-mix-3), transparent);
