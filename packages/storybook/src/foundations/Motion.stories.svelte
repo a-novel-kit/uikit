@@ -1,5 +1,6 @@
 <script module lang="ts">
   import { defineMeta } from "@storybook/addon-svelte-csf";
+  import { expect } from "storybook/test";
 
   const { Story } = defineMeta({
     title: "Foundations/Motion & depth",
@@ -31,7 +32,25 @@
   </div>
 </Story>
 
-<Story name="Glow" asChild>
+<Story
+  name="Glow"
+  asChild
+  parameters={{
+    docs: {
+      description: {
+        story:
+          "A bright edge and two soft halos give selected surfaces a luminous outline. Glow is decorative; text and focus indicators remain independent.",
+      },
+    },
+  }}
+  play={({ canvas }) => {
+    for (const name of ["Brand", "Pressure", "Signal"]) {
+      const sample = canvas.getByText(name).parentElement!;
+      expect(getComputedStyle(sample).boxShadow).toContain("0px 0px 0px 1px");
+      expect(getComputedStyle(sample).textShadow).toBe("none");
+    }
+  }}
+>
   <div class="glow-grid">
     <div class="glow brand"><strong>Brand</strong><span>Selected or focused</span></div>
     <div class="glow pressure"><strong>Pressure</strong><span>Destructive confirmation</span></div>
