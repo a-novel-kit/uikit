@@ -11,13 +11,20 @@ import "@a-novel-kit/uikit-tokens/tokens.css";
 
 import { render } from "@testing-library/svelte";
 
-function tokenColor(token: string) {
+function resolveColor(value: string, foreground = "") {
   const sample = document.createElement("span");
-  sample.style.backgroundColor = `var(${token})`;
+  sample.style.backgroundColor = value;
+  sample.style.color = foreground;
   document.body.append(sample);
   const color = getComputedStyle(sample).backgroundColor;
   sample.remove();
   return color;
+}
+
+async function expectFeedback(element: HTMLElement, opacity: string) {
+  await Promise.all(element.getAnimations().map((animation) => animation.finished));
+  const { backgroundColor, color } = getComputedStyle(element);
+  expect(backgroundColor).toBe(resolveColor(`color-mix(in oklab, currentColor var(${opacity}), transparent)`, color));
 }
 
 function appearance(element: HTMLElement) {
@@ -30,23 +37,18 @@ beforeEach(async () => userEvent.unhover(document.body));
 describe("low-emphasis action feedback", () => {
   for (const variant of ["outline", "ghost"] as const) {
     it.each(["brand", "neutral", "danger"] as const)(
-      `${variant} %s uses shared hover and active layers`,
+      `${variant} %s keeps hover and active layers in its own color family`,
       async (tone) => {
         const { getByRole, rerender } = render(Button, { variant, tone, "aria-label": "Save" });
         const button = getByRole("button");
         await userEvent.hover(button);
-        await expect
-          .poll(() => getComputedStyle(button).backgroundColor)
-          .toBe(tokenColor("--color-action-subtle-hover"));
-        await Promise.all(button.getAnimations().map((animation) => animation.finished));
+        await expectFeedback(button, "--color-mix-2");
         const activeForeground = getComputedStyle(button).color;
 
         await userEvent.unhover(button);
         button.focus();
         await userEvent.keyboard("[Space>]");
-        await expect
-          .poll(() => getComputedStyle(button).backgroundColor)
-          .toBe(tokenColor("--color-action-subtle-active"));
+        await expectFeedback(button, "--color-mix-3");
         await expect.poll(() => getComputedStyle(button).color).toBe(activeForeground);
         await userEvent.keyboard("[/Space]");
         expect(parseFloat(getComputedStyle(button).outlineWidth)).toBeGreaterThan(0);
@@ -54,7 +56,7 @@ describe("low-emphasis action feedback", () => {
         await rerender({ disabled: true });
         await expect
           .poll(() => getComputedStyle(button).backgroundColor)
-          .toBe(tokenColor("--color-action-disabled-surface"));
+          .toBe(resolveColor("var(--color-action-disabled-surface)"));
         expect(getComputedStyle(button).boxShadow).toBe("none");
       }
     );
@@ -86,7 +88,7 @@ describe("low-emphasis action feedback", () => {
     }
   );
 
-  it("gives quiet links the same hover layer without filling inline links", async () => {
+  it("tints quiet-link hover with its text color without filling inline links", async () => {
     const { getByRole, rerender } = render(Link, {
       href: "#help",
       variant: "inline",
@@ -96,7 +98,7 @@ describe("low-emphasis action feedback", () => {
     const inlineBackground = getComputedStyle(link).backgroundColor;
     await rerender({ variant: "quiet" });
     await userEvent.hover(link);
-    await expect.poll(() => getComputedStyle(link).backgroundColor).toBe(tokenColor("--color-action-subtle-hover"));
+    await expectFeedback(link, "--color-mix-2");
     await rerender({ variant: "inline" });
     await expect.poll(() => getComputedStyle(link).backgroundColor).toBe(inlineBackground);
   });

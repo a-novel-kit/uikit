@@ -220,10 +220,14 @@
     var(--color-text-primary)
   );
   --color-action-ghost-text: var(--color-action-primary-foreground);
-  --color-action-subtle-hover: var(--color-surface-glass-hover);
+  --color-action-subtle-hover: color-mix(
+    in oklab,
+    currentColor var(--color-mix-2),
+    transparent
+  );
   --color-action-subtle-active: color-mix(
     in oklab,
-    var(--color-text-primary) var(--color-mix-3),
+    currentColor var(--color-mix-3),
     transparent
   );
   --color-action-ghost-hover: var(--color-action-subtle-hover);

@@ -140,7 +140,7 @@ Previous and next labels are currently English.
   .text {
     padding-inline: var(--space-3);
   }
-  .control:hover:not([aria-disabled="true"]):not(:disabled) {
+  .control:hover:not([aria-disabled="true"]):not(:disabled):not([aria-current="page"]) {
     background: var(--color-action-ghost-hover);
     color: var(--color-text-primary);
   }
