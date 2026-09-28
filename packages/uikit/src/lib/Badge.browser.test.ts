@@ -42,4 +42,45 @@ describe("Badge reflow", () => {
     expect(content.getBoundingClientRect().height).toBeGreaterThan(parseFloat(css.lineHeight));
     expect(badge.scrollWidth).toBeLessThanOrEqual(badge.clientWidth);
   });
+
+  it("keeps short status words intact in a narrow table column", () => {
+    const table = document.createElement("table");
+    table.style.inlineSize = "10rem";
+    const row = table.insertRow();
+    row.insertCell().textContent = "Production";
+    const cell = row.insertCell();
+    row.insertCell().textContent = "Yesterday";
+    document.body.append(table);
+    try {
+      const { getByText } = render(Badge, {
+        target: cell,
+        props: { children: createRawSnippet(() => ({ render: () => "<span>Healthy</span>" })) },
+      });
+      const content = getByText("Healthy");
+      expect(content.getBoundingClientRect().height).toBeLessThanOrEqual(
+        parseFloat(getComputedStyle(content).lineHeight)
+      );
+    } finally {
+      table.remove();
+    }
+  });
+});
+
+describe("Badge surfaces", () => {
+  it.each(["neutral", "brand", "success", "warning", "danger"] as const)(
+    "keeps the %s fill distinct and consistent across backdrops",
+    (tone) => {
+      const { container, getByText } = render(Badge, {
+        tone,
+        children: createRawSnippet(() => ({ render: () => "<span>Status</span>" })),
+      });
+      const badge = getByText("Status").parentElement!;
+      const background = getComputedStyle(badge).backgroundColor;
+      for (const surface of ["canvas", "raised", "overlay"]) {
+        container.style.backgroundColor = `var(--color-surface-${surface})`;
+        expect(getComputedStyle(badge).backgroundColor).toBe(background);
+        expect(background).not.toBe(getComputedStyle(container).backgroundColor);
+      }
+    }
+  );
 });

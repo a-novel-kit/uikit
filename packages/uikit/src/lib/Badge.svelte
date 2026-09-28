@@ -20,48 +20,42 @@ Labels a category or status compactly. Use InlineMessage when changes need live 
 
 <style>
   .badge {
-    display: inline-flex;
-    align-items: center;
+    display: inline-block;
     box-sizing: border-box;
     border-radius: var(--radius-md);
-    background: var(--badge-surface);
+    background: color-mix(in oklab, var(--badge-accent) var(--color-mix-6), var(--color-surface-raised));
     padding-inline: var(--space-3);
     padding-block: var(--space-1);
     inline-size: fit-content;
     max-inline-size: 100%;
-    color: var(--badge-text);
+    color: color-mix(in oklab, var(--badge-accent) var(--color-mix-8), var(--color-text-primary));
     font-weight: var(--font-weight-bold);
     font-size: var(--font-size-sm);
     line-height: var(--line-height-compact);
     font-family: var(--font-family-interface);
     letter-spacing: var(--letter-spacing-normal);
     text-transform: none;
-    overflow-wrap: anywhere;
+    overflow-wrap: break-word;
   }
 
   .neutral {
-    --badge-surface: var(--color-surface-island-strong);
-    --badge-text: var(--color-text-secondary);
+    --badge-accent: var(--color-text-secondary);
   }
 
   .brand {
-    --badge-surface: var(--color-feedback-info-surface);
-    --badge-text: var(--color-feedback-info-text);
+    --badge-accent: var(--color-feedback-info-text);
   }
 
   .success {
-    --badge-surface: var(--color-feedback-success-surface);
-    --badge-text: var(--color-feedback-success-text);
+    --badge-accent: var(--color-feedback-success-text);
   }
 
   .warning {
-    --badge-surface: var(--color-feedback-warning-surface);
-    --badge-text: var(--color-feedback-warning-text);
+    --badge-accent: var(--color-feedback-warning-text);
   }
 
   .danger {
-    --badge-surface: var(--color-feedback-error-surface);
-    --badge-text: var(--color-feedback-error-text);
+    --badge-accent: var(--color-feedback-error-text);
   }
 
   @media (forced-colors: active) {

@@ -39,20 +39,30 @@
   </Card>
 </Story>
 
-<Story
-  name="Status labels"
-  parameters={{
-    docs: {
-      description: { story: "Read-only labels preserve the supplied casing and wrap within their container." },
-    },
-  }}
-  asChild
->
+{#snippet statusLabels()}
   <Inline gap="2" wrap>
     <Badge>Draft</Badge><Badge tone="brand">Active</Badge><Badge tone="success">Ready</Badge><Badge tone="warning"
       >Review</Badge
     ><Badge tone="danger">Failed</Badge>
   </Inline>
+{/snippet}
+
+<Story
+  name="Status labels"
+  parameters={{
+    docs: {
+      description: {
+        story:
+          "Read-only labels on the canvas and a raised surface. Labels preserve casing and wrap within their container.",
+      },
+    },
+  }}
+  asChild
+>
+  <Stack gap="6">
+    {@render statusLabels()}
+    <Card>{@render statusLabels()}</Card>
+  </Stack>
 </Story>
 
 {#snippet roles()}
