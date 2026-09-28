@@ -185,7 +185,7 @@ Renders a styled native button. Defaults to `type="button"`; use `type="submit"`
     color: var(--button-foreground);
   }
 
-  :is(.outline, .ghost):hover:not(:disabled):not([aria-pressed="true"]) {
+  :is(.outline, .ghost):is(:hover, :active):not(:disabled):not([aria-pressed="true"]) {
     background-color: var(--color-action-subtle-hover);
     color: var(--button-foreground-hover);
   }

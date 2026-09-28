@@ -45,7 +45,7 @@ Renders a native anchor with inline or quiet styling. The caller owns the destin
     text-decoration-thickness: var(--border-width-strong);
   }
 
-  .quiet:hover {
+  .quiet:is(:hover, :active) {
     background: var(--color-action-subtle-hover);
     color: var(--color-action-primary-foreground-hover);
   }

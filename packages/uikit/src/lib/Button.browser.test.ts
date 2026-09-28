@@ -38,12 +38,16 @@ describe("low-emphasis action feedback", () => {
         await expect
           .poll(() => getComputedStyle(button).backgroundColor)
           .toBe(tokenColor("--color-action-subtle-hover"));
+        await Promise.all(button.getAnimations().map((animation) => animation.finished));
+        const activeForeground = getComputedStyle(button).color;
 
+        await userEvent.unhover(button);
         button.focus();
         await userEvent.keyboard("[Space>]");
         await expect
           .poll(() => getComputedStyle(button).backgroundColor)
           .toBe(tokenColor("--color-action-subtle-active"));
+        await expect.poll(() => getComputedStyle(button).color).toBe(activeForeground);
         await userEvent.keyboard("[/Space]");
         expect(parseFloat(getComputedStyle(button).outlineWidth)).toBeGreaterThan(0);
 
