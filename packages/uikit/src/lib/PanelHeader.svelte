@@ -48,7 +48,7 @@ Use titleId and descriptionId to label a containing dialog or region.
   .header {
     display: grid;
     flex: none;
-    align-items: start;
+    align-items: center;
     gap: var(--space-2) var(--space-4);
     min-inline-size: 0;
     overflow-wrap: anywhere;
@@ -61,7 +61,6 @@ Use titleId and descriptionId to label a containing dialog or region.
   }
   .actions {
     display: flex;
-    align-self: center;
     gap: var(--space-2);
   }
   h2 {
