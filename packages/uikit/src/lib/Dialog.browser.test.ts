@@ -107,6 +107,22 @@ describe("Dialog browser lifecycle", () => {
     await expect.element(page.getByRole("button", { name: "Open details" })).toHaveFocus();
   });
 
+  it.each([true, false])("stays reopened when an earlier close event arrives (modal: %s)", async (modal) => {
+    const controller = createOpenController({ initialOpen: true });
+    render(Dialog, { props: { controller, title: "Reopened dialog", modal } });
+    await expect.element(page.getByRole("dialog")).toBeVisible();
+    const dialog = page.getByRole("dialog").element() as HTMLDialogElement;
+    const closed = new Promise<void>((resolve) => dialog.addEventListener("close", () => resolve(), { once: true }));
+
+    dialog.close();
+    if (modal) dialog.showModal();
+    else dialog.show();
+    await closed;
+
+    expect(controller.state.open).toBe(true);
+    await expect.element(page.getByRole("dialog")).toBeVisible();
+  });
+
   it("survives a queued native close after teardown", async () => {
     const view = render(Dialog, {
       props: { controller: createOpenController({ initialOpen: true }), title: "Queued close" },

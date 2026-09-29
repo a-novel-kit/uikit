@@ -97,8 +97,9 @@ Supply a localized close control through `headerActions`.
     requestClose();
   }
 
-  function handleClose() {
-    if (!controller.state.open) return;
+  function handleClose(event: Event) {
+    const currentDialog = event.currentTarget as HTMLDialogElement;
+    if (currentDialog.open || !controller.state.open) return;
 
     requestClose();
     if (controller.state.open)
