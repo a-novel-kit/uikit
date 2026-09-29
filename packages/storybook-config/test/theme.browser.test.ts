@@ -9,6 +9,19 @@ import Color from "colorjs.io";
 
 afterEach(() => document.body.replaceChildren());
 
+// Sample browser-painted sRGB; a separate gamut mapper can overestimate text contrast.
+function renderedColor(color: string) {
+  const context = document.createElement("canvas").getContext("2d");
+  if (!context) throw new Error("Canvas is required to sample rendered colors");
+  context.fillStyle = color;
+  context.fillRect(0, 0, 1, 1);
+  const channels = Array.from(context.getImageData(0, 0, 1, 1).data).slice(0, 3);
+  return new Color(
+    "srgb",
+    channels.map((channel) => channel / 255)
+  );
+}
+
 function sample(background: string, foreground = "--color-text-primary") {
   const element = document.createElement("span");
   element.style.backgroundColor = `var(${background})`;
@@ -16,8 +29,8 @@ function sample(background: string, foreground = "--color-text-primary") {
   document.body.append(element);
   const style = getComputedStyle(element);
   return {
-    background: new Color(style.backgroundColor).toGamut({ method: "css", space: "srgb" }),
-    foreground: new Color(style.color).toGamut({ method: "css", space: "srgb" }),
+    background: renderedColor(style.backgroundColor),
+    foreground: renderedColor(style.color),
   };
 }
 
@@ -40,4 +53,12 @@ describe("shared dark theme", () => {
     expect(background.oklch.l).toBeGreaterThan(sample("--color-surface-canvas").background.oklch.l);
     expect(background.oklch.l).toBeLessThan(sample("--color-surface-island-strong").background.oklch.l);
   });
+
+  it.each(["canvas", "raised", "island-strong"])(
+    "keeps field errors readable on %s with contrast headroom",
+    (surface) => {
+      const { background, foreground } = sample(`--color-surface-${surface}`, "--color-feedback-error-text");
+      expect(foreground.contrast(background, "WCAG21")).toBeGreaterThanOrEqual(5);
+    }
+  );
 });
