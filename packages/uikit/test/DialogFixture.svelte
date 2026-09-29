@@ -6,15 +6,16 @@
   let {
     controller,
     presentation = "centered",
+    title = "Workspace details and sharing preferences",
     long = false,
-  }: Pick<DialogProps, "controller" | "presentation"> & { long?: boolean } = $props();
+  }: Pick<DialogProps, "controller" | "presentation"> & { title?: DialogProps["title"]; long?: boolean } = $props();
 </script>
 
 <Button onclick={controller.open}>Open details</Button>
 <Dialog
   {controller}
   {presentation}
-  title="Workspace details and sharing preferences"
+  {title}
   description="These settings apply to everyone who can access this workspace."
 >
   {#snippet headerActions()}

@@ -156,7 +156,7 @@ Supply a localized close control through `headerActions`.
   .panel {
     display: flex;
     flex-direction: column;
-    gap: var(--space-5);
+    gap: var(--space-6);
     box-sizing: border-box;
     padding: var(--dialog-padding);
     min-inline-size: 0;

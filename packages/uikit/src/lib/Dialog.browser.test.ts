@@ -1,6 +1,7 @@
 /// <reference types="vite/client" />
 import Fixture from "../../test/DialogFixture.svelte";
 import Dialog from "./Dialog.svelte";
+import PanelHeader from "./PanelHeader.svelte";
 import { createOpenController } from "./controllers.svelte";
 
 import { describe, expect, it } from "vitest";
@@ -11,6 +12,33 @@ import "@a-novel-kit/uikit-tokens/tokens.css";
 import { render } from "@testing-library/svelte";
 
 describe("Dialog browser lifecycle", () => {
+  it.each([320, 1280])("aligns short and wrapped titles with controls at %ipx", async (width) => {
+    await page.viewport(width, 844);
+    for (const title of ["Details", "Workspace details and sharing preferences"]) {
+      const controller = createOpenController({ initialOpen: true });
+      const view = render(Fixture, { controller, title });
+      await expect.element(page.getByRole("dialog")).toBeVisible();
+      const heading = view.getByRole("heading");
+      const text = heading.firstElementChild!.getBoundingClientRect();
+      const close = view.getByRole("button", { name: "Close details" }).getBoundingClientRect();
+      expect(text.top + text.height / 2).toBeCloseTo(close.top + close.height / 2, 1);
+      expect(close.left - heading.getBoundingClientRect().right).toBe(16);
+      const description = view.getByText("These settings apply to everyone who can access this workspace.");
+      expect(description.getBoundingClientRect().top - heading.getBoundingClientRect().bottom).toBe(8);
+      const body = view.getByText("Workspace details 1").getBoundingClientRect();
+      expect(body.top - description.getBoundingClientRect().bottom).toBe(24);
+      expect(body.left).toBe(text.left);
+      expect(view.getByRole("dialog").scrollWidth).toBe(view.getByRole("dialog").clientWidth);
+      view.unmount();
+    }
+  });
+
+  it("keeps a title-only panel header at its natural line height", () => {
+    const view = render(PanelHeader, { title: "Details" });
+    const heading = view.getByRole("heading");
+    expect(heading.getBoundingClientRect().height).toBeCloseTo(parseFloat(getComputedStyle(heading).lineHeight), 1);
+  });
+
   it.each(["centered", "fullscreen"] as const)(
     "keeps %s content reachable on narrow, short viewports",
     async (presentation) => {
@@ -26,7 +54,7 @@ describe("Dialog browser lifecycle", () => {
       expect(rect.left).toBe(presentation === "fullscreen" ? 0 : 8);
       expect(rect.width).toBe(presentation === "fullscreen" ? 320 : 304);
       expect(rect.height).toBeLessThanOrEqual(480);
-      expect(heading.getBoundingClientRect().right).toBeLessThanOrEqual(close.getBoundingClientRect().left - 12);
+      expect(heading.getBoundingClientRect().right).toBeLessThanOrEqual(close.getBoundingClientRect().left - 16);
       expect(description.getBoundingClientRect().left).toBe(heading.getBoundingClientRect().left);
       expect(description.getBoundingClientRect().right).toBe(close.getBoundingClientRect().right);
       expect(description.getBoundingClientRect().top - heading.getBoundingClientRect().bottom).toBe(8);
@@ -40,7 +68,7 @@ describe("Dialog browser lifecycle", () => {
       expect(close.getBoundingClientRect().top).toBe(closeTop);
       expect(getByRole("button", { name: "Done" }).getBoundingClientRect().top).toBe(doneTop);
       if (presentation === "fullscreen") {
-        expect(close.getBoundingClientRect().top).toBe(16);
+        expect(heading.getBoundingClientRect().top).toBe(16);
         const lastAction = getByRole("button", { name: "Last action" });
         let scrollRegion = lastAction.parentElement;
         while (scrollRegion && getComputedStyle(scrollRegion).overflowY !== "auto")
