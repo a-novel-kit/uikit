@@ -243,7 +243,7 @@
   --color-action-disabled-text: var(--color-text-disabled);
 
   --color-navigation-text: var(--color-text-muted);
-  --color-navigation-hover-surface: var(--color-surface-hover);
+  --color-navigation-hover-surface: var(--color-action-subtle-hover);
   --color-navigation-hover-text: var(--color-text-primary);
   --color-navigation-selected-surface: var(--color-surface-selected);
   --color-navigation-selected-text: var(--base-brand);

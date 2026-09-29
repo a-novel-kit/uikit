@@ -126,7 +126,7 @@
 <style>
   .nav-demo {
     border-radius: var(--radius-lg);
-    background: var(--color-surface-sunken);
+    background: var(--color-surface-island-strong);
     padding: var(--space-3);
     inline-size: min(100%, var(--layout-sidebar));
   }
