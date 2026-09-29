@@ -178,7 +178,7 @@
   </div>
 </Story>
 
-{#snippet formExample(controller: OpenController)}
+{#snippet formExample(controller: OpenController, error?: string)}
   <Dialog {controller} title="Create workspace" description="A shared place for your next project.">
     {#snippet headerActions()}
       <IconButton label="Close dialog" variant="ghost" tone="neutral" size="sm" onclick={controller.close}>
@@ -187,8 +187,8 @@
     {/snippet}
     <form onsubmit={(event) => event.preventDefault()}>
       <Stack gap="4">
-        <Field label="Workspace name">
-          {#snippet children(control)}<Input {...control} value="Summer sketches" />{/snippet}
+        <Field label="Workspace name" {error}>
+          {#snippet children(control)}<Input {...control} value="Summer sketches" invalid={Boolean(error)} />{/snippet}
         </Field>
         <Disclosure controller={opened} summary="Sharing">
           <p class="dialog-copy">Your workspace is private until you invite someone.</p>
@@ -225,6 +225,12 @@
 </Story>
 <Story name="Form — mobile" exportName="FormMobile" globals={reviewStoryGlobals.mobile} asChild>
   {@render formExample(opened)}
+</Story>
+<Story name="Validation — desktop" exportName="ValidationDesktop" globals={reviewStoryGlobals.desktop} asChild>
+  {@render formExample(opened, "This workspace name is already in use.")}
+</Story>
+<Story name="Validation — mobile" exportName="ValidationMobile" globals={reviewStoryGlobals.mobile} asChild>
+  {@render formExample(opened, "This workspace name is already in use.")}
 </Story>
 <Story name="Long content — desktop" exportName="LongContentDesktop" globals={reviewStoryGlobals.desktop} asChild>
   {@render scrollExample(opened)}
