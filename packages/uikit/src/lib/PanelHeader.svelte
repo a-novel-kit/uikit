@@ -48,13 +48,16 @@ Use titleId and descriptionId to label a containing dialog or region.
   .header {
     display: grid;
     flex: none;
-    align-items: start;
-    gap: var(--space-2) var(--space-3);
+    align-items: center;
+    gap: var(--space-2) var(--space-4);
     min-inline-size: 0;
     overflow-wrap: anywhere;
   }
   .has-actions {
     grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .has-actions h2 {
+    min-block-size: var(--control-height-sm);
   }
   .actions {
     display: flex;
@@ -64,11 +67,11 @@ Use titleId and descriptionId to label a containing dialog or region.
     display: flex;
     align-items: center;
     margin: 0;
-    min-block-size: var(--control-height-sm);
     color: var(--color-text-primary);
     font-size: var(--font-size-xl);
     line-height: var(--line-height-compact);
     font-family: var(--font-family-display);
+    text-wrap: balance;
   }
   .description {
     grid-column: 1 / -1;

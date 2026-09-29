@@ -1,24 +1,30 @@
 <script lang="ts">
-  import { Button, Dialog, type DialogProps, IconButton, Stack } from "../src/lib";
+  import { Button, Dialog, type DialogProps, IconButton, type IconButtonProps, Stack } from "../src/lib";
 
   import { X } from "@lucide/svelte";
 
   let {
     controller,
     presentation = "centered",
+    title = "Workspace details and sharing preferences",
+    actionSize = "sm",
     long = false,
-  }: Pick<DialogProps, "controller" | "presentation"> & { long?: boolean } = $props();
+  }: Pick<DialogProps, "controller" | "presentation"> & {
+    title?: DialogProps["title"];
+    actionSize?: IconButtonProps["size"];
+    long?: boolean;
+  } = $props();
 </script>
 
 <Button onclick={controller.open}>Open details</Button>
 <Dialog
   {controller}
   {presentation}
-  title="Workspace details and sharing preferences"
+  {title}
   description="These settings apply to everyone who can access this workspace."
 >
   {#snippet headerActions()}
-    <IconButton label="Close details" variant="ghost" tone="neutral" size="sm" onclick={controller.close}>
+    <IconButton label="Close details" variant="ghost" tone="neutral" size={actionSize} onclick={controller.close}>
       <X size="var(--icon-size-sm)" />
     </IconButton>
   {/snippet}
