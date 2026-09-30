@@ -6,10 +6,19 @@ import { Canvas, Controls, Meta } from "@storybook/addon-docs/blocks";
 
 # Button
 
-Buttons trigger an action in the current context. Use `Link` for navigation.
+Buttons trigger an action in the current context. Supply `href` for navigation with the same
+appearance, or use `Link` for an inline text link.
 
 <Canvas of={ButtonStories.Playground} />
 <Controls of={ButtonStories.Playground} />
+
+## Navigation
+
+`href` renders a native anchor, including without JavaScript. It accepts anchor attributes such as
+`target` and `rel`; form and disabled attributes belong to button actions. `IconButton` also accepts
+`href` and always requires an accessible `label`.
+
+<Canvas of={ButtonStories.NavigationLinks} />
 
 ## Variants
 

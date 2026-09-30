@@ -6,7 +6,7 @@
   import { Save as SaveIcon } from "@lucide/svelte";
   import { defineMeta } from "@storybook/addon-svelte-csf";
 
-  type Args = Omit<ComponentProps<typeof Button>, "children"> & {
+  type Args = Omit<Extract<ComponentProps<typeof Button>, { href?: never }>, "children"> & {
     label: string;
   };
 
@@ -61,6 +61,14 @@
 {/snippet}
 
 <Story name="Playground" />
+<Story name="Navigation links" asChild>
+  <Inline gap="4" wrap role="group" aria-label="Navigation links">
+    <Button href="#details" onclick={(event: MouseEvent) => event.preventDefault()}>Continue</Button>
+    <Button href="#details" variant="ghost" tone="neutral" onclick={(event: MouseEvent) => event.preventDefault()}
+      >Back</Button
+    >
+  </Inline>
+</Story>
 <Story name="Variants" asChild>
   <Inline gap="4" wrap role="group" aria-label="Button variants">
     <Button variant="solid">Solid</Button>

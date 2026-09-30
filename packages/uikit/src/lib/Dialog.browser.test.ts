@@ -12,6 +12,22 @@ import "@a-novel-kit/uikit-tokens/tokens.css";
 import { render } from "@testing-library/svelte";
 
 describe("Dialog browser lifecycle", () => {
+  it.each([true, false])("enhances initial open state without closing its controller (modal: %s)", async (modal) => {
+    const controller = createOpenController({ initialOpen: true });
+    const { getByRole } = render(Dialog, { controller, title: "Account", modal });
+    const dialog = getByRole("dialog") as HTMLDialogElement;
+    if (modal) await new Promise<void>((resolve) => dialog.addEventListener("close", () => resolve(), { once: true }));
+    await expect.poll(() => dialog.open).toBe(true);
+    expect(dialog.matches(":modal")).toBe(modal);
+    expect(controller.state.open).toBe(true);
+    controller.close();
+    await expect.poll(() => dialog.open).toBe(false);
+    expect(dialog.matches(":modal")).toBe(false);
+    controller.open();
+    await expect.poll(() => dialog.open).toBe(true);
+    expect(dialog.matches(":modal")).toBe(modal);
+  });
+
   it.each([
     { width: 320, actionSize: "sm" },
     { width: 320, actionSize: "md" },
