@@ -3,6 +3,7 @@
 Renders a native modal dialog driven by `createOpenController` or a compatible controller.
 Escape and backdrop interaction request closure; the controller decides whether it closes.
 Supply a localized close control through `headerActions`.
+An initially open dialog is visible without JavaScript; modal focus and backdrop behavior begin on hydration.
 
 ```svelte
 <script lang="ts">
@@ -59,6 +60,8 @@ Supply a localized close control through `headerActions`.
   import ActionGroup from "./ActionGroup.svelte";
   import PanelHeader from "./PanelHeader.svelte";
 
+  import { untrack } from "svelte";
+
   let {
     controller,
     title,
@@ -77,9 +80,12 @@ Supply a localized close control through `headerActions`.
   const titleId = `${dialogId}-title`;
   const descriptionId = `${dialogId}-description`;
   let dialog: HTMLDialogElement | undefined;
+  const initiallyOpen = untrack(() => controller.state.open);
 
   $effect(() => {
     if (!dialog) return;
+    // Promote the server-rendered non-modal dialog into the browser's modal top layer.
+    if (controller.state.open && modal && dialog.open && !dialog.matches(":modal")) dialog.close();
     if (controller.state.open && !dialog.open) {
       if (modal) dialog.showModal();
       else dialog.show();
@@ -118,6 +124,7 @@ Supply a localized close control through `headerActions`.
 
 <dialog
   bind:this={dialog}
+  open={initiallyOpen}
   class="dialog {presentation} {className}"
   aria-labelledby={titleId}
   aria-describedby={description ? descriptionId : undefined}
@@ -137,8 +144,11 @@ Supply a localized close control through `headerActions`.
   .dialog {
     --dialog-padding: var(--space-4);
     --dialog-margin: var(--space-2);
+    position: fixed;
+    z-index: var(--layer-modal);
     box-sizing: border-box;
     margin: auto;
+    inset: 0;
     box-shadow: var(--shadow-lg);
     border: 0;
     border-radius: var(--radius-xl);

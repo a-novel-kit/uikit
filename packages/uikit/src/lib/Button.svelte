@@ -1,6 +1,7 @@
 <!--
 @component
 Renders a styled native button. Defaults to `type="button"`; use `type="submit"` for form submission.
+Pass `href` for navigation: it renders a native link with the same appearance.
 
 ```svelte
 <script lang="ts">
@@ -14,7 +15,7 @@ Renders a styled native button. Defaults to `type="button"`; use `type="submit"`
   import type { ComponentSize } from "./types";
 
   import type { Snippet } from "svelte";
-  import type { HTMLButtonAttributes } from "svelte/elements";
+  import type { HTMLAnchorAttributes, HTMLButtonAttributes } from "svelte/elements";
 
   /** Props for a styled native button. */
   export interface ButtonProps extends Omit<HTMLButtonAttributes, "children"> {
@@ -28,6 +29,21 @@ Renders a styled native button. Defaults to `type="button"`; use `type="submit"`
     size?: ComponentSize;
     /** Removes inline padding and makes the control square. Used by IconButton. */
     square?: boolean;
+    /** Omit for native button actions. */
+    href?: never;
+  }
+
+  /** Native link attributes combined with the shared Button appearance. */
+  export interface ButtonLinkProps
+    extends
+      Omit<HTMLAnchorAttributes, "children" | "type">,
+      Pick<ButtonProps, "children" | "variant" | "tone" | "size" | "square"> {
+    /** Navigation destination; preserves native link behavior without JavaScript. */
+    href: string;
+    /** Form submission type is only available for button actions. */
+    type?: never;
+    /** Native links have no disabled state. */
+    disabled?: never;
   }
 </script>
 
@@ -37,16 +53,25 @@ Renders a styled native button. Defaults to `type="button"`; use `type="submit"`
     tone = "brand",
     size = "md",
     square = false,
-    type = "button",
     class: className = "",
     children,
     ...rest
-  }: ButtonProps = $props();
+  }: ButtonProps | ButtonLinkProps = $props();
 </script>
 
-<button {type} class="button {variant} {tone} {size} {square ? 'square' : ''} {className}" {...rest}>
-  {@render children?.()}
-</button>
+{#if rest.href !== undefined}
+  <a class="button {variant} {tone} {size} {square ? 'square' : ''} {className}" {...rest}>
+    {@render children?.()}
+  </a>
+{:else}
+  <button
+    {...rest}
+    type={rest.type ?? "button"}
+    class="button {variant} {tone} {size} {square ? 'square' : ''} {className}"
+  >
+    {@render children?.()}
+  </button>
+{/if}
 
 <style>
   .button {
@@ -70,6 +95,7 @@ Renders a styled native button. Defaults to `type="button"`; use `type="submit"`
     font-weight: var(--font-weight-bold);
     line-height: var(--line-height-tight);
     font-family: var(--font-family-interface);
+    text-decoration: none;
   }
 
   .brand {

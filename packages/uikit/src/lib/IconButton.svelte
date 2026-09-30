@@ -3,7 +3,7 @@
 Renders a square Button with a required accessible name. Keep its icon decorative.
 -->
 <script lang="ts" module>
-  import type { ButtonProps } from "./Button.svelte";
+  import type { ButtonLinkProps, ButtonProps } from "./Button.svelte";
 
   import type { Snippet } from "svelte";
 
@@ -14,12 +14,16 @@ Renders a square Button with a required accessible name. Keep its icon decorativ
     /** Icon content rendered inside the button. */
     children: Snippet;
   }
+
+  /** Native link attributes with the same icon and accessible name as IconButton. */
+  export interface IconButtonLinkProps
+    extends Omit<ButtonLinkProps, "children" | "square">, Pick<IconButtonProps, "label" | "children"> {}
 </script>
 
 <script lang="ts">
   import Button from "./Button.svelte";
 
-  let { label, children, ...rest }: IconButtonProps = $props();
+  let { label, children, ...rest }: IconButtonProps | IconButtonLinkProps = $props();
 </script>
 
 <Button square aria-label={label} {...rest}>
