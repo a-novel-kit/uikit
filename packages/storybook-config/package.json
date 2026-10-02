@@ -67,7 +67,7 @@
   },
   "peerDependencies": {
     "react": "^19.3.0",
-    "storybook": "^10.6.0"
+    "storybook": "^10.6.1"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
