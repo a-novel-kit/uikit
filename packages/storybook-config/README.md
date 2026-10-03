@@ -5,10 +5,12 @@ dark preview, fonts, tokens, MDX documentation, GitHub-flavored Markdown, and ac
 
 ## Setup
 
-Install the preset with Storybook and the Svelte Vite framework.
+Install the preset with Storybook, the Svelte Vite framework, and the addons it registers. The addons
+are peer dependencies, so they always match your Storybook version.
 
 ```bash
-pnpm add --save-dev @a-novel-kit/uikit-storybook @storybook/svelte-vite storybook
+pnpm add --save-dev @a-novel-kit/uikit-storybook @storybook/svelte-vite storybook \
+  @storybook/addon-a11y @storybook/addon-docs @storybook/addon-svelte-csf @storybook/addon-vitest
 ```
 
 Add it to `.storybook/main.ts`. The application owns its story paths and framework declaration.
