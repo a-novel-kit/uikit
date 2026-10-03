@@ -1,6 +1,6 @@
 {
   "name": "@a-novel-kit/uikit-storybook",
-  "version": "0.6.6",
+  "version": "0.6.7",
   "private": false,
   "description": "Shared Storybook configuration and Agora theme for Svelte interfaces",
   "repository": {
