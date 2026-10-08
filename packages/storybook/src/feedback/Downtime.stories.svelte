@@ -10,10 +10,9 @@
     parameters: { layout: "fullscreen" },
   });
 
-  // Fixed times, locale and zone keep every rendering identical.
+  // Fixed times and zone keep every rendering identical; the toolbar picks the language.
   const start = new Date("2026-10-12T06:00:00Z");
   const end = new Date("2026-10-12T08:30:00Z");
-  const zone = { locale: "en-US", timeZone: "UTC" };
 </script>
 
 {#snippet content()}
@@ -29,23 +28,21 @@
 
 <Story name="Scheduled banner" asChild>
   <div class="page">
-    <DowntimeBanner {start} {end} {...zone} />
+    <DowntimeBanner {start} {end} timeZone="UTC" />
     {@render content()}
   </div>
 </Story>
 
 <Story name="Started banner" asChild>
   <div class="page">
-    <DowntimeBanner {start} {end} started {...zone} />
+    <DowntimeBanner {start} {end} started timeZone="UTC" />
     {@render content()}
   </div>
 </Story>
 
-<Story name="Localized banner" asChild>
+<Story name="French" asChild globals={{ locale: "fr" }}>
   <div class="page">
-    <DowntimeBanner {start} {end} started locale="fr-FR" timeZone="Europe/Paris" title="Maintenance en cours">
-      {#snippet message(when: string)}Certains services peuvent être indisponibles. Fin prévue&nbsp;: {when}.{/snippet}
-    </DowntimeBanner>
+    <DowntimeBanner {start} {end} started timeZone="Europe/Paris" />
     {@render content()}
   </div>
 </Story>
@@ -53,7 +50,7 @@
 <Story name="Unavailable page" asChild>
   <main class="page centered">
     <Container size="sm">
-      <DowntimeState {end} {...zone} headingLevel={1} actions={home} />
+      <DowntimeState {end} timeZone="UTC" headingLevel={1} actions={home} />
     </Container>
   </main>
 </Story>

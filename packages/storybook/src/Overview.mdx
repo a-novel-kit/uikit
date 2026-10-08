@@ -29,6 +29,16 @@ import "@a-novel-kit/uikit-fonts/fonts.css";
 import "@a-novel-kit/uikit-tokens/tokens.css";
 ```
 
+## Translations
+
+Components ship their built-in text, such as labels and placeholders, in English and French. They
+follow the app's `@a-novel-kit/nodelib-i18n` provider: its language picks the messages and formats
+dates. Without a provider, they render in English.
+
+uikit adds its messages to the app's i18next instance under the `uikit` namespace and never replaces
+the app's own. To change a message, or to add a language uikit doesn't ship yet, give the app a
+`uikit` namespace with those keys; anything it leaves out still comes from uikit, then from English.
+
 ## Example
 
 Import components from Agora UI and standard icons from Lucide.

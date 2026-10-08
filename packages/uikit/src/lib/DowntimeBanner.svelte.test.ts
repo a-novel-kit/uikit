@@ -1,6 +1,5 @@
+import I18nFixture from "../../test/I18nFixture.svelte";
 import DowntimeBanner from "./DowntimeBanner.svelte";
-
-import { createRawSnippet } from "svelte";
 
 import { describe, expect, it } from "vitest";
 
@@ -33,7 +32,6 @@ describe("DowntimeBanner", () => {
       start,
       end,
       started,
-      locale: "en-US",
       timeZone: "UTC",
     });
 
@@ -46,7 +44,6 @@ describe("DowntimeBanner", () => {
     const { getByRole } = render(DowntimeBanner, {
       start,
       end: new Date("2026-10-13T09:30:00Z"),
-      locale: "en-US",
       timeZone: "UTC",
     });
 
@@ -54,25 +51,33 @@ describe("DowntimeBanner", () => {
   });
 
   it("formats the time frame in the given time zone", () => {
-    const { getByRole } = render(DowntimeBanner, { start, end, locale: "en-US", timeZone: "America/New_York" });
+    const { getByRole } = render(DowntimeBanner, { start, end, timeZone: "America/New_York" });
 
     expect(text(getByRole("status"))).toMatch("Expected: Oct 12, 2026, 2:00 – 3:00 AM EDT.");
   });
 
-  it("takes localized wording that receives the time frame", () => {
-    const { getByRole } = render(DowntimeBanner, {
-      start,
-      end,
-      locale: "fr-FR",
-      timeZone: "UTC",
-      title: "Maintenance prévue",
-      message: createRawSnippet((when: () => string) => ({
-        render: () => `<span>Certains services peuvent être indisponibles. Prévue : ${when()}.</span>`,
-      })),
+  it.each([
+    {
+      name: "speaks French in a French app, before the start",
+      started: false,
+      expected:
+        "Maintenance programmée Certains services peuvent être indisponibles. Période prévue : 12 oct. 2026, 06:00 – 07:00 UTC.",
+    },
+    {
+      name: "speaks French in a French app, once started",
+      started: true,
+      expected:
+        "Maintenance en cours Certains services peuvent être indisponibles. Fin prévue : 12 oct. 2026, 07:00 UTC.",
+    },
+  ])("$name", ({ started, expected }) => {
+    const { getByRole } = render(I18nFixture, {
+      props: {
+        locale: "fr",
+        component: DowntimeBanner,
+        props: { start, end, started, timeZone: "UTC" },
+      },
     });
 
-    expect(text(getByRole("status"))).toMatch(
-      /^Maintenance prévue Certains services peuvent être indisponibles\. Prévue : 12 oct\. 2026, 06:00 – 07:00 UTC\.$/
-    );
+    expect(text(getByRole("status"))).toBe(expected);
   });
 });

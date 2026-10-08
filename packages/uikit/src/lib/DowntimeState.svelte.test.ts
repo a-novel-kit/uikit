@@ -1,3 +1,4 @@
+import I18nFixture from "../../test/I18nFixture.svelte";
 import DowntimeState from "./DowntimeState.svelte";
 
 import { createRawSnippet } from "svelte";
@@ -15,7 +16,7 @@ function text(element: HTMLElement): string {
 
 describe("DowntimeState", () => {
   it("explains that the page is unavailable until its expected end", () => {
-    const { getByRole } = render(DowntimeState, { end, locale: "en-US", timeZone: "UTC", headingLevel: 1 });
+    const { getByRole } = render(DowntimeState, { end, timeZone: "UTC", headingLevel: 1 });
 
     expect(getByRole("heading", { level: 1, name: "Temporarily unavailable" })).toBeTruthy();
     expect(text(getByRole("status"))).toMatch(
@@ -23,20 +24,23 @@ describe("DowntimeState", () => {
     );
   });
 
-  it("takes localized wording that receives the expected end, and actions", () => {
-    const { getByRole } = render(DowntimeState, {
-      end,
-      locale: "fr-FR",
-      timeZone: "UTC",
-      title: "Momentanément indisponible",
-      message: createRawSnippet((when: () => string) => ({
-        render: () => `<span>Fin prévue : ${when()}.</span>`,
-      })),
-      actions: createRawSnippet(() => ({ render: () => '<a href="/">Accueil</a>' })),
+  it("speaks French in a French app, and renders actions", () => {
+    const { getByRole } = render(I18nFixture, {
+      props: {
+        locale: "fr",
+        component: DowntimeState,
+        props: {
+          end,
+          timeZone: "UTC",
+          actions: createRawSnippet(() => ({ render: () => '<a href="/">Accueil</a>' })),
+        },
+      },
     });
 
     expect(getByRole("heading", { level: 2, name: "Momentanément indisponible" })).toBeTruthy();
-    expect(text(getByRole("status"))).toMatch("Fin prévue : 12 oct. 2026, 07:00 UTC.");
+    expect(text(getByRole("status"))).toMatch(
+      "Cette page est indisponible pendant la maintenance. Fin prévue : 12 oct. 2026, 07:00 UTC."
+    );
     expect(getByRole("link", { name: "Accueil" })).toBeTruthy();
   });
 });

@@ -2,72 +2,43 @@
 @component
 Announces a planned maintenance in a compact strip that can't be dismissed. Before the maintenance
 it informs with the expected time frame; once started it warns with the expected end. The wording
-is generic; replace `title` and `message` to localize it.
+is generic and translated; only the times vary.
 -->
 <script lang="ts" module>
-  import type { Content } from "./content";
-
-  import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
 
   /** Props for a compact planned maintenance banner. */
-  export interface DowntimeBannerProps extends Omit<HTMLAttributes<HTMLDivElement>, "title" | "children"> {
+  export interface DowntimeBannerProps extends Omit<HTMLAttributes<HTMLDivElement>, "children"> {
     /** When the maintenance starts. */
     start: Date;
     /** When service is expected back. The banner presents it as an estimate. */
     end: Date;
     /** Whether the maintenance has started, which switches to the in-progress wording and a warning. */
     started?: boolean;
-    /** Locale of the times. The runtime default when omitted. */
-    locale?: Intl.LocalesArgument;
     /** IANA time zone of the times. The runtime default when omitted; set it when rendering on a server. */
     timeZone?: string;
-    /** Replaces the default heading, for localization. */
-    title?: Content;
-    /**
-     * Replaces the default sentence, for localization. Receives the formatted time frame before the
-     * start, and the expected end once started.
-     */
-    message?: Snippet<[string]>;
   }
 </script>
 
 <script lang="ts">
-  import RenderContent from "./Content.svelte";
   import FeedbackIcon from "./internal/FeedbackIcon.svelte";
   import { downtimeFormat } from "./internal/downtime";
+  import { useMessages } from "./internal/i18n";
 
-  let {
-    start,
-    end,
-    started = false,
-    locale,
-    timeZone,
-    title,
-    message,
-    class: className = "",
-    ...rest
-  }: DowntimeBannerProps = $props();
+  const { t, language } = useMessages();
 
-  const tone = $derived(started ? "warning" : "info");
-  const format = $derived(downtimeFormat(locale, timeZone));
+  let { start, end, started = false, timeZone, class: className = "", ...rest }: DowntimeBannerProps = $props();
+
+  const phase = $derived(started ? "started" : "scheduled");
+  const format = $derived(downtimeFormat(language, timeZone));
   const when = $derived(started ? format.format(end) : format.formatRange(start, end));
 </script>
 
-<div class="banner {tone} {className}" role="status" {...rest}>
-  <FeedbackIcon {tone} size="sm" />
+<div class="banner {started ? 'warning' : 'info'} {className}" role="status" {...rest}>
+  <FeedbackIcon tone={started ? "warning" : "info"} size="sm" />
   <p>
-    <strong><RenderContent content={title ?? (started ? "Maintenance in progress" : "Scheduled maintenance")} /></strong
-    >
-    <span>
-      {#if message}
-        {@render message(when)}
-      {:else if started}
-        Some services may be unavailable. Expected to end: {when}.
-      {:else}
-        Some services may be unavailable. Expected: {when}.
-      {/if}
-    </span>
+    <strong>{t(`downtimeBanner.${phase}.title`)}</strong>
+    <span>{t(`downtimeBanner.${phase}.message`, { when })}</span>
   </p>
 </div>
 

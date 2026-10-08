@@ -22,7 +22,7 @@ The caller manages their lifetime and removes dismissed entries; no automatic ti
     tone?: FeedbackTone;
     /** Optional action rendered after the message. */
     action?: Snippet;
-    /** Accessible dismiss name; defaults to "Dismiss notification". Visible button text remains "Dismiss". */
+    /** Accessible dismiss name; defaults to the translated "Dismiss notification". The button reads the translated "Dismiss". */
     dismissLabel?: string;
   }
 
@@ -30,7 +30,7 @@ The caller manages their lifetime and removes dismissed entries; no automatic ti
   export interface ToastRegionProps extends Omit<HTMLAttributes<HTMLElement>, "children"> {
     /** Messages to display, keyed by unique IDs; the caller manages expiry and removal. */
     toasts: ToastMessage[];
-    /** Accessible name for the notification region. */
+    /** Accessible name for the notification region; defaults to the translated "Notifications". */
     label?: string;
     /** Shows dismiss controls and receives the requested toast ID. The caller removes that entry. */
     onDismiss?: (id: string) => void;
@@ -40,8 +40,17 @@ The caller manages their lifetime and removes dismissed entries; no automatic ti
 <script lang="ts">
   import RenderContent from "./Content.svelte";
   import FeedbackIcon from "./internal/FeedbackIcon.svelte";
+  import { useMessages } from "./internal/i18n";
 
-  let { toasts, label = "Notifications", onDismiss, class: className = "", ...rest }: ToastRegionProps = $props();
+  const { t } = useMessages();
+
+  let {
+    toasts,
+    label = t("toastRegion.label"),
+    onDismiss,
+    class: className = "",
+    ...rest
+  }: ToastRegionProps = $props();
 </script>
 
 <section class="region {className}" aria-label={label} {...rest}>
@@ -56,8 +65,8 @@ The caller manages their lifetime and removes dismissed entries; no automatic ti
       {#if onDismiss}
         <button
           type="button"
-          aria-label={toast.dismissLabel ?? "Dismiss notification"}
-          onclick={() => onDismiss?.(toast.id)}>Dismiss</button
+          aria-label={toast.dismissLabel ?? t("toastRegion.dismissLabel")}
+          onclick={() => onDismiss?.(toast.id)}>{t("toastRegion.dismiss")}</button
         >
       {/if}
     </div>

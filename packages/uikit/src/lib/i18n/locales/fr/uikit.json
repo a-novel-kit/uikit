@@ -1,0 +1,47 @@
+{
+  "actionMenu": {
+    "trigger": "Actions"
+  },
+  "breadcrumbs": {
+    "label": "Fil d’Ariane"
+  },
+  "combobox": {
+    "empty": "Aucune option correspondante",
+    "placeholder": "Rechercher une option",
+    "toggle": "Afficher les options"
+  },
+  "downtimeBanner": {
+    "scheduled": {
+      "message": "Certains services peuvent être indisponibles. Période prévue : {{when}}.",
+      "title": "Maintenance programmée"
+    },
+    "started": {
+      "message": "Certains services peuvent être indisponibles. Fin prévue : {{when}}.",
+      "title": "Maintenance en cours"
+    }
+  },
+  "downtimeState": {
+    "message": "Cette page est indisponible pendant la maintenance. Fin prévue : {{when}}.",
+    "title": "Momentanément indisponible"
+  },
+  "errorSummary": {
+    "title": "Il y a un problème"
+  },
+  "pagination": {
+    "label": "Pagination",
+    "next": "Suivant",
+    "previous": "Précédent"
+  },
+  "select": {
+    "placeholder": "Sélectionnez une option"
+  },
+  "table": {
+    "captioned": "Tableau : {{caption}}",
+    "uncaptioned": "Tableau défilant"
+  },
+  "toastRegion": {
+    "dismiss": "Fermer",
+    "dismissLabel": "Fermer la notification",
+    "label": "Notifications"
+  }
+}

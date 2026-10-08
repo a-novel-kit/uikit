@@ -9,7 +9,7 @@ import { ArgTypes } from "@storybook/addon-docs/blocks";
 
 # Planned maintenance
 
-Tell users about a planned maintenance with generic wording; only its times change. Times always name
+Tell users about a planned maintenance with generic, translated wording; only its times change. Times always name
 their time zone, and the end is always presented as expected, never promised.
 
 ## Banner
@@ -43,13 +43,14 @@ maintenance. Offer a way out with `actions`:
 ```
 
 Set `started` from the moment the maintenance begins until operators clear it, even past its end.
-Pass `locale` and `timeZone` when rendering on a server, so the server and the browser format the
-same times.
+Pass `timeZone` when rendering on a server, so the server and the browser format the same times.
 
-The wording is English. To localize it, replace `title` and pass a `message` snippet, which receives
-the formatted times:
+## Translations
 
-<ResponsiveStoryPair desktop={Stories.LocalizedBanner} mobile={Stories.LocalizedBanner} meta={Stories} />
+The wording is translated by uikit and follows the app's i18n provider, as every uikit message does:
+dates follow its language too. See Overview for the setup.
+
+<ResponsiveStoryPair desktop={Stories.French} mobile={Stories.French} meta={Stories} />
 
 ## Accessibility
 
