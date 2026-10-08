@@ -22,7 +22,7 @@ The hidden named input submits the selected value. The caller validates required
     options: readonly SelectOption<Value>[];
     /** State owner that decides whether visibility or selection requests take effect. */
     controller: SelectController<Value>;
-    /** Text shown without a selected option; defaults to "Select an option". */
+    /** Text shown without a selected option; defaults to the translated "Select an option". */
     placeholder?: string;
     /** Creates a hidden input with this form name; an unset value submits an empty string. */
     name?: string;
@@ -57,16 +57,19 @@ The hidden named input submits the selected value. The caller validates required
 
 <script lang="ts" generics="Value extends string">
   import FloatingSurface from "./internal/FloatingSurface.svelte";
+  import { useMessages } from "./internal/i18n";
   import { findEnabledBoundary, findNextEnabledIndex, resolveInvalidState } from "./selection";
 
   import { onDestroy, tick } from "svelte";
 
   import { Check as CheckIcon, ChevronDown as ChevronDownIcon } from "@lucide/svelte";
 
+  const { t } = useMessages();
+
   let {
     options,
     controller,
-    placeholder = "Select an option",
+    placeholder = t("select.placeholder"),
     name,
     autocomplete,
     controlSize = "md",

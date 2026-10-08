@@ -33,3 +33,5 @@ catalog:
 allowBuilds:
   "@swc/core": true
   esbuild: true
+minimumReleaseAgeExclude:
+  - "@a-novel-kit/nodelib-i18n@1.13.0"

@@ -16,18 +16,22 @@ Previous and next labels are currently English.
     getHref?: (page: number) => string;
     /** Runs for both link and button activation of another in-range page; does not cancel navigation. */
     onPageChange?: (page: number) => void;
-    /** Accessible name for the navigation landmark. */
+    /** Accessible name for the navigation landmark; defaults to the translated "Pagination". */
     label?: string;
   }
 </script>
 
 <script lang="ts">
+  import { useMessages } from "./internal/i18n";
+
+  const { t } = useMessages();
+
   let {
     currentPage,
     totalPages,
     getHref,
     onPageChange,
-    label = "Pagination",
+    label = t("pagination.label"),
     class: className = "",
     ...rest
   }: PaginationProps = $props();
@@ -59,13 +63,15 @@ Previous and next labels are currently English.
     <li>
       {#if getHref}
         {#if currentPage <= 1}
-          <span class="control text" aria-disabled="true">Previous</span>
+          <span class="control text" aria-disabled="true">{t("pagination.previous")}</span>
         {:else}
-          <a class="control text" href={getHref(currentPage - 1)} onclick={() => change(currentPage - 1)}>Previous</a>
+          <a class="control text" href={getHref(currentPage - 1)} onclick={() => change(currentPage - 1)}
+            >{t("pagination.previous")}</a
+          >
         {/if}
       {:else}
         <button class="control text" type="button" disabled={currentPage <= 1} onclick={() => change(currentPage - 1)}
-          >Previous</button
+          >{t("pagination.previous")}</button
         >
       {/if}
     </li>
@@ -93,16 +99,18 @@ Previous and next labels are currently English.
     <li>
       {#if getHref}
         {#if currentPage >= totalPages}
-          <span class="control text" aria-disabled="true">Next</span>
+          <span class="control text" aria-disabled="true">{t("pagination.next")}</span>
         {:else}
-          <a class="control text" href={getHref(currentPage + 1)} onclick={() => change(currentPage + 1)}>Next</a>
+          <a class="control text" href={getHref(currentPage + 1)} onclick={() => change(currentPage + 1)}
+            >{t("pagination.next")}</a
+          >
         {/if}
       {:else}
         <button
           class="control text"
           type="button"
           disabled={currentPage >= totalPages}
-          onclick={() => change(currentPage + 1)}>Next</button
+          onclick={() => change(currentPage + 1)}>{t("pagination.next")}</button
         >
       {/if}
     </li>

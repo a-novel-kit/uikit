@@ -20,7 +20,7 @@ Mount after validation and enable `focusOnMount` when focus should move to the s
 
   /** Props for a focusable summary of form validation errors. */
   export interface ErrorSummaryProps extends Omit<HTMLAttributes<HTMLElement>, "title" | "children"> {
-    /** Summary heading; defaults to "There is a problem". Supply localized copy when needed. */
+    /** Summary heading; defaults to the translated "There is a problem". */
     title?: Content;
     /** Optional guidance shown before the error list. */
     description?: Content;
@@ -36,11 +36,14 @@ Mount after validation and enable `focusOnMount` when focus should move to the s
 <script lang="ts">
   import RenderContent from "./Content.svelte";
   import FeedbackIcon from "./internal/FeedbackIcon.svelte";
+  import { useMessages } from "./internal/i18n";
 
   import { tick } from "svelte";
 
+  const { t } = useMessages();
+
   let {
-    title = "There is a problem",
+    title = t("errorSummary.title"),
     description,
     errors,
     headingLevel = 2,

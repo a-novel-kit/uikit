@@ -16,12 +16,21 @@ Wraps a native table in a keyboard-scrollable region. Supply semantic table sect
 </script>
 
 <script lang="ts">
+  import { useMessages } from "./internal/i18n";
+
+  const { t } = useMessages();
+
   let { caption, density = "default", class: className = "", children, ...rest }: TableProps = $props();
 </script>
 
 <!-- Keyboard focus lets non-pointer users scroll a table when it overflows. -->
 <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
-<div class="scroller" tabindex="0" role="region" aria-label={caption ? `Table: ${caption}` : "Scrollable table"}>
+<div
+  class="scroller"
+  tabindex="0"
+  role="region"
+  aria-label={caption ? t("table.captioned", { caption }) : t("table.uncaptioned")}
+>
   <table class="{density} {className}" {...rest}>
     {#if caption}<caption>{caption}</caption>{/if}
     {@render children?.()}

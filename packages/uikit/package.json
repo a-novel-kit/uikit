@@ -38,15 +38,19 @@
     "@lucide/svelte": "^1.31.0"
   },
   "devDependencies": {
+    "@a-novel-kit/nodelib-i18n": "^1.13.0",
     "@sveltejs/package": "^3.0.0",
     "@sveltejs/vite-plugin-svelte": "^7.0.1",
     "@testing-library/svelte": "^5.2.4",
+    "i18next": "^26.4.2",
     "jsdom": "^30.0.0",
     "svelte": "^5.55.8",
     "svelte-check": "^4.3.3",
     "vite": "^8.0.0"
   },
   "peerDependencies": {
+    "@a-novel-kit/nodelib-i18n": "^1.13.0",
+    "i18next": "^26.4.2",
     "svelte": "^5.57.1"
   },
   "publishConfig": {

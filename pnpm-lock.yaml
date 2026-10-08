@@ -382,6 +382,9 @@ importers:
         specifier: ^1.31.0
         version: 1.52.0(svelte@5.57.2(@typescript-eslint/types@8.71.1))
     devDependencies:
+      '@a-novel-kit/nodelib-i18n':
+        specifier: ^1.13.0
+        version: 1.13.0(i18next@26.4.2(typescript@6.0.3))(svelte@5.57.2(@typescript-eslint/types@8.71.1))
       '@storybook/addon-a11y':
         specifier: 'catalog:'
         version: 10.6.1(storybook@10.6.1(@types/react@19.3.0)(prettier@3.9.9)(react@19.3.0))
@@ -403,6 +406,9 @@ importers:
       '@types/node':
         specifier: ^24.10.0
         version: 24.19.1
+      i18next:
+        specifier: ^26.4.2
+        version: 26.4.2(typescript@6.0.3)
       react:
         specifier: ^19.2.8
         version: 19.3.0
@@ -498,6 +504,9 @@ importers:
         specifier: ^1.31.0
         version: 1.52.0(svelte@5.57.2(@typescript-eslint/types@8.71.1))
     devDependencies:
+      '@a-novel-kit/nodelib-i18n':
+        specifier: ^1.13.0
+        version: 1.13.0(i18next@26.4.2(typescript@6.0.3))(svelte@5.57.2(@typescript-eslint/types@8.71.1))
       '@sveltejs/package':
         specifier: ^3.0.0
         version: 3.0.0(svelte@5.57.2(@typescript-eslint/types@8.71.1))(typescript@6.0.3)
@@ -507,6 +516,9 @@ importers:
       '@testing-library/svelte':
         specifier: ^5.2.4
         version: 5.4.2(svelte@5.57.2(@typescript-eslint/types@8.71.1))(vite@8.3.3(@types/node@24.19.1)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))(vitest@5.0.3)
+      i18next:
+        specifier: ^26.4.2
+        version: 26.4.2(typescript@6.0.3)
       jsdom:
         specifier: ^30.0.0
         version: 30.1.2
@@ -554,6 +566,13 @@ packages:
       typescript-eslint: ^8.71.0
       vite: ^8.3.2
       vitest: ^5.0.3
+
+  '@a-novel-kit/nodelib-i18n@1.13.0':
+    resolution: {integrity: sha512-oRkx7rmgKejbhgOM4WpVCgfb+BLTWLqJ1H4lZeoYRD7v+NUF6D1+qCxQOYQda11zK3Nz8zx1hjufOZkfZ0ZM1Q==, tarball: https://npm.pkg.github.com/download/@a-novel-kit/nodelib-i18n/1.13.0/e336aa58c764d6a6bb63c90b1d8830343a7f40a1}
+    engines: {node: '>=24.0.0', npm: '>=10.9.2'}
+    peerDependencies:
+      i18next: ^26.4.2
+      svelte: ^5.57.1
 
   '@adobe/css-tools@4.5.0':
     resolution: {integrity: sha512-6OzddxPio9UiWTCemp4N8cYLV2ZN1ncRnV1cVGtve7dhPOtRkleRyx32GQCYSwDYgaHU3USMm84tNsvKzRCa1Q==}
@@ -3816,6 +3835,11 @@ snapshots:
       vite: 8.3.3(@types/node@24.19.1)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)
       vitest: 5.0.3(@types/node@24.19.1)(@vitest/browser-playwright@5.0.3)(@vitest/coverage-v8@5.0.3)(@vitest/ui@5.0.3)(jsdom@30.1.2)(vite@8.3.3(@types/node@24.19.1)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
       yaml: 2.9.1
+
+  '@a-novel-kit/nodelib-i18n@1.13.0(i18next@26.4.2(typescript@6.0.3))(svelte@5.57.2(@typescript-eslint/types@8.71.1))':
+    dependencies:
+      i18next: 26.4.2(typescript@6.0.3)
+      svelte: 5.57.2(@typescript-eslint/types@8.71.1)
 
   '@adobe/css-tools@4.5.0': {}
 

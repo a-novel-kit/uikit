@@ -24,7 +24,7 @@ The hidden named input submits the selected value. The caller validates required
     controller: ComboboxController<Value>;
     /** Creates a hidden input with this form name; an unset value submits an empty string. */
     name?: string;
-    /** Empty search input text; defaults to "Search options". */
+    /** Empty search input text; defaults to the translated "Search options". */
     placeholder?: string;
     /** Sets aria-required; the caller validates selection before submitting. Defaults to false. */
     required?: boolean;
@@ -55,17 +55,20 @@ The hidden named input submits the selected value. The caller validates required
 
 <script lang="ts" generics="Value extends string">
   import FloatingSurface from "./internal/FloatingSurface.svelte";
+  import { useMessages } from "./internal/i18n";
   import { findEnabledBoundary, findNextEnabledIndex, resolveInvalidState } from "./selection";
 
   import { tick } from "svelte";
 
   import { Check as CheckIcon, ChevronDown as ChevronDownIcon } from "@lucide/svelte";
 
+  const { t } = useMessages();
+
   let {
     options,
     controller,
     name,
-    placeholder = "Search options",
+    placeholder = t("combobox.placeholder"),
     required = false,
     disabled = false,
     invalid = false,
@@ -260,7 +263,7 @@ The hidden named input submits the selected value. The caller validates required
     <button
       class="agora-combobox-trigger"
       type="button"
-      aria-label="Show options"
+      aria-label={t("combobox.toggle")}
       data-state={controller.state.open ? "open" : "closed"}
       tabindex={-1}
       {disabled}
@@ -320,7 +323,7 @@ The hidden named input submits the selected value. The caller validates required
         {/if}
       </button>
     {:else}
-      <span class="empty">No matching options</span>
+      <span class="empty">{t("combobox.empty")}</span>
     {/each}
   </FloatingSurface>
 </div>

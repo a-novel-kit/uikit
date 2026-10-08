@@ -6,7 +6,7 @@ Agora's shared Svelte components consume the public contracts from
 Install the component package and the foundations imported by your application.
 
 ```bash
-pnpm add @a-novel-kit/uikit @a-novel-kit/uikit-fonts @a-novel-kit/uikit-tokens
+pnpm add @a-novel-kit/uikit @a-novel-kit/uikit-fonts @a-novel-kit/uikit-tokens @a-novel-kit/nodelib-i18n i18next
 ```
 
 Import the foundation styles once in the application shell.
@@ -25,6 +25,11 @@ Components are exported from the package root.
 
 <Button variant="solid">Continue</Button>
 ```
+
+Built-in text, such as labels and placeholders, ships in English and French. Inside an
+`@a-novel-kit/nodelib-i18n` provider, components join the app's i18next instance under the `uikit`
+namespace and follow its language; elsewhere they render in English. An app's own `uikit` messages
+always win, which also covers languages uikit doesn't ship yet.
 
 Component prop types and shared contracts such as `ComponentSize`, `FeedbackTone`, `LayoutGap`,
 and `SelectionOption` are exported from the same package root.

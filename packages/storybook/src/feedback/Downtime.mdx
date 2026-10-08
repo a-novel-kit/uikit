@@ -1,0 +1,69 @@
+import * as Stories from "./Downtime.stories.svelte";
+
+import { DowntimeBanner, DowntimeState } from "@a-novel-kit/uikit";
+import { Meta, ResponsiveStoryPair } from "@a-novel-kit/uikit-storybook";
+
+import { ArgTypes } from "@storybook/addon-docs/blocks";
+
+<Meta of={Stories} />
+
+# Planned maintenance
+
+Tell users about a planned maintenance with generic, translated wording; only its times change. Times always name
+their time zone, and the end is always presented as expected, never promised.
+
+## Banner
+
+`DowntimeBanner` is a compact strip above the page that users can't dismiss. Before the maintenance,
+it informs with the expected time frame:
+
+<ResponsiveStoryPair desktop={Stories.ScheduledBanner} mobile={Stories.ScheduledBanner} meta={Stories} />
+
+Once it has started, it warns with the expected end. Keep it on pages that remain partly usable:
+
+<ResponsiveStoryPair desktop={Stories.StartedBanner} mobile={Stories.StartedBanner} meta={Stories} />
+
+## Unavailable page
+
+`DowntimeState` replaces a page, or a whole section of navigation, that can't work during the
+maintenance. Offer a way out with `actions`:
+
+<ResponsiveStoryPair desktop={Stories.UnavailablePage} mobile={Stories.UnavailablePage} meta={Stories} />
+
+## Usage
+
+```svelte
+<script lang="ts">
+  import { DowntimeBanner, DowntimeState } from "@a-novel-kit/uikit";
+</script>
+
+<DowntimeBanner start={downtime.start} end={downtime.end} {started} />
+
+<DowntimeState end={downtime.end} headingLevel={1} />
+```
+
+Set `started` from the moment the maintenance begins until operators clear it, even past its end.
+Pass `timeZone` when rendering on a server, so the server and the browser format the same times.
+
+## Translations
+
+The wording is translated by uikit and follows the app's i18n provider, as every uikit message does:
+dates follow its language too. See Overview for the setup. Content the app passes, such as the
+unavailable page's link, stays the app's to translate.
+
+<ResponsiveStoryPair desktop={Stories.French} mobile={Stories.French} meta={Stories} />
+
+## Accessibility
+
+Both use a `status` live region, so switching the banner from scheduled to started is announced.
+Icons are decorative. The banner has no close control: it stays until the maintenance is cleared.
+
+## API
+
+### DowntimeBanner
+
+<ArgTypes of={DowntimeBanner} />
+
+### DowntimeState
+
+<ArgTypes of={DowntimeState} />

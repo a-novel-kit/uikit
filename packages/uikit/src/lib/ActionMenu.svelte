@@ -70,7 +70,7 @@ For a custom trigger, spread the snippet attributes onto a native button.
     label: string;
     /** Actions and separators shown in the menu. */
     items: ActionMenuItem[];
-    /** Text in the default trigger; defaults to "Actions". */
+    /** Text in the default trigger; defaults to the translated "Actions". */
     triggerText?: string;
     /** Optional graphic in the default trigger. */
     triggerIcon?: Snippet;
@@ -92,13 +92,16 @@ For a custom trigger, spread the snippet attributes onto a native button.
 <script lang="ts">
   import { getEnabledCompositeItems, moveCompositeFocus } from "./focus";
   import FloatingSurface from "./internal/FloatingSurface.svelte";
+  import { useMessages } from "./internal/i18n";
 
   import { onDestroy, tick } from "svelte";
+
+  const { t } = useMessages();
 
   let {
     label,
     items,
-    triggerText = "Actions",
+    triggerText = t("actionMenu.trigger"),
     triggerIcon,
     trigger,
     renderItem,

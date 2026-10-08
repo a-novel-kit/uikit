@@ -1,0 +1,47 @@
+{
+  "actionMenu": {
+    "trigger": "Actions"
+  },
+  "breadcrumbs": {
+    "label": "Breadcrumb"
+  },
+  "combobox": {
+    "empty": "No matching options",
+    "placeholder": "Search options",
+    "toggle": "Show options"
+  },
+  "downtimeBanner": {
+    "scheduled": {
+      "message": "Some services may be unavailable. Expected: {{when}}.",
+      "title": "Scheduled maintenance"
+    },
+    "started": {
+      "message": "Some services may be unavailable. Expected to end: {{when}}.",
+      "title": "Maintenance in progress"
+    }
+  },
+  "downtimeState": {
+    "message": "This page is unavailable during maintenance. Expected to end: {{when}}.",
+    "title": "Temporarily unavailable"
+  },
+  "errorSummary": {
+    "title": "There is a problem"
+  },
+  "pagination": {
+    "label": "Pagination",
+    "next": "Next",
+    "previous": "Previous"
+  },
+  "select": {
+    "placeholder": "Select an option"
+  },
+  "table": {
+    "captioned": "Table: {{caption}}",
+    "uncaptioned": "Scrollable table"
+  },
+  "toastRegion": {
+    "dismiss": "Dismiss",
+    "dismissLabel": "Dismiss notification",
+    "label": "Notifications"
+  }
+}

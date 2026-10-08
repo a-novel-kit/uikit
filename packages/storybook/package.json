@@ -20,6 +20,7 @@
     "@lucide/svelte": "^1.31.0"
   },
   "devDependencies": {
+    "@a-novel-kit/nodelib-i18n": "^1.13.0",
     "@storybook/addon-a11y": "catalog:",
     "@storybook/addon-docs": "catalog:",
     "@storybook/addon-svelte-csf": "catalog:",
@@ -27,6 +28,7 @@
     "@storybook/svelte-vite": "catalog:",
     "@sveltejs/vite-plugin-svelte": "^7.0.0",
     "@types/node": "^24.10.0",
+    "i18next": "^26.4.2",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "storybook": "catalog:",

@@ -20,7 +20,7 @@ Renders an ordered navigation trail; the final item is always the current, unlin
   export interface BreadcrumbsProps extends Omit<HTMLAttributes<HTMLElement>, "children"> {
     /** Ordered locations from the broadest parent to the current page. */
     items: BreadcrumbItem[];
-    /** Accessible name for the navigation landmark. */
+    /** Accessible name for the navigation landmark; defaults to the translated "Breadcrumb". */
     label?: string;
     /** Visual content placed between locations. */
     separator?: Content;
@@ -31,10 +31,13 @@ Renders an ordered navigation trail; the final item is always the current, unlin
 
 <script lang="ts">
   import RenderContent from "./Content.svelte";
+  import { useMessages } from "./internal/i18n";
+
+  const { t } = useMessages();
 
   let {
     items,
-    label = "Breadcrumb",
+    label = t("breadcrumbs.label"),
     separator = "/",
     renderItem,
     class: className = "",
