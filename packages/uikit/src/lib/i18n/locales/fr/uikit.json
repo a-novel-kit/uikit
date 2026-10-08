@@ -12,16 +12,16 @@
   },
   "downtimeBanner": {
     "scheduled": {
-      "message": "Certains services peuvent être indisponibles. Période prévue : {{when}}.",
+      "message": "Certains services peuvent être indisponibles. Période prévue: {{when}}.",
       "title": "Maintenance programmée"
     },
     "started": {
-      "message": "Certains services peuvent être indisponibles. Fin prévue : {{when}}.",
+      "message": "Certains services peuvent être indisponibles. Fin prévue: {{when}}.",
       "title": "Maintenance en cours"
     }
   },
   "downtimeState": {
-    "message": "Cette page est indisponible pendant la maintenance. Fin prévue : {{when}}.",
+    "message": "Cette page est indisponible pendant la maintenance. Fin prévue: {{when}}.",
     "title": "Momentanément indisponible"
   },
   "errorSummary": {
@@ -36,7 +36,7 @@
     "placeholder": "Sélectionnez une option"
   },
   "table": {
-    "captioned": "Tableau : {{caption}}",
+    "captioned": "Tableau: {{caption}}",
     "uncaptioned": "Tableau défilant"
   },
   "toastRegion": {

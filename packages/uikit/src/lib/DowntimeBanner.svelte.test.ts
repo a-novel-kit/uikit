@@ -67,13 +67,13 @@ describe("DowntimeBanner", () => {
       name: "speaks French in a French app, before the start",
       started: false,
       expected:
-        "Maintenance programmée Certains services peuvent être indisponibles. Période prévue : 12 oct. 2026, 06:00 – 07:00 UTC.",
+        "Maintenance programmée Certains services peuvent être indisponibles. Période prévue: 12 oct. 2026, 06:00 – 07:00 UTC.",
     },
     {
       name: "speaks French in a French app, once started",
       started: true,
       expected:
-        "Maintenance en cours Certains services peuvent être indisponibles. Fin prévue : 12 oct. 2026, 07:00 UTC.",
+        "Maintenance en cours Certains services peuvent être indisponibles. Fin prévue: 12 oct. 2026, 07:00 UTC.",
     },
   ])("$name", ({ started, expected }) => {
     const { getByRole } = render(I18nFixture, {

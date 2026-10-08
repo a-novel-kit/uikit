@@ -64,6 +64,10 @@ describe("uikit catalogs", () => {
     expect(Object.entries(french).filter(([, text]) => text.trim() === "")).toEqual([]);
   });
 
+  it("put no space before a colon in French", () => {
+    expect(Object.entries(french).filter(([, text]) => /\s:/.test(text))).toEqual([]);
+  });
+
   it("keep the same placeholders in every language", () => {
     const placeholders = (text: string) => [...text.matchAll(/{{\s*(\w+)\s*}}/g)].map(([, name]) => name).sort();
 

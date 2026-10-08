@@ -39,7 +39,7 @@ describe("DowntimeState", () => {
 
     expect(getByRole("heading", { level: 2, name: "Momentanément indisponible" })).toBeTruthy();
     expect(text(getByRole("status"))).toMatch(
-      "Cette page est indisponible pendant la maintenance. Fin prévue : 12 oct. 2026, 07:00 UTC."
+      "Cette page est indisponible pendant la maintenance. Fin prévue: 12 oct. 2026, 07:00 UTC."
     );
     expect(getByRole("link", { name: "Accueil" })).toBeTruthy();
   });
