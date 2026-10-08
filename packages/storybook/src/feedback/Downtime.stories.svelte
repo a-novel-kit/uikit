@@ -44,7 +44,7 @@
 <Story name="Localized banner" asChild>
   <div class="page">
     <DowntimeBanner {start} {end} started locale="fr-FR" timeZone="Europe/Paris" title="Maintenance en cours">
-      {#snippet message(when: string)}Certains services peuvent être indisponibles. Fin prévue : {when}.{/snippet}
+      {#snippet message(when: string)}Certains services peuvent être indisponibles. Fin prévue&nbsp;: {when}.{/snippet}
     </DowntimeBanner>
     {@render content()}
   </div>

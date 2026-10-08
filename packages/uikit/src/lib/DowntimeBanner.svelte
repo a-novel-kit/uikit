@@ -95,14 +95,16 @@ is generic; replace `title` and `message` to localize it.
 
   p {
     display: flex;
-    column-gap: var(--space-2);
     flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-1) var(--space-3);
     margin: 0;
     min-inline-size: 0;
   }
 
   span {
     color: var(--color-text-secondary);
+    font-size: var(--font-size-xs);
   }
 
   @media (forced-colors: active) {
