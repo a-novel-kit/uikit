@@ -44,15 +44,17 @@ Errors use an alert live region; other tones use status. Override `role` for sta
 <style>
   .alert {
     --alert-direction: to right;
+    /* Slimmer than a spacing step, in proportion with the compact box. */
+    --alert-accent-width: calc(var(--border-width-base) * var(--multiplier-3));
 
     display: flex;
     align-items: center;
     gap: var(--space-3);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-md);
     background-image: linear-gradient(
       var(--alert-direction),
-      var(--alert-accent) var(--space-1),
-      transparent var(--space-1)
+      var(--alert-accent) var(--alert-accent-width),
+      transparent var(--alert-accent-width)
     );
     background-color: var(--alert-surface);
     padding-inline: var(--space-4);

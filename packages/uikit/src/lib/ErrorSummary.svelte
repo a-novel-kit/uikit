@@ -91,7 +91,7 @@ Mount after validation and enable `focusOnMount` when focus should move to the s
     display: flex;
     align-items: flex-start;
     gap: var(--space-3);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-md);
     background: var(--color-feedback-error-surface);
     padding-inline: var(--space-4);
     padding-block: var(--space-2);

@@ -89,7 +89,7 @@ The caller manages their lifetime and removes dismissed entries; no automatic ti
     align-items: flex-start;
     gap: var(--space-3);
     box-shadow: var(--shadow-lg);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-md);
     background: var(--color-surface-island-strong);
     padding-inline: var(--space-4);
     padding-block: var(--space-2);
