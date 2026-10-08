@@ -1,0 +1,78 @@
+import DowntimeBanner from "./DowntimeBanner.svelte";
+
+import { createRawSnippet } from "svelte";
+
+import { describe, expect, it } from "vitest";
+
+import { render } from "@testing-library/svelte";
+
+const start = new Date("2026-10-12T06:00:00Z");
+const end = new Date("2026-10-12T07:00:00Z");
+
+// Collapses template whitespace and the narrow spaces Intl puts in times.
+function text(element: HTMLElement): string {
+  return element.textContent?.replace(/\s+/g, " ").trim() ?? "";
+}
+
+describe("DowntimeBanner", () => {
+  it.each([
+    {
+      name: "announces a scheduled maintenance with its expected time frame",
+      started: false,
+      expected:
+        /^Scheduled maintenance Some services may be unavailable\. Expected: Oct 12, 2026, 6:00 – 7:00 AM UTC\.$/,
+    },
+    {
+      name: "warns of a maintenance in progress with its expected end",
+      started: true,
+      expected:
+        /^Maintenance in progress Some services may be unavailable\. Expected to end: Oct 12, 2026, 7:00 AM UTC\.$/,
+    },
+  ])("$name", ({ started, expected }) => {
+    const { getByRole, queryByRole } = render(DowntimeBanner, {
+      start,
+      end,
+      started,
+      locale: "en-US",
+      timeZone: "UTC",
+    });
+
+    expect(text(getByRole("status"))).toMatch(expected);
+    // The banner can't be dismissed.
+    expect(queryByRole("button")).toBeNull();
+  });
+
+  it("spans days in the time frame", () => {
+    const { getByRole } = render(DowntimeBanner, {
+      start,
+      end: new Date("2026-10-13T09:30:00Z"),
+      locale: "en-US",
+      timeZone: "UTC",
+    });
+
+    expect(text(getByRole("status"))).toMatch("Expected: Oct 12, 2026, 6:00 AM UTC – Oct 13, 2026, 9:30 AM UTC.");
+  });
+
+  it("formats the time frame in the given time zone", () => {
+    const { getByRole } = render(DowntimeBanner, { start, end, locale: "en-US", timeZone: "America/New_York" });
+
+    expect(text(getByRole("status"))).toMatch("Expected: Oct 12, 2026, 2:00 – 3:00 AM EDT.");
+  });
+
+  it("takes localized wording that receives the time frame", () => {
+    const { getByRole } = render(DowntimeBanner, {
+      start,
+      end,
+      locale: "fr-FR",
+      timeZone: "UTC",
+      title: "Maintenance prévue",
+      message: createRawSnippet((when: () => string) => ({
+        render: () => `<span>Certains services peuvent être indisponibles. Prévue : ${when()}.</span>`,
+      })),
+    });
+
+    expect(text(getByRole("status"))).toMatch(
+      /^Maintenance prévue Certains services peuvent être indisponibles\. Prévue : 12 oct\. 2026, 06:00 – 07:00 UTC\.$/
+    );
+  });
+});
