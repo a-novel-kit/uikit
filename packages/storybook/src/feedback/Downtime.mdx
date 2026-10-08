@@ -23,6 +23,12 @@ Once it has started, it warns with the expected end. Keep it on pages that remai
 
 <ResponsiveStoryPair desktop={Stories.StartedBanner} mobile={Stories.StartedBanner} meta={Stories} />
 
+Keep the banner in view while the page scrolls: pin it above the content on wide screens, and below
+it on narrow ones, away from where reading starts. Placing it after the content keeps it from
+covering the end of the page. Scroll the example to try it:
+
+<ResponsiveStoryPair desktop={Stories.PinnedWhileScrolling} mobile={Stories.PinnedWhileScrolling} meta={Stories} />
+
 ## Unavailable page
 
 `DowntimeState` replaces a page, or a whole section of navigation, that can't work during the

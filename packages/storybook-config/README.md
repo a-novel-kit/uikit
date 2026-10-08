@@ -30,6 +30,21 @@ export default config;
 No manager or preview file is required. Add local configuration only for application-specific story
 ordering or parameters.
 
+## Scroll previews
+
+Render `ScrollPreview` as a story's page content to try scrolling: sticky headers, banners and rails
+stay in view while its numbered rows move. It is for stories only.
+
+```svelte
+<script lang="ts">
+  import ScrollPreview from "@a-novel-kit/uikit-storybook/ScrollPreview.svelte";
+</script>
+
+<Shell>
+  <ScrollPreview rows={60} />
+</Shell>
+```
+
 ## Responsive screen documentation
 
 Use `ResponsiveStoryPair` in an attached MDX page to compare separate desktop and mobile story

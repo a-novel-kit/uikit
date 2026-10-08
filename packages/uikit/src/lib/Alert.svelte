@@ -33,7 +33,7 @@ Errors use an alert live region; other tones use status. Override `role` for sta
 </script>
 
 <div class="alert {tone} {className}" role={liveRole} {...rest}>
-  <FeedbackIcon {tone} children={icon} />
+  <FeedbackIcon {tone} size="sm" children={icon} />
   <div class="content">
     <strong><RenderContent content={title} /></strong>
     {#if children}<div class="message">{@render children()}</div>{/if}
@@ -44,19 +44,21 @@ Errors use an alert live region; other tones use status. Override `role` for sta
 <style>
   .alert {
     --alert-direction: to right;
+    /* Slimmer than a spacing step, in proportion with the compact box. */
+    --alert-accent-width: calc(var(--border-width-base) * var(--multiplier-3));
 
     display: flex;
     align-items: center;
     gap: var(--space-3);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-md);
     background-image: linear-gradient(
       var(--alert-direction),
-      var(--alert-accent) var(--space-1),
-      transparent var(--space-1)
+      var(--alert-accent) var(--alert-accent-width),
+      transparent var(--alert-accent-width)
     );
     background-color: var(--alert-surface);
     padding-inline: var(--space-4);
-    padding-block: var(--space-4);
+    padding-block: var(--space-2);
     color: var(--color-text-primary);
     overflow-wrap: anywhere;
   }
@@ -88,7 +90,7 @@ Errors use an alert live region; other tones use status. Override `role` for sta
 
   .content {
     display: grid;
-    gap: var(--space-2);
+    gap: var(--space-1);
     min-inline-size: 0;
   }
   strong {
@@ -97,8 +99,8 @@ Errors use an alert live region; other tones use status. Override `role` for sta
   }
   .message {
     color: var(--color-text-secondary);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-normal);
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-compact);
   }
   .actions {
     display: flex;

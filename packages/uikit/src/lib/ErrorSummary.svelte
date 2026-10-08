@@ -72,7 +72,7 @@ Mount after validation and enable `focusOnMount` when focus should move to the s
   tabindex="-1"
   {...rest}
 >
-  <FeedbackIcon tone="error" />
+  <FeedbackIcon tone="error" size="sm" />
   <div class="content">
     <svelte:element this={`h${headingLevel}`} id={titleId} class="title"
       ><RenderContent content={title} /></svelte:element
@@ -91,9 +91,10 @@ Mount after validation and enable `focusOnMount` when focus should move to the s
     display: flex;
     align-items: flex-start;
     gap: var(--space-3);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-md);
     background: var(--color-feedback-error-surface);
-    padding: var(--space-4);
+    padding-inline: var(--space-4);
+    padding-block: var(--space-2);
     color: var(--color-text-primary);
   }
 
@@ -104,7 +105,7 @@ Mount after validation and enable `focusOnMount` when focus should move to the s
 
   .content {
     display: grid;
-    gap: var(--space-2);
+    gap: var(--space-1);
     min-inline-size: 0;
     overflow-wrap: anywhere;
   }
@@ -123,8 +124,8 @@ Mount after validation and enable `focusOnMount` when focus should move to the s
 
   p {
     color: var(--color-text-secondary);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-normal);
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-compact);
   }
 
   ul {

@@ -2,6 +2,7 @@
   import Localized from "../Localized.svelte";
 
   import { Container, DowntimeBanner, DowntimeState, Link, Stack } from "@a-novel-kit/uikit";
+  import ScrollPreview from "@a-novel-kit/uikit-storybook/ScrollPreview.svelte";
 
   import { defineMeta } from "@storybook/addon-svelte-csf";
 
@@ -54,6 +55,15 @@
   </div>
 </Story>
 
+<Story name="Pinned while scrolling" asChild>
+  <div class="scrolling">
+    <div class="pinned">
+      <DowntimeBanner {start} {end} started timeZone="UTC" />
+    </div>
+    <ScrollPreview />
+  </div>
+</Story>
+
 <Story name="Unavailable page" asChild>
   <main class="page centered">
     <Container size="sm">
@@ -80,5 +90,27 @@
   h1,
   p {
     margin: 0;
+  }
+
+  /* The placement apps use: pinned above the content, or below it on narrow screens. */
+  .scrolling {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-surface-canvas);
+    min-block-size: 100dvb;
+  }
+
+  .pinned {
+    position: sticky;
+    z-index: var(--layer-sticky);
+    inset-block-start: 0;
+  }
+
+  @media (max-width: 47.999rem) {
+    .pinned {
+      order: 1;
+      inset-block-end: 0;
+      inset-block-start: auto;
+    }
   }
 </style>

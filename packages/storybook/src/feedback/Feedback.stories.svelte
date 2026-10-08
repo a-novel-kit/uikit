@@ -58,7 +58,7 @@
     <Alert tone="warning" title="You are offline">Your changes are stored on this device.</Alert>
     <Alert tone="error" title="Account unavailable">
       The service could not be reached.
-      {#snippet actions()}<Button>Try again</Button>{/snippet}
+      {#snippet actions()}<Button size="sm">Try again</Button>{/snippet}
     </Alert>
   </Stack>
 </Story>
