@@ -76,7 +76,7 @@ For a custom trigger, spread the snippet attributes onto a native button.
     triggerIcon?: Snippet;
     /** Replaces the default trigger; spread all supplied attributes onto a native button. */
     trigger?: Snippet<[ActionMenuTriggerAttributes]>;
-    /** Replaces visible action content while preserving its text label. */
+    /** Replaces visible action content, which names the item, so it must include the label. */
     renderItem?: Snippet<[ActionMenuAction]>;
     /** State owner that decides whether visibility requests take effect. */
     controller: ActionMenuController;
@@ -312,7 +312,6 @@ For a custom trigger, spread the snippet attributes onto a native button.
           class="agora-menu-item {item.tone === 'danger' ? 'danger' : ''}"
           type="button"
           role="menuitem"
-          aria-label={item.label}
           data-menu-item=""
           data-menu-index={index}
           data-label={item.label}
@@ -329,7 +328,7 @@ For a custom trigger, spread the snippet attributes onto a native button.
           <span
             >{#if renderItem}{@render renderItem(item)}{:else}{item.label}{/if}</span
           >
-          {#if item.shortcut}<kbd>{item.shortcut}</kbd>{/if}
+          {#if item.shortcut}<kbd aria-hidden="true">{item.shortcut}</kbd>{/if}
         </button>
       {/if}
     {/each}
