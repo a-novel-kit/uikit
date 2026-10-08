@@ -56,7 +56,7 @@ The caller manages their lifetime and removes dismissed entries; no automatic ti
 <section class="region {className}" aria-label={label} {...rest}>
   {#each toasts as toast (toast.id)}
     <div class="toast" role={toast.tone === "error" ? "alert" : "status"}>
-      <FeedbackIcon tone={toast.tone ?? "info"} />
+      <FeedbackIcon tone={toast.tone ?? "info"} size="sm" />
       <div class="message">
         {#if toast.title}<strong><RenderContent content={toast.title} /></strong>{/if}
         <p><RenderContent content={toast.message} /></p>
@@ -92,7 +92,7 @@ The caller manages their lifetime and removes dismissed entries; no automatic ti
     border-radius: var(--radius-lg);
     background: var(--color-surface-island-strong);
     padding-inline: var(--space-4);
-    padding-block: var(--space-4);
+    padding-block: var(--space-2);
     pointer-events: auto;
     color: var(--color-text-primary);
   }
@@ -112,8 +112,8 @@ The caller manages their lifetime and removes dismissed entries; no automatic ti
   p {
     margin: 0;
     color: var(--color-text-secondary);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-normal);
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-compact);
   }
   .action {
     margin-block-start: var(--space-2);
