@@ -30,7 +30,7 @@ their content under a started `DowntimeBanner` instead.
 
   let { end, timeZone, ...rest }: DowntimeStateProps = $props();
 
-  const when = $derived(downtimeFormat(language, timeZone).format(end));
+  const when = $derived(downtimeFormat(language, timeZone).instant(end));
 </script>
 
 <StatusState

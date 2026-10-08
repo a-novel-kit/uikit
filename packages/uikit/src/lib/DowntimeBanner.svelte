@@ -31,7 +31,7 @@ is generic and translated; only the times vary.
 
   const phase = $derived(started ? "started" : "scheduled");
   const format = $derived(downtimeFormat(language, timeZone));
-  const when = $derived(started ? format.format(end) : format.formatRange(start, end));
+  const when = $derived(started ? format.instant(end) : format.range(start, end));
 </script>
 
 <div class="banner {started ? 'warning' : 'info'} {className}" role="status" {...rest}>

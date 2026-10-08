@@ -1,4 +1,6 @@
 <script module lang="ts">
+  import Localized from "../Localized.svelte";
+
   import { Container, DowntimeBanner, DowntimeState, Link, Stack } from "@a-novel-kit/uikit";
 
   import { defineMeta } from "@storybook/addon-svelte-csf";
@@ -18,13 +20,18 @@
 {#snippet content()}
   <Container size="sm">
     <Stack gap="3">
-      <h1>Your library</h1>
-      <p>Pick up the story you were writing, or start a new one.</p>
+      <h1><Localized en="Your library" fr="Votre bibliothèque" /></h1>
+      <p>
+        <Localized
+          en="Pick up the story you were writing, or start a new one."
+          fr="Reprenez l’histoire que vous écriviez, ou commencez-en une nouvelle."
+        />
+      </p>
     </Stack>
   </Container>
 {/snippet}
 
-{#snippet home()}<Link href="/">Back to the home page</Link>{/snippet}
+{#snippet home()}<Link href="/"><Localized en="Back to the home page" fr="Retour à l’accueil" /></Link>{/snippet}
 
 <Story name="Scheduled banner" asChild>
   <div class="page">
