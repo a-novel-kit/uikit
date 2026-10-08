@@ -31,6 +31,10 @@
     "./preview": {
       "types": "./dist/preview.d.ts",
       "default": "./dist/preview.js"
+    },
+    "./ScrollPreview.svelte": {
+      "svelte": "./dist/ScrollPreview.svelte",
+      "default": "./dist/ScrollPreview.svelte"
     }
   },
   "files": [
@@ -40,7 +44,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.json && cp src/ScrollPreview.svelte dist/",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
@@ -71,7 +75,8 @@
     "@storybook/addon-svelte-csf": "^5.1.5",
     "@storybook/addon-vitest": "^10.6.1",
     "react": "^19.3.0",
-    "storybook": "^10.6.1"
+    "storybook": "^10.6.1",
+    "svelte": "^5.57.1"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
