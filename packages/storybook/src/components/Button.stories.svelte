@@ -108,23 +108,23 @@
       <tbody>
         <tr>
           <th scope="row">Brand</th>
-          <td><Button aria-label="Brand idle">Action</Button></td>
-          <td><Button aria-pressed="true" aria-label="Brand selected">Action</Button></td>
-          <td><Button disabled aria-label="Brand disabled">Action</Button></td>
+          <td><Button>Action</Button></td>
+          <td><Button aria-pressed="true">Action</Button></td>
+          <td><Button disabled>Action</Button></td>
         </tr>
         <tr>
           <th scope="row">Neutral</th>
-          <td><Button tone="neutral" aria-label="Neutral idle">Action</Button></td>
+          <td><Button tone="neutral">Action</Button></td>
           <td>
-            <Button tone="neutral" aria-pressed="true" aria-label="Neutral selected">Action</Button>
+            <Button tone="neutral" aria-pressed="true">Action</Button>
           </td>
-          <td><Button tone="neutral" disabled aria-label="Neutral disabled">Action</Button></td>
+          <td><Button tone="neutral" disabled>Action</Button></td>
         </tr>
         <tr>
           <th scope="row">Danger</th>
-          <td><Button tone="danger" aria-label="Danger idle">Action</Button></td>
+          <td><Button tone="danger">Action</Button></td>
           <td><span class="not-applicable">Not used</span></td>
-          <td><Button tone="danger" disabled aria-label="Danger disabled">Action</Button></td>
+          <td><Button tone="danger" disabled>Action</Button></td>
         </tr>
       </tbody>
     </table>
