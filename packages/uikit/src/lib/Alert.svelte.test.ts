@@ -31,6 +31,15 @@ describe("feedback composition", () => {
     expect(container.querySelector("strong")?.parentElement?.children).toHaveLength(1);
   });
 
+  it("shows only the message when the title is omitted", () => {
+    const { getByRole, container } = render(Alert, {
+      tone: "warning",
+      children: createRawSnippet(() => ({ render: () => "<span>Account unavailable during maintenance.</span>" })),
+    });
+    expect(getByRole("status").textContent?.trim()).toBe("Account unavailable during maintenance.");
+    expect(container.querySelector("strong")).toBeNull();
+  });
+
   it("preserves custom alert graphics, body, and recovery actions", () => {
     const { getByRole, getByText, container } = render(Alert, {
       tone: "error",

@@ -63,6 +63,14 @@
   </Stack>
 </Story>
 
+<Story name="Tight spaces" asChild>
+  <Stack gap="3" style="inline-size: min(100%, 14rem)">
+    <Alert tone="loading">Loading account</Alert>
+    <Alert tone="warning">Account unavailable during maintenance.</Alert>
+    <Alert tone="error">Account unavailable. Try again in a few minutes.</Alert>
+  </Stack>
+</Story>
+
 <Story name="Progress and loading" asChild>
   <Stack gap="6">
     <Progress label="Uploading assets" value={68} showValue />

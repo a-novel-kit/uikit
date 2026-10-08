@@ -14,8 +14,8 @@ Errors use an alert live region; other tones use status. Override `role` for sta
   export interface AlertProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
     /** Semantic status conveyed by the alert. */
     tone?: FeedbackState;
-    /** Alert heading. */
-    title: Content;
+    /** Alert heading. Omit it in tight spaces, such as a navigation rail, to show only the message. */
+    title?: Content;
     /** Replaces the default status graphic. */
     icon?: Snippet;
     /** Optional controls rendered after the message. */
@@ -35,7 +35,7 @@ Errors use an alert live region; other tones use status. Override `role` for sta
 <div class="alert {tone} {className}" role={liveRole} {...rest}>
   <FeedbackIcon {tone} size="sm" children={icon} />
   <div class="content">
-    <strong><RenderContent content={title} /></strong>
+    {#if title}<strong><RenderContent content={title} /></strong>{/if}
     {#if children}<div class="message">{@render children()}</div>{/if}
     {#if actions}<div class="actions">{@render actions()}</div>{/if}
   </div>
