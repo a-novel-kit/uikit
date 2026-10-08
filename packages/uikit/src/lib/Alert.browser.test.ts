@@ -46,7 +46,7 @@ describe("Alert presentation", () => {
         expect(style.borderBottomWidth).toBe("0px");
         expect(parseFloat(style.borderTopLeftRadius)).toBeGreaterThan(0);
         expect(style.backgroundImage).toMatch(
-          new RegExp(`^linear-gradient\\(to ${dir === "ltr" ? "right" : "left"}, .+ 4px, .+ 4px\\)$`)
+          new RegExp(`^linear-gradient\\(to ${dir === "ltr" ? "right" : "left"}, .+ 3px, .+ 3px\\)$`)
         );
         expect(style.backgroundClip).toBe("border-box");
         expect(alert.scrollWidth).toBeLessThanOrEqual(alert.clientWidth);

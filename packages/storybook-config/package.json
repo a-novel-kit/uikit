@@ -33,18 +33,19 @@
       "default": "./dist/preview.js"
     },
     "./ScrollPreview.svelte": {
-      "svelte": "./dist/ScrollPreview.svelte",
-      "default": "./dist/ScrollPreview.svelte"
+      "svelte": "./src/ScrollPreview.svelte",
+      "default": "./src/ScrollPreview.svelte"
     }
   },
   "files": [
     "dist",
     "preview.css",
+    "src/ScrollPreview.svelte",
     "README.md",
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.json && cp src/ScrollPreview.svelte dist/",
+    "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
