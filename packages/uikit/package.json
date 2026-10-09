@@ -51,7 +51,7 @@
   "peerDependencies": {
     "@a-novel-kit/nodelib-i18n": "^1.13.0",
     "i18next": "^26.4.2",
-    "svelte": "^5.57.1"
+    "svelte": "^5.57.2"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
