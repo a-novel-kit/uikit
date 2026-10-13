@@ -21,8 +21,6 @@ jobs:
         id: setup
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          app_private_key: ${{ secrets.DEPENDENCY_BOT_PRIVATE_KEY }}
-          client_id: ${{ vars.DEPENDENCY_BOT_CLIENT_ID }}
       - uses: actions/checkout@v7
         with:
           token: ${{ steps.setup.outputs.token }}
@@ -43,8 +41,6 @@ jobs:
       - uses: a-novel-kit/workflows/node-actions/test-node@v1.55.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          app_private_key: ${{ secrets.DEPENDENCY_BOT_PRIVATE_KEY }}
-          client_id: ${{ vars.DEPENDENCY_BOT_CLIENT_ID }}
           test_action: "test:unit"
 
   test-browser:
@@ -59,8 +55,6 @@ jobs:
       - uses: a-novel-kit/workflows/node-actions/setup-node@v1.55.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          app_private_key: ${{ secrets.DEPENDENCY_BOT_PRIVATE_KEY }}
-          client_id: ${{ vars.DEPENDENCY_BOT_CLIENT_ID }}
       - name: Run browser component tests
         run: pnpm run test:browser
 
@@ -76,8 +70,6 @@ jobs:
       - uses: a-novel-kit/workflows/node-actions/setup-node@v1.55.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          app_private_key: ${{ secrets.DEPENDENCY_BOT_PRIVATE_KEY }}
-          client_id: ${{ vars.DEPENDENCY_BOT_CLIENT_ID }}
       - name: Run Storybook interaction and accessibility tests
         run: pnpm run test:storybook
 
@@ -119,6 +111,4 @@ jobs:
       - uses: a-novel-kit/workflows/node-actions/build-node@v1.55.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          app_private_key: ${{ secrets.DEPENDENCY_BOT_PRIVATE_KEY }}
-          client_id: ${{ vars.DEPENDENCY_BOT_CLIENT_ID }}
           build_action: "build:ci"
