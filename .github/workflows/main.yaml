@@ -17,7 +17,7 @@ jobs:
       contents: read
       packages: read
     steps:
-      - uses: a-novel-kit/workflows/node-actions/setup-node@v1.57.0
+      - uses: a-novel-kit/workflows/node-actions/setup-node@v1.58.0
         id: setup
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -38,7 +38,7 @@ jobs:
       contents: read
       packages: read
     steps:
-      - uses: a-novel-kit/workflows/node-actions/test-node@v1.57.0
+      - uses: a-novel-kit/workflows/node-actions/test-node@v1.58.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           test_action: "test:unit"
@@ -52,7 +52,7 @@ jobs:
       contents: read
       packages: read
     steps:
-      - uses: a-novel-kit/workflows/node-actions/setup-node@v1.57.0
+      - uses: a-novel-kit/workflows/node-actions/setup-node@v1.58.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Run browser component tests
@@ -67,7 +67,7 @@ jobs:
       contents: read
       packages: read
     steps:
-      - uses: a-novel-kit/workflows/node-actions/setup-node@v1.57.0
+      - uses: a-novel-kit/workflows/node-actions/setup-node@v1.58.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Run Storybook interaction and accessibility tests
@@ -98,7 +98,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: a-novel-kit/workflows/generic-actions/codecov@v1.57.0
+      - uses: a-novel-kit/workflows/generic-actions/codecov@v1.58.0
         with:
           codecov_token: ${{ secrets.CODECOV_TOKEN }}
 
@@ -108,7 +108,7 @@ jobs:
       contents: read
       packages: read
     steps:
-      - uses: a-novel-kit/workflows/node-actions/build-node@v1.57.0
+      - uses: a-novel-kit/workflows/node-actions/build-node@v1.58.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           build_action: "build:ci"
