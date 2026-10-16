@@ -3,7 +3,7 @@
 The organization-wide library taxonomy lives in the
 [libraries, tooling, and platform concepts](https://github.com/a-novel-kit/.github/blob/master/CONTRIBUTING.md).
 Platform setup and shared commands live in the
-[developer onboarding guide](https://github.com/a-novel-kit/.github/blob/master/README.md). Read the
+[developer guide](https://a-novel-kit.github.io/stack/). Read the
 [README](./README.md) first for this repository's package map.
 
 ## Package boundaries

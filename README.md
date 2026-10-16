@@ -68,6 +68,6 @@ import "@a-novel-kit/uikit-tokens/tokens.css";
 
 ## Contributing
 
-Read the [developer onboarding guide](https://github.com/a-novel-kit/.github/blob/master/README.md)
+Read the [developer guide](https://a-novel-kit.github.io/stack/)
 for the shared toolchain, then follow this repository's [contributing guide](./CONTRIBUTING.md) for
 package boundaries, public API rules, and the Storybook workflow.
