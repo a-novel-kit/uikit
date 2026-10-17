@@ -12,6 +12,8 @@ Composable Svelte components and shared design foundations for Agora interfaces.
 [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/a-novel-kit/uikit/main.yaml)](https://github.com/a-novel-kit/uikit/actions/workflows/main.yaml)
 [![Codecov](https://codecov.io/gh/a-novel-kit/uikit/graph/badge.svg)](https://codecov.io/gh/a-novel-kit/uikit)
 
+![Coverage graph](https://codecov.io/gh/a-novel-kit/uikit/graphs/sunburst.svg)
+
 ## What this is
 
 This repository contains the generic UI packages shared by Agora clients:
