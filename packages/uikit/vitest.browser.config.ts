@@ -24,8 +24,5 @@ export default defineProject({
       headless: true,
       instances: [{ browser: "chromium" }],
     },
-    coverage: {
-      enabled: false,
-    },
   },
 });

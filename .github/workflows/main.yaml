@@ -52,11 +52,11 @@ jobs:
       contents: read
       packages: read
     steps:
-      - uses: a-novel-kit/workflows/node-actions/setup-node@v1.58.0
+      - uses: a-novel-kit/workflows/node-actions/test-node@v1.58.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Run browser component tests
-        run: pnpm run test:browser
+          test_action: "test:browser"
+          coverage_artifact: coverage-browser
 
   test-storybook:
     runs-on: ubuntu-latest
@@ -95,6 +95,7 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - test-unit
+      - test-browser
     permissions:
       contents: read
     steps:
