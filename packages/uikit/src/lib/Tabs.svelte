@@ -131,12 +131,18 @@ Every panel stays mounted; inactive panels are hidden. Initialize the controller
   }
 </script>
 
-<div class="agora-tabs {orientation} {className}">
-  <div bind:this={listElement} class="agora-tabs-list" role="tablist" aria-label={label} aria-orientation={orientation}>
+<div class="a-novel-tabs {orientation} {className}">
+  <div
+    bind:this={listElement}
+    class="a-novel-tabs-list"
+    role="tablist"
+    aria-label={label}
+    aria-orientation={orientation}
+  >
     {#each tabs as tab, index (tab.value)}
       <button
         id="{componentId}-tab-{index}"
-        class="agora-tabs-trigger"
+        class="a-novel-tabs-trigger"
         type="button"
         role="tab"
         aria-label={tab.label}
@@ -160,7 +166,7 @@ Every panel stays mounted; inactive panels are hidden. Initialize the controller
   {#each tabs as tab, index (tab.value)}
     <div
       id="{componentId}-panel-{index}"
-      class="agora-tabs-content"
+      class="a-novel-tabs-content"
       role="tabpanel"
       aria-labelledby="{componentId}-tab-{index}"
       tabindex={0}
@@ -172,29 +178,29 @@ Every panel stays mounted; inactive panels are hidden. Initialize the controller
 </div>
 
 <style>
-  .agora-tabs {
+  .a-novel-tabs {
     display: flex;
     min-inline-size: 0;
   }
-  .agora-tabs.horizontal {
+  .a-novel-tabs.horizontal {
     flex-direction: column;
   }
-  .agora-tabs.vertical {
+  .a-novel-tabs.vertical {
     flex-direction: row;
     align-items: flex-start;
   }
-  .agora-tabs-list {
+  .a-novel-tabs-list {
     display: flex;
     gap: var(--space-1);
     border-block-end: var(--border-width-thin) solid var(--color-border-subtle);
   }
-  .agora-tabs.vertical .agora-tabs-list {
+  .a-novel-tabs.vertical .a-novel-tabs-list {
     flex: none;
     flex-direction: column;
     border-inline-end: var(--border-width-thin) solid var(--color-border-subtle);
     border-block-end: 0;
   }
-  .agora-tabs-trigger {
+  .a-novel-tabs-trigger {
     display: inline-flex;
     position: relative;
     align-items: center;
@@ -213,20 +219,20 @@ Every panel stays mounted; inactive panels are hidden. Initialize the controller
     font-size: var(--font-size-sm);
     font-family: var(--font-family-interface);
   }
-  .agora-tabs.vertical .agora-tabs-trigger {
+  .a-novel-tabs.vertical .a-novel-tabs-trigger {
     border-inline-end: var(--border-width-strong) solid transparent;
     border-block-end: 0;
     inline-size: 100%;
   }
-  .agora-tabs-trigger:hover:not([data-disabled], [data-state="active"]) {
+  .a-novel-tabs-trigger:hover:not([data-disabled], [data-state="active"]) {
     background: var(--color-navigation-hover-surface);
     color: var(--color-navigation-hover-text);
   }
-  .agora-tabs-trigger[data-state="active"] {
+  .a-novel-tabs-trigger[data-state="active"] {
     border-color: transparent;
     color: var(--color-navigation-selected-text);
   }
-  .agora-tabs-trigger[data-state="active"]::after {
+  .a-novel-tabs-trigger[data-state="active"]::after {
     position: absolute;
     inset-block-end: calc(var(--border-width-strong) * -1);
     inset-inline: 0;
@@ -235,28 +241,28 @@ Every panel stays mounted; inactive panels are hidden. Initialize the controller
     block-size: var(--border-width-strong);
     content: "";
   }
-  .agora-tabs.vertical .agora-tabs-trigger[data-state="active"]::after {
+  .a-novel-tabs.vertical .a-novel-tabs-trigger[data-state="active"]::after {
     inset-block: 0;
     inset-inline-end: calc(var(--border-width-strong) * -1);
     inset-inline-start: auto;
     inline-size: var(--border-width-strong);
     block-size: auto;
   }
-  .agora-tabs-trigger:focus-visible {
+  .a-novel-tabs-trigger:focus-visible {
     outline: var(--focus-ring-width) solid var(--color-focus-ring);
     outline-offset: calc(var(--focus-ring-offset) * -1);
     border-radius: var(--radius-sm);
   }
-  .agora-tabs-trigger[data-disabled] {
+  .a-novel-tabs-trigger[data-disabled] {
     cursor: not-allowed;
     color: var(--color-text-disabled);
   }
-  .agora-tabs-content {
+  .a-novel-tabs-content {
     padding-block: var(--space-4);
     min-inline-size: 0;
     color: var(--color-text-secondary);
   }
-  .agora-tabs.vertical .agora-tabs-content {
+  .a-novel-tabs.vertical .a-novel-tabs-content {
     flex: 1;
     padding-inline: var(--space-4);
     padding-block: 0;

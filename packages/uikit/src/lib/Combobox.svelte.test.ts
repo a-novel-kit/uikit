@@ -74,8 +74,8 @@ describe("Combobox", () => {
     await fireEvent.focus(getByRole("combobox", { name: "Language" }));
 
     const listbox = getByRole("listbox");
-    const content = listbox.closest<HTMLElement>(".agora-combobox-content");
-    expect(content?.style.getPropertyValue("--agora-combobox-menu-max-height")).toBe("8rem");
+    const content = listbox.closest<HTMLElement>(".a-novel-combobox-content");
+    expect(content?.style.getPropertyValue("--a-novel-combobox-menu-max-height")).toBe("8rem");
   });
 
   it("keeps option labels when custom visuals replace their content", async () => {

@@ -135,7 +135,7 @@ Spread all trigger attributes onto that element; an open controller owns visibil
   {source}
   mode="manual"
   id={tooltipId}
-  class="agora-tooltip {side}"
+  class="a-novel-tooltip {side}"
   role="tooltip"
   onOpenChange={(open) => (open ? controller.open() : controller.close())}
 >
@@ -143,7 +143,7 @@ Spread all trigger attributes onto that element; an open controller owns visibil
 </FloatingSurface>
 
 <style>
-  :global(.agora-tooltip) {
+  :global(.a-novel-tooltip) {
     z-index: var(--layer-dropdown);
     box-shadow: var(--shadow-md);
     border: 0;
@@ -157,27 +157,27 @@ Spread all trigger attributes onto that element; an open controller owns visibil
     line-height: var(--line-height-compact);
     font-family: var(--font-family-interface);
   }
-  :global(.agora-tooltip.top) {
+  :global(.a-novel-tooltip.top) {
     position-area: block-start span-inline-end;
     justify-self: start;
     inset-block-end: var(--space-2);
   }
-  :global(.agora-tooltip.right) {
+  :global(.a-novel-tooltip.right) {
     position-area: inline-end span-block-end;
     align-self: start;
     inset-inline-start: var(--space-2);
   }
-  :global(.agora-tooltip.bottom) {
+  :global(.a-novel-tooltip.bottom) {
     position-area: block-end span-inline-end;
     justify-self: start;
     inset-block-start: var(--space-2);
   }
-  :global(.agora-tooltip.left) {
+  :global(.a-novel-tooltip.left) {
     position-area: inline-start span-block-end;
     align-self: start;
     inset-inline-end: var(--space-2);
   }
-  :global(.agora-tooltip::before) {
+  :global(.a-novel-tooltip::before) {
     position: absolute;
     transform: rotate(45deg);
     background: inherit;
@@ -185,25 +185,25 @@ Spread all trigger attributes onto that element; an open controller owns visibil
     block-size: var(--space-2);
     content: "";
   }
-  :global(.agora-tooltip.top::before) {
+  :global(.a-novel-tooltip.top::before) {
     inset-block-end: calc(var(--space-1) * -1);
     inset-inline-start: calc(50% - var(--space-1));
   }
-  :global(.agora-tooltip.right::before) {
+  :global(.a-novel-tooltip.right::before) {
     inset-block-start: calc(50% - var(--space-1));
     inset-inline-start: calc(var(--space-1) * -1);
   }
-  :global(.agora-tooltip.bottom::before) {
+  :global(.a-novel-tooltip.bottom::before) {
     inset-block-start: calc(var(--space-1) * -1);
     inset-inline-start: calc(50% - var(--space-1));
   }
-  :global(.agora-tooltip.left::before) {
+  :global(.a-novel-tooltip.left::before) {
     inset-block-start: calc(50% - var(--space-1));
     inset-inline-end: calc(var(--space-1) * -1);
   }
 
   @supports (backdrop-filter: blur(0)) or (-webkit-backdrop-filter: blur(0)) {
-    :global(.agora-tooltip) {
+    :global(.a-novel-tooltip) {
       -webkit-backdrop-filter: blur(var(--blur-md));
       backdrop-filter: blur(var(--blur-md));
       background: var(--color-surface-glass);
@@ -211,7 +211,7 @@ Spread all trigger attributes onto that element; an open controller owns visibil
   }
 
   @media (forced-colors: active) {
-    :global(.agora-tooltip) {
+    :global(.a-novel-tooltip) {
       border: var(--border-width-thin) solid CanvasText;
     }
   }

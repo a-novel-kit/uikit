@@ -105,7 +105,7 @@ body {
   overflow-x: auto;
 }
 
-.agora-story-review {
+.a-novel-story-review {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
@@ -115,7 +115,7 @@ body {
   overflow-x: auto;
 }
 
-.agora-story-review__frame {
+.a-novel-story-review__frame {
   display: grid;
   flex: 0 0 auto;
   gap: var(--space-2);
@@ -123,7 +123,7 @@ body {
   min-inline-size: 0;
 }
 
-.agora-story-review__caption {
+.a-novel-story-review__caption {
   display: flex;
   align-items: baseline;
   gap: var(--space-2);
@@ -131,12 +131,12 @@ body {
   font-size: var(--font-size-sm);
 }
 
-.agora-story-review__caption strong {
+.a-novel-story-review__caption strong {
   color: var(--color-text-primary);
   font-weight: var(--font-weight-medium);
 }
 
-.agora-story-review__scroll {
+.a-novel-story-review__scroll {
   box-shadow: var(--shadow-sm);
   border: var(--border-width-thin) solid
     color-mix(in oklab, var(--color-border-selected) var(--color-mix-6), transparent);
@@ -146,15 +146,15 @@ body {
   overflow: auto;
 }
 
-.agora-story-review__viewport {
+.a-novel-story-review__viewport {
   overflow: hidden;
 }
 
-.agora-story-review__document {
+.a-novel-story-review__document {
   transform-origin: top left;
 }
 
-.agora-story-review__iframe {
+.a-novel-story-review__iframe {
   display: block;
   border: 0;
   inline-size: 100%;

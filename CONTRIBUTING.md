@@ -1,4 +1,4 @@
-# Contributing to Agora UI
+# Contributing to A-Novel UI
 
 The organization-wide library taxonomy lives in the
 [libraries, tooling, and platform concepts](https://github.com/a-novel-kit/.github/blob/master/CONTRIBUTING.md).
@@ -13,13 +13,13 @@ Platform setup and shared commands live in the
 - `packages/tokens` owns primitive and semantic design values. Components consume semantic
   tokens rather than raw palette steps.
 - `packages/fonts` owns the self-hosted font files, declarations, and required license copies.
-- `packages/icons` owns the curated icon vocabulary and custom Agora glyphs.
+- `packages/icons` owns the curated icon vocabulary and custom A-Novel glyphs.
 - `packages/storybook-config` is the published Storybook preset used by this workbench and client
   repositories.
 - `packages/storybook` is the private workbench and design-system documentation site.
 
 Product-specific workflows, page shells, manuscript rendering, and screen composition stay in their
-feature or client repository. Move a pattern into the UI kit only when it is useful without Agora
+feature or client repository. Move a pattern into the UI kit only when it is useful without product
 domain knowledge.
 
 ## Component contracts

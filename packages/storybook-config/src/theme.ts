@@ -30,14 +30,14 @@ const fonts = {
  *
  * @example
  * ```ts
- * import { agoraTheme } from "@a-novel-kit/uikit-storybook";
+ * import { aNovelTheme } from "@a-novel-kit/uikit-storybook";
  * import { addons } from "storybook/manager-api";
- * addons.setConfig({ theme: agoraTheme });
+ * addons.setConfig({ theme: aNovelTheme });
  * ```
  */
-export const agoraTheme = create({
+export const aNovelTheme = create({
   base: "dark",
-  brandTitle: "Agora UI",
+  brandTitle: "A-Novel UI",
   colorPrimary: colors.accent,
   colorSecondary: colors.accent,
   appBg: colors.canvas,

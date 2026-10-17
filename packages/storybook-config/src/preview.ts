@@ -1,6 +1,6 @@
 import "../preview.css";
 import { reviewViewportOptions } from "./responsiveStory.js";
-import { agoraTheme } from "./theme.js";
+import { aNovelTheme } from "./theme.js";
 
 import "@a-novel-kit/uikit-fonts/fonts.css";
 import "@a-novel-kit/uikit-tokens/tokens.css";
@@ -39,7 +39,7 @@ const preview: Preview = {
     },
     backgrounds: {
       options: {
-        night: { name: "Agora night", value: "var(--color-surface-canvas)" },
+        night: { name: "A-Novel night", value: "var(--color-surface-canvas)" },
         paper: { name: "Paper", value: "var(--color-text-primary)" },
       },
     },
@@ -50,7 +50,7 @@ const preview: Preview = {
       },
     },
     docs: {
-      theme: agoraTheme,
+      theme: aNovelTheme,
       toc: true,
     },
     viewport: {

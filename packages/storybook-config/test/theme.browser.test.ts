@@ -1,4 +1,4 @@
-import { agoraTheme } from "../src/theme";
+import { aNovelTheme } from "../src/theme";
 
 import { afterEach, describe, expect, it } from "vitest";
 
@@ -38,7 +38,7 @@ describe("shared dark theme", () => {
   it("renders the agreed grey-blue canvas in CSS, palette metadata, and Storybook chrome", () => {
     const canvas = sample("--color-surface-canvas").background;
     const colors = [canvas, new Color(colorSystem.canvas)];
-    for (const value of [agoraTheme.appBg, agoraTheme.appContentBg, agoraTheme.appPreviewBg]) {
+    for (const value of [aNovelTheme.appBg, aNovelTheme.appContentBg, aNovelTheme.appPreviewBg]) {
       expect(value).toBeDefined();
       colors.push(new Color(value!));
     }

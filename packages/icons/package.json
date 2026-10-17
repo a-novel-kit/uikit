@@ -2,7 +2,7 @@
   "name": "@a-novel-kit/uikit-icons",
   "version": "0.8.1",
   "private": false,
-  "description": "Custom Agora glyphs for the a-novel-kit design system",
+  "description": "Custom A-Novel glyphs for the a-novel-kit design system",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/a-novel-kit/uikit.git"

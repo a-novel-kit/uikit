@@ -1,6 +1,6 @@
-# Agora UI
+# A-Novel UI
 
-Composable Svelte components and shared design foundations for Agora interfaces.
+Composable Svelte components and shared design foundations for A-Novel interfaces.
 
 [![X (formerly Twitter) Follow](https://img.shields.io/twitter/follow/agorastoryverse)](https://twitter.com/agorastoryverse)
 [![Discord](https://img.shields.io/discord/1315240114691248138?logo=discord)](https://discord.gg/rp4Qr8cA)
@@ -16,7 +16,7 @@ Composable Svelte components and shared design foundations for Agora interfaces.
 
 ## What this is
 
-This repository contains the generic UI packages shared by Agora clients:
+This repository contains the generic UI packages shared by A-Novel clients:
 
 ```text
 packages/
@@ -25,7 +25,7 @@ packages/
 ├── fonts/             self-hosted font faces and licenses
 ├── images/            raw artwork and generated banners and application icons
 ├── icons/             custom Svelte icon components
-├── storybook-config/  reusable Agora Storybook preset and theme
+├── storybook-config/  reusable A-Novel Storybook preset and theme
 └── storybook/         private design-system workbench
 ```
 

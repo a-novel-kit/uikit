@@ -240,7 +240,7 @@ The hidden named input submits the selected value. The caller validates required
     <input
       bind:this={inputElement}
       id={inputId}
-      class="agora-combobox-input"
+      class="a-novel-combobox-input"
       type="text"
       role="combobox"
       value={inputValue}
@@ -261,7 +261,7 @@ The hidden named input submits the selected value. The caller validates required
       onkeydown={handleInputKeyDown}
     />
     <button
-      class="agora-combobox-trigger"
+      class="a-novel-combobox-trigger"
       type="button"
       aria-label={t("combobox.toggle")}
       data-state={controller.state.open ? "open" : "closed"}
@@ -283,11 +283,11 @@ The hidden named input submits the selected value. The caller validates required
     bind:element={listboxElement}
     source={inputElement}
     id={listboxId}
-    class="agora-combobox-content"
+    class="a-novel-combobox-content"
     role="listbox"
     aria-labelledby={inputId}
-    style="--agora-combobox-anchor-width: {anchorWidth}; {maxMenuHeight
-      ? '--agora-combobox-menu-max-height: ' + maxMenuHeight
+    style="--a-novel-combobox-anchor-width: {anchorWidth}; {maxMenuHeight
+      ? '--a-novel-combobox-menu-max-height: ' + maxMenuHeight
       : ''}"
     onOpenChange={(nextOpen) => {
       if (nextOpen) controller.open();
@@ -297,7 +297,7 @@ The hidden named input submits the selected value. The caller validates required
     {#each filteredOptions as option, index (option.value)}
       <button
         id={optionId(index)}
-        class="agora-combobox-item {allowDeselect ? 'deselectable' : ''}"
+        class="a-novel-combobox-item {allowDeselect ? 'deselectable' : ''}"
         type="button"
         tabindex={-1}
         role="option"
@@ -343,7 +343,7 @@ The hidden named input submits the selected value. The caller validates required
   .input-wrap.invalid:focus-within {
     box-shadow: var(--shadow-invalid-focus-ring);
   }
-  .agora-combobox-input {
+  .a-novel-combobox-input {
     appearance: none;
     transition:
       background-color var(--duration-fast) var(--easing-standard),
@@ -361,35 +361,35 @@ The hidden named input submits the selected value. The caller validates required
     font-size: var(--font-size-md);
     font-family: var(--font-family-interface);
   }
-  .agora-combobox-input:hover:not(:disabled, :focus-visible, [aria-invalid="true"], :user-invalid) {
+  .a-novel-combobox-input:hover:not(:disabled, :focus-visible, [aria-invalid="true"], :user-invalid) {
     border-color: var(--color-control-border-hover);
     background: var(--color-control-surface-hover);
   }
-  .agora-combobox-input:focus-visible {
+  .a-novel-combobox-input:focus-visible {
     outline: none;
     border-color: var(--color-control-border-focus);
     background: var(--color-control-surface-focus);
   }
-  .agora-combobox-input[aria-invalid="true"],
-  .agora-combobox-input:user-invalid {
+  .a-novel-combobox-input[aria-invalid="true"],
+  .a-novel-combobox-input:user-invalid {
     border-color: var(--color-feedback-error-border);
     background: var(--color-control-surface-invalid);
   }
-  .agora-combobox-input[aria-invalid="true"]:focus-visible,
-  .agora-combobox-input:user-invalid:focus-visible {
+  .a-novel-combobox-input[aria-invalid="true"]:focus-visible,
+  .a-novel-combobox-input:user-invalid:focus-visible {
     border-color: var(--color-feedback-error-border);
     background: var(--color-control-surface-invalid);
   }
-  .agora-combobox-input::placeholder {
+  .a-novel-combobox-input::placeholder {
     color: var(--color-control-placeholder);
   }
-  .agora-combobox-input:disabled {
+  .a-novel-combobox-input:disabled {
     cursor: not-allowed;
     border-color: var(--color-border-subtle);
     background: var(--color-control-surface-disabled);
     color: var(--color-control-disabled-text);
   }
-  .agora-combobox-trigger {
+  .a-novel-combobox-trigger {
     display: grid;
     position: absolute;
     place-items: center;
@@ -403,20 +403,20 @@ The hidden named input submits the selected value. The caller validates required
     inline-size: var(--control-height-md);
     color: var(--color-text-muted);
   }
-  .input-wrap:not(:focus-within) .agora-combobox-trigger:hover:not(:disabled) {
+  .input-wrap:not(:focus-within) .a-novel-combobox-trigger:hover:not(:disabled) {
     background: var(--color-action-ghost-hover);
     color: var(--color-text-primary);
   }
-  .agora-combobox-trigger:focus-visible {
+  .a-novel-combobox-trigger:focus-visible {
     outline: none;
     color: var(--color-text-primary);
   }
-  .agora-combobox-trigger:disabled {
+  .a-novel-combobox-trigger:disabled {
     cursor: not-allowed;
     color: var(--color-text-disabled);
   }
 
-  :global(.agora-combobox-content) {
+  :global(.a-novel-combobox-content) {
     display: grid;
     position-area: block-end span-inline-end;
     justify-self: start;
@@ -429,18 +429,18 @@ The hidden named input submits the selected value. The caller validates required
     border-radius: var(--radius-lg);
     background: var(--color-surface-island-strong);
     padding: var(--space-1);
-    inline-size: var(--agora-combobox-anchor-width);
-    min-inline-size: var(--agora-combobox-anchor-width);
+    inline-size: var(--a-novel-combobox-anchor-width);
+    min-inline-size: var(--a-novel-combobox-anchor-width);
     max-block-size: min(
       calc(100dvb - var(--space-8)),
-      var(--agora-combobox-menu-max-height, var(--control-menu-max-height))
+      var(--a-novel-combobox-menu-max-height, var(--control-menu-max-height))
     );
     overflow-x: hidden;
     overflow-y: auto;
     overscroll-behavior-block: contain;
     color: var(--color-text-primary);
   }
-  :global(.agora-combobox-item) {
+  :global(.a-novel-combobox-item) {
     display: flex;
     align-items: center;
     gap: var(--space-3);
@@ -459,26 +459,26 @@ The hidden named input submits the selected value. The caller validates required
     user-select: none;
     text-align: start;
   }
-  :global(.agora-combobox-item > :last-child:not(:first-child)) {
+  :global(.a-novel-combobox-item > :last-child:not(:first-child)) {
     margin-inline-start: auto;
     color: var(--color-text-accent);
   }
-  :global(.agora-combobox-item[data-highlighted]:not([data-selected]):not([data-disabled])) {
+  :global(.a-novel-combobox-item[data-highlighted]:not([data-selected]):not([data-disabled])) {
     background: var(--color-surface-glass-hover);
     color: var(--color-navigation-hover-text);
   }
-  :global(.agora-combobox-item[data-selected]) {
+  :global(.a-novel-combobox-item[data-selected]) {
     cursor: default;
     background: var(--color-navigation-selected-surface);
     color: var(--color-navigation-selected-text);
   }
-  :global(.agora-combobox-item[data-selected][data-highlighted]) {
+  :global(.a-novel-combobox-item[data-selected][data-highlighted]) {
     background: var(--color-navigation-selected-surface);
   }
-  :global(.agora-combobox-item[data-selected].deselectable:not([data-disabled])) {
+  :global(.a-novel-combobox-item[data-selected].deselectable:not([data-disabled])) {
     cursor: pointer;
   }
-  :global(.agora-combobox-item[data-disabled]) {
+  :global(.a-novel-combobox-item[data-disabled]) {
     cursor: not-allowed;
     color: var(--color-text-disabled);
   }
@@ -491,26 +491,26 @@ The hidden named input submits the selected value. The caller validates required
   }
 
   @supports (backdrop-filter: blur(0)) or (-webkit-backdrop-filter: blur(0)) {
-    :global(.agora-combobox-content) {
+    :global(.a-novel-combobox-content) {
       -webkit-backdrop-filter: blur(var(--blur-md));
       backdrop-filter: blur(var(--blur-md));
       background: var(--color-surface-glass);
     }
 
-    :global(.agora-combobox-item[data-highlighted]:not([data-selected]):not([data-disabled])) {
+    :global(.a-novel-combobox-item[data-highlighted]:not([data-selected]):not([data-disabled])) {
       -webkit-backdrop-filter: blur(var(--blur-sm));
       backdrop-filter: blur(var(--blur-sm));
     }
   }
 
   @media (forced-colors: active) {
-    .agora-combobox-input:focus-visible,
-    .agora-combobox-trigger:focus-visible {
+    .a-novel-combobox-input:focus-visible,
+    .a-novel-combobox-trigger:focus-visible {
       outline: var(--border-width-strong) solid Highlight;
       outline-offset: calc(var(--focus-ring-offset) * -1);
     }
 
-    :global(.agora-combobox-content) {
+    :global(.a-novel-combobox-content) {
       border: var(--border-width-thin) solid CanvasText;
     }
   }

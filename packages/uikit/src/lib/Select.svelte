@@ -234,7 +234,7 @@ The hidden named input submits the selected value. The caller validates required
   <button
     bind:this={triggerElement}
     id={triggerId}
-    class="agora-select-trigger {controlSize} {isInvalid ? 'invalid' : ''} {allowDeselect
+    class="a-novel-select-trigger {controlSize} {isInvalid ? 'invalid' : ''} {allowDeselect
       ? 'deselectable'
       : ''} {className}"
     type="button"
@@ -261,7 +261,7 @@ The hidden named input submits the selected value. The caller validates required
         {placeholder}
       {/if}
     </span>
-    <ChevronDownIcon class="agora-select-indicator" size="var(--icon-size-sm)" aria-hidden="true" />
+    <ChevronDownIcon class="a-novel-select-indicator" size="var(--icon-size-sm)" aria-hidden="true" />
   </button>
 
   {#if name}
@@ -273,10 +273,10 @@ The hidden named input submits the selected value. The caller validates required
     bind:element={listboxElement}
     source={triggerElement}
     id={listboxId}
-    class="agora-select-content"
+    class="a-novel-select-content"
     role="listbox"
     aria-labelledby={triggerId}
-    style="--agora-select-anchor-width: {anchorWidth}"
+    style="--a-novel-select-anchor-width: {anchorWidth}"
     onOpenChange={(nextOpen) => {
       if (nextOpen) controller.open();
       else controller.close();
@@ -286,7 +286,7 @@ The hidden named input submits the selected value. The caller validates required
     {#each options as option, index (option.value)}
       <button
         id={optionId(index)}
-        class="agora-select-item {allowDeselect ? 'deselectable' : ''}"
+        class="a-novel-select-item {allowDeselect ? 'deselectable' : ''}"
         type="button"
         tabindex={-1}
         role="option"
@@ -320,7 +320,7 @@ The hidden named input submits the selected value. The caller validates required
     min-inline-size: 0;
   }
 
-  .agora-select-trigger {
+  .a-novel-select-trigger {
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
@@ -344,73 +344,73 @@ The hidden named input submits the selected value. The caller validates required
     text-align: start;
   }
 
-  .agora-select-trigger:hover:not(:disabled, :focus-visible, [aria-invalid="true"]) {
+  .a-novel-select-trigger:hover:not(:disabled, :focus-visible, [aria-invalid="true"]) {
     border-color: var(--color-control-border-hover);
     background: var(--color-control-surface-hover);
   }
 
-  .agora-select-trigger:focus-visible {
+  .a-novel-select-trigger:focus-visible {
     outline: none;
     box-shadow: var(--shadow-focus-ring);
     border-color: var(--color-control-border-focus);
     background: var(--color-control-surface-focus);
   }
 
-  .agora-select-trigger[data-placeholder] [data-select-value] {
+  .a-novel-select-trigger[data-placeholder] [data-select-value] {
     color: var(--color-text-muted);
   }
 
-  :global(.agora-select-indicator) {
+  :global(.a-novel-select-indicator) {
     flex: none;
     transition: transform var(--duration-fast) var(--easing-standard);
     color: var(--color-text-muted);
   }
 
-  .agora-select-trigger[data-state="open"] :global(.agora-select-indicator) {
+  .a-novel-select-trigger[data-state="open"] :global(.a-novel-select-indicator) {
     transform: rotate(180deg);
   }
 
-  .agora-select-trigger:disabled {
+  .a-novel-select-trigger:disabled {
     cursor: not-allowed;
     border-color: var(--color-border-subtle);
     background: var(--color-control-surface-disabled);
     color: var(--color-control-disabled-text);
   }
 
-  .agora-select-trigger:disabled :global(.agora-select-indicator) {
+  .a-novel-select-trigger:disabled :global(.a-novel-select-indicator) {
     color: var(--color-control-disabled-text);
   }
 
-  .agora-select-trigger.invalid,
-  .agora-select-trigger[aria-invalid="true"] {
+  .a-novel-select-trigger.invalid,
+  .a-novel-select-trigger[aria-invalid="true"] {
     border-color: var(--color-feedback-error-border);
     background: var(--color-control-surface-invalid);
   }
 
-  .agora-select-trigger.invalid:focus-visible,
-  .agora-select-trigger[aria-invalid="true"]:focus-visible {
+  .a-novel-select-trigger.invalid:focus-visible,
+  .a-novel-select-trigger[aria-invalid="true"]:focus-visible {
     box-shadow: var(--shadow-invalid-focus-ring);
     border-color: var(--color-feedback-error-border);
     background: var(--color-control-surface-invalid);
   }
 
-  .agora-select-trigger.sm {
+  .a-novel-select-trigger.sm {
     padding-inline: var(--space-3);
     min-block-size: var(--control-height-sm);
     font-size: var(--font-size-sm);
   }
-  .agora-select-trigger.md {
+  .a-novel-select-trigger.md {
     padding-inline: var(--space-3);
     min-block-size: var(--control-height-md);
     font-size: var(--font-size-md);
   }
-  .agora-select-trigger.lg {
+  .a-novel-select-trigger.lg {
     padding-inline: var(--space-4);
     min-block-size: var(--control-height-lg);
     font-size: var(--font-size-lg);
   }
 
-  :global(.agora-select-content) {
+  :global(.a-novel-select-content) {
     display: grid;
     position-area: block-end span-inline-end;
     justify-self: start;
@@ -423,8 +423,8 @@ The hidden named input submits the selected value. The caller validates required
     border-radius: var(--radius-lg);
     background: var(--color-surface-island-strong);
     padding: var(--space-1);
-    inline-size: var(--agora-select-anchor-width);
-    min-inline-size: var(--agora-select-anchor-width);
+    inline-size: var(--a-novel-select-anchor-width);
+    min-inline-size: var(--a-novel-select-anchor-width);
     max-block-size: min(calc(100dvb - var(--space-8)), var(--control-menu-max-height));
     overflow-x: hidden;
     overflow-y: auto;
@@ -432,7 +432,7 @@ The hidden named input submits the selected value. The caller validates required
     color: var(--color-text-primary);
   }
 
-  :global(.agora-select-item) {
+  :global(.a-novel-select-item) {
     display: flex;
     align-items: center;
     gap: var(--space-3);
@@ -452,51 +452,51 @@ The hidden named input submits the selected value. The caller validates required
     text-align: start;
   }
 
-  :global(.agora-select-item > :last-child:not(:first-child)) {
+  :global(.a-novel-select-item > :last-child:not(:first-child)) {
     margin-inline-start: auto;
     color: var(--color-text-accent);
   }
 
-  :global(.agora-select-item[data-highlighted]:not([data-selected]):not([data-disabled])) {
+  :global(.a-novel-select-item[data-highlighted]:not([data-selected]):not([data-disabled])) {
     background: var(--color-surface-glass-hover);
     color: var(--color-navigation-hover-text);
   }
 
-  :global(.agora-select-item[data-selected]) {
+  :global(.a-novel-select-item[data-selected]) {
     cursor: default;
     background: var(--color-navigation-selected-surface);
     color: var(--color-navigation-selected-text);
   }
 
-  :global(.agora-select-item[data-selected].deselectable) {
+  :global(.a-novel-select-item[data-selected].deselectable) {
     cursor: pointer;
   }
 
-  :global(.agora-select-item[data-disabled]) {
+  :global(.a-novel-select-item[data-disabled]) {
     cursor: not-allowed;
     color: var(--color-text-disabled);
   }
 
   @supports (backdrop-filter: blur(0)) or (-webkit-backdrop-filter: blur(0)) {
-    :global(.agora-select-content) {
+    :global(.a-novel-select-content) {
       -webkit-backdrop-filter: blur(var(--blur-md));
       backdrop-filter: blur(var(--blur-md));
       background: var(--color-surface-glass);
     }
 
-    :global(.agora-select-item[data-highlighted]:not([data-selected]):not([data-disabled])) {
+    :global(.a-novel-select-item[data-highlighted]:not([data-selected]):not([data-disabled])) {
       -webkit-backdrop-filter: blur(var(--blur-sm));
       backdrop-filter: blur(var(--blur-sm));
     }
   }
 
   @media (forced-colors: active) {
-    .agora-select-trigger:focus-visible {
+    .a-novel-select-trigger:focus-visible {
       outline: var(--border-width-strong) solid Highlight;
       outline-offset: var(--focus-ring-offset);
     }
 
-    :global(.agora-select-content) {
+    :global(.a-novel-select-content) {
       border: var(--border-width-thin) solid CanvasText;
     }
   }

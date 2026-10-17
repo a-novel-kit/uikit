@@ -1,4 +1,4 @@
-# Agora UI Storybook
+# A-Novel UI Storybook
 
 This private workspace package is the local component workbench and rendered design-system
 documentation. It consumes the published UI packages and `@a-novel-kit/uikit-storybook`; the
@@ -12,7 +12,7 @@ From the repository root:
 pnpm storybook
 ```
 
-The shared preset applies Agora's dark theme. The dev command sets `BROWSER=none` and passes
+The shared preset applies A-Novel's dark theme. The dev command sets `BROWSER=none` and passes
 `--no-open`, so it prints the local URL without opening a browser tab.
 
 Build the static verification artifact through the repository build command. The generated

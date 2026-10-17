@@ -1,6 +1,6 @@
 @import "./colors.css";
 
-/* Agora metric tokens derive in the browser from compact CSS bases. */
+/* A-Novel metric tokens derive in the browser from compact CSS bases. */
 :root {
   --multiplier-0: 0;
   --multiplier-half: 0.5;
