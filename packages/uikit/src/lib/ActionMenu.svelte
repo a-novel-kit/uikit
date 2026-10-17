@@ -270,7 +270,7 @@ For a custom trigger, spread the snippet attributes onto a native button.
   <button
     bind:this={triggerElement}
     id={triggerId}
-    class="agora-menu-trigger {className}"
+    class="a-novel-menu-trigger {className}"
     type="button"
     aria-controls={menuId}
     aria-expanded={controller.state.open}
@@ -291,10 +291,10 @@ For a custom trigger, spread the snippet attributes onto a native button.
   bind:element={menuElement}
   source={triggerElement}
   id={menuId}
-  class="agora-menu-content {align}"
+  class="a-novel-menu-content {align}"
   role="menu"
   aria-label={label}
-  style="--agora-menu-anchor-width: {anchorWidth}"
+  style="--a-novel-menu-anchor-width: {anchorWidth}"
   onkeydown={handleMenuKeyDown}
   onfocusin={(event) => {
     const item = event.target instanceof Element ? event.target.closest<HTMLElement>("[data-menu-item]") : null;
@@ -306,13 +306,13 @@ For a custom trigger, spread the snippet attributes onto a native button.
     if (!controller.state.open) activeItemIndex = -1;
   }}
 >
-  <div class="agora-menu-group" role="group" aria-label={label}>
+  <div class="a-novel-menu-group" role="group" aria-label={label}>
     {#each items as item, index (item.id)}
       {#if item.kind === "separator"}
-        <div class="agora-menu-separator" role="separator"></div>
+        <div class="a-novel-menu-separator" role="separator"></div>
       {:else}
         <button
-          class="agora-menu-item {item.tone === 'danger' ? 'danger' : ''}"
+          class="a-novel-menu-item {item.tone === 'danger' ? 'danger' : ''}"
           type="button"
           role="menuitem"
           data-menu-item=""
@@ -339,7 +339,7 @@ For a custom trigger, spread the snippet attributes onto a native button.
 </FloatingSurface>
 
 <style>
-  :global(.agora-menu-trigger) {
+  :global(.a-novel-menu-trigger) {
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -360,26 +360,26 @@ For a custom trigger, spread the snippet attributes onto a native button.
     font-size: var(--font-size-md);
     font-family: var(--font-family-interface);
   }
-  :global(.agora-menu-trigger:hover:not(:disabled, [data-state="open"])) {
+  :global(.a-novel-menu-trigger:hover:not(:disabled, [data-state="open"])) {
     border-color: var(--color-border-strong);
     background: var(--color-action-neutral-hover);
   }
-  :global(.agora-menu-trigger[data-state="open"]) {
+  :global(.a-novel-menu-trigger[data-state="open"]) {
     box-shadow: var(--shadow-glow-brand);
     border-color: var(--color-border-selected);
     background: var(--color-action-neutral-selected);
   }
-  :global(.agora-menu-trigger:focus-visible) {
+  :global(.a-novel-menu-trigger:focus-visible) {
     outline: var(--focus-ring-width) solid var(--color-focus-ring);
     outline-offset: var(--focus-ring-offset);
   }
-  :global(.agora-menu-trigger:disabled) {
+  :global(.a-novel-menu-trigger:disabled) {
     cursor: not-allowed;
     border-color: var(--color-action-disabled-border);
     background: var(--color-action-disabled-surface);
     color: var(--color-action-disabled-text);
   }
-  :global(.agora-menu-content) {
+  :global(.a-novel-menu-content) {
     position-area: block-end span-inline-end;
     z-index: var(--layer-dropdown);
     inset-block-start: var(--space-2);
@@ -389,28 +389,28 @@ For a custom trigger, spread the snippet attributes onto a native button.
     border-radius: var(--radius-lg);
     background: var(--color-surface-island-strong);
     padding: var(--space-1);
-    min-inline-size: max(var(--agora-menu-anchor-width), calc(var(--space-base) * var(--multiplier-48)));
+    min-inline-size: max(var(--a-novel-menu-anchor-width), calc(var(--space-base) * var(--multiplier-48)));
     max-block-size: min(calc(100dvb - var(--space-8)), var(--control-menu-max-height));
     overflow-x: hidden;
     overflow-y: auto;
     overscroll-behavior-block: contain;
     color: var(--color-text-primary);
   }
-  :global(.agora-menu-content.start) {
+  :global(.a-novel-menu-content.start) {
     justify-self: start;
   }
-  :global(.agora-menu-content.center) {
+  :global(.a-novel-menu-content.center) {
     justify-self: center;
   }
-  :global(.agora-menu-content.end) {
+  :global(.a-novel-menu-content.end) {
     position-area: block-end span-inline-start;
     justify-self: end;
   }
-  :global(.agora-menu-group) {
+  :global(.a-novel-menu-group) {
     display: grid;
     gap: var(--space-1);
   }
-  :global(.agora-menu-item) {
+  :global(.a-novel-menu-item) {
     display: flex;
     align-items: center;
     gap: var(--space-3);
@@ -429,21 +429,21 @@ For a custom trigger, spread the snippet attributes onto a native button.
     user-select: none;
     text-align: start;
   }
-  :global(.agora-menu-item[data-highlighted]) {
+  :global(.a-novel-menu-item[data-highlighted]) {
     background: var(--color-surface-glass-hover);
     color: var(--color-navigation-hover-text);
   }
-  :global(.agora-menu-item.danger) {
+  :global(.a-novel-menu-item.danger) {
     color: var(--color-feedback-error-text);
   }
-  :global(.agora-menu-item.danger[data-highlighted]) {
+  :global(.a-novel-menu-item.danger[data-highlighted]) {
     background: var(--color-feedback-error-surface);
   }
-  :global(.agora-menu-item[data-disabled]) {
+  :global(.a-novel-menu-item[data-disabled]) {
     cursor: not-allowed;
     color: var(--color-text-disabled);
   }
-  :global(.agora-menu-separator) {
+  :global(.a-novel-menu-separator) {
     margin: 0 var(--space-1);
     background: var(--color-border-subtle);
     block-size: var(--border-width-thin);
@@ -461,20 +461,20 @@ For a custom trigger, spread the snippet attributes onto a native button.
   }
 
   @supports (backdrop-filter: blur(0)) or (-webkit-backdrop-filter: blur(0)) {
-    :global(.agora-menu-content) {
+    :global(.a-novel-menu-content) {
       -webkit-backdrop-filter: blur(var(--blur-md));
       backdrop-filter: blur(var(--blur-md));
       background: var(--color-surface-glass);
     }
 
-    :global(.agora-menu-item[data-highlighted]) {
+    :global(.a-novel-menu-item[data-highlighted]) {
       -webkit-backdrop-filter: blur(var(--blur-sm));
       backdrop-filter: blur(var(--blur-sm));
     }
   }
 
   @media (forced-colors: active) {
-    :global(.agora-menu-content) {
+    :global(.a-novel-menu-content) {
       border: var(--border-width-thin) solid CanvasText;
     }
   }

@@ -1,6 +1,6 @@
 # @a-novel-kit/uikit-tokens
 
-Agora's design tokens ship as one dependency-free stylesheet. Import it once in the application shell.
+A-Novel's design tokens ship as one dependency-free stylesheet. Import it once in the application shell.
 
 ```ts
 import "@a-novel-kit/uikit-tokens/tokens.css";

@@ -1,5 +1,5 @@
 import "../src/preview";
-import { agoraTheme } from "../src/theme";
+import { aNovelTheme } from "../src/theme";
 
 import { afterEach, expect, it } from "vitest";
 
@@ -31,7 +31,7 @@ it.each([
   root.render(
     createElement(
       ThemeProvider,
-      { theme: convert(agoraTheme) },
+      { theme: convert(aNovelTheme) },
       createElement(CodeOrSourceMdx, { className: `language-${language}` }, code)
     )
   );
