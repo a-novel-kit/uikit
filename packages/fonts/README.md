@@ -1,6 +1,6 @@
 # @a-novel-kit/uikit-fonts
 
-Self-hosted web fonts for the Agora design system. **Every byte is vendored in this package**
+Self-hosted web fonts for the A-Novel design system. **Every byte is vendored in this package**
 (`files/*.woff2`) and served same-origin — no CDN, no runtime font dependency, CSP-clean.
 
 ## Voices

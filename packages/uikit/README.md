@@ -1,6 +1,6 @@
 # @a-novel-kit/uikit
 
-Agora's shared Svelte components consume the public contracts from
+A-Novel's shared Svelte components consume the public contracts from
 `@a-novel-kit/uikit-tokens` and the self-hosted faces from `@a-novel-kit/uikit-fonts`.
 
 Install the component package and the foundations imported by your application.

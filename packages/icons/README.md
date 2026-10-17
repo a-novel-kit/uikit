@@ -1,6 +1,6 @@
 # @a-novel-kit/uikit-icons
 
-This package contains custom Agora glyphs and the shared `IconBase` canvas used to build them.
+This package contains custom A-Novel glyphs and the shared `IconBase` canvas used to build them.
 
 Import standard interface icons directly from `@lucide/svelte`.
 

@@ -1,5 +1,5 @@
 /** Context key shared only by Accordion and AccordionItem. */
-export const accordionContextKey = Symbol("agora-accordion");
+export const accordionContextKey = Symbol("a-novel-accordion");
 
 /** State inherited by an AccordionItem from its nearest Accordion. */
 export interface AccordionContext {

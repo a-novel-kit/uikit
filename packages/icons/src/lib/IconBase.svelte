@@ -14,7 +14,7 @@ Frames custom 24×24 SVG geometry with inherited text color. Icons are decorativ
   import type { Snippet } from "svelte";
   import type { SVGAttributes } from "svelte/elements";
 
-  /** Props shared by custom Agora SVG icons. */
+  /** Props shared by custom A-Novel SVG icons. */
   export interface IconProps extends Omit<SVGAttributes<SVGSVGElement>, "children"> {
     /** Square rendered size. Components inherit surrounding text color. */
     size?: number | string;

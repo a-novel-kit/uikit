@@ -15,7 +15,7 @@ interface MdxLoaderOptions {
   [key: string]: unknown;
 }
 
-/** Storybook addons installed by the Agora preset. */
+/** Storybook addons installed by the A-Novel preset. */
 export const addons = [
   resolve("@storybook/addon-svelte-csf/preset"),
   resolve("@storybook/addon-docs/preset"),

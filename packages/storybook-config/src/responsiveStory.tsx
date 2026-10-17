@@ -15,7 +15,7 @@ interface ReviewViewport {
 const reviewViewports = {
   desktop: {
     height: 800,
-    id: "agoraDesktop",
+    id: "aNovelDesktop",
     label: "Desktop",
     scale: 0.85,
     type: "desktop",
@@ -23,7 +23,7 @@ const reviewViewports = {
   },
   mobile: {
     height: 844,
-    id: "agoraMobile",
+    id: "aNovelMobile",
     label: "Mobile",
     scale: 0.85,
     type: "mobile",
@@ -170,18 +170,18 @@ function ReviewFrame({ meta, startAt, story, viewport }: ReviewFrameProps) {
   } satisfies CSSProperties;
 
   return (
-    <figure className="agora-story-review__frame">
-      <figcaption className="agora-story-review__caption">
+    <figure className="a-novel-story-review__frame">
+      <figcaption className="a-novel-story-review__caption">
         <strong>{viewport.label}</strong>
         <span>
           {viewport.width} × {viewport.height} · {Math.round(viewport.scale * 100)}%
         </span>
       </figcaption>
-      <div className="agora-story-review__scroll">
-        <div className="agora-story-review__viewport" style={scaledSize}>
-          <div className="agora-story-review__document" style={documentSize}>
+      <div className="a-novel-story-review__scroll">
+        <div className="a-novel-story-review__viewport" style={scaledSize}>
+          <div className="a-novel-story-review__document" style={documentSize}>
             <iframe
-              className="agora-story-review__iframe"
+              className="a-novel-story-review__iframe"
               id={`iframe--${preparedStory.id}--${viewport.id}`}
               loading="lazy"
               src={source}
@@ -211,7 +211,7 @@ function ReviewFrame({ meta, startAt, story, viewport }: ReviewFrameProps) {
  */
 export function ResponsiveStoryPair({ desktop, meta, mobile, startAt }: ResponsiveStoryPairProps) {
   return (
-    <section className="agora-story-review" aria-label="Desktop and mobile previews">
+    <section className="a-novel-story-review" aria-label="Desktop and mobile previews">
       <ReviewFrame story={desktop} meta={meta} startAt={startAt} viewport={reviewViewports.desktop} />
       <ReviewFrame story={mobile} meta={meta} startAt={startAt} viewport={reviewViewports.mobile} />
     </section>

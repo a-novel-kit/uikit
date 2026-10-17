@@ -11,9 +11,9 @@ afterEach(() => {
 
 async function reviewFrame(width: number) {
   document.body.innerHTML = `
-      <div class="agora-story-review__viewport" style="width: ${width * 0.85}px; height: 340px">
-        <div class="agora-story-review__document" style="width: ${width}px; height: 400px; transform: scale(.85)">
-          <iframe class="agora-story-review__iframe" title="Scrollable preview"></iframe>
+      <div class="a-novel-story-review__viewport" style="width: ${width * 0.85}px; height: 340px">
+        <div class="a-novel-story-review__document" style="width: ${width}px; height: 400px; transform: scale(.85)">
+          <iframe class="a-novel-story-review__iframe" title="Scrollable preview"></iframe>
         </div>
       </div>`;
 

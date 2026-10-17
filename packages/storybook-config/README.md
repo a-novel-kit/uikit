@@ -1,6 +1,6 @@
 # @a-novel-kit/uikit-storybook
 
-Shared Storybook configuration for Agora Svelte interfaces. The package provides the manager theme,
+Shared Storybook configuration for A-Novel Svelte interfaces. The package provides the manager theme,
 dark preview, fonts, tokens, MDX documentation, GitHub-flavored Markdown, and accessibility checks.
 
 ## Setup
