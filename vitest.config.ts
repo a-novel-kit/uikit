@@ -19,7 +19,8 @@ export default defineConfig({
       provider: "v8",
       reporter: ["text", "json", "lcov"],
       reportsDirectory: "coverage",
-      include: ["packages/uikit/src/**/*.{svelte,ts}"],
+      // Vitest matches this against the root, or against each project root once --project filters the run.
+      include: ["packages/uikit/src/lib/**/*.{svelte,ts}", "src/lib/**/*.{svelte,ts}"],
     },
     projects: [
       "packages/storybook-config",
