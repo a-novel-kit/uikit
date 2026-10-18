@@ -1,8 +1,8 @@
 # @a-novel-kit/uikit-images
 
-Lossless, web-ready Agora brand images. The package owns the editable source artwork in `raw/` and
-contains responsive banners and square icons in `files/`. Raw artwork remains in Git LFS and is not
-included in the published npm package.
+Lossless, web-ready logos for Agora, Studio, A-Novel, and KIT. The package owns the editable source
+artwork in `raw/` and contains responsive banners and square icons in `files/`. Raw artwork remains in
+Git LFS and is not included in the published npm package.
 
 ## Usage
 
@@ -10,25 +10,39 @@ Import the smallest file that covers the image's rendered size and display densi
 Vite resolve the import to a public asset URL.
 
 ```ts
-import bannerUrl from "@a-novel-kit/uikit-images/files/banner/1280w/agora-banner.png";
+import bannerUrl from "@a-novel-kit/uikit-images/files/banner/160h/agora-banner.png";
 import iconUrl from "@a-novel-kit/uikit-images/files/icon/192x192/agora-icon.png";
 ```
 
-Banner files retain the source aspect ratio and are available at widths from 320 to 3840 pixels.
-Their `*w` directories map directly to HTML `srcset` width descriptors. Icon files cover browser,
-PWA, and app surfaces from 16×16 through 1024×1024 pixels.
+Files follow `files/banner/{height}h/{logo}-banner{variant}.png` and
+`files/icon/{size}x{size}/{logo}-icon{variant}.png`, where `{logo}` is `agora`, `a-novel`, `kit`, or
+`studio`.
 
-Use meaningful alternative text when the brand image contributes content. Use an empty `alt` when
-the surrounding interface already names Agora.
+| `{variant}`    | Mode  | Background  |
+| -------------- | ----- | ----------- |
+| _(none)_       | Dark  | Transparent |
+| `-black`       | Dark  | Black       |
+| `-light`       | Light | Transparent |
+| `-light-white` | Light | White       |
+
+Banner files are available at heights from 80 to 960 pixels and keep each logo's aspect ratio. For a
+banner displayed at a fixed height, the height directories map to `srcset` density descriptors: at 80
+CSS pixels, `80h` is `1x`, `160h` is `2x`, and `240h` is `3x`. Icon files cover browser, PWA, and app
+surfaces from 16×16 through 1024×1024 pixels.
+
+Use meaningful alternative text when the logo contributes content. Use an empty `alt` when the
+surrounding interface already names the product.
 
 ## Reproducing the images
 
 Run the repository generator after changing reviewed source artwork or a preset:
 
 ```sh
+git lfs pull
 pnpm generate:images
 ```
 
-The source-to-preset manifest is hardcoded in `scripts/generate-images.mjs`. Sources live in
-`packages/images/raw`; generated files keep the source filename, and their directories identify the
-preset and resolution.
+Each logo's folder in `packages/images/raw` holds its GIMP project, its export plug-in, and the
+instructions to install both. The plug-in writes the eight PNG sources the generator reads into the
+folder's `exports/` directory. The logo list, presets, and variant suffixes are hardcoded in
+`scripts/generate-images.mjs`.

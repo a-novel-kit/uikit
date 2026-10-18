@@ -1,11 +1,38 @@
-import banner320Url from "@a-novel-kit/uikit-images/files/banner/320w/agora-banner.png";
-import banner640Url from "@a-novel-kit/uikit-images/files/banner/640w/agora-banner.png";
-import banner960Url from "@a-novel-kit/uikit-images/files/banner/960w/agora-banner.png";
-import banner1280Url from "@a-novel-kit/uikit-images/files/banner/1280w/agora-banner.png";
-import banner1920Url from "@a-novel-kit/uikit-images/files/banner/1920w/agora-banner.png";
-import banner2560Url from "@a-novel-kit/uikit-images/files/banner/2560w/agora-banner.png";
-import banner3840Url from "@a-novel-kit/uikit-images/files/banner/3840w/agora-banner.png";
+import aNovelBannerBlackUrl from "@a-novel-kit/uikit-images/files/banner/80h/a-novel-banner-black.png";
+import aNovelBannerLightWhiteUrl from "@a-novel-kit/uikit-images/files/banner/80h/a-novel-banner-light-white.png";
+import aNovelBannerLightUrl from "@a-novel-kit/uikit-images/files/banner/80h/a-novel-banner-light.png";
+import aNovelBannerUrl from "@a-novel-kit/uikit-images/files/banner/80h/a-novel-banner.png";
+import agoraBannerBlackUrl from "@a-novel-kit/uikit-images/files/banner/80h/agora-banner-black.png";
+import agoraBannerLightWhiteUrl from "@a-novel-kit/uikit-images/files/banner/80h/agora-banner-light-white.png";
+import agoraBannerLightUrl from "@a-novel-kit/uikit-images/files/banner/80h/agora-banner-light.png";
+import agoraBannerUrl from "@a-novel-kit/uikit-images/files/banner/80h/agora-banner.png";
+import kitBannerBlackUrl from "@a-novel-kit/uikit-images/files/banner/80h/kit-banner-black.png";
+import kitBannerLightWhiteUrl from "@a-novel-kit/uikit-images/files/banner/80h/kit-banner-light-white.png";
+import kitBannerLightUrl from "@a-novel-kit/uikit-images/files/banner/80h/kit-banner-light.png";
+import kitBannerUrl from "@a-novel-kit/uikit-images/files/banner/80h/kit-banner.png";
+import studioBannerBlackUrl from "@a-novel-kit/uikit-images/files/banner/80h/studio-banner-black.png";
+import studioBannerLightWhiteUrl from "@a-novel-kit/uikit-images/files/banner/80h/studio-banner-light-white.png";
+import studioBannerLightUrl from "@a-novel-kit/uikit-images/files/banner/80h/studio-banner-light.png";
+import studioBannerUrl from "@a-novel-kit/uikit-images/files/banner/80h/studio-banner.png";
+import banner160Url from "@a-novel-kit/uikit-images/files/banner/160h/agora-banner.png";
+import banner240Url from "@a-novel-kit/uikit-images/files/banner/240h/agora-banner.png";
 import icon48Url from "@a-novel-kit/uikit-images/files/icon/48x48/agora-icon.png";
+import aNovelIconBlackUrl from "@a-novel-kit/uikit-images/files/icon/96x96/a-novel-icon-black.png";
+import aNovelIconLightWhiteUrl from "@a-novel-kit/uikit-images/files/icon/96x96/a-novel-icon-light-white.png";
+import aNovelIconLightUrl from "@a-novel-kit/uikit-images/files/icon/96x96/a-novel-icon-light.png";
+import aNovelIconUrl from "@a-novel-kit/uikit-images/files/icon/96x96/a-novel-icon.png";
+import agoraIconBlackUrl from "@a-novel-kit/uikit-images/files/icon/96x96/agora-icon-black.png";
+import agoraIconLightWhiteUrl from "@a-novel-kit/uikit-images/files/icon/96x96/agora-icon-light-white.png";
+import agoraIconLightUrl from "@a-novel-kit/uikit-images/files/icon/96x96/agora-icon-light.png";
+import agoraIconUrl from "@a-novel-kit/uikit-images/files/icon/96x96/agora-icon.png";
+import kitIconBlackUrl from "@a-novel-kit/uikit-images/files/icon/96x96/kit-icon-black.png";
+import kitIconLightWhiteUrl from "@a-novel-kit/uikit-images/files/icon/96x96/kit-icon-light-white.png";
+import kitIconLightUrl from "@a-novel-kit/uikit-images/files/icon/96x96/kit-icon-light.png";
+import kitIconUrl from "@a-novel-kit/uikit-images/files/icon/96x96/kit-icon.png";
+import studioIconBlackUrl from "@a-novel-kit/uikit-images/files/icon/96x96/studio-icon-black.png";
+import studioIconLightWhiteUrl from "@a-novel-kit/uikit-images/files/icon/96x96/studio-icon-light-white.png";
+import studioIconLightUrl from "@a-novel-kit/uikit-images/files/icon/96x96/studio-icon-light.png";
+import studioIconUrl from "@a-novel-kit/uikit-images/files/icon/96x96/studio-icon.png";
 import icon192Url from "@a-novel-kit/uikit-images/files/icon/192x192/agora-icon.png";
 import icon512Url from "@a-novel-kit/uikit-images/files/icon/512x512/agora-icon.png";
 
@@ -15,17 +42,35 @@ import "./BrandImages.css";
 
 <Meta title="Foundations/Brand images" />
 
-export const bannerSrcset = [
-  [banner320Url, 320],
-  [banner640Url, 640],
-  [banner960Url, 960],
-  [banner1280Url, 1280],
-  [banner1920Url, 1920],
-  [banner2560Url, 2560],
-  [banner3840Url, 3840],
-]
-  .map(([url, width]) => `${url} ${width}w`)
-  .join(", ");
+export const variants = [
+  { label: "Dark, transparent", suffix: "" },
+  { label: "Dark, black", suffix: "-black" },
+  { label: "Light, transparent", light: true, suffix: "-light" },
+  { label: "Light, white", suffix: "-light-white" },
+];
+
+export const logos = [
+  {
+    banners: [agoraBannerUrl, agoraBannerBlackUrl, agoraBannerLightUrl, agoraBannerLightWhiteUrl],
+    icons: [agoraIconUrl, agoraIconBlackUrl, agoraIconLightUrl, agoraIconLightWhiteUrl],
+    id: "agora",
+  },
+  {
+    banners: [aNovelBannerUrl, aNovelBannerBlackUrl, aNovelBannerLightUrl, aNovelBannerLightWhiteUrl],
+    icons: [aNovelIconUrl, aNovelIconBlackUrl, aNovelIconLightUrl, aNovelIconLightWhiteUrl],
+    id: "a-novel",
+  },
+  {
+    banners: [kitBannerUrl, kitBannerBlackUrl, kitBannerLightUrl, kitBannerLightWhiteUrl],
+    icons: [kitIconUrl, kitIconBlackUrl, kitIconLightUrl, kitIconLightWhiteUrl],
+    id: "kit",
+  },
+  {
+    banners: [studioBannerUrl, studioBannerBlackUrl, studioBannerLightUrl, studioBannerLightWhiteUrl],
+    icons: [studioIconUrl, studioIconBlackUrl, studioIconLightUrl, studioIconLightWhiteUrl],
+    id: "studio",
+  },
+];
 
 export const iconSamples = [
   { label: "Browser", size: 48, url: icon48Url },
@@ -35,28 +80,56 @@ export const iconSamples = [
 
 # Brand images
 
-Import responsive banners and square application icons from `@a-novel-kit/uikit-images`.
+Import logo banners and square application icons from `@a-novel-kit/uikit-images`.
+
+## Logos
+
+Agora, A-Novel, KIT, and Studio each ship a banner and an icon in four variants. The variant suffix
+ends every file name.
+
+| Suffix         | Mode  | Background  |
+| -------------- | ----- | ----------- |
+| _(none)_       | Dark  | Transparent |
+| `-black`       | Dark  | Black       |
+| `-light`       | Light | Transparent |
+| `-light-white` | Light | White       |
+
+<div className="brand-image-grid brand-image-grid--logos">
+  {logos.flatMap((logo) =>
+    variants.map((variant, index) => (
+      <figure className="brand-image-sample" key={logo.id + variant.suffix}>
+        <div className={"brand-image-stage brand-logo-stage" + (variant.light ? " brand-image-stage--light" : "")}>
+          <img alt="" src={logo.banners[index]} />
+          <img alt="" src={logo.icons[index]} />
+        </div>
+        <figcaption>
+          <strong>{variant.label}</strong>
+          <code>{logo.id + "-*" + variant.suffix + ".png"}</code>
+        </figcaption>
+      </figure>
+    ))
+  )}
+</div>
 
 ## Banner
 
-Use width descriptors and a `sizes` value that reflects the consuming layout. The browser can then
-select the smallest source that covers the rendered slot and display density.
+Banners keep their logo's aspect ratio, and their directories name a height. Display a banner at a
+fixed height and list the larger heights as density descriptors.
 
-<figure className="brand-image-sample brand-image-sample--banner">
+<figure className="brand-image-sample">
   <div className="brand-image-stage">
     <img
       alt="Agora"
       decoding="async"
-      height="321"
-      sizes="(max-width: 48rem) 100vw, 80rem"
-      src={banner1280Url}
-      srcSet={bannerSrcset}
-      width="1280"
+      height="80"
+      src={agoraBannerUrl}
+      srcSet={`${banner160Url} 2x, ${banner240Url} 3x`}
+      width="319"
     />
   </div>
   <figcaption>
-    <strong>Responsive banner</strong>
-    <code>files/banner/{"{width}"}w/agora-banner.png</code>
+    <strong>Fixed-height banner</strong>
+    <code>files/banner/{"{height}"}h/agora-banner.png</code>
   </figcaption>
 </figure>
 
@@ -65,7 +138,7 @@ select the smallest source that covers the rendered slot and display density.
 Choose the file whose intrinsic square size matches the platform surface. Keep the image square and
 let the platform apply its own mask.
 
-<div className="brand-icon-grid">
+<div className="brand-image-grid">
   {iconSamples.map((sample) => (
     <figure className="brand-image-sample" key={sample.size}>
       <div className="brand-image-stage brand-image-stage--icon">
@@ -85,5 +158,5 @@ let the platform apply its own mask.
   ))}
 </div>
 
-The icon previews are decorative because their captions already identify each size. Product usage
-needs meaningful alternative text unless adjacent content names Agora.
+The previews are decorative because their captions already identify each file. Product usage needs
+meaningful alternative text unless adjacent content names the product.
