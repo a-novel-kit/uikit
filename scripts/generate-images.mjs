@@ -9,40 +9,34 @@ const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const rawRoot = resolve(repositoryRoot, "packages/images/raw");
 const outputRoot = resolve(repositoryRoot, "packages/images/files");
 
+const logos = ["agora", "a-novel", "kit", "studio"];
+
+// Every raw export shares this height. Banner sizes set only the height and keep their logo's aspect
+// ratio.
+const sourceHeight = 1792;
+
 const presets = {
   banner: {
-    sizes: [
-      { width: 320 },
-      { width: 640 },
-      { width: 960 },
-      { width: 1280 },
-      { width: 1920 },
-      { width: 2560 },
-      { width: 3840 },
-    ],
+    sizes: [80, 160, 240, 320, 480, 640, 960].map((height) => ({ height })),
+    source: "wordmark",
   },
   icon: {
     sizes: [16, 32, 48, 96, 144, 192, 512, 1024].map((size) => ({
       height: size,
       width: size,
     })),
+    source: "icon",
   },
 };
 
-const sources = [
-  {
-    filename: "agora-banner.png",
-    height: 1792,
-    preset: "banner",
-    width: 7136,
-  },
-  {
-    filename: "agora-icon.png",
-    height: 1792,
-    preset: "icon",
-    width: 1792,
-  },
-];
+// Maps each raw export variant to its published file-name suffix. The dark-mode export on a
+// transparent background is the logo's default file.
+const variants = {
+  transparent: "",
+  black: "-black",
+  "light-transparent": "-light",
+  "light-white": "-light-white",
+};
 
 const argumentsList = process.argv.slice(2);
 const checkOnly = argumentsList.length === 1 && argumentsList[0] === "--check";
@@ -53,7 +47,7 @@ if (argumentsList.length > 0 && !checkOnly) {
 
 const portablePath = (path) => path.split(sep).join("/");
 
-const outputDirectory = (preset, size) => (preset === "banner" ? `${size.width}w` : `${size.width}x${size.height}`);
+const outputDirectory = (preset, size) => (preset === "banner" ? `${size.height}h` : `${size.width}x${size.height}`);
 
 const collectFiles = async (directory) => {
   try {
@@ -80,33 +74,38 @@ const collectFiles = async (directory) => {
 const generateImages = async () => {
   const outputs = new Map();
 
-  for (const source of sources) {
-    const sourcePath = resolve(rawRoot, source.filename);
-    if (dirname(sourcePath) !== rawRoot) {
-      throw new Error(`Image source must be a direct child of packages/images/raw: ${source.filename}`);
-    }
+  for (const logo of logos) {
+    for (const [preset, { sizes, source }] of Object.entries(presets)) {
+      for (const [variant, suffix] of Object.entries(variants)) {
+        const sourcePath = resolve(rawRoot, logo, "exports", `${logo}-${source}-${variant}.png`);
+        const metadata = await sharp(sourcePath).metadata();
+        if (
+          metadata.format !== "png" ||
+          metadata.height !== sourceHeight ||
+          (preset === "icon" && metadata.width !== sourceHeight)
+        ) {
+          throw new Error(
+            `${portablePath(relative(repositoryRoot, sourcePath))} must be a PNG ${sourceHeight} pixels high` +
+              `${preset === "icon" ? " and wide" : ""}; received ` +
+              `${metadata.width ?? "unknown"}x${metadata.height ?? "unknown"} ${metadata.format ?? "file"}`
+          );
+        }
 
-    const metadata = await sharp(sourcePath).metadata();
-    if (metadata.format !== "png" || metadata.width !== source.width || metadata.height !== source.height) {
-      throw new Error(
-        `${source.filename} must be a ${source.width}x${source.height} PNG; received ` +
-          `${metadata.width ?? "unknown"}x${metadata.height ?? "unknown"} ${metadata.format ?? "file"}`
-      );
-    }
+        for (const size of sizes) {
+          const target = resolve(outputRoot, preset, outputDirectory(preset, size), `${logo}-${preset}${suffix}.png`);
+          const contents = await sharp(sourcePath)
+            .resize({
+              height: size.height,
+              kernel: sharp.kernel.lanczos3,
+              width: size.width,
+              withoutEnlargement: true,
+            })
+            .png({ adaptiveFiltering: true, compressionLevel: 9 })
+            .toBuffer();
 
-    for (const size of presets[source.preset].sizes) {
-      const target = resolve(outputRoot, source.preset, outputDirectory(source.preset, size), source.filename);
-      const contents = await sharp(sourcePath)
-        .resize({
-          height: size.height,
-          kernel: sharp.kernel.lanczos3,
-          width: size.width,
-          withoutEnlargement: true,
-        })
-        .png({ adaptiveFiltering: true, compressionLevel: 9 })
-        .toBuffer();
-
-      outputs.set(target, contents);
+          outputs.set(target, contents);
+        }
+      }
     }
   }
 

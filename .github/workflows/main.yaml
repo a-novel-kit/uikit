@@ -22,6 +22,11 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/checkout@v7
+        # Fetch from LFS only the PNG sources that the image check reads.
+        env:
+          GIT_CONFIG_COUNT: 1
+          GIT_CONFIG_KEY_0: lfs.fetchinclude
+          GIT_CONFIG_VALUE_0: packages/images/raw/*/exports/*.png
         with:
           token: ${{ steps.setup.outputs.token }}
           clean: false
