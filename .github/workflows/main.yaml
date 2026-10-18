@@ -26,7 +26,7 @@ jobs:
         env:
           GIT_CONFIG_COUNT: 1
           GIT_CONFIG_KEY_0: lfs.fetchinclude
-          GIT_CONFIG_VALUE_0: packages/images/raw/*.png
+          GIT_CONFIG_VALUE_0: packages/images/raw/*/exports/*.png
         with:
           token: ${{ steps.setup.outputs.token }}
           clean: false
