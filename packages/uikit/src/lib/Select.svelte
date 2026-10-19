@@ -137,9 +137,8 @@ The hidden named input submits the selected value. The caller validates required
 
     rememberTrigger(element);
     const startOnSelection = boundary === undefined && selectedIndex >= 0 && !options[selectedIndex].disabled;
-    activeIndex = startOnSelection ? selectedIndex : findEnabledBoundary(options, boundary ?? "first");
+    setActiveIndex(startOnSelection ? selectedIndex : findEnabledBoundary(options, boundary ?? "first"));
     controller.open();
-    if (controller.state.open) void tick().then(scrollActiveOption);
   }
 
   function closeListbox(focusTrigger = false) {
