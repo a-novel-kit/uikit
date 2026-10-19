@@ -7,14 +7,8 @@ export function findEnabledBoundary<Value extends string>(
   options: readonly SelectionOption<Value>[],
   boundary: "first" | "last"
 ): number {
-  const start = boundary === "first" ? 0 : options.length - 1;
-  const direction = boundary === "first" ? 1 : -1;
-
-  for (let index = start; index >= 0 && index < options.length; index += direction) {
-    if (!options[index]?.disabled) return index;
-  }
-
-  return -1;
+  const isEnabled = (option: SelectionOption<Value>) => !option.disabled;
+  return boundary === "first" ? options.findIndex(isEnabled) : options.findLastIndex(isEnabled);
 }
 
 /** Finds the next enabled option and optionally wraps at either edge. */

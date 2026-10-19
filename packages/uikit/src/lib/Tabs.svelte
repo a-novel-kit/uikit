@@ -47,7 +47,7 @@ Every panel stays mounted; inactive panels are hidden. Initialize the controller
 </script>
 
 <script lang="ts">
-  import { getEnabledCompositeItems, moveCompositeFocus } from "./focus";
+  import { findCompositeTarget, getEnabledCompositeItems } from "./focus";
 
   let {
     tabs,
@@ -69,31 +69,22 @@ Every panel stays mounted; inactive panels are hidden. Initialize the controller
     activationMode === "automatic" ? controller.state.value : focusedValue || controller.state.value
   );
 
-  $effect(() => {
-    const selected = tabs.find((tab) => tab.value === controller.state.value && !tab.disabled);
-    if (selected) return;
+  const firstEnabledValue = $derived(tabs.find((tab) => !tab.disabled)?.value ?? "");
+  const isEnabled = (value: string) => tabs.some((tab) => tab.value === value && !tab.disabled);
 
-    controller.setValue(tabs.find((tab) => !tab.disabled)?.value ?? "");
+  $effect(() => {
+    if (!isEnabled(controller.state.value)) controller.setValue(firstEnabledValue);
   });
 
   $effect(() => {
-    const focused = tabs.find((tab) => tab.value === focusedValue && !tab.disabled);
-    if (focused) return;
-
-    focusedValue =
-      tabs.find((tab) => tab.value === controller.state.value && !tab.disabled)?.value ??
-      tabs.find((tab) => !tab.disabled)?.value ??
-      "";
+    if (isEnabled(focusedValue)) return;
+    focusedValue = isEnabled(controller.state.value) ? controller.state.value : firstEnabledValue;
   });
 
   function selectTab(tab: TabItem) {
     if (tab.disabled || controller.state.value === tab.value) return;
 
     controller.setValue(tab.value);
-  }
-
-  function focusTab(element: HTMLElement) {
-    element.focus();
   }
 
   function handleTabFocus(tab: TabItem) {
@@ -104,8 +95,6 @@ Every panel stays mounted; inactive panels are hidden. Initialize the controller
   }
 
   function handleKeyDown(event: KeyboardEvent, tab: TabItem) {
-    const current = event.currentTarget as HTMLButtonElement;
-
     if (activationMode === "manual" && (event.key === "Enter" || event.key === " ")) {
       event.preventDefault();
       selectTab(tab);
@@ -113,21 +102,10 @@ Every panel stays mounted; inactive panels are hidden. Initialize the controller
     }
 
     const items = getEnabledCompositeItems(listElement, "[role='tab']");
-    let next: HTMLElement | undefined;
-
-    if (event.key === "Home") next = items[0];
-    else if (event.key === "End") next = items.at(-1);
-    else if (orientation === "horizontal" && event.key === "ArrowRight")
-      next = moveCompositeFocus(items, current, 1, loop);
-    else if (orientation === "horizontal" && event.key === "ArrowLeft")
-      next = moveCompositeFocus(items, current, -1, loop);
-    else if (orientation === "vertical" && event.key === "ArrowDown")
-      next = moveCompositeFocus(items, current, 1, loop);
-    else if (orientation === "vertical" && event.key === "ArrowUp") next = moveCompositeFocus(items, current, -1, loop);
-
+    const next = findCompositeTarget(items, event.currentTarget as HTMLElement, event.key, orientation, loop);
     if (!next) return;
     event.preventDefault();
-    focusTab(next);
+    next.focus();
   }
 </script>
 
