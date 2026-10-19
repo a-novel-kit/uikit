@@ -1,7 +1,6 @@
 <!--
 @component
 Renders numbered page controls. The caller updates `currentPage` or supplies URLs through `getHref`.
-Previous and next labels are currently English.
 -->
 <script lang="ts" module>
   import type { HTMLAttributes } from "svelte/elements";

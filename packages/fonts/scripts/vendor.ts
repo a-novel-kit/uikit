@@ -1,5 +1,6 @@
 /**
- * Vendors same-origin WOFF2 files and required licenses. Generated files are committed.
+ * Vendors the WOFF2 font files into files/ and their licenses into licenses/. Both directories are
+ * committed and published, so applications serve the fonts from their own origin.
  */
 import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
@@ -14,9 +15,8 @@ const root = join(import.meta.dirname, "..");
 const outDir = join(root, "files");
 mkdirSync(outDir, { recursive: true });
 
-// 1. TeX Gyre Heros + its Condensed sibling, from CTAN (GUST Font License).
-//    We convert the OTF to WOFF2 ourselves — the bytes never touch a CDN.
-// A pinned CTAN mirror avoids load-balanced mirrors with inconsistent TLS.
+// 1. TeX Gyre Heros and its condensed sibling, downloaded from CTAN as OTF and converted to WOFF2.
+// The fixed CTAN mirror avoids load-balanced mirrors with inconsistent TLS.
 const CTAN = "https://ctan.math.illinois.edu/fonts/tex-gyre/opentype";
 const HEROS: Array<[string, string]> = [
   ["texgyreheros-regular.otf", "heros-regular.woff2"],
@@ -35,8 +35,7 @@ for (const [src, dst] of HEROS) {
   console.log(`heros  ${dst.padEnd(24)} ${(woff2.length / 1024).toFixed(0)}KB`);
 }
 
-// 2. The OFL variable voices, copied from their npm packages (Latin subset only
-//    for the English launch — the other subsets are added per locale later).
+// 2. The OFL variable faces, copied from their npm packages. Only their Latin subset ships.
 const OFL = ["@fontsource-variable/lora", "@fontsource-variable/jetbrains-mono", "@fontsource-variable/arimo"];
 for (const pkg of OFL) {
   const filesDir = join(dirname(require.resolve(`${pkg}/package.json`)), "files");
@@ -51,8 +50,7 @@ for (const pkg of OFL) {
   }
 }
 
-// 3. Ship the font licenses alongside the bytes. The GUST Font License requires
-//    it; the OFL requires the license text to travel with the fonts too.
+// 3. The licenses, which both the GUST Font License and the OFL require to travel with the fonts.
 const licDir = join(root, "licenses");
 mkdirSync(licDir, { recursive: true });
 for (const pkg of OFL) {

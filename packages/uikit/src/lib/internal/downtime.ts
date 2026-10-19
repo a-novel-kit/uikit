@@ -7,8 +7,8 @@ export interface DowntimeFormat {
 }
 
 /**
- * Formats the times of a planned maintenance. The time zone is always named, so no reader guesses
- * which one applies; that rules out `dateStyle`, which can't be combined with `timeZoneName`.
+ * Formats the times of a planned maintenance. Every time names its zone, so no reader guesses which
+ * one applies. `dateStyle` cannot be combined with `timeZoneName`, so the format lists each field.
  */
 export function downtimeFormat(language: string, timeZone?: string): DowntimeFormat {
   const format = new Intl.DateTimeFormat(language, {
