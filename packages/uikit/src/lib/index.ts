@@ -1,5 +1,5 @@
-// Public API of @a-novel-kit/uikit. Platforms consume stable, styled components
-// from this entry point rather than depending on implementation libraries.
+// Public API of @a-novel-kit/uikit. scripts/check-package-contract.mjs fails when a component, or a
+// type its module script exports, is missing here.
 export type { Content } from "./content";
 export { createAuthorizationController, useAuthorization } from "./authorization";
 export type {

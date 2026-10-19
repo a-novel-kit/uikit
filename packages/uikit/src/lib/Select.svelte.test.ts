@@ -79,6 +79,33 @@ describe("Select", () => {
     expect(getByTestId("option-organization")).toBeTruthy();
   });
 
+  it("selects the next enabled option matching typed characters while closed", async () => {
+    const onValueChange = vi.fn();
+    const controller = createSelectController({ initialValue: "private", onValueChange });
+    const { getByRole } = render(Select, { props: { "aria-label": "Visibility", controller, options } });
+
+    const trigger = getByRole("combobox", { name: "Visibility" });
+    await fireEvent.keyDown(trigger, { key: "o" });
+    expect(onValueChange).toHaveBeenLastCalledWith("organization");
+
+    await fireEvent.keyDown(trigger, { key: "p" });
+    expect(onValueChange).toHaveBeenCalledOnce();
+  });
+
+  it("highlights the option matching typed characters while open", async () => {
+    const { getByRole } = render(Select, {
+      props: { "aria-label": "Visibility", controller: createSelectController({ initialValue: "private" }), options },
+    });
+
+    const trigger = getByRole("combobox", { name: "Visibility" });
+    await fireEvent.keyDown(trigger, { key: "ArrowDown" });
+    await fireEvent.keyDown(trigger, { key: "O" });
+
+    const organization = getByRole("option", { name: "Organization" });
+    expect(trigger.getAttribute("aria-activedescendant")).toBe(organization.id);
+    expect(organization.hasAttribute("data-highlighted")).toBe(true);
+  });
+
   it("can clear an optional selected value", async () => {
     const onValueChange = vi.fn();
     const controller = createSelectController({ initialValue: "private", onValueChange });

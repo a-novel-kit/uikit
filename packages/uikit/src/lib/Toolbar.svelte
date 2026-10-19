@@ -28,7 +28,7 @@ Compose ToolbarButton, ToolbarToggleButton, and ToolbarLink inside it.
 </script>
 
 <script lang="ts">
-  import { getEnabledCompositeItems, moveCompositeFocus } from "./focus";
+  import { closestCompositeItem, findCompositeTarget, getEnabledCompositeItems } from "./focus";
 
   import { onMount } from "svelte";
 
@@ -59,7 +59,7 @@ Compose ToolbarButton, ToolbarToggleButton, and ToolbarLink inside it.
     onfocusin?.(event);
     if (event.defaultPrevented) return;
 
-    const item = event.target instanceof Element ? event.target.closest<HTMLElement>("[data-composite-item]") : null;
+    const item = closestCompositeItem(event.target);
     if (item && toolbarElement.contains(item)) syncTabStops(item);
   }
 
@@ -67,22 +67,10 @@ Compose ToolbarButton, ToolbarToggleButton, and ToolbarLink inside it.
     onkeydown?.(event);
     if (event.defaultPrevented) return;
 
-    const current = event.target instanceof Element ? event.target.closest<HTMLElement>("[data-composite-item]") : null;
+    const current = closestCompositeItem(event.target);
     if (!current || !toolbarElement.contains(current)) return;
 
-    const items = getEnabledCompositeItems(toolbarElement);
-    let next: HTMLElement | undefined;
-
-    if (event.key === "Home") next = items[0];
-    else if (event.key === "End") next = items.at(-1);
-    else if (orientation === "horizontal" && event.key === "ArrowRight")
-      next = moveCompositeFocus(items, current, 1, loop);
-    else if (orientation === "horizontal" && event.key === "ArrowLeft")
-      next = moveCompositeFocus(items, current, -1, loop);
-    else if (orientation === "vertical" && event.key === "ArrowDown")
-      next = moveCompositeFocus(items, current, 1, loop);
-    else if (orientation === "vertical" && event.key === "ArrowUp") next = moveCompositeFocus(items, current, -1, loop);
-
+    const next = findCompositeTarget(getEnabledCompositeItems(toolbarElement), current, event.key, orientation, loop);
     if (!next) return;
     event.preventDefault();
     syncTabStops(next);

@@ -9,7 +9,6 @@ import { playwright } from "@vitest/browser-playwright";
 const storybookConfigDirectory = fileURLToPath(new URL("./packages/storybook/.storybook", import.meta.url));
 const storybookRoot = fileURLToPath(new URL("./packages/storybook", import.meta.url));
 const storybookSvelteConfig = fileURLToPath(new URL("./packages/storybook/svelte.config.js", import.meta.url));
-const uikitSource = fileURLToPath(new URL("./packages/uikit/src/lib/index.ts", import.meta.url));
 
 export default defineConfig({
   test: {
@@ -44,15 +43,6 @@ export default defineConfig({
       defineProject({
         extends: true,
         root: storybookRoot,
-        resolve: {
-          alias: [
-            { find: /^@a-novel-kit\/uikit$/, replacement: uikitSource },
-            {
-              find: /^@a-novel-kit\/uikit\/authorization$/,
-              replacement: fileURLToPath(new URL("./packages/uikit/src/lib/authorization.ts", import.meta.url)),
-            },
-          ],
-        },
         plugins: [
           svelte({ configFile: storybookSvelteConfig }),
           storybookTest({

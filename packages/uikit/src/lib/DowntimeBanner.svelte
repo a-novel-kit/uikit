@@ -1,8 +1,8 @@
 <!--
 @component
-Announces a planned maintenance in a compact strip that can't be dismissed. Before the maintenance
-it informs with the expected time frame; once started it warns with the expected end. The wording
-is generic and translated; only the times vary.
+Announces a planned maintenance in a compact strip that can't be dismissed. Before the maintenance,
+it informs with the expected time frame. Once started, it warns with the expected end. The wording
+is generic and translated, and only the times vary.
 -->
 <script lang="ts" module>
   import type { HTMLAttributes } from "svelte/elements";

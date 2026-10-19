@@ -20,14 +20,13 @@ shared numeric multipliers, so a global density or shape adjustment stays local 
 ```
 
 Components consume public tokens such as `--space-4` and `--radius-md`. Base and multiplier tokens
-define the system's scale and are not component-level choices.
+define the scale itself.
 
 ## Color
 
 Colors are authored from one OKLCH anchor. The generated stylesheet keeps primitives in `oklch()`,
 relative color syntax, and CSS math. Semantic transparency and blending use `color-mix()`. The browser
-maps each device-independent color to the display gamut at paint time under CSS Color 4. Applications
-receive a dependency-free stylesheet.
+maps each device-independent color to the display gamut at paint time under CSS Color 4.
 
 Electric blue at `232deg` anchors the palette. Its `52deg` complement is biased by `-10deg` to an
 opposition center at `42deg`, then split by `±26deg`. CSS `calc()` derives pressure at `16deg` and signal
@@ -69,8 +68,8 @@ color with a label or icon. Primitive palette steps remain available for design-
 `scripts/generate-colors.mjs` is the authoring source. Run
 `pnpm --filter @a-novel-kit/uikit-tokens generate:colors` after changing its compact bases. It writes
 the formula-based `colors.css` and an OKLCH `palette` export for tooling. Color.js samples gamut only
-during development. The private Storybook manager derives the legacy string required by its theme
-parser; that conversion is outside the token and component APIs.
+during development. The private Storybook manager converts colors to the sRGB strings its theme parser
+requires. That conversion stays outside the token and component APIs.
 
 ## Spacing, shape, and motion
 

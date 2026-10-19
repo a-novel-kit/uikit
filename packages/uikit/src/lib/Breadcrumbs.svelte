@@ -45,22 +45,21 @@ Renders an ordered navigation trail; the final item is always the current, unlin
   }: BreadcrumbsProps = $props();
 </script>
 
+{#snippet itemLabel(item: BreadcrumbItem)}
+  {#if renderItem}{@render renderItem(item)}{:else}{item.label}{/if}
+{/snippet}
+
 <nav class="breadcrumbs {className}" aria-label={label} {...rest}>
   <ol>
     {#each items as item, index (item.href ?? item.label)}
+      {@const current = index === items.length - 1}
       <li>
-        {#if item.href && index < items.length - 1}
-          <a href={item.href}
-            >{#if renderItem}{@render renderItem(item)}{:else}{item.label}{/if}</a
-          >
+        {#if item.href && !current}
+          <a href={item.href}>{@render itemLabel(item)}</a>
         {:else}
-          <span aria-current={index === items.length - 1 ? "page" : undefined}
-            >{#if renderItem}{@render renderItem(item)}{:else}{item.label}{/if}</span
-          >
+          <span aria-current={current ? "page" : undefined}>{@render itemLabel(item)}</span>
         {/if}
-        {#if index < items.length - 1}<span class="separator" aria-hidden="true"
-            ><RenderContent content={separator} /></span
-          >{/if}
+        {#if !current}<span class="separator" aria-hidden="true"><RenderContent content={separator} /></span>{/if}
       </li>
     {/each}
   </ol>

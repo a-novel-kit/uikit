@@ -1,7 +1,7 @@
 # @a-novel-kit/uikit-storybook
 
-Shared Storybook configuration for A-Novel Svelte interfaces. The package provides the manager theme,
-dark preview, fonts, tokens, MDX documentation, GitHub-flavored Markdown, and accessibility checks.
+Shared Storybook configuration for A-Novel Svelte projects. One preset gives a Storybook the A-Novel
+theme and foundations, MDX documentation, and accessibility checks that fail the story tests.
 
 ## Setup
 
@@ -27,8 +27,8 @@ const config: StorybookConfig = {
 export default config;
 ```
 
-No manager or preview file is required. Add local configuration only for application-specific story
-ordering or parameters.
+The preset installs the manager and preview configuration. Add local configuration only for
+application-specific story ordering or parameters.
 
 ## Scroll previews
 
@@ -47,15 +47,11 @@ stay in view while its numbered rows move. It is for stories only.
 
 ## Responsive screen documentation
 
-Use `ResponsiveStoryPair` in an attached MDX page to compare separate desktop and mobile story
-exports. Each story renders in its own iframe at the real review viewport, then the documentation
-scales and flows the previews across the available docs width. The mobile review wraps beneath the
-desktop review when the pair no longer fits, and each isolated document has a subtle brand boundary.
-Scalar toolbar globals, including locale, are forwarded to both subdocuments and stay synchronized
-when their controls change. Comparison frames support native scrolling, text selection, and keyboard
-interaction. Use fixed-state story controllers to keep menus and dialogs open during review.
-Frames do not run story play functions and suppress Storybook's measurement and outline overlays.
-Off-screen frames load lazily so long state catalogues remain responsive.
+Use `ResponsiveStoryPair` in an attached MDX page to compare a desktop and a mobile story export. Each
+story renders in its own iframe at its review viewport, 1280×800 or 390×844, shown at 85% scale. The
+mobile frame wraps beneath the desktop one on narrow docs pages. Toolbar globals such as the locale
+reach both frames and stay in sync. Use fixed-state story controllers to keep menus and dialogs open
+during review.
 
 ```mdx
 import * as ScreenStories from "./screen.stories.svelte";

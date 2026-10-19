@@ -1,7 +1,6 @@
 <!--
 @component
 Renders numbered page controls. The caller updates `currentPage` or supplies URLs through `getHref`.
-Previous and next labels are currently English.
 -->
 <script lang="ts" module>
   import type { HTMLAttributes } from "svelte/elements";
@@ -58,23 +57,19 @@ Previous and next labels are currently English.
   }
 </script>
 
+{#snippet stepControl(page: number, disabled: boolean, text: string)}
+  {#if !getHref}
+    <button class="control text" type="button" {disabled} onclick={() => change(page)}>{text}</button>
+  {:else if disabled}
+    <span class="control text" aria-disabled="true">{text}</span>
+  {:else}
+    <a class="control text" href={getHref(page)} onclick={() => change(page)}>{text}</a>
+  {/if}
+{/snippet}
+
 <nav class="pagination {className}" aria-label={label} {...rest}>
   <ul>
-    <li>
-      {#if getHref}
-        {#if currentPage <= 1}
-          <span class="control text" aria-disabled="true">{t("pagination.previous")}</span>
-        {:else}
-          <a class="control text" href={getHref(currentPage - 1)} onclick={() => change(currentPage - 1)}
-            >{t("pagination.previous")}</a
-          >
-        {/if}
-      {:else}
-        <button class="control text" type="button" disabled={currentPage <= 1} onclick={() => change(currentPage - 1)}
-          >{t("pagination.previous")}</button
-        >
-      {/if}
-    </li>
+    <li>{@render stepControl(currentPage - 1, currentPage <= 1, t("pagination.previous"))}</li>
     {#each pages as page (page)}
       <li>
         {#if typeof page === "string"}
@@ -96,24 +91,7 @@ Previous and next labels are currently English.
         {/if}
       </li>
     {/each}
-    <li>
-      {#if getHref}
-        {#if currentPage >= totalPages}
-          <span class="control text" aria-disabled="true">{t("pagination.next")}</span>
-        {:else}
-          <a class="control text" href={getHref(currentPage + 1)} onclick={() => change(currentPage + 1)}
-            >{t("pagination.next")}</a
-          >
-        {/if}
-      {:else}
-        <button
-          class="control text"
-          type="button"
-          disabled={currentPage >= totalPages}
-          onclick={() => change(currentPage + 1)}>{t("pagination.next")}</button
-        >
-      {/if}
-    </li>
+    <li>{@render stepControl(currentPage + 1, currentPage >= totalPages, t("pagination.next"))}</li>
   </ul>
 </nav>
 

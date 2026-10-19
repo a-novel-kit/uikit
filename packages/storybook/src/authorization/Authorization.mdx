@@ -110,7 +110,7 @@ factory. Boundary props and hook rules can further restrict it, never bypass a d
 To replace the whole decision, pass another `controller` to a boundary. Include all required checks
 in that controller; its descendants use the replacement while siblings keep the app decision.
 
-An isolated story needs only read-only state—no auth client or dummy methods:
+An isolated story needs only read-only state, without an auth client or stub methods:
 
 ```svelte
 <script lang="ts">

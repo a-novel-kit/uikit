@@ -92,14 +92,15 @@ interface ReviewFrameProps {
   viewport: ReviewViewport;
 }
 
+/** Encodes one scalar global in Storybook's URL syntax and skips any other value. */
+function serializedGlobal([name, value]: [string, unknown]): string[] {
+  if (typeof value !== "boolean" && typeof value !== "number" && typeof value !== "string") return [];
+  const serializedValue = typeof value === "boolean" ? `!${value}` : String(value);
+  return [`${encodeURIComponent(name)}:${encodeURIComponent(serializedValue)}`];
+}
+
 function serializedGlobals(globals: Record<string, unknown>) {
-  return Object.entries(globals)
-    .flatMap(([name, value]) => {
-      if (typeof value !== "boolean" && typeof value !== "number" && typeof value !== "string") return [];
-      const serializedValue = typeof value === "boolean" ? `!${value}` : String(value);
-      return `${encodeURIComponent(name)}:${encodeURIComponent(serializedValue)}`;
-    })
-    .join(";");
+  return Object.entries(globals).flatMap(serializedGlobal).join(";");
 }
 
 function storyUrl(storyId: string, globals: Record<string, unknown>) {
@@ -109,36 +110,40 @@ function storyUrl(storyId: string, globals: Record<string, unknown>) {
   return `iframe.html?${parameters.toString()}`;
 }
 
+/** Blurs the focused element and scrolls `startAt` into view; returns false until that target renders. */
+function settleReviewDocument(reviewDocument: Document, reviewWindow: Window, startAt: string | undefined) {
+  const activeElement = reviewDocument.activeElement;
+  if (activeElement && "blur" in activeElement && typeof activeElement.blur === "function") activeElement.blur();
+
+  if (!startAt) return true;
+  const target = reviewDocument.getElementById(startAt);
+  if (!target) return false;
+  const margin = Number.parseFloat(reviewWindow.getComputedStyle(target).scrollMarginTop) || 0;
+  reviewWindow.scrollTo({
+    top: reviewWindow.scrollY + target.getBoundingClientRect().top - margin,
+    behavior: "instant",
+  });
+  return true;
+}
+
 /** Clears initial autofocus and aligns the requested section in a review iframe. */
 export function prepareReviewDocument(frame: HTMLIFrameElement, startAt: string | undefined) {
   const reviewDocument = frame.contentDocument;
   const reviewWindow = frame.contentWindow;
   if (!reviewDocument || !reviewWindow) return;
 
-  const settle = () => {
-    const activeElement = reviewDocument.activeElement;
-    if (activeElement && "blur" in activeElement && typeof activeElement.blur === "function") activeElement.blur();
-
-    if (!startAt) return true;
-    const target = reviewDocument.getElementById(startAt);
-    if (!target) return false;
-    const margin = Number.parseFloat(reviewWindow.getComputedStyle(target).scrollMarginTop) || 0;
-    reviewWindow.scrollTo({
-      top: reviewWindow.scrollY + target.getBoundingClientRect().top - margin,
-      behavior: "instant",
-    });
-    return true;
-  };
+  const settle = () => settleReviewDocument(reviewDocument, reviewWindow, startAt);
+  const settleAfterTwoFrames = () =>
+    reviewWindow.requestAnimationFrame(() => reviewWindow.requestAnimationFrame(settle));
 
   const aligned = settle();
-  reviewWindow.requestAnimationFrame(() => reviewWindow.requestAnimationFrame(settle));
-
+  settleAfterTwoFrames();
   if (aligned || !startAt) return;
 
   const observer = new MutationObserver(() => {
     if (!settle()) return;
     observer.disconnect();
-    reviewWindow.requestAnimationFrame(() => reviewWindow.requestAnimationFrame(settle));
+    settleAfterTwoFrames();
   });
   observer.observe(reviewDocument, { childList: true, subtree: true });
   reviewWindow.setTimeout(() => observer.disconnect(), 10_000);

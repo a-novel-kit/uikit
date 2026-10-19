@@ -38,7 +38,7 @@ const blended = new WeakSet<i18n>();
 
 function blend(instance: i18n): i18n {
   if (!blended.has(instance)) {
-    // Deep and without overwriting: an app's own uikit messages win, and fill in for any language.
+    // Merges deeply without overwriting, so an app's own uikit messages win.
     for (const [language, messages] of Object.entries({ en, fr })) {
       instance.addResourceBundle(language, namespace, messages, true, false);
     }

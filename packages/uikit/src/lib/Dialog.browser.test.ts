@@ -11,6 +11,13 @@ import "@a-novel-kit/uikit-tokens/tokens.css";
 
 import { render } from "@testing-library/svelte";
 
+const layoutCases = [
+  { width: 320, actionSize: "sm" },
+  { width: 320, actionSize: "md" },
+  { width: 1280, actionSize: "sm" },
+  { width: 1280, actionSize: "md" },
+] as const;
+
 describe("Dialog browser lifecycle", () => {
   it.each([true, false])("enhances initial open state without closing its controller (modal: %s)", async (modal) => {
     const controller = createOpenController({ initialOpen: true });
@@ -28,12 +35,7 @@ describe("Dialog browser lifecycle", () => {
     expect(dialog.matches(":modal")).toBe(modal);
   });
 
-  it.each([
-    { width: 320, actionSize: "sm" },
-    { width: 320, actionSize: "md" },
-    { width: 1280, actionSize: "sm" },
-    { width: 1280, actionSize: "md" },
-  ] as const)(
+  it.each(layoutCases)(
     "aligns short and wrapped titles with $actionSize controls at $width pixels",
     async ({ width, actionSize }) => {
       await page.viewport(width, 844);

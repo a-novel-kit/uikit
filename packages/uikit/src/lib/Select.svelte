@@ -58,6 +58,7 @@ The hidden named input submits the selected value. The caller validates required
 <script lang="ts" generics="Value extends string">
   import FloatingSurface from "./internal/FloatingSurface.svelte";
   import { useMessages } from "./internal/i18n";
+  import { createTypeahead, findTypeaheadMatch, isTypeaheadKey } from "./internal/typeahead";
   import { findEnabledBoundary, findNextEnabledIndex, resolveInvalidState } from "./selection";
 
   import { onDestroy, tick } from "svelte";
@@ -89,13 +90,12 @@ The hidden named input submits the selected value. The caller validates required
   const componentId = $props.id();
   const triggerId = $derived(id ?? componentId + "-trigger");
   const listboxId = componentId + "-listbox";
+  const typeahead = createTypeahead();
 
   let activeIndex = $state(-1);
   let triggerElement = $state<HTMLButtonElement | null>(null);
   let listboxElement = $state<HTMLDivElement | null>(null);
   let anchorWidth = $state("0px");
-  let typeaheadBuffer = "";
-  let typeaheadTimer: ReturnType<typeof setTimeout> | undefined;
 
   const selectedIndex = $derived(options.findIndex((option) => option.value === controller.state.value));
   const selectedOption = $derived(selectedIndex >= 0 ? options[selectedIndex] : undefined);
@@ -108,6 +108,8 @@ The hidden named input submits the selected value. The caller validates required
   $effect(() => {
     if (disabled && controller.state.open) closeListbox();
   });
+
+  onDestroy(typeahead.dispose);
 
   function optionId(index: number) {
     return componentId + "-option-" + index;
@@ -124,18 +126,20 @@ The hidden named input submits the selected value. The caller validates required
     option?.scrollIntoView?.({ block: "nearest" });
   }
 
-  async function openListbox(element: HTMLButtonElement, boundary?: "first" | "last") {
+  function setActiveIndex(index: number) {
+    activeIndex = index;
+    void tick().then(scrollActiveOption);
+  }
+
+  /** Opens on the selected option, or on the first or last enabled option when `boundary` is set. */
+  function openListbox(element: HTMLButtonElement, boundary?: "first" | "last") {
     if (disabled) return;
 
     rememberTrigger(element);
-    activeIndex =
-      boundary === undefined && selectedIndex >= 0 && !options[selectedIndex]?.disabled
-        ? selectedIndex
-        : findEnabledBoundary(options, boundary ?? "first");
+    const startOnSelection = boundary === undefined && selectedIndex >= 0 && !options[selectedIndex].disabled;
+    activeIndex = startOnSelection ? selectedIndex : findEnabledBoundary(options, boundary ?? "first");
     controller.open();
-    if (!controller.state.open) return;
-    await tick();
-    scrollActiveOption();
+    if (controller.state.open) void tick().then(scrollActiveOption);
   }
 
   function closeListbox(focusTrigger = false) {
@@ -146,48 +150,31 @@ The hidden named input submits the selected value. The caller validates required
   }
 
   function moveActive(direction: -1 | 1) {
-    const boundary = direction === 1 ? "first" : "last";
-    activeIndex =
-      activeIndex < 0 ? findEnabledBoundary(options, boundary) : findNextEnabledIndex(options, activeIndex, direction);
-    void tick().then(scrollActiveOption);
-  }
-
-  function updateValue(nextValue: Value | undefined) {
-    controller.select(nextValue);
+    if (activeIndex >= 0) setActiveIndex(findNextEnabledIndex(options, activeIndex, direction));
+    else setActiveIndex(findEnabledBoundary(options, direction === 1 ? "first" : "last"));
   }
 
   function selectOption(option: SelectOption<Value>) {
     if (option.disabled) return;
 
-    updateValue(allowDeselect && controller.state.value === option.value ? undefined : option.value);
+    controller.select(allowDeselect && controller.state.value === option.value ? undefined : option.value);
     closeListbox(true);
   }
 
   function handleTriggerClick(event: MouseEvent) {
-    const trigger = event.currentTarget as HTMLButtonElement;
     if (controller.state.open) closeListbox();
-    else void openListbox(trigger);
+    else openListbox(event.currentTarget as HTMLButtonElement);
   }
 
+  /** Highlights the matching option while open, and selects it while closed. */
   function handleTypeahead(key: string) {
-    clearTimeout(typeaheadTimer);
-    typeaheadBuffer += key.toLocaleLowerCase();
-    typeaheadTimer = setTimeout(() => (typeaheadBuffer = ""), 500);
-
+    const labels = options.map((option) => (option.disabled ? undefined : option.label));
     const start = controller.state.open ? activeIndex : selectedIndex;
-    for (let offset = 1; offset <= options.length; offset += 1) {
-      const index = (Math.max(start, -1) + offset) % options.length;
-      const option = options[index];
-      if (!option?.disabled && option.label.toLocaleLowerCase().startsWith(typeaheadBuffer)) {
-        if (controller.state.open) {
-          activeIndex = index;
-          void tick().then(scrollActiveOption);
-        } else {
-          updateValue(option.value);
-        }
-        return;
-      }
-    }
+    const index = findTypeaheadMatch(labels, start, typeahead.type(key));
+    if (index < 0) return;
+
+    if (controller.state.open) setActiveIndex(index);
+    else controller.select(options[index].value);
   }
 
   function handleTriggerKeyDown(event: KeyboardEvent) {
@@ -196,7 +183,7 @@ The hidden named input submits the selected value. The caller validates required
 
     if (event.key === "ArrowDown" || event.key === "ArrowUp") {
       event.preventDefault();
-      if (!controller.state.open) void openListbox(trigger, event.key === "ArrowDown" ? undefined : "last");
+      if (!controller.state.open) openListbox(trigger, event.key === "ArrowDown" ? undefined : "last");
       else moveActive(event.key === "ArrowDown" ? 1 : -1);
       return;
     }
@@ -204,14 +191,13 @@ The hidden named input submits the selected value. The caller validates required
     if (event.key === "Home" || event.key === "End") {
       if (!controller.state.open) return;
       event.preventDefault();
-      activeIndex = findEnabledBoundary(options, event.key === "Home" ? "first" : "last");
-      void tick().then(scrollActiveOption);
+      setActiveIndex(findEnabledBoundary(options, event.key === "Home" ? "first" : "last"));
       return;
     }
 
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
-      if (!controller.state.open) void openListbox(trigger);
+      if (!controller.state.open) openListbox(trigger);
       else if (activeIndex >= 0 && options[activeIndex]) selectOption(options[activeIndex]);
       return;
     }
@@ -222,12 +208,14 @@ The hidden named input submits the selected value. The caller validates required
       return;
     }
 
-    if (!event.altKey && !event.ctrlKey && !event.metaKey && event.key.length === 1) {
-      handleTypeahead(event.key);
-    }
+    if (isTypeaheadKey(event)) handleTypeahead(event.key);
   }
 
-  onDestroy(() => clearTimeout(typeaheadTimer));
+  function handleSurfaceOpenChange(nextOpen: boolean) {
+    if (nextOpen) controller.open();
+    else controller.close();
+    if (!controller.state.open) activeIndex = -1;
+  }
 </script>
 
 <div class="select-root">
@@ -277,11 +265,7 @@ The hidden named input submits the selected value. The caller validates required
     role="listbox"
     aria-labelledby={triggerId}
     style="--a-novel-select-anchor-width: {anchorWidth}"
-    onOpenChange={(nextOpen) => {
-      if (nextOpen) controller.open();
-      else controller.close();
-      if (!controller.state.open) activeIndex = -1;
-    }}
+    onOpenChange={handleSurfaceOpenChange}
   >
     {#each options as option, index (option.value)}
       <button

@@ -37,4 +37,34 @@ describe("ActionMenu", () => {
     expect(queryByRole("menu")).toBeNull();
     expect(document.activeElement).toBe(trigger);
   });
+
+  it("moves focus to the next enabled action matching typed characters", async () => {
+    const { getByRole } = render(ActionMenu, {
+      props: {
+        label: "Item actions",
+        controller: createOpenController(),
+        items: [
+          { id: "rename", label: "Rename" },
+          { id: "archive", label: "Archive", disabled: true },
+          { kind: "separator", id: "danger" },
+          { id: "delete", label: "Delete" },
+          { id: "duplicate", label: "Duplicate" },
+        ],
+      },
+    });
+
+    await fireEvent.keyDown(getByRole("button", { name: "Item actions" }), { key: "ArrowUp" });
+    const duplicate = getByRole("menuitem", { name: "Duplicate" });
+    await waitFor(() => expect(document.activeElement).toBe(duplicate));
+
+    const remove = getByRole("menuitem", { name: "Delete" });
+    await fireEvent.keyDown(duplicate, { key: "d" });
+    expect(document.activeElement).toBe(remove);
+
+    await fireEvent.keyDown(remove, { key: "u" });
+    expect(document.activeElement).toBe(duplicate);
+
+    await fireEvent.keyDown(duplicate, { key: "Home" });
+    expect(document.activeElement).toBe(getByRole("menuitem", { name: "Rename" }));
+  });
 });

@@ -90,9 +90,10 @@ For a custom trigger, spread the snippet attributes onto a native button.
 </script>
 
 <script lang="ts">
-  import { getEnabledCompositeItems, moveCompositeFocus } from "./focus";
+  import { closestCompositeItem, findCompositeTarget, getEnabledCompositeItems } from "./focus";
   import FloatingSurface from "./internal/FloatingSurface.svelte";
   import { useMessages } from "./internal/i18n";
+  import { createTypeahead, findTypeaheadMatch, isTypeaheadKey } from "./internal/typeahead";
 
   import { onDestroy, tick } from "svelte";
 
@@ -114,13 +115,13 @@ For a custom trigger, spread the snippet attributes onto a native button.
   const componentId = $props.id();
   const triggerId = componentId + "-trigger";
   const menuId = componentId + "-menu";
+  const itemSelector = "[data-menu-item]";
+  const typeahead = createTypeahead();
 
   let triggerElement = $state<HTMLElement | null>(null);
   let menuElement = $state<HTMLDivElement | null>(null);
   let activeItemIndex = $state(-1);
   let anchorWidth = $state("0px");
-  let typeaheadBuffer = "";
-  let typeaheadTimer: ReturnType<typeof setTimeout> | undefined;
 
   const triggerAttributes = $derived<ActionMenuTriggerAttributes>({
     id: triggerId,
@@ -135,14 +136,14 @@ For a custom trigger, spread the snippet attributes onto a native button.
   });
 
   $effect(() => {
-    if (!controller.state.open || !triggerElement) return;
-
-    anchorWidth = triggerElement.getBoundingClientRect().width + "px";
+    if (controller.state.open && triggerElement) anchorWidth = triggerElement.getBoundingClientRect().width + "px";
   });
 
   $effect(() => {
     if (disabled && controller.state.open) closeMenu();
   });
+
+  onDestroy(typeahead.dispose);
 
   function rememberTrigger(element: HTMLElement) {
     triggerElement = element;
@@ -150,12 +151,10 @@ For a custom trigger, spread the snippet attributes onto a native button.
   }
 
   function menuItems() {
-    return menuElement ? getEnabledCompositeItems(menuElement, "[data-menu-item]") : [];
+    return menuElement ? getEnabledCompositeItems(menuElement, itemSelector) : [];
   }
 
-  function focusMenuItem(boundary: "first" | "last") {
-    const enabledItems = menuItems();
-    const item = boundary === "first" ? enabledItems[0] : enabledItems.at(-1);
+  function focusItem(item: HTMLElement | undefined) {
     if (!item) return;
 
     activeItemIndex = Number(item.dataset.menuIndex);
@@ -169,7 +168,7 @@ For a custom trigger, spread the snippet attributes onto a native button.
     controller.open();
     if (!controller.state.open) return;
     await tick();
-    focusMenuItem(boundary);
+    focusItem(boundary === "first" ? menuItems()[0] : menuItems().at(-1));
   }
 
   function closeMenu(focusTrigger = false) {
@@ -199,31 +198,16 @@ For a custom trigger, spread the snippet attributes onto a native button.
     }
   }
 
-  function focusItem(item: HTMLElement) {
-    activeItemIndex = Number(item.dataset.menuIndex);
-    item.focus();
-  }
-
+  /** Focuses the next enabled action whose label starts with the typed characters. */
   function handleTypeahead(key: string) {
-    clearTimeout(typeaheadTimer);
-    typeaheadBuffer += key.toLocaleLowerCase();
-    typeaheadTimer = setTimeout(() => (typeaheadBuffer = ""), 500);
-
     const enabledItems = menuItems();
     const currentIndex = enabledItems.findIndex((item) => Number(item.dataset.menuIndex) === activeItemIndex);
-    for (let offset = 1; offset <= enabledItems.length; offset += 1) {
-      const index = (Math.max(currentIndex, -1) + offset) % enabledItems.length;
-      const item = enabledItems[index];
-      if (item?.dataset.label?.toLocaleLowerCase().startsWith(typeaheadBuffer)) {
-        focusItem(item);
-        return;
-      }
-    }
+    const labels = enabledItems.map((item) => item.dataset.label);
+    const index = findTypeaheadMatch(labels, currentIndex, typeahead.type(key));
+    if (index >= 0) focusItem(enabledItems[index]);
   }
 
   function handleMenuKeyDown(event: KeyboardEvent) {
-    const current = event.target instanceof Element ? event.target.closest<HTMLElement>("[data-menu-item]") : null;
-
     if (event.key === "Escape") {
       event.preventDefault();
       closeMenu(true);
@@ -235,23 +219,27 @@ For a custom trigger, spread the snippet attributes onto a native button.
       return;
     }
 
+    const current = closestCompositeItem(event.target, itemSelector);
     if (!current) return;
 
-    const enabledItems = menuItems();
-    let next: HTMLElement | undefined;
-
-    if (event.key === "Home") next = enabledItems[0];
-    else if (event.key === "End") next = enabledItems.at(-1);
-    else if (event.key === "ArrowDown") next = moveCompositeFocus(enabledItems, current, 1, true);
-    else if (event.key === "ArrowUp") next = moveCompositeFocus(enabledItems, current, -1, true);
-    else if (!event.altKey && !event.ctrlKey && !event.metaKey && event.key.length === 1) {
+    const next = findCompositeTarget(menuItems(), current, event.key, "vertical", true);
+    if (next) {
+      event.preventDefault();
+      focusItem(next);
+    } else if (isTypeaheadKey(event)) {
       handleTypeahead(event.key);
-      return;
     }
+  }
 
-    if (!next) return;
-    event.preventDefault();
-    focusItem(next);
+  function handleMenuFocusIn(event: FocusEvent) {
+    const item = closestCompositeItem(event.target, itemSelector);
+    if (item) activeItemIndex = Number(item.dataset.menuIndex);
+  }
+
+  function handleSurfaceOpenChange(nextOpen: boolean) {
+    if (nextOpen) controller.open();
+    else controller.close();
+    if (!controller.state.open) activeItemIndex = -1;
   }
 
   function selectAction(action: ActionMenuAction) {
@@ -260,8 +248,6 @@ For a custom trigger, spread the snippet attributes onto a native button.
     action.onSelect?.();
     closeMenu(true);
   }
-
-  onDestroy(() => clearTimeout(typeaheadTimer));
 </script>
 
 {#if trigger}
@@ -296,15 +282,8 @@ For a custom trigger, spread the snippet attributes onto a native button.
   aria-label={label}
   style="--a-novel-menu-anchor-width: {anchorWidth}"
   onkeydown={handleMenuKeyDown}
-  onfocusin={(event) => {
-    const item = event.target instanceof Element ? event.target.closest<HTMLElement>("[data-menu-item]") : null;
-    if (item) activeItemIndex = Number(item.dataset.menuIndex);
-  }}
-  onOpenChange={(nextOpen) => {
-    if (nextOpen) controller.open();
-    else controller.close();
-    if (!controller.state.open) activeItemIndex = -1;
-  }}
+  onfocusin={handleMenuFocusIn}
+  onOpenChange={handleSurfaceOpenChange}
 >
   <div class="a-novel-menu-group" role="group" aria-label={label}>
     {#each items as item, index (item.id)}

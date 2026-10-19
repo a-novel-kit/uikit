@@ -1,108 +1,100 @@
+// Verifies what each publishable package ships after a build: manifest metadata, export targets
+// and their files allowlist, the uikit barrel, and the headless authorization entry.
 import { execFileSync } from "node:child_process";
-import { access, readFile, readdir } from "node:fs/promises";
-import { dirname, relative, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import { existsSync } from "node:fs";
+import { readFile, readdir } from "node:fs/promises";
+import { relative, resolve } from "node:path";
 
 import ts from "typescript";
 
-const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const repositoryRoot = resolve(import.meta.dirname, "..");
 const packagesRoot = resolve(repositoryRoot, "packages");
 const issues = [];
 
-const exists = async (path) => {
-  try {
-    await access(path);
-    return true;
-  } catch {
-    return false;
-  }
-};
+/** Returns the literal path prefix of a package pattern, without a wildcard or trailing slash. */
+const literalPrefix = (pattern) => pattern.split("*", 1)[0].replace(/\/$/, "");
 
-const readJson = async (path) => JSON.parse(await readFile(path, "utf8"));
-
+/** Lists every string target nested in a package exports map. */
 const collectExportTargets = (value) => {
-  if (typeof value === "string") {
-    return [value];
-  }
-
-  if (value === null || typeof value !== "object") {
-    return [];
-  }
-
+  if (typeof value === "string") return [value];
+  if (value === null || typeof value !== "object") return [];
   return Object.values(value).flatMap(collectExportTargets);
 };
 
-const isIncludedByFiles = (target, files) => {
-  if (target === "package.json") {
-    return true;
-  }
+/** Reports whether a package-relative path is published by the manifest's files allowlist. */
+function isIncludedByFiles(target, files) {
+  const coversTarget = (entry) => {
+    const prefix = literalPrefix(entry);
+    return target === prefix || target.startsWith(prefix + "/");
+  };
 
-  return files
-    .filter((entry) => !entry.startsWith("!"))
-    .some((entry) => {
-      const prefix = entry.split("*", 1)[0].replace(/\/$/, "");
-      return target === prefix || target.startsWith(prefix + "/");
-    });
-};
+  return target === "package.json" || files.some((entry) => !entry.startsWith("!") && coversTarget(entry));
+}
 
-const verifyPublishedPackage = async (packageRoot, manifest) => {
-  const packageLabel = relative(repositoryRoot, packageRoot);
+async function verifyPublishedPackage(packageRoot, manifest) {
+  const report = (message) => issues.push(`${relative(repositoryRoot, packageRoot)}: ${message}`);
 
-  if (manifest.private !== false) {
-    issues.push(packageLabel + ": publishable packages must set private to false explicitly");
-  }
+  if (manifest.private !== false) report("publishable packages must set private to false explicitly");
   if (typeof manifest.description !== "string" || manifest.description.trim() === "") {
-    issues.push(packageLabel + ": missing package description");
+    report("missing package description");
   }
-  if (manifest.license !== "MIT") {
-    issues.push(packageLabel + ": expected MIT license metadata");
-  }
+  if (manifest.license !== "MIT") report("expected MIT license metadata");
   if (manifest.repository?.url !== "git+https://github.com/a-novel-kit/uikit.git") {
-    issues.push(packageLabel + ": repository URL does not identify the UI kit");
+    report("repository URL does not identify the UI kit");
   }
   if (manifest.exports === undefined) {
-    issues.push(packageLabel + ": missing exports map");
+    report("missing exports map");
     return;
   }
   if (!Array.isArray(manifest.files)) {
-    issues.push(packageLabel + ": missing package files allowlist");
+    report("missing package files allowlist");
     return;
   }
   for (const requiredFile of ["README.md", "LICENSE"]) {
-    if (!manifest.files.includes(requiredFile)) {
-      issues.push(packageLabel + ": files must include " + requiredFile);
-    }
+    if (!manifest.files.includes(requiredFile)) report("files must include " + requiredFile);
   }
 
   const targets = [...new Set(collectExportTargets(manifest.exports))];
   for (const target of targets) {
     if (!target.startsWith("./")) {
-      issues.push(packageLabel + ": export target must be package-relative: " + target);
+      report("export target must be package-relative: " + target);
       continue;
     }
 
-    const cleanTarget = target.slice(2);
-    const wildcardIndex = cleanTarget.indexOf("*");
-    const diskTarget =
-      wildcardIndex === -1
-        ? resolve(packageRoot, cleanTarget)
-        : resolve(packageRoot, cleanTarget.slice(0, wildcardIndex).replace(/\/$/, ""));
-
-    if (!(await exists(diskTarget))) {
-      issues.push(packageLabel + ": export target does not exist after build: " + target);
+    const packagePath = target.slice(2);
+    if (!existsSync(resolve(packageRoot, literalPrefix(packagePath)))) {
+      report("export target does not exist after build: " + target);
     }
-    if (!isIncludedByFiles(cleanTarget, manifest.files)) {
-      issues.push(packageLabel + ": export target is excluded from package files: " + target);
+    if (!isIncludedByFiles(packagePath, manifest.files)) {
+      report("export target is excluded from package files: " + target);
     }
   }
 
-  if (targets.some((target) => target.endsWith(".css"))) {
-    const sideEffects = Array.isArray(manifest.sideEffects) ? manifest.sideEffects : [];
-    if (!sideEffects.includes("**/*.css")) {
-      issues.push(packageLabel + ": CSS exports must be declared as side effects");
+  const declaresCssSideEffects = Array.isArray(manifest.sideEffects) && manifest.sideEffects.includes("**/*.css");
+  if (targets.some((target) => target.endsWith(".css")) && !declaresCssSideEffects) {
+    report("CSS exports must be declared as side effects");
+  }
+}
+
+/** Names the declarations a module exports, as written in its source. */
+function exportedDeclarationNames(sourceText, path) {
+  const source = ts.createSourceFile(path, sourceText, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
+  const names = [];
+
+  for (const statement of source.statements) {
+    if (!statement.modifiers?.some((modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword)) continue;
+
+    if (ts.isVariableStatement(statement)) {
+      names.push(...statement.declarationList.declarations.map((declaration) => declaration.name.getText(source)));
+    } else if (statement.name) {
+      names.push(statement.name.text);
     }
   }
-};
+
+  return names;
+}
+
+// ---- Package manifests ----
 
 const packageEntries = (await readdir(packagesRoot, { withFileTypes: true }))
   .filter((entry) => entry.isDirectory())
@@ -111,18 +103,13 @@ const packageEntries = (await readdir(packagesRoot, { withFileTypes: true }))
 for (const entry of packageEntries) {
   const packageRoot = resolve(packagesRoot, entry.name);
   const manifestPath = resolve(packageRoot, "package.json");
+  if (!existsSync(manifestPath)) continue;
 
-  if (!(await exists(manifestPath))) {
-    continue;
-  }
-
-  const manifest = await readJson(manifestPath);
-  if (manifest.private === true) {
-    continue;
-  }
-
-  await verifyPublishedPackage(packageRoot, manifest);
+  const manifest = JSON.parse(await readFile(manifestPath, "utf8"));
+  if (manifest.private !== true) await verifyPublishedPackage(packageRoot, manifest);
 }
+
+// ---- uikit barrel ----
 
 const uikitSourceRoot = resolve(packagesRoot, "uikit/src/lib");
 const indexPath = resolve(uikitSourceRoot, "index.ts");
@@ -133,63 +120,36 @@ const indexSource = ts.createSourceFile(
   true,
   ts.ScriptKind.TS
 );
-const barrelExports = new Map();
 
+// Maps each module specifier to the names the barrel re-exports from it.
+const barrelExports = new Map();
 for (const statement of indexSource.statements) {
   if (!ts.isExportDeclaration(statement) || !statement.moduleSpecifier || !ts.isNamedExports(statement.exportClause)) {
     continue;
   }
 
-  const specifier = statement.moduleSpecifier.text;
-  const entries = barrelExports.get(specifier) ?? [];
+  const entries = barrelExports.get(statement.moduleSpecifier.text) ?? [];
   for (const element of statement.exportClause.elements) {
-    entries.push({
-      imported: element.propertyName?.text ?? element.name.text,
-      exported: element.name.text,
-    });
+    entries.push({ imported: element.propertyName?.text ?? element.name.text, exported: element.name.text });
   }
-  barrelExports.set(specifier, entries);
+  barrelExports.set(statement.moduleSpecifier.text, entries);
 }
-
-const exportedDeclarationNames = (sourceText, path) => {
-  const source = ts.createSourceFile(path, sourceText, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
-  const names = [];
-
-  for (const statement of source.statements) {
-    const exported = statement.modifiers?.some((modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword);
-    if (!exported) {
-      continue;
-    }
-
-    if (ts.isVariableStatement(statement)) {
-      names.push(...statement.declarationList.declarations.map((declaration) => declaration.name.getText(source)));
-    } else if (statement.name) {
-      names.push(statement.name.text);
-    }
-  }
-
-  return names;
-};
 
 const componentFiles = (await readdir(uikitSourceRoot))
   .filter((name) => name.endsWith(".svelte") && name !== "Content.svelte")
   .sort();
-const publicModules = [...componentFiles, "content.ts", "types.ts"];
 
-for (const filename of publicModules) {
+for (const filename of [...componentFiles, "content.ts", "types.ts"]) {
   const path = resolve(uikitSourceRoot, filename);
   const raw = await readFile(path, "utf8");
-  const sourceText = filename.endsWith(".svelte")
-    ? raw.match(/<script\s+lang="ts"\s+module>([\s\S]*?)<\/script>/)?.[1]
-    : raw;
-  const specifier = "./" + (filename.endsWith(".ts") ? filename.slice(0, -".ts".length) : filename);
-  const entries = barrelExports.get(specifier) ?? [];
+  const isComponent = filename.endsWith(".svelte");
+  const sourceText = isComponent ? raw.match(/<script\s+lang="ts"\s+module>([\s\S]*?)<\/script>/)?.[1] : raw;
+  const entries = barrelExports.get("./" + filename.replace(/\.ts$/, "")) ?? [];
+  const isReexported = (imported, exported) =>
+    entries.some((entry) => entry.imported === imported && entry.exported === exported);
 
-  if (filename.endsWith(".svelte")) {
-    const componentName = filename.slice(0, -".svelte".length);
-    if (!entries.some((entry) => entry.imported === "default" && entry.exported === componentName)) {
-      issues.push("packages/uikit/src/lib/index.ts: missing component export for " + filename);
-    }
+  if (isComponent && !isReexported("default", filename.replace(/\.svelte$/, ""))) {
+    issues.push("packages/uikit/src/lib/index.ts: missing component export for " + filename);
   }
 
   if (sourceText === undefined) {
@@ -198,7 +158,7 @@ for (const filename of publicModules) {
   }
 
   for (const name of exportedDeclarationNames(sourceText, path)) {
-    if (!entries.some((entry) => entry.imported === name && entry.exported === name)) {
+    if (!isReexported(name, name)) {
       issues.push("packages/uikit/src/lib/index.ts: missing type export " + name + " from " + filename);
     }
   }

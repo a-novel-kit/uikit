@@ -15,7 +15,7 @@ afterEach(() => {
   document.body.replaceChildren();
 });
 
-it.each([
+const testCases = [
   {
     language: "svelte",
     code: '<script lang="ts">\n  const label = "Save";\n</script>\n<Button>{label}</Button>\n<style>button { color: red; }</style>',
@@ -24,24 +24,29 @@ it.each([
   { language: "ts", code: 'const label: string = "Save";', tokens: [".keyword", ".string"] },
   { language: "html", code: '<button type="submit">Save</button>', tokens: [".tag", ".attr-name"] },
   { language: "text", code: "Plain text\n<not-markup>", tokens: [] },
-])("renders $language documentation without changing its source text", async ({ language, code, tokens }) => {
-  const container = document.createElement("div");
-  document.body.append(container);
-  root = createRoot(container);
-  root.render(
-    createElement(
-      ThemeProvider,
-      { theme: convert(aNovelTheme) },
-      createElement(CodeOrSourceMdx, { className: `language-${language}` }, code)
-    )
-  );
+];
 
-  await expect.poll(() => container.querySelector("pre.prismjs")?.textContent).toBe(code);
-  const source = container.querySelector("pre.prismjs")!;
-  for (const selector of tokens) {
-    const token = source.querySelector(`.token${selector}`);
-    expect(token).not.toBeNull();
-    expect(getComputedStyle(token!).color).not.toBe(getComputedStyle(source).color);
+it.each(testCases)(
+  "renders $language documentation without changing its source text",
+  async ({ language, code, tokens }) => {
+    const container = document.createElement("div");
+    document.body.append(container);
+    root = createRoot(container);
+    root.render(
+      createElement(
+        ThemeProvider,
+        { theme: convert(aNovelTheme) },
+        createElement(CodeOrSourceMdx, { className: `language-${language}` }, code)
+      )
+    );
+
+    await expect.poll(() => container.querySelector("pre.prismjs")?.textContent).toBe(code);
+    const source = container.querySelector("pre.prismjs")!;
+    for (const selector of tokens) {
+      const token = source.querySelector(`.token${selector}`);
+      expect(token).not.toBeNull();
+      expect(getComputedStyle(token!).color).not.toBe(getComputedStyle(source).color);
+    }
+    if (tokens.length === 0) expect(source.querySelectorAll(".token")).toHaveLength(0);
   }
-  if (tokens.length === 0) expect(source.querySelectorAll(".token")).toHaveLength(0);
-});
+);

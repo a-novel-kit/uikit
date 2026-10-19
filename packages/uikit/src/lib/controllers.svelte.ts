@@ -1,39 +1,3 @@
-/** A state owner consumed by a pure UI component. */
-interface StateController<State> {
-  /** State rendered by the component. */
-  readonly state: State;
-  /** Applies a state change requested by the component. */
-  setState(nextState: State): void;
-}
-
-/** Configuration for a reactive default controller. */
-interface StateControllerOptions<State> {
-  /** State exposed before the first requested change. */
-  initialState: State;
-  /** Runs after the controller accepts a changed state. */
-  onStateChange?: (state: State) => void;
-}
-
-/** Creates a reactive controller for components that need local default behavior. */
-function createStateController<State>({
-  initialState,
-  onStateChange,
-}: StateControllerOptions<State>): StateController<State> {
-  let state = $state(initialState);
-
-  return {
-    get state() {
-      return state;
-    },
-    setState(nextState) {
-      if (Object.is(state, nextState)) return;
-
-      state = nextState;
-      onStateChange?.(nextState);
-    },
-  };
-}
-
 /** State managed for content that can be open or closed. */
 export interface OpenState {
   /** Whether the content is visible. */
@@ -75,22 +39,21 @@ export function createOpenController({
   initialOpen = false,
   onOpenChange,
 }: OpenControllerOptions = {}): OpenController {
-  const state = createStateController({
-    initialState: { open: initialOpen },
-    onStateChange: ({ open }) => onOpenChange?.(open),
-  });
+  let state = $state<OpenState>({ open: initialOpen });
+
+  function setOpen(open: boolean) {
+    if (state.open === open) return;
+    state = { open };
+    onOpenChange?.(open);
+  }
 
   return {
     get state() {
-      return state.state;
+      return state;
     },
-    open: () => {
-      if (!state.state.open) state.setState({ open: true });
-    },
-    close: () => {
-      if (state.state.open) state.setState({ open: false });
-    },
-    toggle: () => state.setState({ open: !state.state.open }),
+    open: () => setOpen(true),
+    close: () => setOpen(false),
+    toggle: () => setOpen(!state.open),
   };
 }
 
@@ -132,19 +95,20 @@ export function createCheckedController({
   initialChecked = false,
   onCheckedChange,
 }: CheckedControllerOptions = {}): CheckedController {
-  const state = createStateController({
-    initialState: { checked: initialChecked },
-    onStateChange: ({ checked }) => onCheckedChange?.(checked),
-  });
+  let state = $state<CheckedState>({ checked: initialChecked });
+
+  function setChecked(checked: boolean) {
+    if (state.checked === checked) return;
+    state = { checked };
+    onCheckedChange?.(checked);
+  }
 
   return {
     get state() {
-      return state.state;
+      return state;
     },
-    setChecked: (checked) => {
-      if (state.state.checked !== checked) state.setState({ checked });
-    },
-    toggle: () => state.setState({ checked: !state.state.checked }),
+    setChecked,
+    toggle: () => setChecked(!state.checked),
   };
 }
 
@@ -186,19 +150,20 @@ export function createPressedController({
   initialPressed = false,
   onPressedChange,
 }: PressedControllerOptions = {}): PressedController {
-  const state = createStateController({
-    initialState: { pressed: initialPressed },
-    onStateChange: ({ pressed }) => onPressedChange?.(pressed),
-  });
+  let state = $state<PressedState>({ pressed: initialPressed });
+
+  function setPressed(pressed: boolean) {
+    if (state.pressed === pressed) return;
+    state = { pressed };
+    onPressedChange?.(pressed);
+  }
 
   return {
     get state() {
-      return state.state;
+      return state;
     },
-    setPressed: (pressed) => {
-      if (state.state.pressed !== pressed) state.setState({ pressed });
-    },
-    toggle: () => state.setState({ pressed: !state.state.pressed }),
+    setPressed,
+    toggle: () => setPressed(!state.pressed),
   };
 }
 
@@ -239,17 +204,16 @@ export function createValueController<Value>({
   initialValue,
   onValueChange,
 }: ValueControllerOptions<Value>): ValueController<Value> {
-  const state = createStateController({
-    initialState: { value: initialValue },
-    onStateChange: ({ value }) => onValueChange?.(value),
-  });
+  let state = $state<ValueState<Value>>({ value: initialValue });
 
   return {
     get state() {
-      return state.state;
+      return state;
     },
     setValue: (value) => {
-      if (!Object.is(state.state.value, value)) state.setState({ value });
+      if (Object.is(state.value, value)) return;
+      state = { value };
+      onValueChange?.(value);
     },
   };
 }
@@ -306,26 +270,24 @@ export function createSelectController<Value>({
   onOpenChange,
   onValueChange,
 }: SelectControllerOptions<Value> = {}): SelectController<Value> {
-  const state = createStateController<SelectState<Value>>({
-    initialState: { open: initialOpen, value: initialValue },
-  });
+  let state = $state<SelectState<Value>>({ open: initialOpen, value: initialValue });
 
   function setOpen(open: boolean) {
-    if (state.state.open === open) return;
-    state.setState({ ...state.state, open });
+    if (state.open === open) return;
+    state = { ...state, open };
     onOpenChange?.(open);
   }
 
   return {
     get state() {
-      return state.state;
+      return state;
     },
     open: () => setOpen(true),
     close: () => setOpen(false),
-    toggle: () => setOpen(!state.state.open),
+    toggle: () => setOpen(!state.open),
     select: (value) => {
-      if (Object.is(state.state.value, value)) return;
-      state.setState({ ...state.state, value });
+      if (Object.is(state.value, value)) return;
+      state = { ...state, value };
       onValueChange?.(value);
     },
   };
@@ -382,36 +344,34 @@ export function createComboboxController<Value>({
   onQueryChange,
   onValueChange,
 }: ComboboxControllerOptions<Value> = {}): ComboboxController<Value> {
-  const state = createStateController<ComboboxState<Value>>({
-    initialState: { open: initialOpen, query: initialQuery, value: initialValue },
-  });
+  let state = $state<ComboboxState<Value>>({ open: initialOpen, query: initialQuery, value: initialValue });
 
   function setOpen(open: boolean) {
-    const query = open ? state.state.query : "";
-    const openChanged = state.state.open !== open;
-    const queryChanged = state.state.query !== query;
+    const query = open ? state.query : "";
+    const openChanged = state.open !== open;
+    const queryChanged = state.query !== query;
     if (!openChanged && !queryChanged) return;
 
-    state.setState({ ...state.state, open, query });
+    state = { ...state, open, query };
     if (openChanged) onOpenChange?.(open);
     if (queryChanged) onQueryChange?.(query);
   }
 
   return {
     get state() {
-      return state.state;
+      return state;
     },
     open: () => setOpen(true),
     close: () => setOpen(false),
-    toggle: () => setOpen(!state.state.open),
+    toggle: () => setOpen(!state.open),
     setQuery: (query) => {
-      if (state.state.query === query) return;
-      state.setState({ ...state.state, query });
+      if (state.query === query) return;
+      state = { ...state, query };
       onQueryChange?.(query);
     },
     select: (value) => {
-      if (Object.is(state.state.value, value)) return;
-      state.setState({ ...state.state, value });
+      if (Object.is(state.value, value)) return;
+      state = { ...state, value };
       onValueChange?.(value);
     },
   };

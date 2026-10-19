@@ -95,13 +95,10 @@ The hidden named input submits the selected value. The caller validates required
   const selectedOption = $derived(options.find((option) => option.value === controller.state.value));
   const inputValue = $derived(controller.state.open ? controller.state.query : (selectedOption?.label ?? ""));
   const isInvalid = $derived(resolveInvalidState(invalid, ariaInvalid));
-  const filteredOptions = $derived(
-    controller.state.query === ""
-      ? options
-      : options.filter((option) =>
-          option.label.toLocaleLowerCase().includes(controller.state.query.toLocaleLowerCase())
-        )
-  );
+  const filteredOptions = $derived.by(() => {
+    const query = controller.state.query.toLocaleLowerCase();
+    return query === "" ? options : options.filter((option) => option.label.toLocaleLowerCase().includes(query));
+  });
 
   $effect(() => {
     if (controller.state.open && inputElement) anchorWidth = inputElement.getBoundingClientRect().width + "px";
@@ -109,9 +106,8 @@ The hidden named input submits the selected value. The caller validates required
 
   $effect(() => {
     if (!controller.state.open) return;
-    if (activeIndex >= 0 && filteredOptions[activeIndex] && !filteredOptions[activeIndex]?.disabled) return;
-
-    activeIndex = findEnabledBoundary(filteredOptions, "first");
+    const active = filteredOptions[activeIndex];
+    if (!active || active.disabled) activeIndex = findEnabledBoundary(filteredOptions, "first");
   });
 
   $effect(() => {
@@ -133,19 +129,21 @@ The hidden named input submits the selected value. The caller validates required
     option?.scrollIntoView?.({ block: "nearest" });
   }
 
-  async function openListbox() {
+  function setActiveIndex(index: number) {
+    activeIndex = index;
+    void tick().then(scrollActiveOption);
+  }
+
+  /** Opens on the selected option when it is visible and enabled, otherwise on the first enabled option. */
+  function openListbox() {
     if (disabled) return;
 
     rememberAnchor();
     const selectedIndex = filteredOptions.findIndex((option) => option.value === controller.state.value);
-    activeIndex =
-      selectedIndex >= 0 && !filteredOptions[selectedIndex]?.disabled
-        ? selectedIndex
-        : findEnabledBoundary(filteredOptions, "first");
+    const startOnSelection = selectedIndex >= 0 && !filteredOptions[selectedIndex].disabled;
+    activeIndex = startOnSelection ? selectedIndex : findEnabledBoundary(filteredOptions, "first");
     controller.open();
-    if (!controller.state.open) return;
-    await tick();
-    scrollActiveOption();
+    if (controller.state.open) void tick().then(scrollActiveOption);
   }
 
   function closeListbox(focusInput = false) {
@@ -163,27 +161,19 @@ The hidden named input submits the selected value. The caller validates required
   }
 
   function moveActive(direction: -1 | 1) {
-    const boundary = direction === 1 ? "first" : "last";
-    activeIndex =
-      activeIndex < 0
-        ? findEnabledBoundary(filteredOptions, boundary)
-        : findNextEnabledIndex(filteredOptions, activeIndex, direction);
-    void tick().then(scrollActiveOption);
-  }
-
-  function updateValue(nextValue: Value | undefined) {
-    controller.select(nextValue);
+    if (activeIndex >= 0) setActiveIndex(findNextEnabledIndex(filteredOptions, activeIndex, direction));
+    else setActiveIndex(findEnabledBoundary(filteredOptions, direction === 1 ? "first" : "last"));
   }
 
   function selectOption(option: ComboboxOption<Value>) {
     if (option.disabled) return;
 
-    updateValue(allowDeselect && controller.state.value === option.value ? undefined : option.value);
+    controller.select(allowDeselect && controller.state.value === option.value ? undefined : option.value);
     closeListbox(true);
   }
 
   function handleInputFocus() {
-    if (!controller.state.open) void openListbox();
+    if (!controller.state.open) openListbox();
   }
 
   function handleInput(event: Event) {
@@ -204,7 +194,7 @@ The hidden named input submits the selected value. The caller validates required
 
     if (event.key === "ArrowDown" || event.key === "ArrowUp") {
       event.preventDefault();
-      if (!controller.state.open) void openListbox();
+      if (!controller.state.open) openListbox();
       else moveActive(event.key === "ArrowDown" ? 1 : -1);
       return;
     }
@@ -225,13 +215,16 @@ The hidden named input submits the selected value. The caller validates required
     if (disabled) return;
 
     inputElement?.focus();
-    if (!controller.state.open) void openListbox();
+    if (!controller.state.open) openListbox();
   }
 
   function handleTriggerPointerDown(event: PointerEvent) {
-    if (event.button !== 0) return;
+    if (event.button === 0) event.preventDefault();
+  }
 
-    event.preventDefault();
+  function handleSurfaceOpenChange(nextOpen: boolean) {
+    if (nextOpen) controller.open();
+    else closeListbox();
   }
 </script>
 
@@ -289,10 +282,7 @@ The hidden named input submits the selected value. The caller validates required
     style="--a-novel-combobox-anchor-width: {anchorWidth}; {maxMenuHeight
       ? '--a-novel-combobox-menu-max-height: ' + maxMenuHeight
       : ''}"
-    onOpenChange={(nextOpen) => {
-      if (nextOpen) controller.open();
-      else closeListbox();
-    }}
+    onOpenChange={handleSurfaceOpenChange}
   >
     {#each filteredOptions as option, index (option.value)}
       <button
