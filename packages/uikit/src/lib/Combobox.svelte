@@ -141,9 +141,8 @@ The hidden named input submits the selected value. The caller validates required
     rememberAnchor();
     const selectedIndex = filteredOptions.findIndex((option) => option.value === controller.state.value);
     const startOnSelection = selectedIndex >= 0 && !filteredOptions[selectedIndex].disabled;
-    activeIndex = startOnSelection ? selectedIndex : findEnabledBoundary(filteredOptions, "first");
+    setActiveIndex(startOnSelection ? selectedIndex : findEnabledBoundary(filteredOptions, "first"));
     controller.open();
-    if (controller.state.open) void tick().then(scrollActiveOption);
   }
 
   function closeListbox(focusInput = false) {
