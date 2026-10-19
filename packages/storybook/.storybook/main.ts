@@ -8,6 +8,8 @@ const config: StorybookConfig = {
   stories: ["../src/**/*.mdx", "../src/**/*.stories.{js,ts,svelte}"],
   addons: ["@a-novel-kit/uikit-storybook"],
   framework: "@storybook/svelte-vite",
+  // Stories import the UI packages as an application does. These aliases resolve them to workspace
+  // source for Storybook and its Vitest project alike.
   viteFinal: async (config) =>
     mergeConfig(config, {
       resolve: {
