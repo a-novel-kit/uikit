@@ -1,70 +1,92 @@
 # Contributing to A-Novel UI
 
-The organization-wide library taxonomy lives in the
-[libraries, tooling, and platform concepts](https://github.com/a-novel-kit/.github/blob/master/CONTRIBUTING.md).
-Platform setup and shared commands live in the
-[developer guide](https://a-novel-kit.github.io/stack/). Read the
-[README](./README.md) first for this repository's package map.
+This guide covers what is specific to the design system. Set up the shared toolchain with the
+[developer guide](https://a-novel-kit.github.io/stack/), and read the [README](./README.md) first for
+the package map. The
+[libraries, tooling, and platform concepts](https://github.com/a-novel-kit/.github/blob/master/CONTRIBUTING.md)
+hold what is true of every library.
 
-## Package boundaries
+## What belongs here
 
-- `packages/uikit` contains generic, styled Svelte components and their public TypeScript
-  contracts.
-- `packages/tokens` owns primitive and semantic design values. Components consume semantic
-  tokens rather than raw palette steps.
-- `packages/fonts` owns the self-hosted font files, declarations, and required license copies.
-- `packages/icons` owns the curated icon vocabulary and custom A-Novel glyphs.
-- `packages/storybook-config` is the published Storybook preset used by this workbench and client
-  repositories.
-- `packages/storybook` is the private workbench and design-system documentation site.
+A pattern belongs in uikit when an application can use it without product knowledge. Product
+workflows, page shells, manuscript rendering, and screen composition stay in the application or
+feature package that owns them.
 
-Product-specific workflows, page shells, manuscript rendering, and screen composition stay in their
-feature or client repository. Move a pattern into the UI kit only when it is useful without product
-domain knowledge.
+Each package owns one layer of the system:
+
+- `packages/tokens` owns every design value. Components read semantic tokens, never primitive palette
+  steps.
+- `packages/fonts` owns the font files, their declarations, and their licenses.
+- `packages/images` owns the brand logos and their source artwork.
+- `packages/icons` owns the canvas for custom glyphs. Standard icons come from `@lucide/svelte`.
+- `packages/storybook-config` is the Storybook preset that the workbench and the applications share.
+- `packages/storybook` is the private workbench that documents every component and foundation.
+
+`pnpm lint` fails when a source file authors a color outside OKLCH, or when a component reads a
+primitive palette token.
 
 ## Component contracts
 
 Components are small composition primitives:
 
-- prefer native HTML behavior before adding a headless primitive;
-- expose content and subregions as Svelte snippets instead of growing configuration objects;
-- keep optional presentation around the essential semantic element;
-- forward appropriate native attributes and preserve application-owned links, values, and event
-  handlers;
-- use the shared public types for sizes, feedback tones, layout gaps, and selectable options;
-- style with semantic CSS tokens only.
+- Start from the native element that owns the behavior before adding custom keyboard or focus logic.
+- Expose content and subregions as Svelte snippets rather than configuration objects.
+- Keep optional presentation around the essential semantic element.
+- Forward the native attributes a consumer needs, and preserve the links, values, and event handlers
+  the application owns.
+- Reuse the shared public types for sizes, feedback tones, layout gaps, and selectable options.
+- Keep rendered state in a controller. A stateful component takes one `controller` prop, and
+  `controllers.svelte.ts` exports a default factory for it.
+- Style with semantic CSS tokens only.
 
-Every exported component, type, and component-specific prop has concise JSDoc. Document what the
-contract accepts or returns and how a consumer uses it. Maintainer rationale that spans packages
-belongs here; local comments are reserved for non-obvious implementation constraints.
+Every exported component, type, and component-specific prop has concise JSDoc, and every public
+component opens with an `@component` comment. `pnpm lint` fails when one is missing. Document what the
+contract accepts or returns and how a consumer uses it. Rationale that spans packages belongs in this
+guide, and source comments explain the constraints a reader cannot see in the code.
 
 ## Public API
 
-`packages/uikit/src/lib/index.ts` is the component package boundary. Export each public component
-and its types there. Internal renderers, context keys, and primitive adapters remain unexported.
+`packages/uikit/src/lib/index.ts` is the component package boundary. Export each public component and
+its types there. Internal renderers, context keys, and helpers stay unexported.
 
-Each published package declares an explicit `exports` map, a `files` allowlist, and CSS side
-effects where applicable. The package contract check verifies built export targets and the UI-kit
-barrel before CI tests run.
+Each published package declares an explicit `exports` map, a `files` allowlist, and CSS side effects
+where applicable. `pnpm build:ci` builds every package, verifies the built export targets and the
+uikit barrel, and dry-runs the publish.
 
-## Generated assets
+## Generated files
 
-`packages/tokens/colors.css` and `packages/tokens/palette.js` are generated from
-`packages/tokens/scripts/generate-colors.mjs`. Change the compact derivation inputs and regenerate
-the artifacts rather than editing generated values.
+The color tokens, brand images, and vendored fonts are generated from sources in their package.
+Change the source, never the generated values, and regenerate as the
+[tokens](./packages/tokens/README.md#color), [images](./packages/images/README.md#reproducing-the-images),
+and [fonts](./packages/fonts/README.md#reproducing-the-vendored-fonts) READMEs show. `pnpm lint` fails
+when a generated color or image file drifts from its source. Review both bytes and licensing whenever
+the font source list changes.
 
-The font vendoring script downloads pinned upstream faces, converts the required OpenType files,
-and copies their licenses. Review both bytes and licensing whenever its source list changes.
+## Working on a component
 
-## Component workflow
+Run Storybook while working on UI, and add or update stories for every public state, variant, and
+composition pattern. It serves on port 6006 without opening a browser.
 
-Run `pnpm storybook` while working on UI and add or update stories for every public state,
-variant, and composition pattern. The command disables automatic browser opening; use the printed
-local URL.
+```bash
+pnpm storybook
+```
 
-Before handoff, format the repository and run its lint, test, build, and package-contract scripts.
-Storybook accessibility checks are test failures, so resolve violations instead of suppressing
-them without a documented component constraint.
+Before handing off, format the repository and run every gate CI runs:
+
+```bash
+pnpm format
+pnpm lint
+pnpm test:unit
+pnpm test:browser
+pnpm test:storybook
+pnpm build:ci
+```
+
+The browser and Storybook suites need Chromium. `pnpm exec playwright install chromium` downloads it,
+and CI runs them in the Playwright container image.
+
+Storybook accessibility violations fail `pnpm test:storybook`. Fix the violation, and suppress a rule
+only for a documented component constraint.
 
 ## Questions?
 

@@ -1,39 +1,27 @@
 # A-Novel UI Storybook
 
-This private workspace package is the local component workbench and rendered design-system
-documentation. It consumes the published UI packages and `@a-novel-kit/uikit-storybook`; the
-workbench itself is not published.
+This private package is the component workbench and the rendered documentation of the design system.
+Its stories import the UI packages the way an application does, and its Vite configuration resolves
+them to their workspace source. It applies the shared preset of `@a-novel-kit/uikit-storybook`.
 
 ## Run it
 
-From the repository root:
+Serve it from the repository root:
 
 ```bash
 pnpm storybook
 ```
 
-The shared preset applies A-Novel's dark theme. The dev command sets `BROWSER=none` and passes
-`--no-open`, so it prints the local URL without opening a browser tab.
-
-Build the static verification artifact through the repository build command. The generated
-`storybook-static/` directory is ignored and is not a release artifact.
+`pnpm build` also builds the static Storybook into `storybook-static/`, which git ignores. The
+`storybook` workflow publishes that build to GitHub Pages from `master`.
 
 ## Authoring conventions
 
-- Put native Svelte stories under `src/components/*.stories.svelte` using the maintained
-  [`@storybook/addon-svelte-csf`](https://github.com/storybookjs/addon-svelte-csf).
-- Give every component one attached MDX page with usage, variants, edge states, accessibility
-  contract, and API. Do not also tag that story file with `autodocs`; one docs node has one owner.
-- Use Storybook's maintained doc blocks for foundations, including
-  [`ColorPalette`](https://storybook.js.org/docs/api/doc-blocks/doc-block-colorpalette) and
-  [`Typeset`](https://storybook.js.org/docs/api/doc-blocks/doc-block-typeset).
-- Keep docs-only helpers here. A helper belongs in a published package only when a platform—not
-  merely Storybook—has a runtime reason to import it.
-
-## Toolchain note
-
-The package follows Storybook 10.5's generated Svelte+Vite setup. It intentionally pins its private
-builder to Vite 7 and the matching Svelte plugin: Vite 8's Rolldown build currently hands
-Storybook's internal `.svelte` files to the JavaScript parser before the Svelte transform. The
-published UI-kit remains on Vite 8; this isolated tooling pin can be removed once that integration
-is fixed upstream.
+- Write stories as Svelte CSF files (`*.stories.svelte`) with the maintained
+  [`@storybook/addon-svelte-csf`](https://github.com/storybookjs/addon-svelte-csf), in the `src/`
+  folder of their sidebar group.
+- Give each story file one docs page: an attached MDX page (`<Meta of={Stories} />`), or the page
+  Storybook generates for the `autodocs` tag.
+- Render foundations with the real tokens, so the pages show what components use.
+- Keep docs-only helpers here. A helper belongs in a published package only when an application, not
+  merely Storybook, has a runtime reason to import it.

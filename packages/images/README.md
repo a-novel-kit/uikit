@@ -1,8 +1,8 @@
 # @a-novel-kit/uikit-images
 
-Lossless, web-ready logos for Agora, Studio, A-Novel, and KIT. The package owns the editable source
-artwork in `raw/` and contains responsive banners and square icons in `files/`. Raw artwork remains in
-Git LFS and is not included in the published npm package.
+Lossless, web-ready logos for Agora, Studio, A-Novel, and KIT. The package publishes responsive
+banners and square icons from `files/`. Their editable source artwork stays in `raw/`, under Git LFS,
+outside the published package.
 
 ## Usage
 

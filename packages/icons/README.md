@@ -1,6 +1,6 @@
 # @a-novel-kit/uikit-icons
 
-This package contains custom A-Novel glyphs and the shared `IconBase` canvas used to build them.
+This package holds `IconBase`, the shared canvas for custom A-Novel glyphs.
 
 Import standard interface icons directly from `@lucide/svelte`.
 
@@ -25,5 +25,5 @@ Build a custom glyph on the shared 24-unit canvas.
 <IconBase label="Custom action"><path d="M4 12h16" /></IconBase>
 ```
 
-Custom glyphs inherit `currentColor` and accept the shared icon props. Give each icon a visible or
-programmatic label at the call site.
+Custom glyphs draw in `currentColor` and accept the shared icon props. An icon stays decorative unless
+it gets a `label`. Set one only when no visible text names the icon.

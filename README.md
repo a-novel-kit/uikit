@@ -16,36 +16,38 @@ Composable Svelte components and shared design foundations for A-Novel interface
 
 ## What this is
 
-This repository contains the generic UI packages shared by A-Novel clients:
+A-Novel UI is the design system of the A-Novel web applications. Its Svelte components start from
+native HTML elements, style themselves with semantic design tokens, and take their content through
+Svelte snippets. The foundations they render with ship as separate packages, which an application
+imports once.
 
-```text
-packages/
-├── uikit/             composable Svelte components
-├── tokens/            generated CSS and JavaScript design tokens
-├── fonts/             self-hosted font faces and licenses
-├── images/            raw artwork and generated banners and application icons
-├── icons/             custom Svelte icon components
-├── storybook-config/  reusable A-Novel Storybook preset and theme
-└── storybook/         private design-system workbench
-```
-
-Components are native-first, use semantic tokens, and expose composition points through Svelte
-snippets. Product workflows and screen-specific components belong to their client or feature
-package rather than this repository.
+Product workflows and screen-specific components live in the applications that use them. The
+[Storybook](https://a-novel-kit.github.io/uikit/) documents every component and foundation.
 
 ## Installation
 
-Packages are published to GitHub Packages under the `@a-novel-kit` scope. Install the component
-package and import the global foundations once in the application shell:
+The packages are published to GitHub Packages, which needs a `read:packages` token even to read. The
+[developer guide](https://a-novel-kit.github.io/stack/dependencies/node#configure) sets one up. Point
+the `@a-novel-kit` scope at that registry in the application's `.npmrc`:
+
+```ini
+@a-novel-kit:registry=https://npm.pkg.github.com
+```
+
+Install the components with their peer dependencies and the foundations:
 
 ```bash
-pnpm add @a-novel-kit/uikit @a-novel-kit/uikit-fonts @a-novel-kit/uikit-images @a-novel-kit/uikit-tokens
+pnpm add @a-novel-kit/uikit @a-novel-kit/uikit-fonts @a-novel-kit/uikit-tokens @a-novel-kit/nodelib-i18n i18next
 ```
+
+Import the foundation styles once in the application shell:
 
 ```ts
 import "@a-novel-kit/uikit-fonts/fonts.css";
 import "@a-novel-kit/uikit-tokens/tokens.css";
 ```
+
+Then import components from the package root:
 
 ```svelte
 <script lang="ts">
@@ -59,17 +61,16 @@ import "@a-novel-kit/uikit-tokens/tokens.css";
 
 ## Packages
 
-| Package                                                       | Purpose                                                       |
-| ------------------------------------------------------------- | ------------------------------------------------------------- |
-| [`@a-novel-kit/uikit`](./packages/uikit)                      | Generic Svelte components and public component types.         |
-| [`@a-novel-kit/uikit-tokens`](./packages/tokens)              | CSS tokens, generated OKLCH palette, and palette metadata.    |
-| [`@a-novel-kit/uikit-fonts`](./packages/fonts)                | Self-hosted interface, editorial, and monospace font faces.   |
-| [`@a-novel-kit/uikit-images`](./packages/images)              | Responsive banners and square application icons.              |
-| [`@a-novel-kit/uikit-icons`](./packages/icons)                | Custom icon components and their shared SVG canvas.           |
-| [`@a-novel-kit/uikit-storybook`](./packages/storybook-config) | Shared Storybook preset, preview defaults, and manager theme. |
+| Package                                                       | What it is for                                                                 |
+| ------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| [`@a-novel-kit/uikit`](./packages/uikit)                      | The Svelte components, their default controllers, and their public types.      |
+| [`@a-novel-kit/uikit-tokens`](./packages/tokens)              | The design tokens that components and applications style with.                 |
+| [`@a-novel-kit/uikit-fonts`](./packages/fonts)                | The self-hosted font faces that the typography tokens name.                    |
+| [`@a-novel-kit/uikit-images`](./packages/images)              | The brand logos, as responsive banners and square application icons.           |
+| [`@a-novel-kit/uikit-icons`](./packages/icons)                | The shared canvas for custom icons. Standard icons come from `@lucide/svelte`. |
+| [`@a-novel-kit/uikit-storybook`](./packages/storybook-config) | The Storybook preset and theme for A-Novel Svelte projects.                    |
 
 ## Contributing
 
-Read the [developer guide](https://a-novel-kit.github.io/stack/)
-for the shared toolchain, then follow this repository's [contributing guide](./CONTRIBUTING.md) for
-package boundaries, public API rules, and the Storybook workflow.
+Start with the [developer guide](https://a-novel-kit.github.io/stack/), then read the
+[contribution guide](./CONTRIBUTING.md).
