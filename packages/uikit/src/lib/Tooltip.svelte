@@ -74,10 +74,7 @@ Spread all trigger attributes onto that element; an open controller owns visibil
   });
 
   $effect(() => {
-    if (!disabled) return;
-
-    clearTimeout(openTimer);
-    controller.close();
+    if (disabled) closeTooltip();
   });
 
   function scheduleOpen(element: HTMLElement) {
@@ -90,11 +87,13 @@ Spread all trigger attributes onto that element; an open controller owns visibil
     }, delayDuration);
   }
 
-  function closeIfInactive() {
-    if (hovered || focused) return;
-
+  function closeTooltip() {
     clearTimeout(openTimer);
     controller.close();
+  }
+
+  function closeIfInactive() {
+    if (!hovered && !focused) closeTooltip();
   }
 
   function handlePointerEnter(event: PointerEvent) {
@@ -121,8 +120,7 @@ Spread all trigger attributes onto that element; an open controller owns visibil
     if (event.key !== "Escape" || !controller.state.open) return;
 
     event.preventDefault();
-    clearTimeout(openTimer);
-    controller.close();
+    closeTooltip();
   }
 
   onDestroy(() => clearTimeout(openTimer));

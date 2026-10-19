@@ -86,39 +86,31 @@ An initially open dialog is visible without JavaScript; modal focus and backdrop
     if (!dialog) return;
     // Promote the server-rendered non-modal dialog into the browser's modal top layer.
     if (controller.state.open && modal && dialog.open && !dialog.matches(":modal")) dialog.close();
-    if (controller.state.open && !dialog.open) {
-      if (modal) dialog.showModal();
-      else dialog.show();
-    } else if (!controller.state.open && dialog.open) {
-      dialog.close();
-    }
+    if (controller.state.open && !dialog.open) showDialog();
+    else if (!controller.state.open && dialog.open) dialog.close();
   });
 
-  function requestClose() {
-    controller.close();
+  function showDialog() {
+    if (modal) dialog?.showModal();
+    else dialog?.show();
   }
 
   function handleCancel(event: Event) {
     event.preventDefault();
-    requestClose();
+    controller.close();
   }
 
+  // Reopens the dialog when the controller refuses a close the browser already performed.
   function handleClose(event: Event) {
     const currentDialog = event.currentTarget as HTMLDialogElement;
     if (currentDialog.open || !controller.state.open) return;
 
-    requestClose();
-    if (controller.state.open)
-      queueMicrotask(() => {
-        if (modal) dialog?.showModal();
-        else dialog?.show();
-      });
+    controller.close();
+    if (controller.state.open) queueMicrotask(showDialog);
   }
 
   function handleBackdrop(event: MouseEvent) {
-    const currentDialog = event.currentTarget as HTMLDialogElement;
-
-    if (closeOnBackdrop && event.target === currentDialog) requestClose();
+    if (closeOnBackdrop && event.target === event.currentTarget) controller.close();
   }
 </script>
 
