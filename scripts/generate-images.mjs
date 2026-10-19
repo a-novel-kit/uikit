@@ -1,11 +1,12 @@
-// Generates the publishable brand-image resolutions from reviewed raw sources.
-import { access, mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
+// Generates the publishable brand-image resolutions from reviewed raw sources. With --check, it
+// writes nothing and fails when packages/images/files differs from the generated output.
+import { existsSync } from "node:fs";
+import { mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { dirname, relative, resolve, sep } from "node:path";
-import { fileURLToPath } from "node:url";
 
 import sharp from "sharp";
 
-const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const repositoryRoot = resolve(import.meta.dirname, "..");
 const rawRoot = resolve(repositoryRoot, "packages/images/raw");
 const outputRoot = resolve(repositoryRoot, "packages/images/files");
 
@@ -21,10 +22,7 @@ const presets = {
     source: "wordmark",
   },
   icon: {
-    sizes: [16, 32, 48, 96, 144, 192, 512, 1024].map((size) => ({
-      height: size,
-      width: size,
-    })),
+    sizes: [16, 32, 48, 96, 144, 192, 512, 1024].map((size) => ({ height: size, width: size })),
     source: "icon",
   },
 };
@@ -45,61 +43,44 @@ if (argumentsList.length > 0 && !checkOnly) {
   throw new Error("Usage: node scripts/generate-images.mjs [--check]");
 }
 
-const portablePath = (path) => path.split(sep).join("/");
+const portablePath = (path) => relative(repositoryRoot, path).split(sep).join("/");
 
 const outputDirectory = (preset, size) => (preset === "banner" ? `${size.height}h` : `${size.width}x${size.height}`);
 
-const collectFiles = async (directory) => {
-  try {
-    await access(directory);
-  } catch {
-    return [];
-  }
+/** Lists the files under a directory, or none when the directory is missing. */
+async function collectFiles(directory) {
+  if (!existsSync(directory)) return [];
 
-  const entries = await readdir(directory, { withFileTypes: true });
-  const files = [];
+  const entries = await readdir(directory, { recursive: true, withFileTypes: true });
+  return entries.filter((entry) => entry.isFile()).map((entry) => resolve(entry.parentPath, entry.name));
+}
 
-  for (const entry of entries) {
-    const path = resolve(directory, entry.name);
-    if (entry.isDirectory()) {
-      files.push(...(await collectFiles(path)));
-    } else if (entry.isFile()) {
-      files.push(path);
-    }
-  }
+/** Rejects a raw export that is not a PNG at the shared source height, and square for icons. */
+async function assertSource(sourcePath, preset) {
+  const { format, height, width } = await sharp(sourcePath).metadata();
+  const square = preset === "icon";
+  if (format === "png" && height === sourceHeight && (!square || width === sourceHeight)) return;
 
-  return files;
-};
+  throw new Error(
+    `${portablePath(sourcePath)} must be a PNG ${sourceHeight} pixels high${square ? " and wide" : ""}; ` +
+      `received ${width ?? "unknown"}x${height ?? "unknown"} ${format ?? "file"}`
+  );
+}
 
-const generateImages = async () => {
+/** Renders every logo, preset, variant, and size, keyed by output path. */
+async function generateImages() {
   const outputs = new Map();
 
   for (const logo of logos) {
     for (const [preset, { sizes, source }] of Object.entries(presets)) {
       for (const [variant, suffix] of Object.entries(variants)) {
         const sourcePath = resolve(rawRoot, logo, "exports", `${logo}-${source}-${variant}.png`);
-        const metadata = await sharp(sourcePath).metadata();
-        if (
-          metadata.format !== "png" ||
-          metadata.height !== sourceHeight ||
-          (preset === "icon" && metadata.width !== sourceHeight)
-        ) {
-          throw new Error(
-            `${portablePath(relative(repositoryRoot, sourcePath))} must be a PNG ${sourceHeight} pixels high` +
-              `${preset === "icon" ? " and wide" : ""}; received ` +
-              `${metadata.width ?? "unknown"}x${metadata.height ?? "unknown"} ${metadata.format ?? "file"}`
-          );
-        }
+        await assertSource(sourcePath, preset);
 
         for (const size of sizes) {
           const target = resolve(outputRoot, preset, outputDirectory(preset, size), `${logo}-${preset}${suffix}.png`);
           const contents = await sharp(sourcePath)
-            .resize({
-              height: size.height,
-              kernel: sharp.kernel.lanczos3,
-              width: size.width,
-              withoutEnlargement: true,
-            })
+            .resize({ ...size, kernel: sharp.kernel.lanczos3, withoutEnlargement: true })
             .png({ adaptiveFiltering: true, compressionLevel: 9 })
             .toBuffer();
 
@@ -110,33 +91,20 @@ const generateImages = async () => {
   }
 
   return outputs;
-};
+}
 
 const outputs = await generateImages();
 
 if (checkOnly) {
   const issues = [];
-  const expectedPaths = new Set(outputs.keys());
 
   for (const [path, expected] of outputs) {
-    try {
-      const actual = await readFile(path);
-      if (!actual.equals(expected)) {
-        issues.push(`outdated ${portablePath(relative(repositoryRoot, path))}`);
-      }
-    } catch (error) {
-      if (error && typeof error === "object" && "code" in error && error.code === "ENOENT") {
-        issues.push(`missing ${portablePath(relative(repositoryRoot, path))}`);
-      } else {
-        throw error;
-      }
-    }
+    if (!existsSync(path)) issues.push(`missing ${portablePath(path)}`);
+    else if (!(await readFile(path)).equals(expected)) issues.push(`outdated ${portablePath(path)}`);
   }
 
   for (const path of await collectFiles(outputRoot)) {
-    if (!expectedPaths.has(path)) {
-      issues.push(`unexpected ${portablePath(relative(repositoryRoot, path))}`);
-    }
+    if (!outputs.has(path)) issues.push(`unexpected ${portablePath(path)}`);
   }
 
   if (issues.length > 0) {
