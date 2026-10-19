@@ -13,21 +13,36 @@ function text(element: HTMLElement): string {
   return element.textContent?.replace(/\s+/g, " ").trim() ?? "";
 }
 
+const phaseCases = [
+  {
+    name: "announces a scheduled maintenance with its expected time frame",
+    started: false,
+    expected: /^Scheduled maintenance Some services may be unavailable\. Expected: Oct 12, 2026, 6:00 – 7:00 AM UTC\.$/,
+  },
+  {
+    name: "warns of a maintenance in progress with its expected end",
+    started: true,
+    expected:
+      /^Maintenance in progress Some services may be unavailable\. Expected to end: Oct 12, 2026, 7:00 AM UTC\.$/,
+  },
+];
+
+const frenchCases = [
+  {
+    name: "speaks French in a French app, before the start",
+    started: false,
+    expected:
+      "Maintenance programmée Certains services peuvent être indisponibles. Période prévue: 12 oct. 2026, 06:00 – 07:00 UTC.",
+  },
+  {
+    name: "speaks French in a French app, once started",
+    started: true,
+    expected: "Maintenance en cours Certains services peuvent être indisponibles. Fin prévue: 12 oct. 2026, 07:00 UTC.",
+  },
+];
+
 describe("DowntimeBanner", () => {
-  it.each([
-    {
-      name: "announces a scheduled maintenance with its expected time frame",
-      started: false,
-      expected:
-        /^Scheduled maintenance Some services may be unavailable\. Expected: Oct 12, 2026, 6:00 – 7:00 AM UTC\.$/,
-    },
-    {
-      name: "warns of a maintenance in progress with its expected end",
-      started: true,
-      expected:
-        /^Maintenance in progress Some services may be unavailable\. Expected to end: Oct 12, 2026, 7:00 AM UTC\.$/,
-    },
-  ])("$name", ({ started, expected }) => {
+  it.each(phaseCases)("$name", ({ started, expected }) => {
     const { getByRole, queryByRole } = render(DowntimeBanner, {
       start,
       end,
@@ -62,20 +77,7 @@ describe("DowntimeBanner", () => {
     expect(text(getByRole("status"))).toMatch("Expected: Oct 12, 2026, 2:00 – 3:00 AM EDT.");
   });
 
-  it.each([
-    {
-      name: "speaks French in a French app, before the start",
-      started: false,
-      expected:
-        "Maintenance programmée Certains services peuvent être indisponibles. Période prévue: 12 oct. 2026, 06:00 – 07:00 UTC.",
-    },
-    {
-      name: "speaks French in a French app, once started",
-      started: true,
-      expected:
-        "Maintenance en cours Certains services peuvent être indisponibles. Fin prévue: 12 oct. 2026, 07:00 UTC.",
-    },
-  ])("$name", ({ started, expected }) => {
+  it.each(frenchCases)("$name", ({ started, expected }) => {
     const { getByRole } = render(I18nFixture, {
       props: {
         locale: "fr",
