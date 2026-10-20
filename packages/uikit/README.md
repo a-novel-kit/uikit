@@ -18,8 +18,8 @@ import "@a-novel-kit/uikit-fonts/fonts.css";
 import "@a-novel-kit/uikit-tokens/tokens.css";
 ```
 
-Components and their prop types are exported from the package root, with shared contracts such as
-`ComponentSize`, `FeedbackTone`, `LayoutGap`, and `SelectionOption`.
+Components, their prop types, and shared contracts such as `ComponentSize` are exported from the
+package root.
 
 ```svelte
 <script lang="ts">
