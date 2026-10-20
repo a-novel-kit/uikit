@@ -6,3 +6,6 @@ storybook-static
 *.tsbuildinfo
 .DS_Store
 tmp
+.visual
+test-results
+.vitest

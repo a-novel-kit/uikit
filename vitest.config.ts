@@ -1,3 +1,4 @@
+import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { defineConfig, defineProject } from "vitest/config";
@@ -54,11 +55,19 @@ export default defineConfig({
         test: {
           name: "storybook",
           exclude: ["**/*.mdx"],
+          // Only the Drive runner in CI provides the screenshot directory, so other runs take no screenshots.
+          setupFiles: process.env.PLAYWRIGHT_SNAPSHOT_DIR ? [`${storybookConfigDirectory}/vitest.screenshot.ts`] : [],
           browser: {
             enabled: true,
             provider: playwright({}),
             headless: true,
             instances: [{ browser: "chromium" }],
+            expect: {
+              toMatchScreenshot: {
+                resolveScreenshotPath: ({ arg, ext }) =>
+                  resolve(process.env.PLAYWRIGHT_SNAPSHOT_DIR ?? "", `${arg}${ext}`),
+              },
+            },
           },
           coverage: {
             enabled: false,

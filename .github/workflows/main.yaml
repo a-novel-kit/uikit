@@ -48,40 +48,42 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           test_action: "test:unit"
 
+  # Component tests, then the Storybook stories, which compare their screenshots against the Drive
+  # reference batch once the VISUAL_* variables are set.
   test-browser:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     container:
       # renovate: datasource=npm depName=playwright
       image: mcr.microsoft.com/playwright:v1.64.1-noble
     permissions:
       contents: read
       packages: read
+      actions: read
+      pull-requests: read
+      statuses: write
+      id-token: write
     steps:
-      - uses: a-novel-kit/workflows/node-actions/test-node@v1.64.0
+      - uses: a-novel-kit/workflows/node-actions/test-playwright@v1.64.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          test_action: "test:browser"
+          component_test_action: "test:browser"
           coverage_artifact: coverage-browser
-
-  test-storybook:
-    runs-on: ubuntu-latest
-    container:
-      # renovate: datasource=npm depName=playwright
-      image: mcr.microsoft.com/playwright:v1.64.1-noble
-    permissions:
-      contents: read
-      packages: read
-    steps:
-      - uses: a-novel-kit/workflows/node-actions/setup-node@v1.64.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Run Storybook interaction and accessibility tests
-        run: pnpm run test:storybook
+          coverage_file: coverage/lcov.info
+          test_action: "test:storybook"
+          runner: vitest
+          drive_ci_provider: ${{ vars.VISUAL_CI_PROVIDER }}
+          drive_ci_account: ${{ vars.VISUAL_CI_ACCOUNT }}
+          drive_maintenance_provider: ${{ vars.VISUAL_MAINTENANCE_PROVIDER }}
+          drive_maintenance_account: ${{ vars.VISUAL_MAINTENANCE_ACCOUNT }}
+          references_folder: ${{ vars.VISUAL_REFERENCES_FOLDER }}
+          results_folder: ${{ vars.VISUAL_RESULTS_FOLDER }}
+          seed_sha: ${{ vars.VISUAL_SEED_SHA }}
 
   # Keep the established required context while making it fail closed over
   # every independently visible test suite.
   test-js:
-    needs: [test-unit, test-browser, test-storybook]
+    needs: [test-unit, test-browser]
     if: ${{ always() }}
     runs-on: ubuntu-latest
     permissions: {}
@@ -90,11 +92,9 @@ jobs:
         env:
           UNIT_RESULT: ${{ needs.test-unit.result }}
           BROWSER_RESULT: ${{ needs.test-browser.result }}
-          STORYBOOK_RESULT: ${{ needs.test-storybook.result }}
         run: |
           test "$UNIT_RESULT" = success
           test "$BROWSER_RESULT" = success
-          test "$STORYBOOK_RESULT" = success
 
   report-codecov:
     runs-on: ubuntu-latest

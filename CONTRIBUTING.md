@@ -88,6 +88,14 @@ and CI runs them in the Playwright container image.
 Storybook accessibility violations fail `pnpm test:storybook`. Fix the violation, and suppress a rule
 only for a documented component constraint.
 
+## Visual changes
+
+CI compares every story's viewport with the reference screenshots of `master`, kept in a private
+Google Drive. A pull request that changes how a story looks fails the `visual-comparison` check, which
+links an **Old / New / Diff** page. A maintainer reviews that page, then adds the
+`allow-screenshot-change` label. A push removes the label. New stories need no approval, and approval
+never waives a failing play function or accessibility check.
+
 ## Questions?
 
 [Open an issue](https://github.com/a-novel-kit/uikit/issues) with the component or package involved,
