@@ -20,7 +20,7 @@
     "@lucide/svelte": "^1.31.0"
   },
   "devDependencies": {
-    "@a-novel-kit/nodelib-i18n": "^1.13.0",
+    "@a-novel-kit/nodelib-i18n": "^2.0.0",
     "@storybook/addon-a11y": "catalog:",
     "@storybook/addon-docs": "catalog:",
     "@storybook/addon-svelte-csf": "catalog:",
