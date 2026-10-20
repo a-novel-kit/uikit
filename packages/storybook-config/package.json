@@ -1,6 +1,6 @@
 {
   "name": "@a-novel-kit/uikit-storybook",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "private": false,
   "description": "Shared Storybook configuration and A-Novel theme for Svelte interfaces",
   "repository": {
