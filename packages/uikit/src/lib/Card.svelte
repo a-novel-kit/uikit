@@ -79,11 +79,6 @@ Groups content on a tokenized surface with optional header and footer snippets.
     padding: var(--card-padding);
   }
 
-  .header + .content,
-  .content + .footer {
-    padding-block-start: var(--card-padding);
-  }
-
   @supports (backdrop-filter: blur(0)) or (-webkit-backdrop-filter: blur(0)) {
     .surface-overlay {
       -webkit-backdrop-filter: blur(var(--blur-md));

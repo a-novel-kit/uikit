@@ -39,10 +39,11 @@ Renders numbered page controls. The caller updates `currentPage` or supplies URL
     const clampedTotal = Math.max(1, Math.floor(totalPages));
     const clampedCurrent = Math.min(clampedTotal, Math.max(1, Math.floor(currentPage)));
     const visible = new Set([1, clampedTotal, clampedCurrent - 1, clampedCurrent, clampedCurrent + 1]);
+    const inRange = [...visible].filter((page) => page >= 1 && page <= clampedTotal).sort((a, b) => a - b);
     const result: Array<number | string> = [];
     let previous = 0;
 
-    for (const page of [...visible].filter((page) => page >= 1 && page <= clampedTotal).sort((a, b) => a - b)) {
+    for (const page of inRange) {
       if (previous && page - previous > 1) result.push(`ellipsis-${previous}`);
       result.push(page);
       previous = page;

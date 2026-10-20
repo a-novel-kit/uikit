@@ -49,15 +49,14 @@ Within an AuthorizationProvider:
 
   let { controller, when = true, children, fallback }: AuthorizationBoundaryProps = $props();
   const inherited = hasAuthorization() ? useAuthorization() : undefined;
-  const active = createAuthorizationController({
-    getStatus: () => {
-      const source = controller ?? inherited;
-      if (!source) throw new Error("AuthorizationBoundary requires a controller or an AuthorizationProvider.");
-      return source.state.status;
-    },
-    when: () => when,
-  });
+  const active = createAuthorizationController({ getStatus: sourceStatus, when: () => when });
   const status = $derived(active.state.status);
+
+  function sourceStatus() {
+    const source = controller ?? inherited;
+    if (!source) throw new Error("AuthorizationBoundary requires a controller or an AuthorizationProvider.");
+    return source.state.status;
+  }
 </script>
 
 <AuthorizationProvider controller={active}>

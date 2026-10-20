@@ -4,7 +4,7 @@ Switches between labeled panels using an external value controller.
 Every panel stays mounted; inactive panels are hidden. Initialize the controller with an enabled tab value.
 -->
 <script lang="ts" module>
-  import type { ValueController as StateController } from "./controllers.svelte";
+  import type { ValueController } from "./controllers.svelte";
 
   import type { Snippet } from "svelte";
 
@@ -21,7 +21,7 @@ Every panel stays mounted; inactive panels are hidden. Initialize the controller
   }
 
   /** External state contract for tabs. */
-  export type TabsController = StateController<string>;
+  export type TabsController = ValueController<string>;
 
   /** Props for a composed tab list and its associated panels. */
   export interface TabsProps {

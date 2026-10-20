@@ -68,7 +68,12 @@ so its accessible name, description, required state, and invalid state stay conn
 
   const hintId = $derived(hint ? `${controlId}-hint` : undefined);
   const errorId = $derived(error ? `${controlId}-error` : undefined);
-  const describedBy = $derived([hintId, errorId].filter(Boolean).join(" ") || undefined);
+  const controlProps = $derived<FieldControlProps>({
+    id: controlId,
+    "aria-describedby": [hintId, errorId].filter(Boolean).join(" ") || undefined,
+    "aria-invalid": error ? true : undefined,
+    required: required ? true : undefined,
+  });
 </script>
 
 <div class="field {className}" {...rest}>
@@ -78,12 +83,7 @@ so its accessible name, description, required state, and invalid state stay conn
       {#if required}<span class="required" aria-hidden="true">*</span>{/if}
     </label>
   {/if}
-  {@render children({
-    id: controlId,
-    "aria-describedby": describedBy,
-    "aria-invalid": error ? true : undefined,
-    required: required ? true : undefined,
-  })}
+  {@render children(controlProps)}
   {#if hint}<div id={hintId} class="hint"><RenderContent content={hint} /></div>{/if}
   {#if error}<div id={errorId} class="error"><RenderContent content={error} /></div>{/if}
 </div>
