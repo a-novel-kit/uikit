@@ -17,7 +17,7 @@ jobs:
       contents: read
       packages: read
     steps:
-      - uses: a-novel-kit/workflows/node-actions/setup-node@v1.65.1
+      - uses: a-novel-kit/workflows/node-actions/setup-node@v1.66.0
         id: setup
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -87,7 +87,7 @@ jobs:
       contents: read
       packages: read
     steps:
-      - uses: a-novel-kit/workflows/node-actions/test-node@v1.65.1
+      - uses: a-novel-kit/workflows/node-actions/test-node@v1.66.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           test_action: "test:unit"
@@ -108,7 +108,7 @@ jobs:
       statuses: write
       id-token: write
     steps:
-      - uses: a-novel-kit/workflows/node-actions/test-playwright@v1.65.1
+      - uses: a-novel-kit/workflows/node-actions/test-playwright@v1.66.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           component_test_action: "test:browser"
@@ -148,7 +148,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: a-novel-kit/workflows/generic-actions/codecov@v1.65.1
+      - uses: a-novel-kit/workflows/generic-actions/codecov@v1.66.0
         with:
           codecov_token: ${{ secrets.CODECOV_TOKEN }}
 
@@ -158,7 +158,7 @@ jobs:
       contents: read
       packages: read
     steps:
-      - uses: a-novel-kit/workflows/node-actions/build-node@v1.65.1
+      - uses: a-novel-kit/workflows/node-actions/build-node@v1.66.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           build_action: "build:ci"
