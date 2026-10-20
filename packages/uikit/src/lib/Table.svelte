@@ -66,19 +66,20 @@ Wraps a native table in a keyboard-scrollable region. Supply semantic table sect
     text-align: start;
   }
 
-  :global(th),
-  :global(td) {
+  /* The consumer's snippet supplies the rows and cells, which Svelte does not scope to this component. */
+  table :global(th),
+  table :global(td) {
     vertical-align: top;
     border-block-end: var(--border-width-thin) solid var(--color-border-subtle);
     padding: var(--table-padding);
     text-align: start;
   }
 
-  :global(th) {
+  table :global(th) {
     color: var(--color-text-secondary);
     font-weight: var(--font-weight-bold);
   }
-  :global(tbody tr:hover) {
+  table :global(tbody tr:hover) {
     background: var(--color-surface-hover);
   }
   .compact {
