@@ -102,6 +102,6 @@ Renders an ordered navigation trail; the final item is always the current, unlin
   }
   [aria-current="page"] {
     color: var(--color-text-primary);
-    font-weight: var(--font-weight-medium);
+    font-weight: var(--font-weight-bold);
   }
 </style>

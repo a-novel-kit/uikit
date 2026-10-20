@@ -193,7 +193,7 @@ Every panel stays mounted; inactive panels are hidden. Initialize the controller
     padding: var(--space-2) var(--space-3);
     min-block-size: var(--control-height-sm);
     color: var(--color-text-muted);
-    font-weight: var(--font-weight-medium);
+    font-weight: var(--font-weight-regular);
     font-size: var(--font-size-sm);
     font-family: var(--font-family-interface);
   }

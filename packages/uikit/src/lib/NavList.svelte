@@ -122,7 +122,7 @@ URLs and the current destination are supplied by the caller.
     min-block-size: var(--control-height-sm);
     overflow: hidden;
     color: var(--color-navigation-text);
-    font-weight: var(--font-weight-medium);
+    font-weight: var(--font-weight-regular);
     font-size: var(--font-size-sm);
     line-height: var(--line-height-compact);
     text-decoration: none;

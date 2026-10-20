@@ -63,7 +63,7 @@ Renders a responsive description list. Wrap each related `dt` and `dd` pair in a
 
   :global(.description-list dt) {
     color: var(--color-text-muted);
-    font-weight: var(--font-weight-medium);
+    font-weight: var(--font-weight-bold);
     font-size: var(--font-size-sm);
     font-family: var(--font-family-interface);
   }

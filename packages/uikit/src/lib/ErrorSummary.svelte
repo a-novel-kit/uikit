@@ -137,7 +137,6 @@ Mount after validation and enable `focusOnMount` when focus should move to the s
 
   a {
     color: var(--color-feedback-error-text);
-    font-weight: var(--font-weight-medium);
     text-underline-offset: var(--space-1);
   }
 
