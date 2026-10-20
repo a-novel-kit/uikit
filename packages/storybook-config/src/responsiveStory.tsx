@@ -53,25 +53,16 @@ export const reviewStoryGlobals = {
   },
 } as const;
 
+/** Describes a review viewport in the shape of Storybook's viewport options. */
+function viewportOption({ height, label, type, width }: ReviewViewport) {
+  return { name: label, styles: { height: `${height}px`, width: `${width}px` }, type };
+}
+
 /** Viewport options installed by the shared Storybook preview. */
 export const reviewViewportOptions = {
-  [reviewViewports.desktop.id]: {
-    name: reviewViewports.desktop.label,
-    styles: {
-      height: `${reviewViewports.desktop.height}px`,
-      width: `${reviewViewports.desktop.width}px`,
-    },
-    type: reviewViewports.desktop.type,
-  },
-  [reviewViewports.mobile.id]: {
-    name: reviewViewports.mobile.label,
-    styles: {
-      height: `${reviewViewports.mobile.height}px`,
-      width: `${reviewViewports.mobile.width}px`,
-    },
-    type: reviewViewports.mobile.type,
-  },
-} as const;
+  [reviewViewports.desktop.id]: viewportOption(reviewViewports.desktop),
+  [reviewViewports.mobile.id]: viewportOption(reviewViewports.mobile),
+};
 
 /** Stories and metadata rendered by a responsive documentation comparison. */
 export interface ResponsiveStoryPairProps {

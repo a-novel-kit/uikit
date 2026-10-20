@@ -41,7 +41,6 @@ const preview: Preview = {
           "Feedback",
           "Overlays",
           "Icons",
-          "Recipes",
           "Guidelines",
           ["Composition", "Accessibility", "Content & layout"],
         ],
