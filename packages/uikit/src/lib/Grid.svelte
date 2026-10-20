@@ -9,7 +9,7 @@ Lays out equal-width items in an intrinsic grid that wraps when its minimum item
 
   /** Props for an intrinsic grid that wraps at a minimum item width. */
   export interface GridProps extends HTMLAttributes<HTMLDivElement> {
-    /** Minimum card width before the intrinsic grid wraps. */
+    /** Minimum item width before the grid wraps. */
     minItemWidth?: ComponentSize;
     /** Space between grid items. */
     gap?: LayoutGap;

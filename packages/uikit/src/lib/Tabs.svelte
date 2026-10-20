@@ -16,7 +16,7 @@ Every panel stays mounted; inactive panels are hidden. Initialize the controller
     label: string;
     /** Prevents the tab from being selected. */
     disabled?: boolean;
-    /** Optional leading graphic. */
+    /** Leading graphic. */
     icon?: Snippet;
   }
 

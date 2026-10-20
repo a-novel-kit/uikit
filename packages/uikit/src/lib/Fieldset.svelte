@@ -9,7 +9,7 @@ Groups related native form controls with an optional legend and supporting descr
 
   /** Props for a native group of related form controls. */
   export interface FieldsetProps extends HTMLFieldsetAttributes {
-    /** Optional fieldset legend. */
+    /** Fieldset legend. */
     legend?: Content;
     /** Supporting content shown after the legend. */
     description?: Content;

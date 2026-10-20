@@ -22,7 +22,7 @@ Use `createValueController` with a selected option value or `undefined`.
 
   /** Props for a native single-choice radio group. */
   export interface RadioGroupProps<Value extends string> extends Omit<HTMLFieldsetAttributes, "value"> {
-    /** Optional fieldset legend. */
+    /** Fieldset legend naming the group. */
     legend?: Content;
     /** Values available for selection. */
     options: readonly RadioOption<Value>[];

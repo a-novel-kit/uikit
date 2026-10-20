@@ -140,7 +140,6 @@ Pass `href` for navigation: it renders a native link with the same appearance.
     outline-offset: var(--focus-ring-offset);
   }
 
-  /* Logical padding keeps the control shape consistent in right-to-left layouts. */
   .sm {
     padding-inline: var(--space-3);
     padding-block: var(--space-1-5);

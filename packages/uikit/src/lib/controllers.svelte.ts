@@ -4,7 +4,7 @@ export interface OpenState {
   open: boolean;
 }
 
-/** A component requests visibility changes through these methods; custom controllers may reject them. */
+/** Pure state transitions for content that can be open or closed. Custom controllers may reject a request. */
 export interface OpenController {
   /** State rendered by the component. */
   readonly state: OpenState;

@@ -16,11 +16,11 @@ Frames custom 24×24 SVG geometry with inherited text color. Icons are decorativ
 
   /** Props shared by custom A-Novel SVG icons. */
   export interface IconProps extends Omit<SVGAttributes<SVGSVGElement>, "children"> {
-    /** Square rendered size. Components inherit surrounding text color. */
+    /** Square rendered size; defaults to the surrounding font size. */
     size?: number | string;
     /** Width of the icon strokes. */
     strokeWidth?: number | string;
-    /** Use only when the icon has no adjacent visible label. */
+    /** Accessible name, set only when no visible text names the icon. */
     label?: string;
     /** SVG geometry rendered inside the shared icon frame. */
     children: Snippet;

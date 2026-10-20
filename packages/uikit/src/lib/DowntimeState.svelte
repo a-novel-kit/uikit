@@ -12,7 +12,7 @@ their content under a started `DowntimeBanner` instead.
   export interface DowntimeStateProps extends Omit<HTMLAttributes<HTMLDivElement>, "title" | "children"> {
     /** When service is expected back. The state presents it as an estimate. */
     end: Date;
-    /** IANA time zone of the expected end. The runtime default when omitted; set it when rendering on a server. */
+    /** IANA time zone of the expected end; defaults to the runtime's. Set it when rendering on a server. */
     timeZone?: string;
     /** Heading level within the surrounding document. */
     headingLevel?: 1 | 2 | 3 | 4 | 5 | 6;

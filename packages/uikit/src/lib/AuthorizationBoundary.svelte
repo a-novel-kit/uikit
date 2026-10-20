@@ -37,7 +37,7 @@ Within an AuthorizationProvider:
     when?: boolean;
     /** Content instantiated only while access is allowed. */
     children: Snippet;
-    /** Optional replacement for every non-allowed state. Applications own its copy and actions. */
+    /** Replacement for every non-allowed state. Applications own its copy and actions. */
     fallback?: Snippet<[Exclude<AuthorizationStatus, "allowed">]>;
   }
 </script>

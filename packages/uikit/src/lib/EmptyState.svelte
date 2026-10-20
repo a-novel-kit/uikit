@@ -16,7 +16,7 @@ Presents an empty result with an h2 heading and optional guidance or recovery ac
     description?: Content;
     /** Decorative leading graphic, hidden from assistive technology. */
     illustration?: Snippet;
-    /** Optional controls that resolve the empty state. */
+    /** Controls that resolve the empty state. */
     actions?: Snippet;
   }
 </script>

@@ -20,7 +20,7 @@ For a custom trigger, spread the snippet attributes onto a native button.
     disabled?: boolean;
     /** Semantic treatment for destructive actions. */
     tone?: "neutral" | "danger";
-    /** Optional leading graphic. */
+    /** Leading graphic. */
     icon?: Snippet;
     /** Visual shortcut hint; the caller registers the keyboard shortcut. */
     shortcut?: string;
@@ -72,7 +72,7 @@ For a custom trigger, spread the snippet attributes onto a native button.
     items: ActionMenuItem[];
     /** Text in the default trigger; defaults to the translated "Actions". */
     triggerText?: string;
-    /** Optional graphic in the default trigger. */
+    /** Graphic in the default trigger. */
     triggerIcon?: Snippet;
     /** Replaces the default trigger; spread all supplied attributes onto a native button. */
     trigger?: Snippet<[ActionMenuTriggerAttributes]>;

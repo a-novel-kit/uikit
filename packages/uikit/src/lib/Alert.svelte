@@ -18,7 +18,7 @@ Errors use an alert live region; other tones use status. Override `role` for sta
     title?: Content;
     /** Replaces the default status graphic. */
     icon?: Snippet;
-    /** Optional controls rendered after the message. */
+    /** Controls rendered after the message. */
     actions?: Snippet;
   }
 </script>

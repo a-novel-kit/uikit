@@ -8,7 +8,7 @@ Wraps a native table in a keyboard-scrollable region. Supply semantic table sect
 
   /** Props for a responsive native data table. */
   export interface TableProps extends HTMLTableAttributes {
-    /** Optional accessible table caption. */
+    /** Table caption, which also names the scrolling region. */
     caption?: string;
     /** Keeps rows compact for data-dense views. */
     density?: "compact" | "default";
