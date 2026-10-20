@@ -15,7 +15,7 @@ is generic and translated, and only the times vary.
     end: Date;
     /** Whether the maintenance has started, which switches to the in-progress wording and a warning. */
     started?: boolean;
-    /** IANA time zone of the times. The runtime default when omitted; set it when rendering on a server. */
+    /** IANA time zone of the times; defaults to the runtime's. Set it when rendering on a server. */
     timeZone?: string;
   }
 </script>

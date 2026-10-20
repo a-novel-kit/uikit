@@ -14,7 +14,7 @@ Provide a visible label or an accessible name.
 
   /** Props for a native checkbox presented as an immediate on/off switch. */
   export interface SwitchProps extends Omit<HTMLInputAttributes, "type" | "role" | "checked" | "onchange"> {
-    /** Optional switch label. */
+    /** Label content beside the switch. */
     label?: Content;
     /** Supporting content shown below the label. */
     description?: Content;

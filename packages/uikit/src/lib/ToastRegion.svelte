@@ -14,13 +14,13 @@ The caller manages their lifetime and removes dismissed entries; no automatic ti
   export interface ToastMessage {
     /** Stable identifier used when dismissing the message. */
     id: string;
-    /** Optional toast heading. */
+    /** Toast heading. */
     title?: Content;
     /** Primary toast content. */
     message: Content;
     /** Semantic status conveyed by the toast. */
     tone?: FeedbackTone;
-    /** Optional action rendered after the message. */
+    /** Action rendered after the message. */
     action?: Snippet;
     /** Accessible dismiss name; defaults to the translated "Dismiss notification". The button reads the translated "Dismiss". */
     dismissLabel?: string;

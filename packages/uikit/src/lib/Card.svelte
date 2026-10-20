@@ -12,9 +12,9 @@ Groups content on a tokenized surface with optional header and footer snippets.
     surface?: "plain" | "subtle" | "raised" | "overlay";
     /** Internal spacing applied around all card regions. */
     padding?: "none" | "sm" | "md" | "lg";
-    /** Optional leading region. */
+    /** Region rendered before the content. */
     header?: Snippet;
-    /** Optional trailing region. */
+    /** Region rendered after the content. */
     footer?: Snippet;
   }
 </script>
@@ -77,11 +77,6 @@ Groups content on a tokenized surface with optional header and footer snippets.
   .content,
   .footer {
     padding: var(--card-padding);
-  }
-
-  .header + .content,
-  .content + .footer {
-    padding-block-start: var(--card-padding);
   }
 
   @supports (backdrop-filter: blur(0)) or (-webkit-backdrop-filter: blur(0)) {

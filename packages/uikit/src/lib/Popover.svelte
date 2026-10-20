@@ -18,7 +18,7 @@ Spread the trigger snippet attributes onto a native button to connect it to the 
 ```
 -->
 <script lang="ts" module>
-  import type { OpenController as StateController } from "./controllers.svelte";
+  import type { OpenController } from "./controllers.svelte";
 
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
@@ -32,7 +32,7 @@ Spread the trigger snippet attributes onto a native button to connect it to the 
   }
 
   /** External state contract for a popover. */
-  export type PopoverController = StateController;
+  export type PopoverController = OpenController;
 
   /** Props for non-modal content anchored to a composed trigger. */
   export interface PopoverProps extends Omit<HTMLAttributes<HTMLDivElement>, "children" | "popover" | "ontoggle"> {

@@ -30,7 +30,8 @@ maps each device-independent color to the display gamut at paint time under CSS 
 
 Electric blue at `232deg` anchors the palette. Its `52deg` complement is biased by `-10deg` to an
 opposition center at `42deg`, then split by `±26deg`. CSS `calc()` derives pressure at `16deg` and signal
-at `68deg`, producing `144deg / 52deg / 164deg` gaps from the brand hue.
+at `68deg`. Going around the hue circle, brand to pressure spans `144deg`, pressure to signal `52deg`,
+and signal back to brand `164deg`.
 
 The generator samples the Display P3 gamut to calculate peak and per-step chroma coefficients for each
 derived hue. The CSS output stores the brand peak once. Relative OKLCH applies generated lightness and
@@ -73,12 +74,12 @@ requires. That conversion stays outside the token and component APIs.
 
 ## Spacing, shape, and motion
 
-Spacing uses a `0.25rem` base. Blur, radius, control height, border, focus-ring, duration, easing, and
-disabled opacity tokens follow the same compact model. Changing a base preserves the relationships
-between generated values.
+Spacing uses a `0.25rem` base. Blur, radius, control height, border, focus-ring, duration, and
+opacity tokens follow the same compact model. Changing a base preserves the relationships between
+generated values.
 
 ## Type
 
 The font-family tokens map to the faces vendored in [`@a-novel-kit/uikit-fonts`](../fonts). The size
-scale is generated from a `1rem` base and a `0.125rem` step. Heros exposes regular and bold faces, so
-interface emphasis uses `400` or `700`.
+scale multiplies or divides a `1rem` base by powers of the `1.125` density ratio. Heros exposes
+regular and bold faces, so interface emphasis uses `400` or `700`.

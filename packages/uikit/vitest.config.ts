@@ -1,11 +1,11 @@
 import { fileURLToPath } from "node:url";
 
-import { defineConfig } from "vitest/config";
+import { defineProject } from "vitest/config";
 
 import { svelte } from "@sveltejs/vite-plugin-svelte";
 import { svelteTesting } from "@testing-library/svelte/vite";
 
-export default defineConfig({
+export default defineProject({
   // Vitest sets a project's root after svelte() reads it, so without this the plugin starts from
   // the workspace root and leaves Svelte libraries such as @lucide/svelte untransformed.
   root: fileURLToPath(new URL(".", import.meta.url)),

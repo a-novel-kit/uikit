@@ -37,7 +37,7 @@ Within an AuthorizationProvider:
     when?: boolean;
     /** Content instantiated only while access is allowed. */
     children: Snippet;
-    /** Optional replacement for every non-allowed state. Applications own its copy and actions. */
+    /** Replacement for every non-allowed state. Applications own its copy and actions. */
     fallback?: Snippet<[Exclude<AuthorizationStatus, "allowed">]>;
   }
 </script>
@@ -49,15 +49,14 @@ Within an AuthorizationProvider:
 
   let { controller, when = true, children, fallback }: AuthorizationBoundaryProps = $props();
   const inherited = hasAuthorization() ? useAuthorization() : undefined;
-  const active = createAuthorizationController({
-    getStatus: () => {
-      const source = controller ?? inherited;
-      if (!source) throw new Error("AuthorizationBoundary requires a controller or an AuthorizationProvider.");
-      return source.state.status;
-    },
-    when: () => when,
-  });
+  const active = createAuthorizationController({ getStatus: sourceStatus, when: () => when });
   const status = $derived(active.state.status);
+
+  function sourceStatus() {
+    const source = controller ?? inherited;
+    if (!source) throw new Error("AuthorizationBoundary requires a controller or an AuthorizationProvider.");
+    return source.state.status;
+  }
 </script>
 
 <AuthorizationProvider controller={active}>

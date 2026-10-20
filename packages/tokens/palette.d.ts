@@ -39,9 +39,9 @@ export interface ColorSystem {
     readonly values: {
       /** Primary accent contrast ratio. */
       readonly brand: number;
-      /** Destructive accent contrast ratio. */
+      /** Urgency and failure accent contrast ratio. */
       readonly pressure: number;
-      /** Informational accent contrast ratio. */
+      /** Readiness and success accent contrast ratio. */
       readonly signal: number;
     };
   };
@@ -70,9 +70,9 @@ export interface ColorSystem {
     readonly hues: {
       /** Primary interactive hue in degrees. */
       readonly brand: number;
-      /** Destructive accent hue in degrees. */
+      /** Urgency and failure accent hue in degrees. */
       readonly pressure: number;
-      /** Informational accent hue in degrees. */
+      /** Readiness and success accent hue in degrees. */
       readonly signal: number;
     };
     /** Midpoint of the opposing accent hues, in degrees. */
@@ -107,14 +107,14 @@ export interface ColorSystem {
     readonly multipliers: readonly number[];
     /** Family peak coordinates expressed as ratios of the primary accent peak. */
     readonly peakRatios: {
-      /** Destructive-family ratios relative to brand. */
+      /** Pressure-family ratios relative to brand. */
       readonly pressure: {
         /** Peak chroma divided by brand peak chroma. */
         readonly chroma: number;
         /** Peak lightness divided by brand peak lightness. */
         readonly lightness: number;
       };
-      /** Informational-family ratios relative to brand. */
+      /** Signal-family ratios relative to brand. */
       readonly signal: {
         /** Peak chroma divided by brand peak chroma. */
         readonly chroma: number;
@@ -131,14 +131,14 @@ export interface ColorSystem {
         /** OKLCH lightness at the sampled cusp, on the 0–1 scale. */
         readonly lightness: number;
       };
-      /** Destructive accent cusp coordinates. */
+      /** Pressure accent cusp coordinates. */
       readonly pressure: {
         /** Absolute OKLCH chroma at the sampled cusp. */
         readonly chroma: number;
         /** OKLCH lightness at the sampled cusp, on the 0–1 scale. */
         readonly lightness: number;
       };
-      /** Informational accent cusp coordinates. */
+      /** Signal accent cusp coordinates. */
       readonly signal: {
         /** Absolute OKLCH chroma at the sampled cusp. */
         readonly chroma: number;
@@ -167,8 +167,8 @@ export const palette: Readonly<{
   neutral: ColorScale;
   /** Primary interactive accent scale. */
   brand: ColorScale;
-  /** Destructive and high-pressure accent scale. */
+  /** Urgency and failure accent scale. */
   pressure: ColorScale;
-  /** Informational signal accent scale. */
+  /** Readiness and success accent scale. */
   signal: ColorScale;
 }>;

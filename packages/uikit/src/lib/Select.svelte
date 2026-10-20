@@ -221,9 +221,9 @@ The hidden named input submits the selected value. The caller validates required
   <button
     bind:this={triggerElement}
     id={triggerId}
-    class="a-novel-select-trigger {controlSize} {isInvalid ? 'invalid' : ''} {allowDeselect
-      ? 'deselectable'
-      : ''} {className}"
+    class="a-novel-select-trigger {controlSize} {className}"
+    class:invalid={isInvalid}
+    class:deselectable={allowDeselect}
     type="button"
     role="combobox"
     aria-controls={listboxId}

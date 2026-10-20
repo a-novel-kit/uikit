@@ -6,12 +6,9 @@ import { svelte } from "@sveltejs/vite-plugin-svelte";
 import { svelteTesting } from "@testing-library/svelte/vite";
 import { playwright } from "@vitest/browser-playwright";
 
-const root = fileURLToPath(new URL(".", import.meta.url));
-const svelteConfig = fileURLToPath(new URL("./svelte.config.js", import.meta.url));
-
 export default defineProject({
-  root,
-  plugins: [svelte({ configFile: svelteConfig }), svelteTesting()],
+  root: fileURLToPath(new URL(".", import.meta.url)),
+  plugins: [svelte(), svelteTesting()],
   resolve: {
     conditions: ["browser"],
   },

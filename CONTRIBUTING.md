@@ -76,14 +76,13 @@ Before handing off, format the repository and run every gate CI runs:
 ```bash
 pnpm format
 pnpm lint
-pnpm test:unit
-pnpm test:browser
-pnpm test:storybook
+pnpm test:ci
 pnpm build:ci
 ```
 
-The browser and Storybook suites need Chromium. `pnpm exec playwright install chromium` downloads it,
-and CI runs them in the Playwright container image.
+`pnpm test:ci` runs the unit, browser, and Storybook suites in turn. The browser and Storybook suites
+need Chromium. `pnpm exec playwright install chromium` downloads it, and CI runs them in the Playwright
+container image.
 
 Storybook accessibility violations fail `pnpm test:storybook`. Fix the violation, and suppress a rule
 only for a documented component constraint.

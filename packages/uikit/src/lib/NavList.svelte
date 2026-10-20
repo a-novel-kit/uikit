@@ -17,9 +17,9 @@ URLs and the current destination are supplied by the caller.
     current?: boolean;
     /** Prevents following the destination. */
     disabled?: boolean;
-    /** Optional compact status or count. */
+    /** Compact status or count shown after the label. */
     badge?: string | number;
-    /** Optional leading graphic. */
+    /** Leading graphic. */
     icon?: Snippet;
   }
 

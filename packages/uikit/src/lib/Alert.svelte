@@ -18,7 +18,7 @@ Errors use an alert live region; other tones use status. Override `role` for sta
     title?: Content;
     /** Replaces the default status graphic. */
     icon?: Snippet;
-    /** Optional controls rendered after the message. */
+    /** Controls rendered after the message. */
     actions?: Snippet;
   }
 </script>
@@ -28,11 +28,9 @@ Errors use an alert live region; other tones use status. Override `role` for sta
   import FeedbackIcon from "./internal/FeedbackIcon.svelte";
 
   let { tone = "info", title, icon, actions, class: className = "", children, ...rest }: AlertProps = $props();
-
-  const liveRole = $derived(tone === "error" ? "alert" : "status");
 </script>
 
-<div class="alert {tone} {className}" role={liveRole} {...rest}>
+<div class="alert {tone} {className}" role={tone === "error" ? "alert" : "status"} {...rest}>
   <FeedbackIcon {tone} size="sm" children={icon} />
   <div class="content">
     {#if title}<strong><RenderContent content={title} /></strong>{/if}

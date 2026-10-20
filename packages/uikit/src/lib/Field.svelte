@@ -35,11 +35,11 @@ so its accessible name, description, required state, and invalid state stay conn
 
   /** Props for composing a label, control, hint, and validation error. */
   export interface FieldProps extends Omit<HTMLAttributes<HTMLDivElement>, "children"> {
-    /** Optional control label. */
+    /** Visible label for the control. */
     label?: Content;
     /** Supporting content rendered below the control, before any error. */
     hint?: Content;
-    /** Optional validation message. */
+    /** Validation message; its presence marks the control invalid. */
     error?: Content;
     /** Marks the composed control as required. */
     required?: boolean;
@@ -68,7 +68,12 @@ so its accessible name, description, required state, and invalid state stay conn
 
   const hintId = $derived(hint ? `${controlId}-hint` : undefined);
   const errorId = $derived(error ? `${controlId}-error` : undefined);
-  const describedBy = $derived([hintId, errorId].filter(Boolean).join(" ") || undefined);
+  const controlProps = $derived<FieldControlProps>({
+    id: controlId,
+    "aria-describedby": [hintId, errorId].filter(Boolean).join(" ") || undefined,
+    "aria-invalid": error ? true : undefined,
+    required: required ? true : undefined,
+  });
 </script>
 
 <div class="field {className}" {...rest}>
@@ -78,12 +83,7 @@ so its accessible name, description, required state, and invalid state stay conn
       {#if required}<span class="required" aria-hidden="true">*</span>{/if}
     </label>
   {/if}
-  {@render children({
-    id: controlId,
-    "aria-describedby": describedBy,
-    "aria-invalid": error ? true : undefined,
-    required: required ? true : undefined,
-  })}
+  {@render children(controlProps)}
   {#if hint}<div id={hintId} class="hint"><RenderContent content={hint} /></div>{/if}
   {#if error}<div id={errorId} class="error"><RenderContent content={error} /></div>{/if}
 </div>

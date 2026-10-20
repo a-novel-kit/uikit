@@ -4,7 +4,7 @@ Renders a keyboard-navigable popup of actions with an external open controller.
 For a custom trigger, spread the snippet attributes onto a native button.
 -->
 <script lang="ts" module>
-  import type { OpenController as StateController } from "./controllers.svelte";
+  import type { OpenController } from "./controllers.svelte";
 
   import type { Snippet } from "svelte";
 
@@ -20,7 +20,7 @@ For a custom trigger, spread the snippet attributes onto a native button.
     disabled?: boolean;
     /** Semantic treatment for destructive actions. */
     tone?: "neutral" | "danger";
-    /** Optional leading graphic. */
+    /** Leading graphic. */
     icon?: Snippet;
     /** Visual shortcut hint; the caller registers the keyboard shortcut. */
     shortcut?: string;
@@ -62,7 +62,7 @@ For a custom trigger, spread the snippet attributes onto a native button.
   }
 
   /** External state contract for an action menu. */
-  export type ActionMenuController = StateController;
+  export type ActionMenuController = OpenController;
 
   /** Props for a composed menu of contextual actions. */
   export interface ActionMenuProps {
@@ -72,7 +72,7 @@ For a custom trigger, spread the snippet attributes onto a native button.
     items: ActionMenuItem[];
     /** Text in the default trigger; defaults to the translated "Actions". */
     triggerText?: string;
-    /** Optional graphic in the default trigger. */
+    /** Graphic in the default trigger. */
     triggerIcon?: Snippet;
     /** Replaces the default trigger; spread all supplied attributes onto a native button. */
     trigger?: Snippet<[ActionMenuTriggerAttributes]>;
@@ -253,20 +253,7 @@ For a custom trigger, spread the snippet attributes onto a native button.
 {#if trigger}
   {@render trigger(triggerAttributes)}
 {:else}
-  <button
-    bind:this={triggerElement}
-    id={triggerId}
-    class="a-novel-menu-trigger {className}"
-    type="button"
-    aria-controls={menuId}
-    aria-expanded={controller.state.open}
-    aria-haspopup="menu"
-    aria-label={label}
-    data-state={controller.state.open ? "open" : "closed"}
-    {disabled}
-    onclick={handleTriggerClick}
-    onkeydown={handleTriggerKeyDown}
-  >
+  <button bind:this={triggerElement} class="a-novel-menu-trigger {className}" type="button" {...triggerAttributes}>
     {#if triggerIcon}<span class="trigger-icon" aria-hidden="true">{@render triggerIcon()}</span>{/if}
     {#if triggerText}<span>{triggerText}</span>{/if}
   </button>

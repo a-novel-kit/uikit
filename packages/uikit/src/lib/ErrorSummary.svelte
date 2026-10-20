@@ -22,7 +22,7 @@ Mount after validation and enable `focusOnMount` when focus should move to the s
   export interface ErrorSummaryProps extends Omit<HTMLAttributes<HTMLElement>, "title" | "children"> {
     /** Summary heading; defaults to the translated "There is a problem". */
     title?: Content;
-    /** Optional guidance shown before the error list. */
+    /** Guidance shown before the error list. */
     description?: Content;
     /** Validation problems linked to their controls. */
     errors: readonly ErrorSummaryItem[];

@@ -5,7 +5,7 @@ Spread all trigger attributes onto that element; an open controller owns visibil
 -->
 <script lang="ts" module>
   import type { Content } from "./content";
-  import type { OpenController as StateController } from "./controllers.svelte";
+  import type { OpenController } from "./controllers.svelte";
 
   import type { Snippet } from "svelte";
 
@@ -28,7 +28,7 @@ Spread all trigger attributes onto that element; an open controller owns visibil
   }
 
   /** External state contract for a tooltip. */
-  export type TooltipController = StateController;
+  export type TooltipController = OpenController;
 
   /** Props for a short description attached to a trigger. */
   export interface TooltipProps {

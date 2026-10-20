@@ -9,15 +9,12 @@ import type { Preview } from "@storybook/svelte-vite";
 import { SyntaxHighlighter } from "storybook/internal/components";
 
 // Storybook has no Svelte grammar; reuse markup and its embedded script/style highlighting.
-SyntaxHighlighter.registerLanguage(
-  "svelte",
-  Object.assign(
-    (highlighter: { alias: (language: string, alias: string) => void }) => highlighter.alias("markup", "svelte"),
-    {
-      displayName: "svelte",
-    }
-  )
+const svelteGrammar = Object.assign(
+  (highlighter: { alias: (language: string, alias: string) => void }) => highlighter.alias("markup", "svelte"),
+  { displayName: "svelte" }
 );
+
+SyntaxHighlighter.registerLanguage("svelte", svelteGrammar);
 
 /**
  * Shared dark preview with token/font styles, responsive viewports, and failing accessibility checks.

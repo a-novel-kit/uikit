@@ -57,18 +57,16 @@ Pass `href` for navigation: it renders a native link with the same appearance.
     children,
     ...rest
   }: ButtonProps | ButtonLinkProps = $props();
+
+  const classes = $derived(`button ${variant} ${tone} ${size} ${square ? "square" : ""} ${className}`);
 </script>
 
 {#if rest.href !== undefined}
-  <a class="button {variant} {tone} {size} {square ? 'square' : ''} {className}" {...rest}>
+  <a class={classes} {...rest}>
     {@render children?.()}
   </a>
 {:else}
-  <button
-    {...rest}
-    type={rest.type ?? "button"}
-    class="button {variant} {tone} {size} {square ? 'square' : ''} {className}"
-  >
+  <button {...rest} type={rest.type ?? "button"} class={classes}>
     {@render children?.()}
   </button>
 {/if}
@@ -142,7 +140,6 @@ Pass `href` for navigation: it renders a native link with the same appearance.
     outline-offset: var(--focus-ring-offset);
   }
 
-  /* Logical padding keeps the control shape consistent in right-to-left layouts. */
   .sm {
     padding-inline: var(--space-3);
     padding-block: var(--space-1-5);

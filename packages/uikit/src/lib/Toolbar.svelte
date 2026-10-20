@@ -47,10 +47,7 @@ Compose ToolbarButton, ToolbarToggleButton, and ToolbarLink inside it.
 
   function syncTabStops(preferred?: HTMLElement) {
     const items = getEnabledCompositeItems(toolbarElement);
-    const current =
-      (preferred && items.includes(preferred) ? preferred : undefined) ??
-      items.find((item) => item.tabIndex === 0) ??
-      items[0];
+    const current = items.find((item) => item === preferred) ?? items.find((item) => item.tabIndex === 0) ?? items[0];
 
     for (const item of items) item.tabIndex = item === current ? 0 : -1;
   }

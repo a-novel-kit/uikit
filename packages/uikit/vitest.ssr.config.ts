@@ -6,7 +6,7 @@ import { svelte } from "@sveltejs/vite-plugin-svelte";
 
 export default defineProject({
   root: fileURLToPath(new URL(".", import.meta.url)),
-  plugins: [svelte({ configFile: fileURLToPath(new URL("./svelte.config.js", import.meta.url)) })],
+  plugins: [svelte()],
   test: {
     name: "uikit-ssr",
     environment: "node",

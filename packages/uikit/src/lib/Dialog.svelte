@@ -43,7 +43,7 @@ An initially open dialog is visible without JavaScript; modal focus and backdrop
     description?: Content;
     /** Controls beside the heading, such as a localized close button. */
     headerActions?: Snippet;
-    /** Optional controls rendered after the dialog body. */
+    /** Controls rendered after the dialog body. */
     actions?: Snippet;
     /** Centered by default; fullscreen fills the viewport with a scrollable body. */
     presentation?: "centered" | "fullscreen";
