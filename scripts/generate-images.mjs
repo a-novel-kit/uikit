@@ -67,9 +67,20 @@ async function assertSource(sourcePath, preset) {
   );
 }
 
-/** Renders every logo, preset, variant, and size, keyed by output path. */
+/** Renders one raw export at one size. */
+function render(sourcePath, size) {
+  return sharp(sourcePath)
+    .resize({ ...size, kernel: sharp.kernel.lanczos3, withoutEnlargement: true })
+    .png({ adaptiveFiltering: true, compressionLevel: 9 })
+    .toBuffer();
+}
+
+/**
+ * Renders every logo, preset, variant, and size, keyed by output path. The renders run in parallel,
+ * bounded by the libuv thread pool that sharp queues them on.
+ */
 async function generateImages() {
-  const outputs = new Map();
+  const renders = [];
 
   for (const logo of logos) {
     for (const [preset, { sizes, source }] of Object.entries(presets)) {
@@ -79,18 +90,14 @@ async function generateImages() {
 
         for (const size of sizes) {
           const target = resolve(outputRoot, preset, outputDirectory(preset, size), `${logo}-${preset}${suffix}.png`);
-          const contents = await sharp(sourcePath)
-            .resize({ ...size, kernel: sharp.kernel.lanczos3, withoutEnlargement: true })
-            .png({ adaptiveFiltering: true, compressionLevel: 9 })
-            .toBuffer();
-
-          outputs.set(target, contents);
+          renders.push({ target, sourcePath, size });
         }
       }
     }
   }
 
-  return outputs;
+  const contents = await Promise.all(renders.map(({ sourcePath, size }) => render(sourcePath, size)));
+  return new Map(renders.map(({ target }, index) => [target, contents[index]]));
 }
 
 const outputs = await generateImages();
