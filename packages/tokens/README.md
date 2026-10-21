@@ -34,8 +34,9 @@ at `68deg`. Going around the hue circle, brand to pressure spans `144deg`, press
 and signal back to brand `164deg`.
 
 The generator samples the Display P3 gamut to calculate peak and per-step chroma coefficients for each
-derived hue. The CSS output stores the brand peak once. Relative OKLCH applies generated lightness and
-chroma factors to pressure and signal, preserving the approved vividness without authored RGB values.
+derived hue. The CSS output stores the brand peak once. Relative OKLCH derives pressure and signal from
+it through generated lightness and chroma factors. Both keep the approved vividness with no authored
+RGB value.
 
 ```css
 --color-hue-pressure: calc(
@@ -57,8 +58,8 @@ early steps near black, then accelerate into the vivid and readable half of each
 
 Semantic surfaces and borders mix the cusp-derived peaks into the neutral field. Their strengths derive
 from `--color-mix-base: 6.25%`: surfaces use two units and borders use eight, nine, or ten units.
-Graphic grid, trace, glow, and gradient tokens use the same palette and mix scale; effects remain
-separate from component meaning and foreground contrast.
+Graphic grid, trace, glow, and gradient tokens use the same palette and mix scale. Effects carry no
+component meaning and play no part in foreground contrast.
 
 Components use semantic aliases such as `--color-action-primary` and `--color-feedback-error-text`.
 Brand carries agency, pressure carries urgency and failure, and signal carries readiness and successful
