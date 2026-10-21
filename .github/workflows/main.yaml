@@ -17,7 +17,7 @@ jobs:
       contents: read
       packages: read
     steps:
-      - uses: a-novel-kit/workflows/node-actions/setup-node@v1.67.0
+      - uses: a-novel-kit/workflows/node-actions/setup-node@v1.67.1
         id: setup
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -46,7 +46,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: a-novel-kit/workflows/security-actions/lint-semgrep@v1.67.0
+      - uses: a-novel-kit/workflows/security-actions/lint-semgrep@v1.67.1
         with:
           ruleset: none
           # renovate: datasource=docker depName=semgrep/semgrep
@@ -60,7 +60,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: a-novel-kit/workflows/security-actions/scan-secrets@v1.67.0
+      - uses: a-novel-kit/workflows/security-actions/scan-secrets@v1.67.1
         with:
           # renovate: datasource=github-releases depName=gitleaks/gitleaks
           version: "8.30.1"
@@ -73,7 +73,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: a-novel-kit/workflows/security-actions/lint-workflows@v1.67.0
+      - uses: a-novel-kit/workflows/security-actions/lint-workflows@v1.67.1
         with:
           # renovate: datasource=docker depName=ghcr.io/zizmorcore/zizmor
           version: "1.31.1"
@@ -84,7 +84,7 @@ jobs:
       contents: read
       packages: read
     steps:
-      - uses: a-novel-kit/workflows/node-actions/test-node@v1.67.0
+      - uses: a-novel-kit/workflows/node-actions/test-node@v1.67.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           test_action: "test:unit"
@@ -105,7 +105,7 @@ jobs:
       statuses: write
       id-token: write
     steps:
-      - uses: a-novel-kit/workflows/node-actions/test-playwright@v1.67.0
+      - uses: a-novel-kit/workflows/node-actions/test-playwright@v1.67.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           component_test_action: "test:browser"
@@ -145,7 +145,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: a-novel-kit/workflows/generic-actions/codecov@v1.67.0
+      - uses: a-novel-kit/workflows/generic-actions/codecov@v1.67.1
         with:
           codecov_token: ${{ secrets.CODECOV_TOKEN }}
 
@@ -155,7 +155,7 @@ jobs:
       contents: read
       packages: read
     steps:
-      - uses: a-novel-kit/workflows/node-actions/build-node@v1.67.0
+      - uses: a-novel-kit/workflows/node-actions/build-node@v1.67.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           build_action: "build:ci"
