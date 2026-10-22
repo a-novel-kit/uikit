@@ -135,7 +135,8 @@ For a custom trigger, spread the snippet attributes onto a native button.
     onkeydown: handleTriggerKeyDown,
   });
 
-  $effect(() => {
+  // Runs before the DOM update, so the surface renders at the anchor's width in the flush that opens it.
+  $effect.pre(() => {
     if (controller.state.open && triggerElement) anchorWidth = triggerElement.getBoundingClientRect().width + "px";
   });
 
@@ -144,11 +145,6 @@ For a custom trigger, spread the snippet attributes onto a native button.
   });
 
   onDestroy(typeahead.dispose);
-
-  function rememberTrigger(element: HTMLElement) {
-    triggerElement = element;
-    anchorWidth = element.getBoundingClientRect().width + "px";
-  }
 
   function menuItems() {
     return menuElement ? getEnabledCompositeItems(menuElement, itemSelector) : [];
@@ -164,7 +160,8 @@ For a custom trigger, spread the snippet attributes onto a native button.
   async function openMenu(source: HTMLElement, boundary: "first" | "last") {
     if (disabled) return;
 
-    rememberTrigger(source);
+    // A composed trigger has no binding, so the opening event supplies the anchor.
+    triggerElement = source;
     controller.open();
     if (!controller.state.open) return;
     await tick();
