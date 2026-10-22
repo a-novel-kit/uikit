@@ -17,7 +17,6 @@ Each package owns one layer of the system:
 - `packages/tokens` owns every design value. Components read semantic tokens, never primitive palette
   steps.
 - `packages/fonts` owns the font files, their declarations, and their licenses.
-- `packages/images` owns the brand logos and their source artwork.
 - `packages/icons` owns the canvas for custom glyphs. Standard icons come from `@lucide/svelte`.
 - `packages/storybook-config` is the Storybook preset that the workbench and the applications share.
 - `packages/storybook` is the private workbench that documents every component and foundation.
@@ -55,11 +54,10 @@ uikit barrel, and dry-runs the publish.
 
 ## Generated files
 
-The color tokens, brand images, and vendored fonts are generated from sources in their package.
-Change the source, never the generated values, and regenerate as the
-[tokens](./packages/tokens/README.md#color), [images](./packages/images/README.md#reproducing-the-images),
-and [fonts](./packages/fonts/README.md#reproducing-the-vendored-fonts) READMEs show. `pnpm lint` fails
-when a generated color or image file drifts from its source. Review both bytes and licensing whenever
+The color tokens and vendored fonts are generated from sources in their package. Change the source,
+never the generated values, and regenerate as the [tokens](./packages/tokens/README.md#color) and
+[fonts](./packages/fonts/README.md#reproducing-the-vendored-fonts) READMEs show. `pnpm lint` fails
+when a generated color file drifts from its source. Review both bytes and licensing whenever
 the font source list changes.
 
 ## Working on a component

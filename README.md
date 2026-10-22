@@ -66,9 +66,10 @@ Then import components from the package root:
 | [`@a-novel-kit/uikit`](./packages/uikit)                      | The Svelte components, their default controllers, and their public types.      |
 | [`@a-novel-kit/uikit-tokens`](./packages/tokens)              | The design tokens that components and applications style with.                 |
 | [`@a-novel-kit/uikit-fonts`](./packages/fonts)                | The self-hosted font faces that the typography tokens name.                    |
-| [`@a-novel-kit/uikit-images`](./packages/images)              | The brand logos, as responsive banners and square application icons.           |
 | [`@a-novel-kit/uikit-icons`](./packages/icons)                | The shared canvas for custom icons. Standard icons come from `@lucide/svelte`. |
 | [`@a-novel-kit/uikit-storybook`](./packages/storybook-config) | The Storybook preset and theme for A-Novel Svelte projects.                    |
+
+The brand logos ship from [A-Novel UI assets](https://github.com/a-novel-kit/ui-assets).
 
 ## Contributing
 
