@@ -101,7 +101,8 @@ The hidden named input submits the selected value. The caller validates required
   const selectedOption = $derived(selectedIndex >= 0 ? options[selectedIndex] : undefined);
   const isInvalid = $derived(resolveInvalidState(invalid, ariaInvalid));
 
-  $effect(() => {
+  // Runs before the DOM update, so the surface renders at the anchor's width in the flush that opens it.
+  $effect.pre(() => {
     if (controller.state.open && triggerElement) anchorWidth = triggerElement.getBoundingClientRect().width + "px";
   });
 
@@ -113,11 +114,6 @@ The hidden named input submits the selected value. The caller validates required
 
   function optionId(index: number) {
     return componentId + "-option-" + index;
-  }
-
-  function rememberTrigger(element: HTMLButtonElement) {
-    triggerElement = element;
-    anchorWidth = element.getBoundingClientRect().width + "px";
   }
 
   function scrollActiveOption() {
@@ -132,10 +128,9 @@ The hidden named input submits the selected value. The caller validates required
   }
 
   /** Opens on the selected option, or on the first or last enabled option when `boundary` is set. */
-  function openListbox(element: HTMLButtonElement, boundary?: "first" | "last") {
+  function openListbox(boundary?: "first" | "last") {
     if (disabled) return;
 
-    rememberTrigger(element);
     const startOnSelection = boundary === undefined && selectedIndex >= 0 && !options[selectedIndex].disabled;
     setActiveIndex(startOnSelection ? selectedIndex : findEnabledBoundary(options, boundary ?? "first"));
     controller.open();
@@ -160,9 +155,9 @@ The hidden named input submits the selected value. The caller validates required
     closeListbox(true);
   }
 
-  function handleTriggerClick(event: MouseEvent) {
+  function handleTriggerClick() {
     if (controller.state.open) closeListbox();
-    else openListbox(event.currentTarget as HTMLButtonElement);
+    else openListbox();
   }
 
   /** Highlights the matching option while open, and selects it while closed. */
@@ -178,11 +173,10 @@ The hidden named input submits the selected value. The caller validates required
 
   function handleTriggerKeyDown(event: KeyboardEvent) {
     if (disabled) return;
-    const trigger = event.currentTarget as HTMLButtonElement;
 
     if (event.key === "ArrowDown" || event.key === "ArrowUp") {
       event.preventDefault();
-      if (!controller.state.open) openListbox(trigger, event.key === "ArrowDown" ? undefined : "last");
+      if (!controller.state.open) openListbox(event.key === "ArrowDown" ? undefined : "last");
       else moveActive(event.key === "ArrowDown" ? 1 : -1);
       return;
     }
@@ -196,7 +190,7 @@ The hidden named input submits the selected value. The caller validates required
 
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
-      if (!controller.state.open) openListbox(trigger);
+      if (!controller.state.open) openListbox();
       else if (activeIndex >= 0 && options[activeIndex]) selectOption(options[activeIndex]);
       return;
     }

@@ -100,7 +100,8 @@ The hidden named input submits the selected value. The caller validates required
     return query === "" ? options : options.filter((option) => option.label.toLocaleLowerCase().includes(query));
   });
 
-  $effect(() => {
+  // Runs before the DOM update, so the surface renders at the anchor's width in the flush that opens it.
+  $effect.pre(() => {
     if (controller.state.open && inputElement) anchorWidth = inputElement.getBoundingClientRect().width + "px";
   });
 
@@ -118,11 +119,6 @@ The hidden named input submits the selected value. The caller validates required
     return componentId + "-option-" + index;
   }
 
-  function rememberAnchor() {
-    if (!inputElement) return;
-    anchorWidth = inputElement.getBoundingClientRect().width + "px";
-  }
-
   function scrollActiveOption() {
     if (activeIndex < 0) return;
     const option = listboxElement?.querySelector<HTMLElement>('[data-option-index="' + activeIndex + '"]');
@@ -138,7 +134,6 @@ The hidden named input submits the selected value. The caller validates required
   function openListbox() {
     if (disabled) return;
 
-    rememberAnchor();
     const selectedIndex = filteredOptions.findIndex((option) => option.value === controller.state.value);
     const startOnSelection = selectedIndex >= 0 && !filteredOptions[selectedIndex].disabled;
     setActiveIndex(startOnSelection ? selectedIndex : findEnabledBoundary(filteredOptions, "first"));
@@ -155,7 +150,6 @@ The hidden named input submits the selected value. The caller validates required
   function ensureOpenForInput() {
     if (controller.state.open || disabled) return;
 
-    rememberAnchor();
     controller.open();
   }
 
