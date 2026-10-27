@@ -15,6 +15,7 @@ export type { AuthorizationProviderProps } from "./AuthorizationProvider.svelte"
 export {
   createCheckedController,
   createComboboxController,
+  createConsentController,
   createOpenController,
   createPressedController,
   createSelectController,
@@ -26,6 +27,9 @@ export type {
   CheckedState,
   ComboboxControllerOptions,
   ComboboxState,
+  ConsentChoice,
+  ConsentController,
+  ConsentControllerOptions,
   OpenController,
   OpenControllerOptions,
   OpenState,
@@ -72,6 +76,8 @@ export { default as Checkbox } from "./Checkbox.svelte";
 export type { CheckboxController, CheckboxProps } from "./Checkbox.svelte";
 export { default as Combobox } from "./Combobox.svelte";
 export type { ComboboxController, ComboboxOption, ComboboxProps } from "./Combobox.svelte";
+export { default as ConsentBanner } from "./ConsentBanner.svelte";
+export type { ConsentBannerProps } from "./ConsentBanner.svelte";
 export { default as Container } from "./Container.svelte";
 export type { ContainerProps } from "./Container.svelte";
 export { default as DescriptionList } from "./DescriptionList.svelte";

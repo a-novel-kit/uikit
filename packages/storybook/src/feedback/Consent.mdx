@@ -1,0 +1,44 @@
+import * as Stories from "./Consent.stories.svelte";
+
+import { ConsentBanner } from "@a-novel-kit/uikit";
+import { Meta, ResponsiveStoryPair } from "@a-novel-kit/uikit-storybook";
+
+import { ArgTypes } from "@storybook/addon-docs/blocks";
+
+<Meta of={Stories} />
+
+# Consent request
+
+Ask visitors whether they accept an optional processing, such as telemetry, without blocking the page.
+
+<ResponsiveStoryPair desktop={Stories.Request} mobile={Stories.Request} meta={Stories} />
+
+## Usage
+
+`ConsentBanner` floats over the page's lower end corner, beside notifications, until the visitor answers. Accept and
+decline carry the same weight, and either answer hides it. The application owns the wording: name
+the processing in `title`, explain it in the content, and link the policy that details it. Open the
+banner again from a lasting link, such as the footer's privacy choices, so the visitor can change
+their answer as easily as they gave it.
+
+```svelte
+<script lang="ts">
+  import { ConsentBanner, Link, createConsentController } from "@a-novel-kit/uikit";
+
+  const consent = createConsentController({ initialOpen: !answered, onChoice: save });
+</script>
+
+<ConsentBanner controller={consent} title="Error and performance reports">
+  Your browser sends us a report when a page fails or loads slowly.
+  <Link href="/privacy">Privacy policy</Link>
+</ConsentBanner>
+```
+
+## Accessibility
+
+The banner is a region named by its title, placed where the application renders it in the reading
+order. It never takes focus or blocks the page, so the visitor can answer whenever they choose.
+
+## API
+
+<ArgTypes of={ConsentBanner} />

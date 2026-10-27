@@ -10,6 +10,10 @@
     "placeholder": "Rechercher une option",
     "toggle": "Afficher les options"
   },
+  "consentBanner": {
+    "accept": "Accepter",
+    "decline": "Refuser"
+  },
   "downtimeBanner": {
     "scheduled": {
       "message": "Certains services peuvent être indisponibles. Période prévue: {{when}}.",
