@@ -68,6 +68,7 @@ supplies the wording and its policy link; the banner supplies the translated ans
     position: fixed;
     gap: var(--space-3);
     z-index: var(--layer-toast);
+    box-sizing: border-box;
     inset-block-end: var(--space-4);
     inset-inline-end: var(--space-4);
     box-shadow: var(--shadow-lg);
