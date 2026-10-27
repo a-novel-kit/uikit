@@ -57,6 +57,60 @@ export function createOpenController({
   };
 }
 
+/** The visitor's answer to a consent request. */
+export type ConsentChoice = "accepted" | "declined";
+
+/** Pure state transitions for a consent request. Custom controllers may reject a request. */
+export interface ConsentController {
+  /** State rendered by the component. */
+  readonly state: OpenState;
+  /** Shows the request again, so the visitor can change their answer. */
+  open(): void;
+  /** Records consent and hides the request. */
+  accept(): void;
+  /** Records the refusal and hides the request. */
+  decline(): void;
+}
+
+/** Configuration for the default consent controller. */
+export interface ConsentControllerOptions {
+  /** Visibility when created; defaults to false. Open it once the visitor has not answered. */
+  initialOpen?: boolean;
+  /** Runs once the visitor answers. */
+  onChoice?: (choice: ConsentChoice) => void;
+}
+
+/**
+ * Creates local reactive state for a consent request. Each answer hides the request and notifies,
+ * and the request opens again on demand.
+ *
+ * @example
+ * ```ts
+ * import { createConsentController } from "@a-novel-kit/uikit";
+ * const consent = createConsentController({ initialOpen: true, onChoice: (choice) => save(choice) });
+ * ```
+ */
+export function createConsentController({
+  initialOpen = false,
+  onChoice,
+}: ConsentControllerOptions = {}): ConsentController {
+  const visibility = createOpenController({ initialOpen });
+
+  function answer(choice: ConsentChoice) {
+    visibility.close();
+    onChoice?.(choice);
+  }
+
+  return {
+    get state() {
+      return visibility.state;
+    },
+    open: visibility.open,
+    accept: () => answer("accepted"),
+    decline: () => answer("declined"),
+  };
+}
+
 /** State managed for a binary selection control. */
 export interface CheckedState {
   /** Whether the control is selected. */

@@ -10,6 +10,10 @@
     "placeholder": "Search options",
     "toggle": "Show options"
   },
+  "consentBanner": {
+    "accept": "Accept",
+    "decline": "Decline"
+  },
   "downtimeBanner": {
     "scheduled": {
       "message": "Some services may be unavailable. Expected: {{when}}.",

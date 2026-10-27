@@ -1,6 +1,7 @@
 import type {
   CheckedController,
   ComboboxController,
+  ConsentController,
   OpenController,
   PressedController,
   SelectController,
@@ -12,6 +13,11 @@ const ignore = () => {};
 /** Pins overlay visibility while preserving native focus and pointer behavior. */
 export function fixedOpen(open = false): OpenController {
   return { state: { open }, open: ignore, close: ignore, toggle: ignore };
+}
+
+/** Pins a consent request's visibility; answers leave it as it is. */
+export function fixedConsent(open = true): ConsentController {
+  return { state: { open }, open: ignore, accept: ignore, decline: ignore };
 }
 
 /** Pins a checkbox or switch in its review state. */
