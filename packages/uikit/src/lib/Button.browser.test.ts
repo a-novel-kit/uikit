@@ -7,6 +7,7 @@ import { createRawSnippet } from "svelte";
 import { beforeEach, describe, expect, it } from "vitest";
 import { userEvent } from "vitest/browser";
 
+import "@a-novel-kit/uikit-fonts/fonts.css";
 import "@a-novel-kit/uikit-tokens/tokens.css";
 
 import { render } from "@testing-library/svelte";
@@ -103,5 +104,26 @@ describe("low-emphasis action feedback", () => {
     await expectFeedback(link, "--color-mix-2");
     await rerender({ variant: "inline" });
     await expect.poll(() => getComputedStyle(link).backgroundColor).toBe(inlineBackground);
+  });
+});
+
+describe("label centering", () => {
+  it.each([
+    ["normal", 400],
+    ["normal", 700],
+    ["italic", 400],
+    ["italic", 700],
+  ])("sets the interface face's %s %i capitals mid-line", async (style, weight) => {
+    const font = `${style} ${weight} 100px "TeX Gyre Heros"`;
+    await document.fonts.load(font);
+    const context = document.createElement("canvas").getContext("2d")!;
+    context.font = font;
+    const metrics = context.measureText("H");
+
+    // A flex button centres the line box, so its label's capitals sit mid-line once ascent minus descent
+    // matches their height. The 2% margin centres them after browsers snap the baseline to a pixel.
+    const margin = metrics.fontBoundingBoxAscent - metrics.fontBoundingBoxDescent - metrics.actualBoundingBoxAscent;
+    expect(margin).toBeGreaterThanOrEqual(1);
+    expect(margin).toBeLessThanOrEqual(3);
   });
 });
