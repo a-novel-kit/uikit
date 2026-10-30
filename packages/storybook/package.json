@@ -11,7 +11,7 @@
     "typecheck": "svelte-check --tsconfig ./tsconfig.json"
   },
   "dependencies": {
-    "@a-novel-kit/ui-images": "0.1.0",
+    "@a-novel-kit/ui-images": "0.2.0",
     "@a-novel-kit/uikit": "workspace:*",
     "@a-novel-kit/uikit-fonts": "workspace:*",
     "@a-novel-kit/uikit-icons": "workspace:*",
