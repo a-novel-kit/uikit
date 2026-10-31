@@ -176,7 +176,12 @@
     var(--base-pressure) var(--color-mix-1),
     var(--color-control-surface)
   );
-  --color-control-surface-disabled: var(--color-neutral-3);
+  /* A disabled field fades toward whatever surface holds it. */
+  --color-control-surface-disabled: color-mix(
+    in oklab,
+    var(--color-control-surface) var(--color-mix-6),
+    transparent
+  );
   --color-control-border: var(--color-border-default);
   --color-control-border-hover: var(--color-border-strong);
   --color-control-border-focus: var(--base-brand);
@@ -238,7 +243,7 @@
     var(--base-brand) var(--color-mix-8),
     var(--color-surface-subtle)
   );
-  --color-action-disabled-surface: var(--color-control-surface-disabled);
+  --color-action-disabled-surface: var(--color-neutral-3);
   --color-action-disabled-border: var(--color-border-subtle);
   --color-action-disabled-text: var(--color-text-disabled);
 
