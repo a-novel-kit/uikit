@@ -36,6 +36,9 @@
     "next": "Suivant",
     "previous": "Précédent"
   },
+  "passwordInput": {
+    "show": "Afficher le mot de passe"
+  },
   "select": {
     "placeholder": "Sélectionnez une option"
   },
