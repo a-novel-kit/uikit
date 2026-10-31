@@ -124,6 +124,8 @@ export { default as Pagination } from "./Pagination.svelte";
 export type { PaginationProps } from "./Pagination.svelte";
 export { default as PanelHeader } from "./PanelHeader.svelte";
 export type { PanelHeaderProps } from "./PanelHeader.svelte";
+export { default as PasswordInput } from "./PasswordInput.svelte";
+export type { PasswordInputController, PasswordInputProps } from "./PasswordInput.svelte";
 export { default as Popover } from "./Popover.svelte";
 export type { PopoverController, PopoverProps, PopoverTriggerAttributes } from "./Popover.svelte";
 export { default as Progress } from "./Progress.svelte";

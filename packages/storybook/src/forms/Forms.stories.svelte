@@ -10,6 +10,7 @@
     FormActions,
     Grid,
     Input,
+    PasswordInput,
     RadioGroup,
     Select,
     Slider,
@@ -64,7 +65,7 @@
 </script>
 
 <script lang="ts">
-  import { fixedChecked, fixedCombobox, fixedSelect, fixedValue } from "../controllers";
+  import { fixedChecked, fixedCombobox, fixedPressed, fixedSelect, fixedValue } from "../controllers";
 
   type Visibility = (typeof visibilityOptions)[number]["value"];
   type Language = (typeof languageOptions)[number]["value"];
@@ -79,6 +80,8 @@
   const scaleController = fixedValue(72);
   const languageController = fixedCombobox<Language>("en", true);
   const compactNavigationController = fixedChecked();
+  const hiddenPasswordController = fixedPressed();
+  const shownPasswordController = fixedPressed(true);
 </script>
 
 <Story name="Text fields" asChild>
@@ -181,6 +184,31 @@
             <span class="count">0 / 500</span>
           {/snippet}
         </Textarea>
+      {/snippet}
+    </Field>
+  </div>
+</Story>
+
+<Story name="Passwords" asChild>
+  <div class="adornment-grid">
+    <Field label="Password" required>
+      {#snippet children(control)}
+        <PasswordInput {...control} controller={hiddenPasswordController} value="correct horse battery" />
+      {/snippet}
+    </Field>
+    <Field label="New password" hint="Use at least 12 characters." required>
+      {#snippet children(control)}
+        <PasswordInput {...control} controller={shownPasswordController} value="correct horse battery" />
+      {/snippet}
+    </Field>
+    <Field label="Confirm new password" error="The passwords do not match." required>
+      {#snippet children(control)}
+        <PasswordInput {...control} controller={hiddenPasswordController} value="correct horse" />
+      {/snippet}
+    </Field>
+    <Field label="Current password">
+      {#snippet children(control)}
+        <PasswordInput {...control} controller={hiddenPasswordController} value="correct horse" disabled />
       {/snippet}
     </Field>
   </div>
