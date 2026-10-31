@@ -37,7 +37,7 @@ without scripting.
 
 <script lang="ts">
   import Input from "./Input.svelte";
-  import ToggleButton from "./ToggleButton.svelte";
+  import FieldButton from "./internal/FieldButton.svelte";
   import { useMessages } from "./internal/i18n";
 
   import type { Attachment } from "svelte/attachments";
@@ -68,21 +68,18 @@ without scripting.
 >
   {#snippet endAdornment()}
     <span class="toggle">
-      <ToggleButton
-        {controller}
-        variant="ghost"
-        tone="neutral"
-        size="sm"
-        square
+      <FieldButton
         aria-label={t("passwordInput.show")}
+        aria-pressed={controller.state.pressed}
         disabled={rest.disabled}
+        onclick={() => controller.toggle()}
       >
         {#if controller.state.pressed}
           <EyeOffIcon size="var(--icon-size-sm)" aria-hidden="true" />
         {:else}
           <EyeIcon size="var(--icon-size-sm)" aria-hidden="true" />
         {/if}
-      </ToggleButton>
+      </FieldButton>
     </span>
   {/snippet}
 </Input>

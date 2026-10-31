@@ -54,6 +54,7 @@ The hidden named input submits the selected value. The caller validates required
 </script>
 
 <script lang="ts" generics="Value extends string">
+  import FieldButton from "./internal/FieldButton.svelte";
   import FloatingSurface from "./internal/FloatingSurface.svelte";
   import { useMessages } from "./internal/i18n";
   import { findEnabledBoundary, findNextEnabledIndex, resolveInvalidState } from "./selection";
@@ -246,18 +247,18 @@ The hidden named input submits the selected value. The caller validates required
       oninput={handleInput}
       onkeydown={handleInputKeyDown}
     />
-    <button
-      class="a-novel-combobox-trigger"
-      type="button"
-      aria-label={t("combobox.toggle")}
-      data-state={controller.state.open ? "open" : "closed"}
-      tabindex={-1}
-      {disabled}
-      onpointerdown={handleTriggerPointerDown}
-      onclick={focusInputAndOpen}
-    >
-      <ChevronDownIcon size="var(--icon-size-sm)" aria-hidden="true" />
-    </button>
+    <span class="trigger">
+      <FieldButton
+        aria-label={t("combobox.toggle")}
+        data-state={controller.state.open ? "open" : "closed"}
+        tabindex={-1}
+        {disabled}
+        onpointerdown={handleTriggerPointerDown}
+        onclick={focusInputAndOpen}
+      >
+        <ChevronDownIcon size="var(--icon-size-sm)" aria-hidden="true" />
+      </FieldButton>
+    </span>
   </div>
 
   {#if name}
@@ -372,31 +373,12 @@ The hidden named input submits the selected value. The caller validates required
     background: var(--color-control-surface-disabled);
     color: var(--color-control-disabled-text);
   }
-  .a-novel-combobox-trigger {
+  .trigger {
     display: grid;
     position: absolute;
     place-items: center;
-    cursor: pointer;
     inset-block: 0;
-    inset-inline-end: 0;
-    border: 0;
-    border-radius: 0 var(--radius-md) var(--radius-md) 0;
-    border-inline-start: var(--border-width-thin) solid var(--color-border-subtle);
-    background: transparent;
-    inline-size: var(--control-height-md);
-    color: var(--color-text-muted);
-  }
-  .input-wrap:not(:focus-within) .a-novel-combobox-trigger:hover:not(:disabled) {
-    background: var(--color-action-ghost-hover);
-    color: var(--color-text-primary);
-  }
-  .a-novel-combobox-trigger:focus-visible {
-    outline: none;
-    color: var(--color-text-primary);
-  }
-  .a-novel-combobox-trigger:disabled {
-    cursor: not-allowed;
-    color: var(--color-text-disabled);
+    inset-inline-end: var(--space-1);
   }
 
   :global(.a-novel-combobox-content) {
@@ -487,8 +469,7 @@ The hidden named input submits the selected value. The caller validates required
   }
 
   @media (forced-colors: active) {
-    .a-novel-combobox-input:focus-visible,
-    .a-novel-combobox-trigger:focus-visible {
+    .a-novel-combobox-input:focus-visible {
       outline: var(--border-width-strong) solid Highlight;
       outline-offset: calc(var(--focus-ring-offset) * -1);
     }
