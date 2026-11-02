@@ -10,6 +10,7 @@
     FormActions,
     Grid,
     Input,
+    Link,
     PasswordInput,
     RadioGroup,
     Select,
@@ -192,6 +193,7 @@
 <Story name="Passwords" asChild>
   <div class="adornment-grid">
     <Field label="Password" required>
+      {#snippet labelActions()}<Link href="#reset">Forgot password?</Link>{/snippet}
       {#snippet children(control)}
         <PasswordInput {...control} controller={hiddenPasswordController} value="correct horse battery" />
       {/snippet}

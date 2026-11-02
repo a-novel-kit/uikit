@@ -2,7 +2,8 @@
 @component
 Groups form feedback above submission controls. Place after fields in a Stack with gap="4";
 the additional spacing separates inputs from actions. Direct children stretch on viewports below
-35rem and keep their natural width on larger screens. Form submission stays with the caller.
+35rem and keep their natural width on larger screens, unless `align="stretch"` fills the width on
+every screen. Form submission stays with the caller.
 
 ```svelte
 <script lang="ts">
@@ -18,6 +19,8 @@ the additional spacing separates inputs from actions. Direct children stretch on
 ```
 -->
 <script lang="ts" module>
+  import type { ActionGroupProps } from "./ActionGroup.svelte";
+
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
 
@@ -25,18 +28,20 @@ the additional spacing separates inputs from actions. Direct children stretch on
   export interface FormActionsProps extends HTMLAttributes<HTMLDivElement> {
     /** Feedback directly above the actions; omit when the form has no message. */
     feedback?: Snippet;
+    /** Action alignment on wider viewports; defaults to start. */
+    align?: ActionGroupProps["align"];
   }
 </script>
 
 <script lang="ts">
   import ActionGroup from "./ActionGroup.svelte";
 
-  let { feedback, children, class: className = "", ...rest }: FormActionsProps = $props();
+  let { feedback, align, children, class: className = "", ...rest }: FormActionsProps = $props();
 </script>
 
 <div class="form-actions {className}" {...rest}>
   {#if feedback}{@render feedback()}{/if}
-  {#if children}<ActionGroup {children} />{/if}
+  {#if children}<ActionGroup {align} {children} />{/if}
 </div>
 
 <style>

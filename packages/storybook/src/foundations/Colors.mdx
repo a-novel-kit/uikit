@@ -72,8 +72,9 @@ export const PrimitiveScale = ({ family, label, description }) => (
 
 # Color
 
-Brand, pressure, and signal accents sit on a blue-black neutral scale. Use semantic tokens in
-components.
+Brand, pressure, and signal accents sit on a cool blue-black canvas. Neutrals carry the signal hue at
+a low chroma, so the surfaces, borders, and text placed on the canvas read warm against it. Use
+semantic tokens in components.
 
 <div className="core-palette">
   {coreColors.map((item) => (
@@ -99,6 +100,10 @@ components.
   <div>
     <strong>Field</strong>
     <span>Keep most area neutral; group with spacing before adding a surface.</span>
+  </div>
+  <div>
+    <strong>Temperature</strong>
+    <span>Keep the canvas cool and everything on it warm; a well takes the tone of its surface.</span>
   </div>
   <div>
     <strong>Accent</strong>

@@ -13,7 +13,11 @@ const scaleMultipliers = Array.from({ length: scaleLength }, (_, index) => index
 
 // Compact authoring inputs; generated scales and public metadata derive from these values.
 const bases = {
-  canvasLightness: 0.14478796,
+  // The canvas is the cool night field; neutrals are the warm light on everything placed on it.
+  canvas: {
+    chroma: 0.012,
+    lightness: 0.125,
+  },
   harmony: {
     halfTurn: 180,
     brandHue: 232,
@@ -38,7 +42,7 @@ const bases = {
     lightnessStep: 0.001,
   },
   neutral: {
-    chroma: 0.012,
+    chroma: 0.006,
     lightnessCurve: 1.6,
     lightnessFloor: 0.11,
     lightnessPeak: 0.96,
@@ -63,7 +67,7 @@ const familyHues = {
 };
 const chromaticFamilies = Object.keys(familyHues);
 
-const canvas = `oklch(${bases.canvasLightness} ${bases.neutral.chroma} ${familyHues.brand})`;
+const canvas = `oklch(${bases.canvas.lightness} ${bases.canvas.chroma} ${familyHues.brand})`;
 
 /** Finds the highest Display P3 chroma reachable for a hue within the authored lightness range. */
 function findGamutCusp(hue) {
@@ -93,12 +97,12 @@ function accentStep(family, multiplier) {
   return { chroma: round(chroma), hue: round(normalizeHue(hue), 2), lightness: round(lightness) };
 }
 
-/** Derives one neutral step: a fixed low chroma on the brand hue, with lightness on a power curve. */
+/** Derives one neutral step: a fixed low chroma on the warm signal hue, with lightness on a power curve. */
 function neutralStep(multiplier) {
   const progress = (multiplier / scaleDivisions) ** bases.neutral.lightnessCurve;
   const lightness = lerp(bases.neutral.lightnessFloor, bases.neutral.lightnessPeak, progress);
 
-  return { chroma: bases.neutral.chroma, hue: familyHues.brand, lightness: round(lightness) };
+  return { chroma: bases.neutral.chroma, hue: familyHues.signal, lightness: round(lightness) };
 }
 
 const scales = {
@@ -217,7 +221,7 @@ function neutralStepCss(multiplier) {
           pow(var(--color-scale-progress-${step}), var(--color-neutral-lightness-curve))
     )
     var(--color-neutral-chroma)
-    var(--color-hue-brand)
+    var(--color-hue-signal)
   );`;
 }
 
@@ -241,7 +245,7 @@ const accentScaleCss = (family) => scaleMultipliers.map((multiplier) => accentSt
 
 const colorsCss = `${generatedHeader}
 :root {
-  --base-canvas: oklch(${bases.canvasLightness} var(--color-neutral-chroma) var(--color-hue-brand));
+  --base-canvas: oklch(${bases.canvas.lightness} var(--color-canvas-chroma) var(--color-hue-brand));
   --color-hue-brand: ${bases.harmony.brandHue};
   --color-harmony-half-turn: ${bases.harmony.halfTurn};
   --color-harmony-opposition-bias: ${bases.harmony.oppositionBias};
@@ -286,6 +290,7 @@ const colorsCss = `${generatedHeader}
   --color-neutral-lightness-peak: ${bases.neutral.lightnessPeak};
   --color-neutral-lightness-curve: ${bases.neutral.lightnessCurve};
   --color-neutral-chroma: ${bases.neutral.chroma};
+  --color-canvas-chroma: ${bases.canvas.chroma};
   --color-scale-divisions: var(--multiplier-${scaleDivisions});
 ${scaleMultipliers.map(scaleStepCss).join("\n")}
 

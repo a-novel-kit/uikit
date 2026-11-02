@@ -47,6 +47,8 @@ An initially open dialog is visible without JavaScript; modal focus and backdrop
     actions?: Snippet;
     /** Centered by default; fullscreen fills the viewport with a scrollable body. */
     presentation?: "centered" | "fullscreen";
+    /** Width of a centered dialog; sm suits a short form or a confirmation. Defaults to md. */
+    size?: "sm" | "md";
     /** Uses native modal focus trapping and an inert background; defaults to true. */
     modal?: boolean;
     /** Requests controller.close() on backdrop clicks; defaults to true. The controller may refuse. */
@@ -69,6 +71,7 @@ An initially open dialog is visible without JavaScript; modal focus and backdrop
     headerActions,
     actions,
     presentation = "centered",
+    size = "md",
     modal = true,
     closeOnBackdrop = true,
     class: className = "",
@@ -117,7 +120,7 @@ An initially open dialog is visible without JavaScript; modal focus and backdrop
 <dialog
   bind:this={dialog}
   open={initiallyOpen}
-  class="dialog {presentation} {className}"
+  class="dialog {presentation} {size} {className}"
   aria-labelledby={titleId}
   aria-describedby={description ? descriptionId : undefined}
   oncancel={handleCancel}
@@ -136,6 +139,7 @@ An initially open dialog is visible without JavaScript; modal focus and backdrop
   .dialog {
     --dialog-padding: var(--space-4);
     --dialog-margin: var(--space-2);
+    --dialog-width: var(--layout-container-sm);
     position: fixed;
     z-index: var(--layer-modal);
     box-sizing: border-box;
@@ -146,7 +150,7 @@ An initially open dialog is visible without JavaScript; modal focus and backdrop
     border-radius: var(--radius-xl);
     background: var(--color-surface-island-strong);
     padding: 0;
-    inline-size: min(calc(100vi - 2 * var(--dialog-margin)), var(--layout-container-sm));
+    inline-size: min(calc(100vi - 2 * var(--dialog-margin)), var(--dialog-width));
     max-inline-size: none;
     max-block-size: calc(100dvb - 2 * var(--dialog-margin));
     overflow: auto;
@@ -176,6 +180,10 @@ An initially open dialog is visible without JavaScript; modal focus and backdrop
   footer {
     flex: none;
     padding-block-start: var(--space-1);
+  }
+
+  .sm {
+    --dialog-width: var(--layout-container-xs);
   }
 
   @media (min-width: 48rem) {

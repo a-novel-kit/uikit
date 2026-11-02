@@ -149,7 +149,7 @@ Native attributes and events target the input; `class` styles the surrounding su
     font-size: var(--font-size-sm);
   }
   .md {
-    padding: var(--space-2) var(--space-3);
+    padding: var(--space-1-5) var(--space-3);
     min-block-size: var(--control-height-md);
   }
   .md .control {

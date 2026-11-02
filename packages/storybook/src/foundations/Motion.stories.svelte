@@ -9,7 +9,7 @@
       docs: {
         description: {
           component:
-            "Depth separates temporary or raised content. Motion confirms a state change and follows reduced-motion preferences.",
+            "Depth separates temporary or raised content: islands catch light on their top edge. Motion confirms a state change and follows reduced-motion preferences.",
         },
       },
     },
@@ -19,8 +19,25 @@
 <Story name="Surfaces" asChild>
   <div class="surface-grid">
     <div class="surface sunken"><strong>Sunken</strong><code>surface-sunken</code></div>
-    <div class="surface island"><strong>Island</strong><code>surface-island</code></div>
+    <div class="surface island"><strong>Island</strong><code>surface-island + shadow-sm</code></div>
     <div class="surface overlay"><strong>Overlay</strong><code>surface-island-strong + shadow-lg</code></div>
+  </div>
+</Story>
+
+<Story
+  name="Lamp"
+  asChild
+  parameters={{
+    docs: {
+      description: {
+        story:
+          "The application paints `--fill-canvas` on its root element: one warm lamp in the top-start corner of the cool canvas. Islands under it keep their own surface.",
+      },
+    },
+  }}
+>
+  <div class="lamp">
+    <div class="surface island"><strong>Island</strong><code>surface-island</code></div>
   </div>
 </Story>
 
@@ -118,6 +135,15 @@
   .overlay {
     box-shadow: var(--shadow-lg);
     background: var(--color-surface-island-strong);
+  }
+  .lamp {
+    display: grid;
+    align-content: end;
+    box-sizing: border-box;
+    border-radius: var(--radius-lg);
+    background: var(--fill-canvas);
+    padding: var(--space-8);
+    min-block-size: 24rem;
   }
   strong {
     color: var(--color-text-primary);

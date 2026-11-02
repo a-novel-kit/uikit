@@ -119,7 +119,7 @@ file selection remains owned by the browser.
   }
   .md::file-selector-button {
     margin-inline-end: var(--space-3);
-    padding: var(--space-2) var(--space-4);
+    padding: var(--space-1-5) var(--space-4);
     min-block-size: calc(var(--control-height-md) - var(--border-width-strong));
   }
 

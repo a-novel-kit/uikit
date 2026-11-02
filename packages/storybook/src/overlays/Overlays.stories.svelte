@@ -11,6 +11,7 @@
     FormActions,
     IconButton,
     Input,
+    Link,
     NavList,
     PanelHeader,
     Popover,
@@ -91,6 +92,28 @@
       <Button tone="danger" onclick={() => controller.close()}>Archive</Button>
     {/snippet}
     <p class="dialog-copy">Other people will lose access until the item is restored.</p>
+  </Dialog>
+{/snippet}
+
+{#snippet compactDialogExample(controller: OpenController)}
+  <Dialog {controller} title="Log in" size="sm">
+    {#snippet headerActions()}
+      <IconButton label="Close dialog" variant="ghost" tone="neutral" size="sm" onclick={controller.close}>
+        <CloseIcon size="var(--icon-size-sm)" />
+      </IconButton>
+    {/snippet}
+    <form>
+      <Stack gap="4">
+        <Field label="Email address" required>
+          {#snippet children(control)}<Input {...control} type="email" autocomplete="username" />{/snippet}
+        </Field>
+        <Field label="Password" required>
+          {#snippet labelActions()}<Link href="#reset">Forgot password?</Link>{/snippet}
+          {#snippet children(control)}<Input {...control} type="password" autocomplete="current-password" />{/snippet}
+        </Field>
+        <FormActions align="stretch"><Button type="submit">Log in</Button></FormActions>
+      </Stack>
+    </form>
   </Dialog>
 {/snippet}
 
@@ -251,6 +274,14 @@
 
 <Story name="Dialog — mobile" exportName="DialogMobile" globals={reviewStoryGlobals.mobile} asChild>
   {@render dialogExample(opened)}
+</Story>
+
+<Story name="Compact (desktop)" exportName="CompactDesktop" globals={reviewStoryGlobals.desktop} asChild>
+  {@render compactDialogExample(opened)}
+</Story>
+
+<Story name="Compact (mobile)" exportName="CompactMobile" globals={reviewStoryGlobals.mobile} asChild>
+  {@render compactDialogExample(opened)}
 </Story>
 
 <Story name="Long heading — desktop" exportName="LongHeadingDesktop" globals={reviewStoryGlobals.desktop} asChild>

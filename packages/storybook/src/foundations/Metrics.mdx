@@ -63,7 +63,8 @@ Use smaller ratios for dense interface details and reserve the major ratio for p
 ## Surfaces
 
 Group related content with spacing first. Use a borderless island when a region needs its own visual
-plane.
+plane. `--shadow-{sm,md,lg}` add the light an island catches on its top edge. A well, such as a field,
+darkens the surface it sits on, so it keeps that surface's temperature.
 
 <div className="surface-demo">
   <section className="surface-group">
@@ -94,13 +95,14 @@ Choose a named radius token for each component shape.
 
 ## Control and interaction metrics
 
-| Contract       | Tokens                                                 |
-| -------------- | ------------------------------------------------------ |
-| Control height | `--control-height-{sm,md,lg}`                          |
-| Border         | `--border-width-thin`                                  |
-| Focus          | `--focus-ring-{width,offset}` and `--color-focus-ring` |
-| Motion         | `--duration-{fast,normal}` and `--easing-standard`     |
-| Disabled state | `--opacity-disabled`                                   |
+| Contract       | Tokens                                                  |
+| -------------- | ------------------------------------------------------- |
+| Control height | `--control-height-{sm,md,lg}`, one step taller on touch |
+| Nested control | `--control-height-nested`, inside a medium field        |
+| Border         | `--border-width-thin`                                   |
+| Focus          | `--focus-ring-{width,offset}` and `--color-focus-ring`  |
+| Motion         | `--duration-{fast,normal}` and `--easing-standard`      |
+| Disabled state | `--opacity-disabled`                                    |
 
 The [Button](?path=/docs/components-button--documentation) stories show these tokens on an interactive
 control.
