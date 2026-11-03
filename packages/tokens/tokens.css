@@ -52,9 +52,11 @@
   --blur-md: calc(var(--blur-base) * var(--multiplier-4));
   --blur-lg: calc(var(--blur-base) * var(--multiplier-8));
 
-  --control-height-sm: calc(var(--space-base) * var(--multiplier-8));
-  --control-height-md: calc(var(--space-base) * var(--multiplier-10));
-  --control-height-lg: calc(var(--space-base) * var(--multiplier-12));
+  --control-height-sm: calc(var(--space-base) * var(--multiplier-7));
+  --control-height-md: calc(var(--space-base) * var(--multiplier-8));
+  --control-height-lg: calc(var(--space-base) * var(--multiplier-10));
+  /* A control nested inside a medium field, such as a password toggle, keeps a space-1 inset. */
+  --control-height-nested: calc(var(--control-height-md) - var(--space-2));
   --control-menu-max-height: calc(var(--space-base) * var(--multiplier-64));
   --icon-size-sm: var(--space-4);
   --icon-size-md: var(--space-5);
@@ -100,7 +102,8 @@
   --color-mix-12: calc(var(--color-mix-base) * var(--multiplier-12));
 
   --color-surface-canvas: var(--base-canvas);
-  --color-surface-sunken: var(--color-neutral-2);
+  /* A well darkens the surface it is cut into, so it keeps that surface's tone. */
+  --color-surface-sunken: color-mix(in oklab, var(--color-neutral-1) var(--color-mix-10), transparent);
   --color-surface-subtle: color-mix(
     in oklab,
     var(--color-neutral-3) var(--color-mix-8),
@@ -135,9 +138,10 @@
     var(--base-brand) var(--color-mix-2),
     var(--color-surface-raised)
   );
+  /* A modal backdrop returns the page to the night, so it dims with the canvas. */
   --color-overlay-backdrop: color-mix(
     in oklab,
-    var(--color-neutral-1) var(--color-mix-12),
+    var(--color-surface-canvas) var(--color-mix-12),
     transparent
   );
 
@@ -156,11 +160,7 @@
   --color-border-strong: var(--color-neutral-8);
   --color-border-selected: var(--base-brand);
 
-  --color-control-surface: color-mix(
-    in oklab,
-    var(--color-neutral-5) var(--color-mix-5),
-    var(--color-surface-sunken)
-  );
+  --color-control-surface: var(--color-surface-sunken);
   --color-control-surface-hover: color-mix(
     in oklab,
     var(--color-neutral-7) var(--color-mix-2),
@@ -183,6 +183,9 @@
     transparent
   );
   --color-control-border: var(--color-border-default);
+  /* A field is a well inside an island, so its tone carries it: no border until focus or an error.
+     The border stays transparent rather than absent, so forced-colors mode still outlines it. */
+  --color-field-border: transparent;
   --color-control-border-hover: var(--color-border-strong);
   --color-control-border-focus: var(--base-brand);
   --color-control-text: var(--color-text-primary);
@@ -340,12 +343,51 @@
     var(--base-signal)
   );
 
-  --shadow-sm: 0 var(--space-1) var(--space-3)
-    color-mix(in oklab, var(--color-neutral-1) var(--color-mix-8), transparent);
-  --shadow-md: 0 var(--space-2) var(--space-6)
-    color-mix(in oklab, var(--color-neutral-1) var(--color-mix-10), transparent);
-  --shadow-lg: 0 var(--space-3) var(--space-10)
-    color-mix(in oklab, var(--color-neutral-1) var(--color-mix-11), transparent);
+  /* Light falls from above: a soft sheen fades down a raised surface's face. Shadows paint no
+     background, so automated contrast checks measure the surface color alone; at the sheen's
+     brightest point muted text keeps 5.6:1 and links 5.4:1. */
+  --shadow-sheen: inset 0 var(--space-16) var(--space-16) calc(-1 * var(--space-16))
+    color-mix(in oklab, var(--color-neutral-12) var(--color-mix-1), transparent);
+  /* A hairline ring holds a raised surface's shape on any backdrop, so it needs no border. */
+  --shadow-ring: 0 0 0 var(--border-width-thin)
+    color-mix(in oklab, var(--color-neutral-12) var(--color-mix-1), transparent);
+  --shadow-sm:
+    var(--shadow-sheen),
+    var(--shadow-ring),
+    0 var(--border-width-thin) var(--space-1)
+      color-mix(in oklab, var(--color-neutral-1) var(--color-mix-8), transparent),
+    0 var(--space-1) var(--space-3)
+      color-mix(in oklab, var(--color-neutral-1) var(--color-mix-8), transparent);
+  --shadow-md:
+    var(--shadow-sheen),
+    var(--shadow-ring),
+    0 var(--border-width-thin) var(--space-1)
+      color-mix(in oklab, var(--color-neutral-1) var(--color-mix-10), transparent),
+    0 var(--space-2) var(--space-6)
+      color-mix(in oklab, var(--color-neutral-1) var(--color-mix-10), transparent);
+  --shadow-lg:
+    var(--shadow-sheen),
+    var(--shadow-ring),
+    0 var(--border-width-thin) var(--space-1)
+      color-mix(in oklab, var(--color-neutral-1) var(--color-mix-12), transparent),
+    0 var(--space-4) var(--space-10) calc(-1 * var(--space-2))
+      color-mix(in oklab, var(--color-neutral-1) var(--color-mix-10), transparent);
+  /* The primary action glows: a slight gradient that lightens toward the top, and a soft underglow
+     in its own color. The gradient only lightens, so its darkest stop is the measured text pair. */
+  --gradient-action-primary: linear-gradient(
+    in oklab,
+    var(--color-brand-10),
+    var(--color-action-primary)
+  );
+  --gradient-action-primary-hover: linear-gradient(
+    in oklab,
+    var(--color-action-primary-hover),
+    var(--color-brand-10)
+  );
+  --shadow-action-primary: 0 var(--space-1) var(--space-4) calc(-1 * var(--space-1))
+    color-mix(in oklab, var(--base-brand) var(--color-mix-6), transparent);
+  --shadow-action-primary-hover: 0 var(--space-1) var(--space-6) calc(-1 * var(--space-1))
+    color-mix(in oklab, var(--base-brand) var(--color-mix-10), transparent);
   --shadow-island: var(--shadow-md);
   --shadow-glow-brand:
     0 0 var(--space-4)
@@ -405,23 +447,27 @@
     0 0 var(--space-4)
       color-mix(in oklab, var(--base-pressure) var(--color-mix-3), transparent);
   --shadow-action-selected: var(--shadow-glow-brand);
-  --gradient-accent:
-    radial-gradient(
-      circle at 12% 15%,
-      color-mix(in oklab, var(--base-brand) var(--color-mix-8), transparent),
-      transparent 46%
-    ),
-    radial-gradient(
-      circle at 88% 18%,
-      color-mix(in oklab, var(--base-pressure) var(--color-mix-7), transparent),
-      transparent 48%
-    ),
-    radial-gradient(
-      circle at 50% 112%,
-      color-mix(in oklab, var(--base-signal) var(--color-mix-6), transparent),
-      transparent 54%
-    ),
-    var(--color-surface-canvas);
+  /* One lamp in the top-start corner, its strength falling with the square of the distance and its
+     reach with the viewport, so a phone keeps a corner light rather than a tinted screen. Each
+     application colors it with --color-lamp on its root element, so people tell the apps apart at
+     a glance; an ember lights any application that sets none. */
+  --color-lamp-ember: color-mix(in oklch, var(--base-signal) var(--color-mix-11), var(--base-pressure));
+  --color-lamp-violet: color-mix(in oklch, var(--base-brand), var(--base-pressure));
+  --lamp-color: var(--color-lamp, var(--color-lamp-ember));
+  --lamp-peak: var(--color-mix-3);
+  --gradient-lamp: radial-gradient(
+    in oklab min(var(--layout-container-md), 80vi) min(var(--layout-container-sm), 50vb) at 0 0,
+    color-mix(in oklab, var(--lamp-color) var(--lamp-peak), transparent),
+    color-mix(in oklab, var(--lamp-color) calc(var(--lamp-peak) * 0.5625), transparent) 25%,
+    color-mix(in oklab, var(--lamp-color) calc(var(--lamp-peak) * 0.25), transparent) 50%,
+    color-mix(in oklab, var(--lamp-color) calc(var(--lamp-peak) * 0.0625), transparent) 75%,
+    transparent
+  );
+  /* The canvas carries the lamp on the root element, where accessibility checks still measure text
+     against the canvas color. Navigation the lamp crosses carries the same light, fixed to the
+     viewport so the two line up; its text keeps muted 5.2:1 and links 4.9:1 under any palette lamp. */
+  --fill-canvas: var(--gradient-lamp) fixed, var(--color-surface-canvas);
+  --fill-navigation: var(--gradient-lamp) fixed, var(--color-surface-island-strong);
   --gradient-telemetry-grid:
     linear-gradient(var(--color-graphic-grid) var(--border-width-thin), transparent var(--border-width-thin)),
     linear-gradient(90deg, var(--color-graphic-grid) var(--border-width-thin), transparent var(--border-width-thin));
@@ -453,6 +499,7 @@
   --letter-spacing-display: 0.12em;
 
   --layout-gutter: clamp(var(--space-4), 2vw, var(--space-8));
+  --layout-container-xs: calc(var(--layout-container-sm) / var(--ratio-emphasis));
   --layout-container-sm: calc(var(--font-size-base) * var(--multiplier-40));
   --layout-container-md: calc(var(--font-size-base) * var(--multiplier-64));
   --layout-container-lg: calc(var(--font-size-base) * var(--multiplier-80));
@@ -467,6 +514,15 @@
   --layer-sticky: calc(var(--layer-step) * var(--multiplier-2));
   --layer-modal: calc(var(--layer-step) * var(--multiplier-3));
   --layer-toast: calc(var(--layer-step) * var(--multiplier-4));
+}
+
+/* Touch needs larger targets: coarse pointers add space-1 to every control height. */
+@media (pointer: coarse) {
+  :root {
+    --control-height-sm: calc(var(--space-base) * var(--multiplier-8));
+    --control-height-md: calc(var(--space-base) * var(--multiplier-9));
+    --control-height-lg: calc(var(--space-base) * var(--multiplier-11));
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

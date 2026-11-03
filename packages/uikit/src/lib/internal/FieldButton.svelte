@@ -35,8 +35,8 @@ the control, so the button shows only its icon, a background and a color.
     border-radius: var(--radius-md);
     background: transparent;
     padding: 0;
-    inline-size: var(--control-height-sm);
-    block-size: var(--control-height-sm);
+    inline-size: var(--control-height-nested);
+    block-size: var(--control-height-nested);
     color: var(--color-text-muted);
   }
 

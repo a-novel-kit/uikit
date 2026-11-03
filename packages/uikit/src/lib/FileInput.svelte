@@ -47,7 +47,7 @@ file selection remains owned by the browser.
       box-shadow var(--duration-fast) var(--easing-standard);
     cursor: pointer;
     box-sizing: border-box;
-    border: var(--border-width-thin) solid var(--color-control-border);
+    border: var(--border-width-thin) solid var(--color-field-border);
     border-radius: var(--radius-md);
     background: var(--color-control-surface);
     inline-size: 100%;
@@ -56,7 +56,7 @@ file selection remains owned by the browser.
   }
 
   .file-input:hover:not(:disabled, :focus-visible, [aria-invalid="true"]) {
-    border-color: var(--color-control-border-hover);
+    border-color: var(--color-field-border);
     background: var(--color-control-surface-hover);
   }
 
@@ -78,7 +78,7 @@ file selection remains owned by the browser.
 
   .file-input:disabled {
     cursor: not-allowed;
-    border-color: var(--color-border-subtle);
+    border-color: var(--color-field-border);
     background: var(--color-control-surface-disabled);
     color: var(--color-control-disabled-text);
   }
@@ -119,7 +119,7 @@ file selection remains owned by the browser.
   }
   .md::file-selector-button {
     margin-inline-end: var(--space-3);
-    padding: var(--space-2) var(--space-4);
+    padding: var(--space-1) var(--space-4);
     min-block-size: calc(var(--control-height-md) - var(--border-width-strong));
   }
 
@@ -129,7 +129,7 @@ file selection remains owned by the browser.
   }
   .lg::file-selector-button {
     margin-inline-end: var(--space-4);
-    padding: var(--space-3) var(--space-5);
+    padding: var(--space-2) var(--space-5);
     min-block-size: calc(var(--control-height-lg) - var(--border-width-strong));
   }
 

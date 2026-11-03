@@ -192,6 +192,8 @@
 <Story name="Passwords" asChild>
   <div class="adornment-grid">
     <Field label="Password" required>
+      {#snippet labelActions()}<Button href="#reset" variant="text" tone="brand" size="sm">Forgot password?</Button
+        >{/snippet}
       {#snippet children(control)}
         <PasswordInput {...control} controller={hiddenPasswordController} value="correct horse battery" />
       {/snippet}

@@ -30,7 +30,7 @@ use only inside Toolbar.
     border: var(--border-width-thin) solid transparent;
     border-radius: var(--radius-md);
     padding-inline: var(--space-3);
-    padding-block: var(--space-1-5);
+    padding-block: var(--space-1);
     min-block-size: var(--control-height-sm);
     font-weight: var(--font-weight-bold);
     font-size: var(--font-size-sm);

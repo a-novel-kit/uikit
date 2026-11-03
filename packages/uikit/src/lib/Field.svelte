@@ -37,6 +37,8 @@ so its accessible name, description, required state, and invalid state stay conn
   export interface FieldProps extends Omit<HTMLAttributes<HTMLDivElement>, "children"> {
     /** Visible label for the control. */
     label?: Content;
+    /** Controls at the end of the label row, such as a quiet text button that opens password recovery. */
+    labelActions?: Snippet;
     /** Supporting content rendered below the control, before any error. */
     hint?: Content;
     /** Validation message; its presence marks the control invalid. */
@@ -57,6 +59,7 @@ so its accessible name, description, required state, and invalid state stay conn
 
   let {
     label,
+    labelActions,
     hint,
     error,
     required = false,
@@ -77,11 +80,16 @@ so its accessible name, description, required state, and invalid state stay conn
 </script>
 
 <div class="field {className}" {...rest}>
-  {#if label}
-    <label for={controlId}>
-      <RenderContent content={label} />
-      {#if required}<span class="required" aria-hidden="true">*</span>{/if}
-    </label>
+  {#if label || labelActions}
+    <div class="label-row">
+      {#if label}
+        <label for={controlId}>
+          <RenderContent content={label} />
+          {#if required}<span class="required" aria-hidden="true">*</span>{/if}
+        </label>
+      {/if}
+      {#if labelActions}<div class="label-actions">{@render labelActions()}</div>{/if}
+    </div>
   {/if}
   {@render children(controlProps)}
   {#if hint}<div id={hintId} class="hint"><RenderContent content={hint} /></div>{/if}
@@ -95,9 +103,30 @@ so its accessible name, description, required state, and invalid state stay conn
     min-inline-size: 0;
   }
 
+  /* The label row keeps its actions at the end and wraps them under a long label. */
+  .label-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-1) var(--space-4);
+  }
+
+  /* A small action stands taller than the label; its hover box overhangs the row, so every field's
+     label sits at the same distance from its control. */
+  .label-actions {
+    display: flex;
+    gap: var(--space-3);
+    margin-inline-start: auto;
+    margin-block: calc(var(--space-1) * -1);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-compact);
+  }
+
+  /* A label names one control, so it stays regular: bold is kept for actions and group names. */
   label {
     color: var(--color-text-secondary);
-    font-weight: var(--font-weight-bold);
+    font-weight: var(--font-weight-regular);
     font-size: var(--font-size-sm);
     line-height: var(--line-height-compact);
     font-family: var(--font-family-interface);

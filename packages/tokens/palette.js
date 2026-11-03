@@ -1,7 +1,7 @@
 /* Generated from one OKLCH basis and gamut-relative coefficients. Do not edit. */
 // prettier-ignore
 export const colorSystem = Object.freeze({
-  "canvas": "oklch(0.14478796 0.012 232)",
+  "canvas": "oklch(0.125 0.012 232)",
   "contrast": {
     "accentStep": 10,
     "inverseStep": 1,

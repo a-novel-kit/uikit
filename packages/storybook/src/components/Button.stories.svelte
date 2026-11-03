@@ -28,8 +28,9 @@
       },
       variant: {
         control: "inline-radio",
-        options: ["solid", "outline", "ghost"],
-        description: "Visual emphasis. Solid is primary, outline is secondary, and ghost is quiet.",
+        options: ["solid", "outline", "ghost", "text"],
+        description:
+          "Visual emphasis. Solid is primary, outline is secondary, ghost is quiet, and text reads as colored text until hovered.",
       },
       tone: {
         control: "inline-radio",
@@ -74,6 +75,7 @@
     <Button variant="solid">Solid</Button>
     <Button variant="outline">Outline</Button>
     <Button variant="ghost">Ghost</Button>
+    <Button variant="text">Text</Button>
   </Inline>
 </Story>
 <Story name="Tones" asChild>

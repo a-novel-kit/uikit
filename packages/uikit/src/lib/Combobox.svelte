@@ -334,10 +334,10 @@ The hidden named input submits the selected value. The caller validates required
       border-color var(--duration-fast) var(--easing-standard),
       box-shadow var(--duration-fast) var(--easing-standard);
     box-sizing: border-box;
-    border: var(--border-width-thin) solid var(--color-control-border);
+    border: var(--border-width-thin) solid var(--color-field-border);
     border-radius: var(--radius-md);
     background: var(--color-control-surface);
-    padding: var(--space-2) var(--control-height-md) var(--space-2) var(--space-3);
+    padding: var(--space-1) var(--control-height-md) var(--space-1) var(--space-3);
     inline-size: 100%;
     min-block-size: var(--control-height-md);
     color: var(--color-control-text);
@@ -346,7 +346,7 @@ The hidden named input submits the selected value. The caller validates required
     font-family: var(--font-family-interface);
   }
   .a-novel-combobox-input:hover:not(:disabled, :focus-visible, [aria-invalid="true"], :user-invalid) {
-    border-color: var(--color-control-border-hover);
+    border-color: var(--color-field-border);
     background: var(--color-control-surface-hover);
   }
   .a-novel-combobox-input:focus-visible {

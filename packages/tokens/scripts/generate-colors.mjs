@@ -13,7 +13,7 @@ const scaleMultipliers = Array.from({ length: scaleLength }, (_, index) => index
 
 // Compact authoring inputs; generated scales and public metadata derive from these values.
 const bases = {
-  canvasLightness: 0.14478796,
+  canvasLightness: 0.125,
   harmony: {
     halfTurn: 180,
     brandHue: 232,

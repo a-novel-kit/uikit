@@ -1,6 +1,7 @@
 <!--
 @component
 Lays out actions at their natural width on desktop and stacked full width below 35rem.
+`align="stretch"` keeps them stacked full width on every screen, for a narrow form's single action.
 Preserves source order. Use ButtonGroup when the controls also need a named group.
 -->
 <script lang="ts" module>
@@ -8,8 +9,8 @@ Preserves source order. Use ButtonGroup when the controls also need a named grou
 
   /** Responsive layout for composed buttons and links. */
   export interface ActionGroupProps extends HTMLAttributes<HTMLDivElement> {
-    /** Alignment on wider viewports; defaults to start. */
-    align?: "start" | "end";
+    /** Alignment on wider viewports; defaults to start. Stretch fills the width on every viewport. */
+    align?: "start" | "end" | "stretch";
   }
 </script>
 
@@ -28,7 +29,7 @@ Preserves source order. Use ButtonGroup when the controls also need a named grou
     min-inline-size: 0;
   }
   @media (min-width: 35rem) {
-    .actions {
+    .actions:not(.stretch) {
       display: flex;
       flex-wrap: wrap;
       align-items: center;

@@ -75,7 +75,6 @@ The default range is 0–100; the caller owns persistence and value validation.
     display: flex;
     justify-content: space-between;
     gap: var(--space-4);
-    font-weight: var(--font-weight-bold);
     font-size: var(--font-size-sm);
   }
 

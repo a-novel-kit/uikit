@@ -418,7 +418,7 @@ For a custom trigger, spread the snippet attributes onto a native button.
   }
   kbd {
     margin-inline-start: auto;
-    color: var(--color-text-subtle);
+    color: var(--color-text-muted);
     font-size: var(--font-size-xs);
     font-family: var(--font-family-mono);
   }

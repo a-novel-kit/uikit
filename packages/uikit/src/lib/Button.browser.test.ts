@@ -36,7 +36,7 @@ function appearance(element: HTMLElement) {
 beforeEach(async () => userEvent.unhover(document.body));
 
 describe("low-emphasis action feedback", () => {
-  for (const variant of ["outline", "ghost"] as const) {
+  for (const variant of ["outline", "ghost", "text"] as const) {
     it.each(["brand", "neutral", "danger"] as const)(
       `${variant} %s keeps hover and active layers in its own color family`,
       async (tone) => {
@@ -77,7 +77,7 @@ describe("low-emphasis action feedback", () => {
       const button = getByRole("button");
       const selected = appearance(button);
       expect(selected.background).toContain("/ 0.1875)");
-      for (const variant of ["outline", "ghost"] as const) {
+      for (const variant of ["outline", "ghost", "text"] as const) {
         await rerender({ variant });
         await userEvent.hover(button);
         await expect.poll(() => appearance(button)).toEqual(selected);
@@ -90,6 +90,17 @@ describe("low-emphasis action feedback", () => {
       await expect.poll(() => getComputedStyle(button).boxShadow).toBe("none");
     }
   );
+
+  it("keeps a text button as regular-weight colored text until it is hovered", async () => {
+    const { getByRole } = render(Button, { variant: "text", "aria-label": "Forgot password" });
+    const button = getByRole("button");
+    const css = getComputedStyle(button);
+    expect(css.fontWeight).toBe(
+      getComputedStyle(document.documentElement).getPropertyValue("--font-weight-regular").trim()
+    );
+    expect(css.backgroundColor).toBe(resolveColor("transparent"));
+    expect(css.color).toBe(resolveColor("var(--color-action-primary-foreground)"));
+  });
 
   it("tints quiet-link hover with its text color without filling inline links", async () => {
     const { getByRole, rerender } = render(Link, {

@@ -4,6 +4,8 @@ Renders a native modal dialog driven by `createOpenController` or a compatible c
 Escape and backdrop interaction request closure; the controller decides whether it closes.
 Supply a localized close control through `headerActions`.
 An initially open dialog is visible without JavaScript; modal focus and backdrop behavior begin on hydration.
+Opening focuses the dialog itself, so no control shows a focus ring until the reader moves on; a
+child with `autofocus` takes focus instead.
 
 ```svelte
 <script lang="ts">
@@ -47,6 +49,8 @@ An initially open dialog is visible without JavaScript; modal focus and backdrop
     actions?: Snippet;
     /** Centered by default; fullscreen fills the viewport with a scrollable body. */
     presentation?: "centered" | "fullscreen";
+    /** Width of a centered dialog; sm suits a short form or a confirmation. Defaults to md. */
+    size?: "sm" | "md";
     /** Uses native modal focus trapping and an inert background; defaults to true. */
     modal?: boolean;
     /** Requests controller.close() on backdrop clicks; defaults to true. The controller may refuse. */
@@ -69,6 +73,7 @@ An initially open dialog is visible without JavaScript; modal focus and backdrop
     headerActions,
     actions,
     presentation = "centered",
+    size = "md",
     modal = true,
     closeOnBackdrop = true,
     class: className = "",
@@ -91,8 +96,12 @@ An initially open dialog is visible without JavaScript; modal focus and backdrop
   });
 
   function showDialog() {
-    if (modal) dialog?.showModal();
-    else dialog?.show();
+    if (!dialog) return;
+    if (modal) dialog.showModal();
+    else dialog.show();
+    // The browser would focus the first control, usually the close button, and light its ring on
+    // every opening. Focus the dialog itself unless content asks for autofocus; Tab reaches the rest.
+    if (!dialog.querySelector("[autofocus]")) dialog.focus();
   }
 
   function handleCancel(event: Event) {
@@ -117,7 +126,8 @@ An initially open dialog is visible without JavaScript; modal focus and backdrop
 <dialog
   bind:this={dialog}
   open={initiallyOpen}
-  class="dialog {presentation} {className}"
+  tabindex="-1"
+  class="dialog {presentation} {size} {className}"
   aria-labelledby={titleId}
   aria-describedby={description ? descriptionId : undefined}
   oncancel={handleCancel}
@@ -136,6 +146,7 @@ An initially open dialog is visible without JavaScript; modal focus and backdrop
   .dialog {
     --dialog-padding: var(--space-4);
     --dialog-margin: var(--space-2);
+    --dialog-width: var(--layout-container-sm);
     position: fixed;
     z-index: var(--layer-modal);
     box-sizing: border-box;
@@ -146,11 +157,14 @@ An initially open dialog is visible without JavaScript; modal focus and backdrop
     border-radius: var(--radius-xl);
     background: var(--color-surface-island-strong);
     padding: 0;
-    inline-size: min(calc(100vi - 2 * var(--dialog-margin)), var(--layout-container-sm));
+    inline-size: min(calc(100vi - 2 * var(--dialog-margin)), var(--dialog-width));
     max-inline-size: none;
     max-block-size: calc(100dvb - 2 * var(--dialog-margin));
     overflow: auto;
     color: var(--color-text-primary);
+  }
+  .dialog:focus {
+    outline: none;
   }
   .dialog::backdrop {
     backdrop-filter: blur(var(--blur-sm));
@@ -176,6 +190,10 @@ An initially open dialog is visible without JavaScript; modal focus and backdrop
   footer {
     flex: none;
     padding-block-start: var(--space-1);
+  }
+
+  .sm {
+    --dialog-width: var(--layout-container-xs);
   }
 
   @media (min-width: 48rem) {

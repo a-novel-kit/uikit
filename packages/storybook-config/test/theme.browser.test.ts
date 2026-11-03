@@ -35,7 +35,7 @@ function sample(background: string, foreground = "--color-text-primary") {
 }
 
 describe("shared dark theme", () => {
-  it("renders the agreed grey-blue canvas in CSS, palette metadata, and Storybook chrome", () => {
+  it("renders the agreed blue-black canvas in CSS, palette metadata, and Storybook chrome", () => {
     const canvas = sample("--color-surface-canvas").background;
     const colors = [canvas, new Color(colorSystem.canvas)];
     for (const value of [aNovelTheme.appBg, aNovelTheme.appContentBg, aNovelTheme.appPreviewBg]) {
@@ -43,7 +43,7 @@ describe("shared dark theme", () => {
       colors.push(new Color(value!));
     }
     for (const color of colors) {
-      expect(color.to("srgb").coords.map((channel) => Math.round(channel * 255))).toEqual([6, 11, 14]);
+      expect(color.to("srgb").coords.map((channel) => Math.round(channel * 255))).toEqual([3, 7, 10]);
     }
   });
 

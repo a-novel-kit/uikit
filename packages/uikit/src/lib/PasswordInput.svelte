@@ -90,7 +90,7 @@ without scripting.
   .toggle {
     display: inline-flex;
     margin-inline-end: calc(-1 * (var(--space-2) + var(--border-width-thin)));
-    margin-block: calc(var(--control-height-sm) / -2);
+    margin-block: calc(var(--control-height-nested) / -2);
   }
 
   @media (scripting: none) {

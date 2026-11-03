@@ -53,7 +53,7 @@ Native attributes and events target the input; `class` styles the surrounding su
       border-color var(--duration-fast) var(--easing-standard),
       box-shadow var(--duration-fast) var(--easing-standard);
     box-sizing: border-box;
-    border: var(--border-width-thin) solid var(--color-control-border);
+    border: var(--border-width-thin) solid var(--color-field-border);
     border-radius: var(--radius-md);
     background: var(--color-control-surface);
     inline-size: 100%;
@@ -88,7 +88,7 @@ Native attributes and events target the input; `class` styles the surrounding su
         .control:user-invalid
       )
     ) {
-    border-color: var(--color-control-border-hover);
+    border-color: var(--color-field-border);
     background: var(--color-control-surface-hover);
   }
 
@@ -107,7 +107,7 @@ Native attributes and events target the input; `class` styles the surrounding su
 
   .input:has(.control:disabled) {
     cursor: not-allowed;
-    border-color: var(--color-border-subtle);
+    border-color: var(--color-field-border);
     background: var(--color-control-surface-disabled);
   }
 
@@ -149,14 +149,14 @@ Native attributes and events target the input; `class` styles the surrounding su
     font-size: var(--font-size-sm);
   }
   .md {
-    padding: var(--space-2) var(--space-3);
+    padding: var(--space-1) var(--space-3);
     min-block-size: var(--control-height-md);
   }
   .md .control {
     font-size: var(--font-size-md);
   }
   .lg {
-    padding: var(--space-3) var(--space-4);
+    padding: var(--space-2) var(--space-4);
     min-block-size: var(--control-height-lg);
   }
   .lg .control {

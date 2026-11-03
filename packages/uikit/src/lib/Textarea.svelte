@@ -58,7 +58,7 @@ Styles a native multiline input. Native attributes and events target the textare
       border-color var(--duration-fast) var(--easing-standard),
       box-shadow var(--duration-fast) var(--easing-standard);
     box-sizing: border-box;
-    border: var(--border-width-thin) solid var(--color-control-border);
+    border: var(--border-width-thin) solid var(--color-field-border);
     border-radius: var(--radius-md);
     background: var(--color-control-surface);
     inline-size: 100%;
@@ -98,7 +98,7 @@ Styles a native multiline input. Native attributes and events target the textare
         .control:user-invalid
       )
     ) {
-    border-color: var(--color-control-border-hover);
+    border-color: var(--color-field-border);
     background: var(--color-control-surface-hover);
   }
 
@@ -117,7 +117,7 @@ Styles a native multiline input. Native attributes and events target the textare
 
   .textarea:has(.control:disabled) {
     cursor: not-allowed;
-    border-color: var(--color-border-subtle);
+    border-color: var(--color-field-border);
     background: var(--color-control-surface-disabled);
   }
 

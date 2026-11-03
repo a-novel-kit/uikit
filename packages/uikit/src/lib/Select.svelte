@@ -309,7 +309,7 @@ The hidden named input submits the selected value. The caller validates required
       box-shadow var(--duration-fast) var(--easing-standard);
     cursor: pointer;
     box-sizing: border-box;
-    border: var(--border-width-thin) solid var(--color-control-border);
+    border: var(--border-width-thin) solid var(--color-field-border);
     border-radius: var(--radius-md);
     background: var(--color-control-surface);
     inline-size: 100%;
@@ -322,7 +322,7 @@ The hidden named input submits the selected value. The caller validates required
   }
 
   .a-novel-select-trigger:hover:not(:disabled, :focus-visible, [aria-invalid="true"]) {
-    border-color: var(--color-control-border-hover);
+    border-color: var(--color-field-border);
     background: var(--color-control-surface-hover);
   }
 
@@ -349,7 +349,7 @@ The hidden named input submits the selected value. The caller validates required
 
   .a-novel-select-trigger:disabled {
     cursor: not-allowed;
-    border-color: var(--color-border-subtle);
+    border-color: var(--color-field-border);
     background: var(--color-control-surface-disabled);
     color: var(--color-control-disabled-text);
   }
