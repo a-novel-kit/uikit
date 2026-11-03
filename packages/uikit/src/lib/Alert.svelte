@@ -71,6 +71,11 @@ Errors use an alert live region; other tones use status. Override `role` for sta
     --alert-accent: var(--color-feedback-info-text);
   }
 
+  .highlight {
+    --alert-surface: var(--color-feedback-highlight-surface);
+    --alert-accent: var(--color-feedback-highlight-text);
+  }
+
   .success {
     --alert-surface: var(--color-feedback-success-surface);
     --alert-accent: var(--color-feedback-success-text);

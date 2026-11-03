@@ -1,7 +1,7 @@
 <script lang="ts" module>
   import { CircleAlert, CircleCheck, Info, TriangleAlert } from "@lucide/svelte";
 
-  const icons = { info: Info, success: CircleCheck, warning: TriangleAlert, error: CircleAlert };
+  const icons = { info: Info, highlight: Info, success: CircleCheck, warning: TriangleAlert, error: CircleAlert };
 </script>
 
 <script lang="ts">
@@ -52,6 +52,11 @@
     --feedback-surface: var(--color-feedback-info-surface);
     --feedback-color: var(--color-feedback-info-text);
   }
+  .highlight {
+    --feedback-surface: var(--color-feedback-highlight-surface);
+    --feedback-color: var(--color-feedback-highlight-text);
+  }
+
   .success {
     --feedback-surface: var(--color-feedback-success-surface);
     --feedback-color: var(--color-feedback-success-text);
