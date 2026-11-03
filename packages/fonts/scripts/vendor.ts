@@ -2,10 +2,8 @@
  * Vendors the WOFF2 font files into files/ and their licenses into licenses/. Both directories are
  * committed and published, so applications serve the fonts from their own origin.
  */
-import { execFileSync } from "node:child_process";
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, readdirSync, writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
-import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 
 import { compress } from "wawoff2";
@@ -15,9 +13,16 @@ const root = join(import.meta.dirname, "..");
 const outDir = join(root, "files");
 mkdirSync(outDir, { recursive: true });
 
+/** Downloads a file, failing on an HTTP error status or once the timeout elapses. */
+async function download(url: string, timeoutMs: number) {
+  const response = await fetch(url, { signal: AbortSignal.timeout(timeoutMs) });
+  if (!response.ok) throw new Error(`${url} answered ${response.status}`);
+  return new Uint8Array(await response.arrayBuffer());
+}
+
 // 1. TeX Gyre Heros and its condensed sibling, downloaded from CTAN as OTF and converted to WOFF2.
 // The fixed CTAN mirror avoids load-balanced mirrors with inconsistent TLS.
-const CTAN = "https://ctan.math.illinois.edu/fonts/tex-gyre/opentype";
+const CTAN = "https://ctan.math.illinois.edu/fonts/tex-gyre";
 const HEROS: Array<[string, string]> = [
   ["texgyreheros-regular.otf", "heros-regular.woff2"],
   ["texgyreheros-bold.otf", "heros-bold.woff2"],
@@ -26,11 +31,8 @@ const HEROS: Array<[string, string]> = [
   ["texgyreheroscn-regular.otf", "heros-cn-regular.woff2"],
   ["texgyreheroscn-bold.otf", "heros-cn-bold.woff2"],
 ];
-const tmp = mkdtempSync(join(tmpdir(), "texgyre-"));
 for (const [src, dst] of HEROS) {
-  const otfPath = join(tmp, src);
-  execFileSync("curl", ["-sSL", "--fail", "-m", "60", `${CTAN}/${src}`, "-o", otfPath]);
-  const woff2 = await compress(new Uint8Array(readFileSync(otfPath)));
+  const woff2 = await compress(await download(`${CTAN}/opentype/${src}`, 60_000));
   writeFileSync(join(outDir, dst), woff2);
   console.log(`heros  ${dst.padEnd(24)} ${(woff2.length / 1024).toFixed(0)}KB`);
 }
@@ -45,7 +47,7 @@ for (const pkg of OFL) {
   }
   const picks = readdirSync(filesDir).filter((f) => /-latin-wght-(normal|italic)\.woff2$/.test(f));
   for (const f of picks) {
-    writeFileSync(join(outDir, f), readFileSync(join(filesDir, f)));
+    copyFileSync(join(filesDir, f), join(outDir, f));
     console.log(`ofl    ${f}`);
   }
 }
@@ -58,20 +60,12 @@ for (const pkg of OFL) {
   const lic = ["LICENSE", "LICENSE.txt", "LICENSE.md"].map((f) => join(pkgDir, f)).find(existsSync);
   if (lic) {
     const name = `OFL-${pkg.split("/")[1]}.txt`;
-    writeFileSync(join(licDir, name), readFileSync(lic));
+    copyFileSync(lic, join(licDir, name));
     console.log(`lic    ${name}`);
   }
 }
 try {
-  execFileSync("curl", [
-    "-sSL",
-    "--fail",
-    "-m",
-    "30",
-    `${CTAN.replace("/opentype", "")}/doc/GUST-FONT-LICENSE.txt`,
-    "-o",
-    join(licDir, "GUST-FONT-LICENSE.txt"),
-  ]);
+  writeFileSync(join(licDir, "GUST-FONT-LICENSE.txt"), await download(`${CTAN}/doc/GUST-FONT-LICENSE.txt`, 30_000));
   console.log("lic    GUST-FONT-LICENSE.txt");
 } catch {
   console.warn("WARN   could not fetch GUST-FONT-LICENSE.txt (vendor it manually from CTAN)");

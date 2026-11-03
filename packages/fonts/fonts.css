@@ -5,13 +5,13 @@
  */
 
 /* ------------------------------------------------------------------ *
- * Interface — TeX Gyre Heros (the Helvetica-Neue voice), Latin only.
+ * Interface: TeX Gyre Heros (the Helvetica-Neue voice), Latin only.
  * Ships two real weights only: 400 and 700.
  *
  * Its own metrics set the capitals about 5% of the size below the
- * middle of a line box, so a button label sat up to a pixel low. Each
+ * middle of a line box, up to a pixel low in a button label. Each
  * face moves its ascent and descent until they differ by the capital
- * height (73%) plus 2%, which centres the capitals once browsers snap
+ * height (73%) plus 2%, which centers the capitals once browsers snap
  * the baseline to whole pixels. Their sum stays the face's own, so
  * `line-height: normal` keeps its height.
  * ------------------------------------------------------------------ */
@@ -65,7 +65,7 @@
 }
 
 /* ------------------------------------------------------------------ *
- * Display — TeX Gyre Heros Cn (condensed), Latin only. 400 and 700.
+ * Display: TeX Gyre Heros Cn (condensed), Latin only. 400 and 700.
  * ------------------------------------------------------------------ */
 @font-face {
   font-style: normal;
@@ -89,7 +89,7 @@
 }
 
 /* ------------------------------------------------------------------ *
- * Story — Lora (variable serif, OFL). Weight axis 400–700.
+ * Story: Lora (variable serif, OFL). Weight axis 400–700.
  * ------------------------------------------------------------------ */
 @font-face {
   font-style: normal;
@@ -107,7 +107,7 @@
 }
 
 /* ------------------------------------------------------------------ *
- * Mono — JetBrains Mono (variable, OFL). Weight axis 100–800.
+ * Mono: JetBrains Mono (variable, OFL). Weight axis 100–800.
  * ------------------------------------------------------------------ */
 @font-face {
   font-style: normal;
@@ -125,7 +125,7 @@
 }
 
 /* ------------------------------------------------------------------ *
- * Interface Latin fallback — Arimo (metric-compatible with Helvetica, OFL).
+ * Interface Latin fallback: Arimo (metric-compatible with Helvetica, OFL).
  * ------------------------------------------------------------------ */
 @font-face {
   font-style: normal;
