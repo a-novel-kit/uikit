@@ -16,9 +16,7 @@ Use only inside Toolbar and supply a pressed-state controller.
 <script lang="ts">
   import ToggleButton from "./ToggleButton.svelte";
 
-  let { children, disabled = false, controller, ...toggleProps }: ToolbarToggleButtonProps = $props();
+  let props: ToolbarToggleButtonProps = $props();
 </script>
 
-<ToggleButton {...toggleProps} {controller} {disabled} data-composite-item="" tabindex={-1}>
-  {@render children?.()}
-</ToggleButton>
+<ToggleButton {...props} data-composite-item="" tabindex={-1} />
