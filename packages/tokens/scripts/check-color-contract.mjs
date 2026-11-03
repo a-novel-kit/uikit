@@ -5,7 +5,7 @@ import { extname, relative, resolve } from "node:path";
 
 const packagesDirectory = resolve(import.meta.dirname, "../..");
 const sourceExtensions = new Set([".css", ".js", ".mjs", ".mdx", ".svelte", ".ts", ".tsx"]);
-const ignoredDirectories = new Set(["dist", "node_modules", "storybook-static"]);
+const ignoredDirectories = new Set([".svelte-kit", "dist", "node_modules", "storybook-static"]);
 const legacyColorPattern = /#[0-9a-f]{3,8}\b|(?:rgb|rgba|hsl|hsla)\s*\(|color\s*\(\s*display-p3\b/i;
 const primitiveComponentPattern =
   /var\(--(?:base-(?:brand|pressure|signal|neutral)|color-(?:neutral|brand|pressure|signal)-\d+)\)/;
@@ -14,11 +14,13 @@ const violations = [];
 
 async function checkFile(path) {
   const lines = (await readFile(path, "utf8")).split(/\r?\n/);
+  const file = relative(packagesDirectory, path);
+  const isComponent = path.startsWith(componentDirectory);
+
   for (const [index, line] of lines.entries()) {
-    const location = `${relative(packagesDirectory, path)}:${index + 1}`;
-    if (legacyColorPattern.test(line)) violations.push(`${location}: legacy color: ${line.trim()}`);
-    if (path.startsWith(componentDirectory) && primitiveComponentPattern.test(line)) {
-      violations.push(`${location}: primitive token: ${line.trim()}`);
+    if (legacyColorPattern.test(line)) violations.push(`${file}:${index + 1}: legacy color: ${line.trim()}`);
+    if (isComponent && primitiveComponentPattern.test(line)) {
+      violations.push(`${file}:${index + 1}: primitive token: ${line.trim()}`);
     }
   }
 }
