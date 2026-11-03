@@ -129,7 +129,7 @@ file selection remains owned by the browser.
   }
   .lg::file-selector-button {
     margin-inline-end: var(--space-4);
-    padding: var(--space-2) var(--space-5);
+    padding: var(--space-2) var(--space-6);
     min-block-size: calc(var(--control-height-lg) - var(--border-width-strong));
   }
 

@@ -30,7 +30,9 @@ Use public spacing, radius, control, border, focus, and motion tokens in compone
 
 ## Spacing
 
-The spacing scale starts at `--space-base` and exposes named steps.
+The spacing scale starts at `--space-base` and exposes named steps. Space inside and between elements
+repeats a few of them: 4, 8, 12, 16, 24 and 32 pixels (`--space-{1,2,3,4,6,8}`), with 48 and 64
+(`--space-{12,16}`) for page layout. The in-between steps only size dense details, such as a badge.
 
 <div className="metric-stack">
   {spacingTokens.map((token) => (
