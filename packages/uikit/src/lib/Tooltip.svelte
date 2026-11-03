@@ -51,7 +51,7 @@ Spread all trigger attributes onto that element; an open controller owns visibil
   import RenderContent from "./Content.svelte";
   import FloatingSurface from "./internal/FloatingSurface.svelte";
 
-  import { onDestroy } from "svelte";
+  import { onDestroy, untrack } from "svelte";
 
   let { content, controller, trigger, side = "top", delayDuration = 400, disabled = false }: TooltipProps = $props();
 
@@ -75,6 +75,12 @@ Spread all trigger attributes onto that element; an open controller owns visibil
 
   $effect(() => {
     if (disabled) closeTooltip();
+  });
+
+  // A tooltip its controller opens without a pointer or focus event anchors to the trigger it describes.
+  $effect(() => {
+    if (!controller.state.open || untrack(() => source)) return;
+    source = document.querySelector<HTMLElement>(`[aria-describedby~="${CSS.escape(tooltipId)}"]`);
   });
 
   function scheduleOpen(element: HTMLElement) {

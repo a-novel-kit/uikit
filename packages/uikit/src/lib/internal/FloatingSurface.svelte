@@ -36,10 +36,17 @@
 
   const supportsPopover = typeof HTMLElement !== "undefined" && "showPopover" in HTMLElement.prototype;
 
+  // The browser reads the anchor when the surface shows, so a source that arrives later shows it again.
+  let anchoredSource: HTMLElement | null = null;
+
   $effect(() => {
     if (!open || !element || typeof element.showPopover !== "function") return;
-    if (element.matches(":popover-open")) return;
+    if (element.matches(":popover-open")) {
+      if (!source || source === anchoredSource) return;
+      element.hidePopover();
+    }
 
+    anchoredSource = source;
     element.showPopover(source ? { source } : undefined);
   });
 

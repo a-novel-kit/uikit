@@ -12,7 +12,7 @@ application serves them from its own origin.
 | Mono                | JetBrains Mono (variable)                  | SIL OFL 1.1                   |
 | Interface fallback  | Arimo (Latin, metric-compatible)           | SIL OFL 1.1                   |
 
-TeX Gyre Heros is scoped to Latin through `unicode-range`, so other scripts fall through the family
+Every face is scoped to Latin through `unicode-range`, so other scripts fall through the family
 stack. Platforms add locale-specific faces, such as Noto, for those scripts. Heros exposes real 400
 and 700 weights.
 

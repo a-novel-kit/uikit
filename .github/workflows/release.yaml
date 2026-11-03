@@ -92,8 +92,7 @@ jobs:
     environment:
       name: governance
       deployment: false
-    permissions:
-      contents: read
+    permissions: {}
     steps:
       - uses: a-novel-kit/workflows/generic-actions/archive-board-items@v1.81.3
         with:

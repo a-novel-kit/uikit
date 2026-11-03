@@ -95,7 +95,7 @@ For a custom trigger, spread the snippet attributes onto a native button.
   import { useMessages } from "./internal/i18n";
   import { createTypeahead, findTypeaheadMatch, isTypeaheadKey } from "./internal/typeahead";
 
-  import { onDestroy, tick } from "svelte";
+  import { onDestroy, tick, untrack } from "svelte";
 
   const { t } = useMessages();
 
@@ -142,6 +142,13 @@ For a custom trigger, spread the snippet attributes onto a native button.
 
   $effect(() => {
     if (disabled && controller.state.open) closeMenu();
+  });
+
+  // When the controller opens the menu without a trigger event, a composed trigger is found by the id
+  // its attributes carry.
+  $effect(() => {
+    if (!controller.state.open || untrack(() => triggerElement)) return;
+    triggerElement = document.getElementById(triggerId);
   });
 
   onDestroy(typeahead.dispose);

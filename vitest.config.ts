@@ -7,6 +7,7 @@ import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
 import { playwright } from "@vitest/browser-playwright";
 
+const storybookConfigRoot = fileURLToPath(new URL("./packages/storybook-config", import.meta.url));
 const storybookConfigDirectory = fileURLToPath(new URL("./packages/storybook/.storybook", import.meta.url));
 const storybookRoot = fileURLToPath(new URL("./packages/storybook", import.meta.url));
 const storybookSvelteConfig = fileURLToPath(new URL("./packages/storybook/svelte.config.js", import.meta.url));
@@ -28,10 +29,12 @@ export default defineConfig({
       "packages/uikit/vitest.browser.config.ts",
       "packages/uikit/vitest.ssr.config.ts",
       defineProject({
+        // The pre-bundled dependencies resolve from the package that declares them.
+        root: storybookConfigRoot,
         optimizeDeps: { include: ["@storybook/addon-docs/blocks", "react", "react/jsx-dev-runtime"] },
         test: {
           name: "storybook-config-browser",
-          include: ["packages/storybook-config/test/**/*.browser.test.ts"],
+          include: ["test/**/*.browser.test.ts"],
           browser: {
             enabled: true,
             provider: playwright({}),

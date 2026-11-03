@@ -106,6 +106,13 @@ The hidden named input submits the selected value. The caller validates required
     if (controller.state.open && triggerElement) anchorWidth = triggerElement.getBoundingClientRect().width + "px";
   });
 
+  // An open listbox always has an active option, including one its controller opened.
+  $effect(() => {
+    if (!controller.state.open) return;
+    const active = options[activeIndex];
+    if (!active || active.disabled) activeIndex = startIndex();
+  });
+
   $effect(() => {
     if (disabled && controller.state.open) closeListbox();
   });
@@ -127,12 +134,20 @@ The hidden named input submits the selected value. The caller validates required
     void tick().then(scrollActiveOption);
   }
 
+  /**
+   * Indexes the option the listbox opens on: the enabled option at `boundary`, or without one, the
+   * selected option when enabled, then the first enabled option.
+   */
+  function startIndex(boundary?: "first" | "last") {
+    const startOnSelection = boundary === undefined && selectedIndex >= 0 && !options[selectedIndex].disabled;
+    return startOnSelection ? selectedIndex : findEnabledBoundary(options, boundary ?? "first");
+  }
+
   /** Opens on the selected option, or on the first or last enabled option when `boundary` is set. */
   function openListbox(boundary?: "first" | "last") {
     if (disabled) return;
 
-    const startOnSelection = boundary === undefined && selectedIndex >= 0 && !options[selectedIndex].disabled;
-    setActiveIndex(startOnSelection ? selectedIndex : findEnabledBoundary(options, boundary ?? "first"));
+    setActiveIndex(startIndex(boundary));
     controller.open();
   }
 
@@ -173,6 +188,11 @@ The hidden named input submits the selected value. The caller validates required
 
   function handleTriggerKeyDown(event: KeyboardEvent) {
     if (disabled) return;
+
+    if (event.key === "Tab" && controller.state.open) {
+      closeListbox();
+      return;
+    }
 
     if (event.key === "ArrowDown" || event.key === "ArrowUp") {
       event.preventDefault();
