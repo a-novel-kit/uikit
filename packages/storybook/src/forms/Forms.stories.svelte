@@ -72,6 +72,7 @@
 
   const visibilityController = fixedSelect<Visibility>();
   const openVisibilityController = fixedSelect<Visibility>("private", true);
+  const openUnsetVisibilityController = fixedSelect<Visibility>(undefined, true);
   const invalidVisibilityController = fixedSelect<Visibility>();
   const composedVisibilityController = fixedSelect<Visibility>("private");
   const productUpdatesController = fixedChecked(true);
@@ -266,6 +267,20 @@
     <Field label="Visibility">
       {#snippet children(control)}
         <Select {...control} controller={openVisibilityController} options={visibilityOptions} allowDeselect />
+      {/snippet}
+    </Field>
+  </div>
+</Story>
+
+<Story
+  name="Open selection without a value"
+  parameters={{ docs: { story: { inline: false, height: "360px" } } }}
+  asChild
+>
+  <div class="narrow">
+    <Field label="Visibility">
+      {#snippet children(control)}
+        <Select {...control} controller={openUnsetVisibilityController} options={visibilityOptions} />
       {/snippet}
     </Field>
   </div>

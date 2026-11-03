@@ -1,8 +1,8 @@
 import Select from "./Select.svelte";
 import type { SelectOption } from "./Select.svelte";
-import { createSelectController } from "./controllers.svelte";
+import { type SelectController, createSelectController } from "./controllers.svelte";
 
-import { createRawSnippet } from "svelte";
+import { createRawSnippet, tick } from "svelte";
 
 import { describe, expect, it, vi } from "vitest";
 
@@ -90,6 +90,22 @@ describe("Select", () => {
 
     await fireEvent.keyDown(trigger, { key: "p" });
     expect(onValueChange).toHaveBeenCalledOnce();
+  });
+
+  it("gives a listbox its controller opened an active option", async () => {
+    const controller: SelectController<string> = {
+      state: { open: true, value: undefined },
+      open() {},
+      close() {},
+      toggle() {},
+      select() {},
+    };
+    const { getByRole } = render(Select, { props: { "aria-label": "Visibility", controller, options } });
+    await tick();
+
+    const first = getByRole("option", { name: "Private" });
+    expect(getByRole("combobox").getAttribute("aria-activedescendant")).toBe(first.id);
+    expect(first.hasAttribute("data-highlighted")).toBe(true);
   });
 
   it("highlights the option matching typed characters while open", async () => {

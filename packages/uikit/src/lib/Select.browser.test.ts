@@ -63,3 +63,14 @@ it.each(openPaths)("shows the listbox at its trigger's width when opened by $pat
 
   expect(await shown).toBe(trigger.getBoundingClientRect().width + "px");
 });
+
+it("closes the listbox when Tab moves focus away", async () => {
+  const controller = createSelectController<string>();
+  render(Select, { controller, "aria-label": "Visibility", options });
+  await userEvent.click(page.getByRole("combobox"));
+  await expect.element(page.getByRole("listbox")).toBeVisible();
+
+  await userEvent.keyboard("{Tab}");
+
+  expect(controller.state.open).toBe(false);
+});
