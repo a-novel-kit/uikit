@@ -278,28 +278,33 @@
     var(--color-surface-subtle)
   );
   --color-feedback-info-text: var(--base-brand);
+  /*
+   * Success is green: signal and brand meet halfway round the hue circle, at oklch(0.758 0.197 150), inside sRGB
+   * and about 10:1 on the canvas. The palette keeps its three canonical families.
+   */
+  --color-feedback-success-text: color-mix(in oklch, var(--base-signal), var(--base-brand));
   --color-feedback-success-surface: color-mix(
     in oklab,
-    var(--base-signal) var(--color-mix-2),
+    var(--color-feedback-success-text) var(--color-mix-2),
     var(--color-surface-canvas)
   );
   --color-feedback-success-border: color-mix(
     in oklab,
-    var(--base-signal) var(--color-mix-9),
+    var(--color-feedback-success-text) var(--color-mix-9),
     var(--color-surface-subtle)
   );
-  --color-feedback-success-text: var(--base-signal);
+  /* A warning is amber, set apart from the crimson of errors. */
   --color-feedback-warning-surface: color-mix(
     in oklab,
-    var(--base-pressure) var(--color-mix-2),
+    var(--base-signal) var(--color-mix-2),
     var(--color-surface-canvas)
   );
   --color-feedback-warning-border: color-mix(
     in oklab,
-    var(--base-pressure) var(--color-mix-8),
+    var(--base-signal) var(--color-mix-9),
     var(--color-surface-subtle)
   );
-  --color-feedback-warning-text: var(--base-pressure);
+  --color-feedback-warning-text: var(--base-signal);
   --color-feedback-error-surface: color-mix(
     in oklab,
     var(--base-pressure) var(--color-mix-2),
