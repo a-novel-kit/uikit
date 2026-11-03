@@ -115,6 +115,14 @@ describe("Dialog browser lifecycle", () => {
     }
   );
 
+  it("focuses the dialog itself on open, so no control lights a focus ring", async () => {
+    const controller = createOpenController();
+    render(Fixture, { controller });
+    await page.getByRole("button", { name: "Open details" }).click();
+    await expect.element(page.getByRole("dialog")).toHaveFocus();
+    expect(document.querySelector(":focus-visible")).toBeNull();
+  });
+
   it("keeps content and dismissal reachable on exceptionally short viewports", async () => {
     await page.viewport(320, 200);
     const controller = createOpenController();

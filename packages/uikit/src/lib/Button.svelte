@@ -142,19 +142,19 @@ Pass `href` for navigation: it renders a native link with the same appearance.
 
   .sm {
     padding-inline: var(--space-3);
-    padding-block: var(--space-1-5);
+    padding-block: var(--space-1);
     min-block-size: var(--control-height-sm);
     font-size: var(--font-size-sm);
   }
   .md {
     padding-inline: var(--space-4);
-    padding-block: var(--space-2);
+    padding-block: var(--space-1-5);
     min-block-size: var(--control-height-md);
     font-size: var(--font-size-sm);
   }
   .lg {
     padding-inline: var(--space-5);
-    padding-block: var(--space-3);
+    padding-block: var(--space-2);
     min-block-size: var(--control-height-lg);
     font-size: var(--font-size-md);
   }
@@ -183,6 +183,20 @@ Pass `href` for navigation: it renders a native link with the same appearance.
 
   .solid:hover:not(:disabled):not([aria-pressed="true"]) {
     background-color: var(--button-hover);
+  }
+
+  .solid.brand:not(:disabled):not([aria-pressed="true"]) {
+    box-shadow: var(--shadow-action-primary);
+    background-image: var(--gradient-action-primary);
+  }
+
+  .solid.brand:hover:not(:disabled):not([aria-pressed="true"]) {
+    box-shadow: var(--shadow-action-primary-hover);
+    background-image: var(--gradient-action-primary-hover);
+  }
+
+  .solid.brand:active:not(:disabled):not([aria-pressed="true"]) {
+    background-image: none;
   }
 
   .solid:active:not(:disabled):not([aria-pressed="true"]) {

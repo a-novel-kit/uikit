@@ -9,7 +9,7 @@
       docs: {
         description: {
           component:
-            "Depth separates temporary or raised content: islands catch light on their top edge. Motion confirms a state change and follows reduced-motion preferences.",
+            "Depth separates temporary or raised content: a soft sheen fades down each island. Motion confirms a state change and follows reduced-motion preferences.",
         },
       },
     },
@@ -31,7 +31,7 @@
     docs: {
       description: {
         story:
-          "The application paints `--fill-canvas` on its root element: one warm lamp in the top-start corner of the cool canvas. Islands under it keep their own surface.",
+          "The application paints `--fill-canvas` on its root element and colors the lamp with `--color-lamp` there, such as `--color-lamp-violet`, so each app is recognizable at a glance. An ember lights any app that sets none. Navigation the lamp crosses uses `--fill-navigation`.",
       },
     },
   }}

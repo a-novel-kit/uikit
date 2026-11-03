@@ -4,6 +4,8 @@ Renders a native modal dialog driven by `createOpenController` or a compatible c
 Escape and backdrop interaction request closure; the controller decides whether it closes.
 Supply a localized close control through `headerActions`.
 An initially open dialog is visible without JavaScript; modal focus and backdrop behavior begin on hydration.
+Opening focuses the dialog itself, so no control shows a focus ring until the reader moves on; a
+child with `autofocus` takes focus instead.
 
 ```svelte
 <script lang="ts">
@@ -94,8 +96,12 @@ An initially open dialog is visible without JavaScript; modal focus and backdrop
   });
 
   function showDialog() {
-    if (modal) dialog?.showModal();
-    else dialog?.show();
+    if (!dialog) return;
+    if (modal) dialog.showModal();
+    else dialog.show();
+    // The browser would focus the first control, usually the close button, and light its ring on
+    // every opening. Focus the dialog itself unless content asks for autofocus; Tab reaches the rest.
+    if (!dialog.querySelector("[autofocus]")) dialog.focus();
   }
 
   function handleCancel(event: Event) {
@@ -120,6 +126,7 @@ An initially open dialog is visible without JavaScript; modal focus and backdrop
 <dialog
   bind:this={dialog}
   open={initiallyOpen}
+  tabindex="-1"
   class="dialog {presentation} {size} {className}"
   aria-labelledby={titleId}
   aria-describedby={description ? descriptionId : undefined}
@@ -155,6 +162,9 @@ An initially open dialog is visible without JavaScript; modal focus and backdrop
     max-block-size: calc(100dvb - 2 * var(--dialog-margin));
     overflow: auto;
     color: var(--color-text-primary);
+  }
+  .dialog:focus {
+    outline: none;
   }
   .dialog::backdrop {
     backdrop-filter: blur(var(--blur-sm));

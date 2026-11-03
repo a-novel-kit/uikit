@@ -1,6 +1,6 @@
 /* Generated from one OKLCH basis and gamut-relative coefficients. Do not edit. */
 :root {
-  --base-canvas: oklch(0.125 var(--color-canvas-chroma) var(--color-hue-brand));
+  --base-canvas: oklch(0.125 var(--color-neutral-chroma) var(--color-hue-brand));
   --color-hue-brand: 232;
   --color-harmony-half-turn: 180;
   --color-harmony-opposition-bias: -10;
@@ -44,8 +44,7 @@
   --color-neutral-lightness-floor: 0.11;
   --color-neutral-lightness-peak: 0.96;
   --color-neutral-lightness-curve: 1.6;
-  --color-neutral-chroma: 0.006;
-  --color-canvas-chroma: 0.012;
+  --color-neutral-chroma: 0.012;
   --color-scale-divisions: var(--multiplier-11);
   --color-scale-progress-1: calc(var(--multiplier-0) / var(--color-scale-divisions));
   --color-scale-tone-1: calc(var(--color-scale-progress-1) * var(--color-scale-progress-1) * (var(--multiplier-3) - var(--multiplier-2) * var(--color-scale-progress-1)));
@@ -118,7 +117,7 @@
           pow(var(--color-scale-progress-1), var(--color-neutral-lightness-curve))
     )
     var(--color-neutral-chroma)
-    var(--color-hue-signal)
+    var(--color-hue-brand)
   );
   --color-neutral-2: oklch(
     calc(
@@ -127,7 +126,7 @@
           pow(var(--color-scale-progress-2), var(--color-neutral-lightness-curve))
     )
     var(--color-neutral-chroma)
-    var(--color-hue-signal)
+    var(--color-hue-brand)
   );
   --color-neutral-3: oklch(
     calc(
@@ -136,7 +135,7 @@
           pow(var(--color-scale-progress-3), var(--color-neutral-lightness-curve))
     )
     var(--color-neutral-chroma)
-    var(--color-hue-signal)
+    var(--color-hue-brand)
   );
   --color-neutral-4: oklch(
     calc(
@@ -145,7 +144,7 @@
           pow(var(--color-scale-progress-4), var(--color-neutral-lightness-curve))
     )
     var(--color-neutral-chroma)
-    var(--color-hue-signal)
+    var(--color-hue-brand)
   );
   --color-neutral-5: oklch(
     calc(
@@ -154,7 +153,7 @@
           pow(var(--color-scale-progress-5), var(--color-neutral-lightness-curve))
     )
     var(--color-neutral-chroma)
-    var(--color-hue-signal)
+    var(--color-hue-brand)
   );
   --color-neutral-6: oklch(
     calc(
@@ -163,7 +162,7 @@
           pow(var(--color-scale-progress-6), var(--color-neutral-lightness-curve))
     )
     var(--color-neutral-chroma)
-    var(--color-hue-signal)
+    var(--color-hue-brand)
   );
   --color-neutral-7: oklch(
     calc(
@@ -172,7 +171,7 @@
           pow(var(--color-scale-progress-7), var(--color-neutral-lightness-curve))
     )
     var(--color-neutral-chroma)
-    var(--color-hue-signal)
+    var(--color-hue-brand)
   );
   --color-neutral-8: oklch(
     calc(
@@ -181,7 +180,7 @@
           pow(var(--color-scale-progress-8), var(--color-neutral-lightness-curve))
     )
     var(--color-neutral-chroma)
-    var(--color-hue-signal)
+    var(--color-hue-brand)
   );
   --color-neutral-9: oklch(
     calc(
@@ -190,7 +189,7 @@
           pow(var(--color-scale-progress-9), var(--color-neutral-lightness-curve))
     )
     var(--color-neutral-chroma)
-    var(--color-hue-signal)
+    var(--color-hue-brand)
   );
   --color-neutral-10: oklch(
     calc(
@@ -199,7 +198,7 @@
           pow(var(--color-scale-progress-10), var(--color-neutral-lightness-curve))
     )
     var(--color-neutral-chroma)
-    var(--color-hue-signal)
+    var(--color-hue-brand)
   );
   --color-neutral-11: oklch(
     calc(
@@ -208,7 +207,7 @@
           pow(var(--color-scale-progress-11), var(--color-neutral-lightness-curve))
     )
     var(--color-neutral-chroma)
-    var(--color-hue-signal)
+    var(--color-hue-brand)
   );
   --color-neutral-12: oklch(
     calc(
@@ -217,7 +216,7 @@
           pow(var(--color-scale-progress-12), var(--color-neutral-lightness-curve))
     )
     var(--color-neutral-chroma)
-    var(--color-hue-signal)
+    var(--color-hue-brand)
   );
   --base-neutral: var(--color-neutral-9);
 
