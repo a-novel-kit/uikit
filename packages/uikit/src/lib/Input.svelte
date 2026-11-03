@@ -143,21 +143,21 @@ Native attributes and events target the input; `class` styles the surrounding su
 
   .sm {
     padding: var(--space-1) var(--space-3);
-    min-block-size: var(--field-height-sm);
+    min-block-size: var(--control-height-sm);
   }
   .sm .control {
     font-size: var(--font-size-sm);
   }
   .md {
-    padding: var(--space-1-5) var(--space-3);
-    min-block-size: var(--field-height-md);
+    padding: var(--space-1) var(--space-3);
+    min-block-size: var(--control-height-md);
   }
   .md .control {
     font-size: var(--font-size-md);
   }
   .lg {
     padding: var(--space-2) var(--space-4);
-    min-block-size: var(--field-height-lg);
+    min-block-size: var(--control-height-lg);
   }
   .lg .control {
     font-size: var(--font-size-lg);

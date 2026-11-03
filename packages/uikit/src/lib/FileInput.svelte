@@ -104,33 +104,33 @@ file selection remains owned by the browser.
   }
 
   .sm {
-    min-block-size: var(--field-height-sm);
+    min-block-size: var(--control-height-sm);
     font-size: var(--font-size-sm);
   }
   .sm::file-selector-button {
     margin-inline-end: var(--space-3);
     padding: var(--space-1) var(--space-3);
-    min-block-size: calc(var(--field-height-sm) - var(--border-width-strong));
+    min-block-size: calc(var(--control-height-sm) - var(--border-width-strong));
   }
 
   .md {
-    min-block-size: var(--field-height-md);
+    min-block-size: var(--control-height-md);
     font-size: var(--font-size-md);
   }
   .md::file-selector-button {
     margin-inline-end: var(--space-3);
-    padding: var(--space-1-5) var(--space-4);
-    min-block-size: calc(var(--field-height-md) - var(--border-width-strong));
+    padding: var(--space-1) var(--space-4);
+    min-block-size: calc(var(--control-height-md) - var(--border-width-strong));
   }
 
   .lg {
-    min-block-size: var(--field-height-lg);
+    min-block-size: var(--control-height-lg);
     font-size: var(--font-size-lg);
   }
   .lg::file-selector-button {
     margin-inline-end: var(--space-4);
-    padding: var(--space-3) var(--space-5);
-    min-block-size: calc(var(--field-height-lg) - var(--border-width-strong));
+    padding: var(--space-2) var(--space-5);
+    min-block-size: calc(var(--control-height-lg) - var(--border-width-strong));
   }
 
   @media (forced-colors: active) {

@@ -373,17 +373,17 @@ The hidden named input submits the selected value. The caller validates required
 
   .a-novel-select-trigger.sm {
     padding-inline: var(--space-3);
-    min-block-size: var(--field-height-sm);
+    min-block-size: var(--control-height-sm);
     font-size: var(--font-size-sm);
   }
   .a-novel-select-trigger.md {
     padding-inline: var(--space-3);
-    min-block-size: var(--field-height-md);
+    min-block-size: var(--control-height-md);
     font-size: var(--font-size-md);
   }
   .a-novel-select-trigger.lg {
     padding-inline: var(--space-4);
-    min-block-size: var(--field-height-lg);
+    min-block-size: var(--control-height-lg);
     font-size: var(--font-size-lg);
   }
 

@@ -337,9 +337,9 @@ The hidden named input submits the selected value. The caller validates required
     border: var(--border-width-thin) solid var(--color-field-border);
     border-radius: var(--radius-md);
     background: var(--color-control-surface);
-    padding: var(--space-1-5) var(--field-height-md) var(--space-1-5) var(--space-3);
+    padding: var(--space-1) var(--control-height-md) var(--space-1) var(--space-3);
     inline-size: 100%;
-    min-block-size: var(--field-height-md);
+    min-block-size: var(--control-height-md);
     color: var(--color-control-text);
     font: inherit;
     font-size: var(--font-size-md);
