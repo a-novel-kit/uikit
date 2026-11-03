@@ -1,7 +1,7 @@
 <!--
 @component
 Announces a planned maintenance in a compact strip that can't be dismissed. Before the maintenance,
-it informs with the expected time frame. Once started, it warns with the expected end. The wording
+it highlights the expected time frame. Once started, it warns with the expected end. The wording
 is generic and translated, and only the times vary.
 -->
 <script lang="ts" module>
@@ -34,8 +34,8 @@ is generic and translated, and only the times vary.
   const when = $derived(started ? format.instant(end) : format.range(start, end));
 </script>
 
-<div class="banner {started ? 'warning' : 'info'} {className}" role="status" {...rest}>
-  <FeedbackIcon tone={started ? "warning" : "info"} size="sm" />
+<div class="banner {started ? 'warning' : 'highlight'} {className}" role="status" {...rest}>
+  <FeedbackIcon tone={started ? "warning" : "highlight"} size="sm" />
   <p>
     <strong>{t(`downtimeBanner.${phase}.title`)}</strong>
     <span>{t(`downtimeBanner.${phase}.message`, { when })}</span>
@@ -56,8 +56,8 @@ is generic and translated, and only the times vary.
     overflow-wrap: anywhere;
   }
 
-  .info {
-    --banner-surface: var(--color-feedback-info-surface);
+  .highlight {
+    --banner-surface: var(--color-feedback-highlight-surface);
   }
 
   .warning {

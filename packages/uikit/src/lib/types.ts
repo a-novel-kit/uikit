@@ -2,7 +2,7 @@
 export type ComponentSize = "sm" | "md" | "lg";
 
 /** Semantic roles shared by status and feedback components. */
-export type FeedbackTone = "info" | "success" | "warning" | "error";
+export type FeedbackTone = "info" | "highlight" | "success" | "warning" | "error";
 
 /** Feedback for pending work or a completed outcome. */
 export type FeedbackState = FeedbackTone | "loading";

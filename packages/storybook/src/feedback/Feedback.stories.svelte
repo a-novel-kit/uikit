@@ -37,6 +37,7 @@
   <Grid minItemWidth="sm" gap="3">
     <InlineMessage tone="loading">Loading account</InlineMessage>
     <InlineMessage tone="info">Check your inbox</InlineMessage>
+    <InlineMessage tone="highlight">New editor available</InlineMessage>
     <InlineMessage tone="success">Changes saved</InlineMessage>
     <InlineMessage tone="warning">Connection unstable</InlineMessage>
     <InlineMessage tone="error">Upload failed</InlineMessage>
@@ -54,6 +55,7 @@
   <Stack gap="4">
     <Alert tone="loading" title="Loading account" />
     <Alert tone="info" title="Check your inbox">Follow the link to finish creating your account.</Alert>
+    <Alert tone="highlight" title="Maintenance on Saturday">Agora pauses from 10:00 to 11:00.</Alert>
     <Alert tone="success" title="Password updated">Use your new password next time you log in.</Alert>
     <Alert tone="warning" title="You are offline">Your changes are stored on this device.</Alert>
     <Alert tone="error" title="Account unavailable">

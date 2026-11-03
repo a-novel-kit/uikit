@@ -62,8 +62,9 @@ Graphic grid, trace, glow, and gradient tokens use the same palette and mix scal
 component meaning and play no part in foreground contrast.
 
 Components use semantic aliases such as `--color-action-primary` and `--color-feedback-error-text`.
-Brand carries agency, pressure carries urgency and failure, and signal carries readiness and successful
-outcomes. Actions use a restrained idle step, lighten once on hover, and reserve the peak plus glow for
+Brand is the base and carries agency. Signal highlights what deserves notice without calling for
+action: a success, or an upcoming change. Pressure marks errors and anything that needs immediate
+attention. Actions use a restrained idle step, lighten once on hover, and reserve the peak plus glow for
 selected state. Disabled controls use neutral surface, border, and text tokens. Feedback components pair
 color with a label or icon. Primitive palette steps remain available for design-system work.
 

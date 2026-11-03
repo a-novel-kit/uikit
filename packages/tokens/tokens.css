@@ -278,17 +278,22 @@
     var(--color-surface-subtle)
   );
   --color-feedback-info-text: var(--base-brand);
-  --color-feedback-success-surface: color-mix(
+  /* Signal highlights what deserves notice without calling for action, such as an upcoming change. */
+  --color-feedback-highlight-surface: color-mix(
     in oklab,
     var(--base-signal) var(--color-mix-2),
     var(--color-surface-canvas)
   );
-  --color-feedback-success-border: color-mix(
+  --color-feedback-highlight-border: color-mix(
     in oklab,
     var(--base-signal) var(--color-mix-9),
     var(--color-surface-subtle)
   );
-  --color-feedback-success-text: var(--base-signal);
+  --color-feedback-highlight-text: var(--base-signal);
+  /* A success is one such highlight. */
+  --color-feedback-success-surface: var(--color-feedback-highlight-surface);
+  --color-feedback-success-border: var(--color-feedback-highlight-border);
+  --color-feedback-success-text: var(--color-feedback-highlight-text);
   --color-feedback-warning-surface: color-mix(
     in oklab,
     var(--base-pressure) var(--color-mix-2),

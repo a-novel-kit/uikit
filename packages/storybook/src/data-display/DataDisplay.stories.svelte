@@ -41,9 +41,9 @@
 
 {#snippet statusLabels()}
   <Inline gap="2" wrap>
-    <Badge>Draft</Badge><Badge tone="brand">Active</Badge><Badge tone="success">Ready</Badge><Badge tone="warning"
-      >Review</Badge
-    ><Badge tone="danger">Failed</Badge>
+    <Badge>Draft</Badge><Badge tone="brand">Active</Badge><Badge tone="highlight">New</Badge><Badge tone="success"
+      >Ready</Badge
+    ><Badge tone="warning">Review</Badge><Badge tone="danger">Failed</Badge>
   </Inline>
 {/snippet}
 
@@ -67,7 +67,7 @@
 
 {#snippet roles()}
   <Stack gap="4">
-    <Inline gap="2" wrap><Badge tone="brand">Member</Badge><Badge tone="brand">Administrator</Badge></Inline>
+    <Inline gap="2" wrap><Badge tone="brand">Member</Badge><Badge tone="highlight">Administrator</Badge></Inline>
     <InlineMessage tone="loading">Loading account</InlineMessage>
   </Stack>
 {/snippet}

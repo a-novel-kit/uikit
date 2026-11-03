@@ -8,7 +8,7 @@ Labels a category or status compactly. Use InlineMessage when changes need live 
   /** Props for a compact categorical label or status. */
   export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
     /** Semantic treatment of the badge. */
-    tone?: "neutral" | "brand" | "success" | "warning" | "danger";
+    tone?: "neutral" | "brand" | "highlight" | "success" | "warning" | "danger";
   }
 </script>
 
@@ -45,6 +45,10 @@ Labels a category or status compactly. Use InlineMessage when changes need live 
 
   .brand {
     --badge-accent: var(--color-feedback-info-text);
+  }
+
+  .highlight {
+    --badge-accent: var(--color-feedback-highlight-text);
   }
 
   .success {
