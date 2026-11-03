@@ -52,6 +52,16 @@ it("anchors a fixed open menu to its trigger and preserves it after selection or
   await expect.element(menu).toBeVisible();
 });
 
+it("anchors a fixed open menu to a composed trigger", async () => {
+  const controller: OpenController = { state: { open: true }, open() {}, close() {}, toggle() {} };
+  render(ActionMenuTriggerFixture, { controller });
+  const trigger = page.getByRole("button", { name: "Item actions" }).element();
+
+  await expect
+    .poll(() => page.getByRole("menu").element().getBoundingClientRect().top)
+    .toBeGreaterThanOrEqual(trigger.getBoundingClientRect().bottom);
+});
+
 it.each(openPaths)("shows the menu with its trigger's width when opened by $path", async ({ composed, open }) => {
   const controller = createOpenController();
   if (composed) render(ActionMenuTriggerFixture, { controller });
