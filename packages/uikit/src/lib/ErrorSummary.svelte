@@ -131,7 +131,7 @@ Mount after validation and enable `focusOnMount` when focus should move to the s
   ul {
     display: grid;
     gap: var(--space-2);
-    padding-inline-start: var(--space-5);
+    padding-inline-start: var(--space-6);
     font-size: var(--font-size-sm);
   }
 

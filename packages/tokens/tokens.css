@@ -149,6 +149,8 @@
   --color-text-secondary: var(--color-neutral-11);
   --color-text-muted: var(--color-neutral-10);
   --color-text-subtle: var(--color-neutral-9);
+  /* A field hint reads a step quieter than muted text and keeps 5.4:1 on every island that holds a field. */
+  --color-text-hint: color-mix(in oklab, var(--color-text-muted), var(--color-text-subtle));
   --color-text-disabled: var(--color-neutral-8);
   --color-text-inverse: var(--color-neutral-1);
   --color-text-accent: var(--base-brand);
@@ -343,30 +345,23 @@
     var(--base-signal)
   );
 
-  /* Light falls from above: a soft sheen fades down a raised surface's face. Shadows paint no
-     background, so automated contrast checks measure the surface color alone; at the sheen's
-     brightest point muted text keeps 5.6:1 and links 5.4:1. */
-  --shadow-sheen: inset 0 var(--space-16) var(--space-16) calc(-1 * var(--space-16))
-    color-mix(in oklab, var(--color-neutral-12) var(--color-mix-1), transparent);
-  /* A hairline ring holds a raised surface's shape on any backdrop, so it needs no border. */
+  /* Raised surfaces stay flat, since the app's lamp gives the page its volume. A hairline ring holds
+     a raised surface's shape on any backdrop, so it needs no border. */
   --shadow-ring: 0 0 0 var(--border-width-thin)
     color-mix(in oklab, var(--color-neutral-12) var(--color-mix-1), transparent);
   --shadow-sm:
-    var(--shadow-sheen),
     var(--shadow-ring),
     0 var(--border-width-thin) var(--space-1)
       color-mix(in oklab, var(--color-neutral-1) var(--color-mix-8), transparent),
     0 var(--space-1) var(--space-3)
       color-mix(in oklab, var(--color-neutral-1) var(--color-mix-8), transparent);
   --shadow-md:
-    var(--shadow-sheen),
     var(--shadow-ring),
     0 var(--border-width-thin) var(--space-1)
       color-mix(in oklab, var(--color-neutral-1) var(--color-mix-10), transparent),
     0 var(--space-2) var(--space-6)
       color-mix(in oklab, var(--color-neutral-1) var(--color-mix-10), transparent);
   --shadow-lg:
-    var(--shadow-sheen),
     var(--shadow-ring),
     0 var(--border-width-thin) var(--space-1)
       color-mix(in oklab, var(--color-neutral-1) var(--color-mix-12), transparent),

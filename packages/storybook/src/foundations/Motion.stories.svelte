@@ -9,7 +9,7 @@
       docs: {
         description: {
           component:
-            "Depth separates temporary or raised content: a soft sheen fades down each island. Motion confirms a state change and follows reduced-motion preferences.",
+            "Depth separates temporary or raised content: islands stay flat, with a hairline ring and a soft shadow. Motion confirms a state change and follows reduced-motion preferences.",
         },
       },
     },

@@ -198,7 +198,7 @@ child with `autofocus` takes focus instead.
 
   @media (min-width: 48rem) {
     .dialog {
-      --dialog-padding: var(--space-5);
+      --dialog-padding: var(--space-6);
       --dialog-margin: var(--space-4);
     }
   }
