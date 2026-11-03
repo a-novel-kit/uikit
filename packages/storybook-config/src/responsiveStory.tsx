@@ -90,13 +90,10 @@ function serializedGlobal([name, value]: [string, unknown]): string[] {
   return [`${encodeURIComponent(name)}:${encodeURIComponent(serializedValue)}`];
 }
 
-function serializedGlobals(globals: Record<string, unknown>) {
-  return Object.entries(globals).flatMap(serializedGlobal).join(";");
-}
-
 function storyUrl(storyId: string, globals: Record<string, unknown>) {
   const parameters = new URLSearchParams({ embed: "true", id: storyId, viewMode: "story" });
-  const serialized = serializedGlobals({ ...globals, measureEnabled: false, outline: false });
+  const reviewGlobals = { ...globals, measureEnabled: false, outline: false };
+  const serialized = Object.entries(reviewGlobals).flatMap(serializedGlobal).join(";");
   if (serialized) parameters.set("globals", serialized);
   return `iframe.html?${parameters.toString()}`;
 }

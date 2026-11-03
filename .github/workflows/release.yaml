@@ -21,7 +21,7 @@ on:
           - minor
           - major
       dry_run:
-        description: Bump and report only — do not commit, tag, push, or publish
+        description: Bump and report only, with no commit, tag, push or publish
         required: false
         type: boolean
         default: false
@@ -83,7 +83,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-  # Everything shipped — clear this repo's awaiting-release board items.
+  # Everything shipped, so the job archives this repo's awaiting-release board items.
   archive:
     needs: [publish-npm]
     if: github.event_name == 'push'

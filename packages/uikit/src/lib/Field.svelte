@@ -144,8 +144,7 @@ so its accessible name, description, required state, and invalid state stay conn
     line-height: var(--line-height-compact);
   }
 
-  /* A hint is quieter than the label and sits slightly inset, so it reads as the field's note
-     rather than another label. */
+  /* A hint is quieter than the label and sits slightly inset, so it reads as the field's note. */
   .hint {
     padding-inline: var(--space-1);
     color: var(--color-text-hint);

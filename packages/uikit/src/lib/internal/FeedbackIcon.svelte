@@ -1,13 +1,16 @@
+<script lang="ts" module>
+  import { CircleAlert, CircleCheck, Info, TriangleAlert } from "@lucide/svelte";
+
+  const icons = { info: Info, success: CircleCheck, warning: TriangleAlert, error: CircleAlert };
+</script>
+
 <script lang="ts">
   import Spinner from "../Spinner.svelte";
   import type { ComponentSize, FeedbackState } from "../types";
 
   import type { Snippet } from "svelte";
 
-  import { CircleAlert, CircleCheck, Info, TriangleAlert } from "@lucide/svelte";
-
   let { tone, size = "md", children }: { tone: FeedbackState; size?: ComponentSize; children?: Snippet } = $props();
-  const icons = { info: Info, success: CircleCheck, warning: TriangleAlert, error: CircleAlert };
   const Icon = $derived(tone === "loading" ? undefined : icons[tone]);
 </script>
 

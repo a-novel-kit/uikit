@@ -12,9 +12,7 @@ Registers a Button with its containing Toolbar's roving focus. Use only inside T
 <script lang="ts">
   import Button from "./Button.svelte";
 
-  let { children, disabled = false, ...buttonProps }: ToolbarButtonProps = $props();
+  let props: ToolbarButtonProps = $props();
 </script>
 
-<Button {...buttonProps} {disabled} data-composite-item="" tabindex={-1}>
-  {@render children?.()}
-</Button>
+<Button {...props} data-composite-item="" tabindex={-1} />

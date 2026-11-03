@@ -148,12 +148,6 @@ The hidden named input submits the selected value. The caller validates required
     if (focusInput) inputElement?.focus();
   }
 
-  function ensureOpenForInput() {
-    if (controller.state.open || disabled) return;
-
-    controller.open();
-  }
-
   function moveActive(direction: -1 | 1) {
     if (activeIndex >= 0) setActiveIndex(findNextEnabledIndex(filteredOptions, activeIndex, direction));
     else setActiveIndex(findEnabledBoundary(filteredOptions, direction === 1 ? "first" : "last"));
@@ -172,7 +166,7 @@ The hidden named input submits the selected value. The caller validates required
 
   function handleInput(event: Event) {
     const target = event.currentTarget as HTMLInputElement;
-    ensureOpenForInput();
+    if (!controller.state.open && !disabled) controller.open();
     controller.setQuery(target.value);
     target.value = inputValue;
     activeIndex = findEnabledBoundary(filteredOptions, "first");

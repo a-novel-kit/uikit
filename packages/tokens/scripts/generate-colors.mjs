@@ -2,11 +2,12 @@
 // nothing and fails when either committed file differs from the generated output.
 import { readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
+import { parseArgs } from "node:util";
 
 import Color from "colorjs.io";
 
 const outputDirectory = resolve(import.meta.dirname, "..");
-const checkOnly = process.argv.includes("--check");
+const { values: options } = parseArgs({ options: { check: { type: "boolean", default: false } } });
 const scaleLength = 12;
 const scaleDivisions = scaleLength - 1;
 const scaleMultipliers = Array.from({ length: scaleLength }, (_, index) => index);
@@ -312,10 +313,7 @@ ${Object.entries(palette).map(paletteFamilyJs).join("\n")}
 
 const outputs = { "colors.css": colorsCss, "palette.js": paletteJs };
 
-if (!checkOnly) {
-  for (const [filename, content] of Object.entries(outputs))
-    await writeFile(resolve(outputDirectory, filename), content);
-} else {
+if (options.check) {
   const staleFiles = [];
   for (const [filename, content] of Object.entries(outputs)) {
     const current = await readFile(resolve(outputDirectory, filename), "utf8").catch(() => undefined);
@@ -323,4 +321,8 @@ if (!checkOnly) {
   }
 
   if (staleFiles.length > 0) throw new Error(`Generated color artifacts are stale: ${staleFiles.join(", ")}`);
+} else {
+  for (const [filename, content] of Object.entries(outputs)) {
+    await writeFile(resolve(outputDirectory, filename), content);
+  }
 }
