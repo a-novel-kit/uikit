@@ -55,8 +55,12 @@
   --control-height-sm: calc(var(--space-base) * var(--multiplier-7));
   --control-height-md: calc(var(--space-base) * var(--multiplier-8));
   --control-height-lg: calc(var(--space-base) * var(--multiplier-10));
+  /* A field stands one step taller than a button, so the text typed into it has room. */
+  --field-height-sm: calc(var(--control-height-sm) + var(--space-1));
+  --field-height-md: calc(var(--control-height-md) + var(--space-1));
+  --field-height-lg: calc(var(--control-height-lg) + var(--space-1));
   /* A control nested inside a medium field, such as a password toggle, keeps a space-1 inset. */
-  --control-height-nested: calc(var(--control-height-md) - var(--space-2));
+  --control-height-nested: calc(var(--field-height-md) - var(--space-2));
   --control-menu-max-height: calc(var(--space-base) * var(--multiplier-64));
   --icon-size-sm: var(--space-4);
   --icon-size-md: var(--space-5);
@@ -183,6 +187,9 @@
     transparent
   );
   --color-control-border: var(--color-border-default);
+  /* A field is a well inside an island, so its tone carries it: no border until focus or an error.
+     The border stays transparent rather than absent, so forced-colors mode still outlines it. */
+  --color-field-border: transparent;
   --color-control-border-hover: var(--color-border-strong);
   --color-control-border-focus: var(--base-brand);
   --color-control-text: var(--color-text-primary);

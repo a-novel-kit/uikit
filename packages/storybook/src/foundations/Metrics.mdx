@@ -64,7 +64,8 @@ Use smaller ratios for dense interface details and reserve the major ratio for p
 
 Group related content with spacing first. Use a borderless island when a region needs its own visual
 plane. `--shadow-{sm,md,lg}` give an island a hairline ring and a soft sheen that fades down its face. A
-well, such as a field, darkens the surface it sits on, so it keeps that surface's tone.
+well, such as a field, darkens the surface it sits on, so it keeps that surface's tone. Fields sit inside an
+island and need no border; only focus and errors outline them.
 
 <div className="surface-demo">
   <section className="surface-group">
@@ -98,6 +99,7 @@ Choose a named radius token for each component shape.
 | Contract       | Tokens                                                  |
 | -------------- | ------------------------------------------------------- |
 | Control height | `--control-height-{sm,md,lg}`, one step taller on touch |
+| Field height   | `--field-height-{sm,md,lg}`, one step above controls    |
 | Nested control | `--control-height-nested`, inside a medium field        |
 | Border         | `--border-width-thin`                                   |
 | Focus          | `--focus-ring-{width,offset}` and `--color-focus-ring`  |

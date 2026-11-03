@@ -37,7 +37,7 @@ so its accessible name, description, required state, and invalid state stay conn
   export interface FieldProps extends Omit<HTMLAttributes<HTMLDivElement>, "children"> {
     /** Visible label for the control. */
     label?: Content;
-    /** Controls at the end of the label row, such as a link to recover a forgotten password. */
+    /** Controls at the end of the label row, such as a quiet text button that opens password recovery. */
     labelActions?: Snippet;
     /** Supporting content rendered below the control, before any error. */
     hint?: Content;
@@ -112,10 +112,13 @@ so its accessible name, description, required state, and invalid state stay conn
     gap: var(--space-1) var(--space-4);
   }
 
+  /* A small action stands taller than the label; its hover box overhangs the row, so every field's
+     label sits at the same distance from its control. */
   .label-actions {
     display: flex;
     gap: var(--space-3);
     margin-inline-start: auto;
+    margin-block: calc(var(--space-1) * -1);
     font-size: var(--font-size-sm);
     line-height: var(--line-height-compact);
   }

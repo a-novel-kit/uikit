@@ -11,7 +11,6 @@
     FormActions,
     IconButton,
     Input,
-    Link,
     NavList,
     PanelHeader,
     Popover,
@@ -108,7 +107,8 @@
           {#snippet children(control)}<Input {...control} type="email" autocomplete="username" />{/snippet}
         </Field>
         <Field label="Password" required>
-          {#snippet labelActions()}<Link href="#reset">Forgot password?</Link>{/snippet}
+          {#snippet labelActions()}<Button href="#reset" variant="text" tone="brand" size="sm">Forgot password?</Button
+            >{/snippet}
           {#snippet children(control)}<Input {...control} type="password" autocomplete="current-password" />{/snippet}
         </Field>
         <FormActions align="stretch"><Button type="submit">Log in</Button></FormActions>

@@ -21,8 +21,11 @@ Pass `href` for navigation: it renders a native link with the same appearance.
   export interface ButtonProps extends Omit<HTMLButtonAttributes, "children"> {
     /** Content rendered inside the button. */
     children?: Snippet;
-    /** Visual importance; defaults to "solid". Use tone for semantic intent. */
-    variant?: "solid" | "outline" | "ghost";
+    /**
+     * Visual importance; defaults to "solid". Use tone for semantic intent. "text" reads as plain
+     * colored text until hovered, for a quiet secondary journey beside a form.
+     */
+    variant?: "solid" | "outline" | "ghost" | "text";
     /** Semantic intent; defaults to "brand". Reserve danger for destructive actions. */
     tone?: "brand" | "neutral" | "danger";
     /** Control size on the shared height and typography scales; defaults to "md". */
@@ -217,21 +220,28 @@ Pass `href` for navigation: it renders a native link with the same appearance.
   }
 
   .outline,
-  .ghost {
+  .ghost,
+  .text {
     background-color: transparent;
     color: var(--button-foreground);
   }
 
-  :is(.outline, .ghost):is(:hover, :active):not(:disabled):not([aria-pressed="true"]) {
+  /* Regular weight and a narrow inset, so the action reads as text until the hover box shows. */
+  .text {
+    padding-inline: var(--space-2);
+    font-weight: var(--font-weight-regular);
+  }
+
+  :is(.outline, .ghost, .text):is(:hover, :active):not(:disabled):not([aria-pressed="true"]) {
     background-color: var(--color-action-subtle-hover);
     color: var(--button-foreground-hover);
   }
 
-  :is(.outline, .ghost):active:not(:disabled):not([aria-pressed="true"]) {
+  :is(.outline, .ghost, .text):active:not(:disabled):not([aria-pressed="true"]) {
     background-color: var(--color-action-subtle-active);
   }
 
-  :is(.outline, .ghost)[aria-pressed="true"] {
+  :is(.outline, .ghost, .text)[aria-pressed="true"] {
     box-shadow: var(--button-glow);
     border-color: var(--button-selected-border);
     background-color: color-mix(in oklab, var(--button-selected-foreground) var(--color-mix-3), transparent);
