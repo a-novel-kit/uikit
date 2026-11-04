@@ -32,8 +32,8 @@
 
 {#snippet message()}
   <Localized
-    en="With your consent, your browser sends Agora a report when a page fails or loads slowly. Reports go to Sentry, our monitoring service, and never serve advertising."
-    fr="Avec votre accord, votre navigateur envoie à Agora un rapport quand une page échoue ou se charge lentement. Ces rapports passent par Sentry, notre service de supervision, et ne servent jamais à la publicité."
+    en="With your consent, your browser sends Agora a report when a page fails or loads slowly. Reports go to Grafana, our monitoring service, and never serve advertising."
+    fr="Avec votre accord, votre navigateur envoie à Agora un rapport quand une page échoue ou se charge lentement. Ces rapports passent par Grafana, notre service de supervision, et ne servent jamais à la publicité."
   />
   <Link href="#privacy"><Localized en="Privacy policy" fr="Politique de confidentialité" /></Link>
 {/snippet}
