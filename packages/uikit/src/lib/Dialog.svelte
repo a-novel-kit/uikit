@@ -203,7 +203,10 @@ child with `autofocus` takes focus instead.
     }
   }
 
+  /* A fullscreen dialog covers the page as a phone's navigation menu does. Its thin edge matches the
+     compact app header it covers, so its title and close button open where the header's controls were. */
   .fullscreen {
+    --dialog-padding: var(--space-1) var(--space-2) var(--space-2);
     --dialog-margin: var(--space-0);
     margin: 0;
     box-shadow: none;

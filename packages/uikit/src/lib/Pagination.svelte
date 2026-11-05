@@ -122,6 +122,7 @@ Renders numbered page controls. The caller updates `currentPage` or supplies URL
     font: inherit;
     font-size: var(--font-size-sm);
     font-family: var(--font-family-interface);
+    user-select: none;
     text-decoration: none;
   }
   .text {

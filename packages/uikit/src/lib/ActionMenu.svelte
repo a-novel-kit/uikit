@@ -376,9 +376,9 @@ For a custom trigger, spread the snippet attributes onto a native button.
     position-area: block-end span-inline-start;
     justify-self: end;
   }
+  /* Items touch, as links of one group do; a separator sets groups apart, inset like the items. */
   :global(.a-novel-menu-group) {
     display: grid;
-    gap: var(--space-1);
   }
   :global(.a-novel-menu-item) {
     display: flex;
@@ -414,8 +414,8 @@ For a custom trigger, spread the snippet attributes onto a native button.
     color: var(--color-text-disabled);
   }
   :global(.a-novel-menu-separator) {
-    margin: 0 var(--space-1);
-    background: var(--color-border-subtle);
+    margin-block: var(--space-2);
+    background: var(--color-border-divider);
     block-size: var(--border-width-thin);
   }
   .trigger-icon,

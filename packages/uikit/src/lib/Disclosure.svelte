@@ -91,6 +91,7 @@ Controller methods may reject a toggle; the rendered disclosure follows the acce
     line-height: var(--line-height-compact);
     font-family: var(--font-family-interface);
     list-style: none;
+    user-select: none;
   }
 
   .summary {

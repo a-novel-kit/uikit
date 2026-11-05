@@ -196,6 +196,7 @@ Every panel stays mounted; inactive panels are hidden. Initialize the controller
     font-weight: var(--font-weight-regular);
     font-size: var(--font-size-sm);
     font-family: var(--font-family-interface);
+    user-select: none;
   }
   .a-novel-tabs.vertical .a-novel-tabs-trigger {
     border-inline-end: var(--border-width-strong) solid transparent;

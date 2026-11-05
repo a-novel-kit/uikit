@@ -89,9 +89,9 @@ URLs and the current destination are supplied by the caller.
 </ul>
 
 <style>
+  /* The links of one group touch, so a long list stays short; a Separator sets groups apart. */
   .nav {
     display: flex;
-    gap: var(--space-1);
     margin: 0;
     padding: 0;
     min-inline-size: 0;
@@ -125,6 +125,7 @@ URLs and the current destination are supplied by the caller.
     font-weight: var(--font-weight-regular);
     font-size: var(--font-size-sm);
     line-height: var(--line-height-compact);
+    user-select: none;
     text-decoration: none;
   }
 

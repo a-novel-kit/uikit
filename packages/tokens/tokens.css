@@ -161,6 +161,8 @@
   --color-border-default: var(--color-neutral-6);
   --color-border-strong: var(--color-neutral-8);
   --color-border-selected: var(--base-brand);
+  /* A translucent light line, so a divider shows on every surface, a lit navigation included. */
+  --color-border-divider: color-mix(in oklab, var(--color-neutral-12) var(--color-mix-2), transparent);
 
   --color-control-surface: var(--color-surface-sunken);
   --color-control-surface-hover: color-mix(
@@ -260,12 +262,14 @@
   --color-navigation-selected-indicator: var(--base-brand);
 
   --color-focus-ring: var(--base-brand);
+  /* Selected text reads amber on a quiet blue veil. No other state pairs them, and the veil's
+     transparency keeps the pair readable on every surface. */
   --color-selection-surface: color-mix(
     in oklab,
-    var(--base-brand) var(--color-mix-5),
+    var(--color-brand-5) var(--color-mix-8),
     transparent
   );
-  --color-selection-text: var(--color-text-primary);
+  --color-selection-text: var(--base-signal);
 
   --color-feedback-info-surface: color-mix(
     in oklab,
@@ -514,6 +518,12 @@
   --layer-sticky: calc(var(--layer-step) * var(--multiplier-2));
   --layer-modal: calc(var(--layer-step) * var(--multiplier-3));
   --layer-toast: calc(var(--layer-step) * var(--multiplier-4));
+}
+
+/* Every text a reader selects takes the selection pair. Buttons and menus are not selectable. */
+::selection {
+  background: var(--color-selection-surface);
+  color: var(--color-selection-text);
 }
 
 /* Touch needs larger targets: coarse pointers add space-1 to every control height. */
