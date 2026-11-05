@@ -16,8 +16,8 @@ Provide a meaningful `label` for either representation.
     label: string;
     /** Characters shown when src is absent; defaults to the first character of the first two label words. */
     initials?: string;
-    /** Avatar diameter on the control-height scale; defaults to "md". */
-    size?: ComponentSize;
+    /** Avatar diameter on the control-height scale, or "xl" for a profile picture; defaults to "md". */
+    size?: ComponentSize | "xl";
   }
 </script>
 
@@ -82,5 +82,18 @@ Provide a meaningful `label` for either representation.
     inline-size: var(--control-height-lg);
     block-size: var(--control-height-lg);
     font-size: var(--font-size-md);
+  }
+  /* A profile picture shrinks on a phone-width screen to leave room for the details beside it. */
+  .xl {
+    inline-size: var(--space-16);
+    block-size: var(--space-16);
+    font-size: var(--font-size-xl);
+  }
+  @media (min-width: 35rem) {
+    .xl {
+      inline-size: var(--space-24);
+      block-size: var(--space-24);
+      font-size: var(--font-size-2xl);
+    }
   }
 </style>
