@@ -1,4 +1,5 @@
 <script module lang="ts">
+  import pictureUrl from "@a-novel-kit/ui-images/files/icon/192x192/agora-icon-black.png";
   import {
     Avatar,
     Badge,
@@ -13,6 +14,8 @@
   } from "@a-novel-kit/uikit";
 
   import { defineMeta } from "@storybook/addon-svelte-csf";
+
+  const avatarSizes = ["sm", "md", "lg", "xl"] as const;
 
   const { Story } = defineMeta({
     title: "Data display/Content",
@@ -37,6 +40,32 @@
       </Stack>
     </Inline>
   </Card>
+</Story>
+
+<Story
+  name="Avatar sizes"
+  parameters={{
+    docs: {
+      description: {
+        story:
+          "Use `sm` to `lg` beside controls of the same height, and `xl` for a profile picture, which shrinks on phone-width screens.",
+      },
+    },
+  }}
+  asChild
+>
+  <Stack gap="4">
+    <Inline gap="4" role="group" aria-label="Image avatars">
+      {#each avatarSizes as size (size)}
+        <Avatar src={pictureUrl} label="Agora" {size} />
+      {/each}
+    </Inline>
+    <Inline gap="4" role="group" aria-label="Initials avatars">
+      {#each avatarSizes as size (size)}
+        <Avatar label="Ada Lovelace" {size} />
+      {/each}
+    </Inline>
+  </Stack>
 </Story>
 
 {#snippet statusLabels()}
