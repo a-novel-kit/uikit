@@ -34,6 +34,26 @@ The spacing scale starts at `--space-base` and exposes named steps. Space inside
 repeats a few of them: 4, 8, 12, 16, 24 and 32 pixels (`--space-{1,2,3,4,6,8}`), with 48 and 64
 (`--space-{12,16}`) for page layout. The in-between steps only size dense details, such as a badge.
 
+Pick a gap by its role. A component that owns the role, such as `Stack` or `FormActions`, already
+applies it.
+
+| Role                                              | Token                                           | Size        |
+| ------------------------------------------------- | ----------------------------------------------- | ----------- |
+| Lines of one item, such as a name and its details | `--space-1`                                     | 4 px        |
+| Icon and its label, compact inline items          | `--space-2`                                     | 8 px        |
+| Buttons in a group                                | `--space-3`, as `ActionGroup` sets              | 12 px       |
+| A heading and the content it names                | `--space-3`                                     | 12 px       |
+| Islands side by side                              | `--layout-island-gap`                           | 12 px       |
+| Fields, list rows and stacked items               | `--space-4`, as `Stack` sets by default         | 16 px       |
+| Inside an island                                  | `--space-4`, as `Card` sets by default          | 16 px       |
+| Sections of a page or a dialog                    | `--space-6`                                     | 24 px       |
+| A form's actions, below its last field            | `--space-8`, as `FormActions` sets in a `Stack` | 32 px       |
+| A page's top and bottom                           | `--space-6` and `--space-12`                    | 24, 48 px   |
+| A page's sides                                    | `--layout-gutter`                               | 16 to 32 px |
+| Dense details, such as a badge or a check mark    | `--space-1-5`, `--space-5`                      | 6, 20 px    |
+
+A value outside this table is an exception: it sits beside a comment naming its reason.
+
 <div className="metric-stack">
   {spacingTokens.map((token) => (
     <div className="metric-row" key={token}>
@@ -44,6 +64,22 @@ repeats a few of them: 4, 8, 12, 16, 24 and 32 pixels (`--space-{1,2,3,4,6,8}`),
     </div>
   ))}
 </div>
+
+## Layout
+
+Widths come from the layout tokens, never from a hand-picked size.
+
+| Token                       | Use                                                      | Size      |
+| --------------------------- | -------------------------------------------------------- | --------- |
+| `--layout-container-xs`     | Compact dialogs, `Dialog size="sm"`                      | 26.67 rem |
+| `--layout-container-sm`     | Forms, settings pages and dialogs, `Container size="sm"` | 40 rem    |
+| `--layout-container-md`     | Wider pages, `Container size="md"`                       | 64 rem    |
+| `--layout-container-lg`     | Full application pages, `Container`'s default            | 80 rem    |
+| `--layout-readable-measure` | Running text, `Container size="readable"` and `Prose`    | 68 ch     |
+| `--layout-sidebar`          | A navigation rail or a split pane's side                 | 15.28 rem |
+
+Every page fills the viewport's height with `100dvb`, and the root keeps `min-inline-size: 20rem`:
+WCAG 1.4.10 reflows content down to 320 CSS pixels, and a narrower window scrolls instead.
 
 ## Proportion
 
@@ -101,6 +137,7 @@ Choose a named radius token for each component shape.
 | Contract       | Tokens                                                  |
 | -------------- | ------------------------------------------------------- |
 | Control height | `--control-height-{sm,md,lg}`, one step taller on touch |
+| Icon size      | `--icon-size-{sm,md,lg}`: 16, 20 and 24 pixels          |
 | Nested control | `--control-height-nested`, inside a medium field        |
 | Border         | `--border-width-thin`                                   |
 | Focus          | `--focus-ring-{width,offset}` and `--color-focus-ring`  |
