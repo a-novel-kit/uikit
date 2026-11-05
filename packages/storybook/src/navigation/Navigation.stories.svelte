@@ -1,5 +1,5 @@
 <script module lang="ts">
-  import { ActionMenu, Breadcrumbs, Card, NavList, Pagination, Stack, Tabs } from "@a-novel-kit/uikit";
+  import { ActionMenu, Breadcrumbs, Card, NavList, Pagination, Separator, Stack, Tabs } from "@a-novel-kit/uikit";
   import type { OpenController } from "@a-novel-kit/uikit";
 
   import {
@@ -51,6 +51,20 @@
       ]}
     />
   </div>
+</Story>
+
+<!-- Links of one group touch; a Separator, inset like the links, sets the next group apart. -->
+<Story name="Grouped navigation" asChild>
+  <nav aria-label="Workspace" class="nav-demo grouped-demo">
+    <NavList
+      items={[
+        { href: "#home", label: "Home", current: true, icon: homeIcon },
+        { href: "#team", label: "Team", badge: 8, icon: usersIcon },
+      ]}
+    />
+    <Separator decorative />
+    <NavList items={[{ href: "#settings", label: "Settings", icon: settingsIcon }]} />
+  </nav>
 </Story>
 
 <Story name="Compact navigation" asChild>
@@ -129,6 +143,10 @@
     background: var(--color-surface-island-strong);
     padding: var(--space-3);
     inline-size: min(100%, var(--layout-sidebar));
+  }
+  .grouped-demo {
+    display: grid;
+    gap: var(--space-2);
   }
   .compact-demo {
     inline-size: var(--control-height-lg);

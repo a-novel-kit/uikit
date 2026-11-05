@@ -96,6 +96,7 @@ Pass `href` for navigation: it renders a native link with the same appearance.
     font-weight: var(--font-weight-bold);
     line-height: var(--line-height-tight);
     font-family: var(--font-family-interface);
+    user-select: none;
     text-decoration: none;
   }
 

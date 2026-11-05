@@ -38,6 +38,7 @@ the control, so the button shows only its icon, a background and a color.
     inline-size: var(--control-height-nested);
     block-size: var(--control-height-nested);
     color: var(--color-text-muted);
+    user-select: none;
   }
 
   .field-button:hover:not(:disabled, [aria-pressed="true"]) {

@@ -96,7 +96,8 @@ describe("Dialog browser lifecycle", () => {
       expect(close.getBoundingClientRect().top).toBe(closeTop);
       expect(getByRole("button", { name: "Done" }).getBoundingClientRect().top).toBe(doneTop);
       if (presentation === "fullscreen") {
-        expect(heading.getBoundingClientRect().top).toBe(16);
+        // A thin edge, as a phone's compact app header has.
+        expect(heading.getBoundingClientRect().top).toBe(4);
         const lastAction = getByRole("button", { name: "Last action" });
         let scrollRegion = lastAction.parentElement;
         while (scrollRegion && getComputedStyle(scrollRegion).overflowY !== "auto")

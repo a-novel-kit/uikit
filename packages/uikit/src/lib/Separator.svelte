@@ -35,7 +35,7 @@ Divides adjacent content visually and semantically. Set `decorative` when the di
     flex: none;
     margin: 0;
     border: 0;
-    background: var(--color-border-subtle);
+    background: var(--color-border-divider);
   }
 
   .horizontal {
