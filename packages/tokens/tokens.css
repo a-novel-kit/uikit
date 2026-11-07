@@ -123,6 +123,13 @@
   --color-surface-island-subtle: var(--color-surface-subtle);
   --color-surface-island: var(--color-surface-raised);
   --color-surface-island-strong: var(--color-surface-overlay);
+  /* Frosted glass: a light veil over the canvas, as light as an island, so the lamp shines through it
+     as it lights the navigation. */
+  --color-surface-island-glass: color-mix(
+    in oklab,
+    var(--color-neutral-12) var(--color-mix-2),
+    transparent
+  );
   --color-surface-glass: color-mix(
     in oklab,
     var(--color-surface-island-strong) var(--color-mix-12),
@@ -467,9 +474,11 @@
     color-mix(in oklab, var(--lamp-color) calc(var(--lamp-peak) * 0.0625), transparent) 75%,
     transparent
   );
-  /* The canvas carries the lamp on the root element, where accessibility checks still measure text
-     against the canvas color. Navigation the lamp crosses carries the same light, fixed to the
-     viewport so the two line up; its text keeps muted 5.2:1 and links 4.9:1 under any palette lamp. */
+  /* iOS ignores a fixed background, so the canvas paints its fill on a layer fixed to the viewport
+     behind the page, and the root element keeps the plain canvas color accessibility checks measure
+     text against. Navigation stays in the viewport's corner, so the light it carries lines up with
+     the canvas in every browser; its text keeps muted 5.2:1 and links 4.9:1 under any palette lamp.
+     Frosted islands let the canvas's light through. */
   --fill-canvas: var(--gradient-lamp) fixed, var(--color-surface-canvas);
   --fill-navigation: var(--gradient-lamp) fixed, var(--color-surface-island-strong);
   --gradient-telemetry-grid:

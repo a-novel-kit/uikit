@@ -68,6 +68,26 @@
   </Stack>
 </Story>
 
+<Story
+  name="Avatar shapes"
+  parameters={{
+    docs: {
+      description: {
+        story:
+          "A square avatar takes the rounded corners of the button it sits in, as an account control in a navigation rail.",
+      },
+    },
+  }}
+  asChild
+>
+  <Inline gap="4" role="group" aria-label="Avatar shapes">
+    <Avatar src={pictureUrl} label="Agora" />
+    <Avatar src={pictureUrl} label="Agora" shape="square" />
+    <Avatar label="Ada Lovelace" />
+    <Avatar label="Ada Lovelace" shape="square" />
+  </Inline>
+</Story>
+
 {#snippet statusLabels()}
   <Inline gap="2" wrap>
     <Badge>Draft</Badge><Badge tone="brand">Active</Badge><Badge tone="highlight">New</Badge><Badge tone="success"
