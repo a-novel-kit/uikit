@@ -18,11 +18,13 @@ Provide a meaningful `label` for either representation.
     initials?: string;
     /** Avatar diameter on the control-height scale, or "xl" for a profile picture; defaults to "md". */
     size?: ComponentSize | "xl";
+    /** A circle, or a square with the rounded corners of a button it sits in; defaults to "circle". */
+    shape?: "circle" | "square";
   }
 </script>
 
 <script lang="ts">
-  let { src, label, initials, size = "md", class: className = "", ...rest }: AvatarProps = $props();
+  let { src, label, initials, size = "md", shape = "circle", class: className = "", ...rest }: AvatarProps = $props();
 
   const fallback = $derived(
     initials ??
@@ -34,7 +36,7 @@ Provide a meaningful `label` for either representation.
   );
 </script>
 
-<span class="avatar {size} {className}" {...rest}>
+<span class="avatar {size} {shape} {className}" {...rest}>
   {#if src}
     <img {src} alt={label} />
   {:else}
@@ -67,6 +69,12 @@ Provide a meaningful `label` for either representation.
 
   img {
     object-fit: cover;
+  }
+
+  .square,
+  .square span,
+  .square img {
+    border-radius: var(--radius-md);
   }
   .sm {
     inline-size: var(--control-height-sm);

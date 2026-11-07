@@ -1,6 +1,8 @@
 <!--
 @component
 Groups content on a tokenized surface with optional header and footer snippets.
+A raised card is frosted glass the app's lamp shines through. Inside another card, it turns opaque
+with a small shadow, so a group of settings can hold one card per option.
 -->
 <script lang="ts" module>
   import type { Snippet } from "svelte";
@@ -42,7 +44,6 @@ Groups content on a tokenized surface with optional header and footer snippets.
     box-sizing: border-box;
     border-radius: var(--radius-lg);
     min-inline-size: 0;
-    overflow: clip;
     color: var(--color-text-primary);
   }
 
@@ -52,16 +53,25 @@ Groups content on a tokenized surface with optional header and footer snippets.
   .surface-subtle {
     background: var(--color-surface-island-subtle);
   }
+  /* Frosted glass: the lamp shines through a raised card as through the navigation. */
   .surface-raised {
+    box-shadow: var(--shadow-ring);
+    background: var(--color-surface-island-glass);
+  }
+  /* A raised card inside another stands on it: opaque, with a small shadow for volume. */
+  .card :global(.card.surface-raised) {
     box-shadow: var(--shadow-sm);
-    background: var(--color-surface-island);
+    background: var(--color-surface-island-strong);
   }
   .surface-overlay {
     box-shadow: var(--shadow-island);
     background: var(--color-surface-island-strong);
   }
+  /* Content that reaches the edges keeps to the rounded corners. A padded card clips nothing, so the
+     glow of an action inside spills past its edge. */
   .padding-none {
     --card-padding: var(--space-0);
+    overflow: clip;
   }
   .padding-sm {
     --card-padding: var(--space-3);
@@ -80,6 +90,14 @@ Groups content on a tokenized surface with optional header and footer snippets.
   }
 
   @supports (backdrop-filter: blur(0)) or (-webkit-backdrop-filter: blur(0)) {
+    .surface-raised {
+      -webkit-backdrop-filter: blur(var(--blur-md));
+      backdrop-filter: blur(var(--blur-md));
+    }
+    .card :global(.card.surface-raised) {
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
     .surface-overlay {
       -webkit-backdrop-filter: blur(var(--blur-md));
       backdrop-filter: blur(var(--blur-md));

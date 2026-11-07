@@ -5,7 +5,7 @@ Escape and backdrop interaction request closure; the controller decides whether 
 Supply a localized close control through `headerActions`.
 An initially open dialog is visible without JavaScript; modal focus and backdrop behavior begin on hydration.
 Opening focuses the dialog itself, so no control shows a focus ring until the reader moves on; a
-child with `autofocus` takes focus instead.
+child with `autofocus` takes focus instead. Opening and closing fade the dialog and its backdrop.
 
 ```svelte
 <script lang="ts">
@@ -64,7 +64,7 @@ child with `autofocus` takes focus instead.
   import ActionGroup from "./ActionGroup.svelte";
   import PanelHeader from "./PanelHeader.svelte";
 
-  import { untrack } from "svelte";
+  import { onMount, untrack } from "svelte";
 
   let {
     controller,
@@ -86,6 +86,9 @@ child with `autofocus` takes focus instead.
   const descriptionId = `${dialogId}-description`;
   let dialog: HTMLDialogElement | undefined;
   const initiallyOpen = untrack(() => controller.state.open);
+  // A dialog open from its first render, as a link to it opens it, is there at once; later openings fade in.
+  let mounted = $state(false);
+  onMount(() => (mounted = true));
 
   $effect(() => {
     if (!dialog) return;
@@ -128,6 +131,7 @@ child with `autofocus` takes focus instead.
   open={initiallyOpen}
   tabindex="-1"
   class="dialog {presentation} {size} {className}"
+  class:mounted
   aria-labelledby={titleId}
   aria-describedby={description ? descriptionId : undefined}
   oncancel={handleCancel}
@@ -143,12 +147,20 @@ child with `autofocus` takes focus instead.
 </dialog>
 
 <style>
+  /* Opening fades the dialog and its backdrop in as the dialog rises a little; closing plays it back.
+     A browser without discrete transitions opens and closes it at once. */
   .dialog {
     --dialog-padding: var(--space-4);
     --dialog-margin: var(--space-2);
     --dialog-width: var(--layout-container-sm);
+    --dialog-rise: var(--space-2);
     position: fixed;
     z-index: var(--layer-modal);
+    transition:
+      opacity var(--duration-normal) var(--easing-standard),
+      translate var(--duration-normal) var(--easing-standard),
+      overlay var(--duration-normal) allow-discrete,
+      display var(--duration-normal) allow-discrete;
     box-sizing: border-box;
     margin: auto;
     inset: 0;
@@ -163,12 +175,32 @@ child with `autofocus` takes focus instead.
     overflow: auto;
     color: var(--color-text-primary);
   }
+  .dialog:not([open]) {
+    translate: 0 var(--dialog-rise);
+    opacity: 0;
+  }
   .dialog:focus {
     outline: none;
   }
   .dialog::backdrop {
     backdrop-filter: blur(var(--blur-sm));
+    transition:
+      opacity var(--duration-normal) var(--easing-standard),
+      overlay var(--duration-normal) allow-discrete,
+      display var(--duration-normal) allow-discrete;
     background: var(--color-overlay-backdrop);
+  }
+  .dialog:not([open])::backdrop {
+    opacity: 0;
+  }
+  @starting-style {
+    .mounted[open] {
+      translate: 0 var(--dialog-rise);
+      opacity: 0;
+    }
+    .mounted[open]::backdrop {
+      opacity: 0;
+    }
   }
   .panel {
     display: flex;
@@ -179,10 +211,11 @@ child with `autofocus` takes focus instead.
     min-inline-size: 0;
     max-block-size: calc(100dvb - 2 * var(--dialog-margin));
   }
+  /* The body scrolls on its own, out to the dialog's sides and bottom, so only the dialog's own edge
+     cuts a child's focus ring or the glow of an action. */
   .content {
-    /* Keep child focus outlines inside the independently scrolling body. */
-    margin: calc(-1 * var(--space-2));
-    padding: var(--space-2);
+    margin: calc(-1 * var(--space-2)) calc(-1 * var(--dialog-padding)) calc(-1 * var(--dialog-padding));
+    padding: var(--space-2) var(--dialog-padding) var(--dialog-padding);
     min-inline-size: 0;
     min-block-size: var(--control-height-md);
     overflow: auto;
@@ -203,11 +236,13 @@ child with `autofocus` takes focus instead.
     }
   }
 
-  /* A fullscreen dialog covers the page as a phone's navigation menu does. Its thin edge matches the
-     compact app header it covers, so its title and close button open where the header's controls were. */
+  /* A fullscreen dialog covers the page as a phone's navigation menu does, and only fades. Its thin
+     edge matches the compact app header it covers, so its title and close button open where the
+     header's controls were. */
   .fullscreen {
-    --dialog-padding: var(--space-1) var(--space-2) var(--space-2);
+    --dialog-padding: var(--space-2);
     --dialog-margin: var(--space-0);
+    --dialog-rise: var(--space-0);
     margin: 0;
     box-shadow: none;
     border-radius: 0;
@@ -216,6 +251,7 @@ child with `autofocus` takes focus instead.
     max-block-size: none;
   }
   .fullscreen .panel {
+    padding-block-start: var(--space-1);
     block-size: 100%;
   }
   .fullscreen .content {

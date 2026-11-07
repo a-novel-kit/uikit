@@ -4,6 +4,8 @@ import Dialog from "./Dialog.svelte";
 import PanelHeader from "./PanelHeader.svelte";
 import { createOpenController } from "./controllers.svelte";
 
+import { tick } from "svelte";
+
 import { describe, expect, it } from "vitest";
 import { page } from "vitest/browser";
 
@@ -75,6 +77,8 @@ describe("Dialog browser lifecycle", () => {
       const { getByRole } = render(Fixture, { controller, presentation, long: true });
       await page.getByRole("button", { name: "Open details" }).click();
       const dialog = getByRole("dialog");
+      // The dialog rises as it opens, so its geometry is measured where it comes to rest.
+      await Promise.all(dialog.getAnimations().map((animation) => animation.finished));
       const heading = getByRole("heading");
       const close = getByRole("button", { name: "Close details" });
       const description = dialog.querySelector<HTMLElement>(`#${dialog.getAttribute("aria-describedby")}`)!;
@@ -115,6 +119,30 @@ describe("Dialog browser lifecycle", () => {
       expect(controller.state.open).toBe(false);
     }
   );
+
+  it("is there at once when open from its first render, then fades out and in", async () => {
+    const controller = createOpenController({ initialOpen: true });
+    const { getByRole } = render(Dialog, { controller, title: "Account" });
+    const dialog = getByRole("dialog") as HTMLDialogElement;
+    await tick();
+    expect(getComputedStyle(dialog).opacity).toBe("1");
+
+    controller.close();
+    await tick();
+
+    expect(dialog.open).toBe(false);
+    expect(getComputedStyle(dialog).display).toBe("block");
+    await Promise.all(dialog.getAnimations().map((animation) => animation.finished));
+    expect(getComputedStyle(dialog).display).toBe("none");
+
+    controller.open();
+    await tick();
+
+    expect(dialog.open).toBe(true);
+    expect(Number(getComputedStyle(dialog).opacity)).toBeLessThan(1);
+    await Promise.all(dialog.getAnimations().map((animation) => animation.finished));
+    expect(getComputedStyle(dialog).opacity).toBe("1");
+  });
 
   it("focuses the dialog itself on open, so no control lights a focus ring", async () => {
     const controller = createOpenController();

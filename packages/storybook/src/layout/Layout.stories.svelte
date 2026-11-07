@@ -55,6 +55,35 @@
   </Container>
 </Story>
 
+<Story
+  name="Nested cards"
+  parameters={{
+    docs: {
+      description: {
+        story:
+          "A raised card is frosted glass the app's lamp shines through. A raised card inside it turns opaque with a small shadow, so one group holds a card per option.",
+      },
+    },
+  }}
+  asChild
+>
+  <Container size="sm">
+    <Card>
+      <Stack gap="4">
+        <strong>Credentials</strong>
+        {#each ["Email and password", "Another sign-in"] as option (option)}
+          <Card>
+            <Stack gap="2">
+              <strong>{option}</strong>
+              <span class="muted">Each way to sign in sits on a card of its own.</span>
+            </Stack>
+          </Card>
+        {/each}
+      </Stack>
+    </Card>
+  </Container>
+</Story>
+
 <Story name="Split pane" asChild>
   <Container size="lg">
     <SplitPane>
