@@ -381,7 +381,8 @@ The hidden named input submits the selected value. The caller validates required
     justify-self: start;
     gap: var(--space-1);
     z-index: var(--layer-dropdown);
-    inset-block-start: var(--space-2);
+    /* Clear of the field's focus glow. */
+    inset-block-start: var(--space-3);
     outline: none;
     box-shadow: var(--shadow-lg);
     border: var(--border-width-thin) solid var(--color-border-subtle);

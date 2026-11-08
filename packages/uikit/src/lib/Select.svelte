@@ -352,12 +352,14 @@ The hidden named input submits the selected value. The caller validates required
     text-align: start;
   }
 
-  .a-novel-select-trigger:hover:not(:disabled, :focus-visible, [aria-invalid="true"]) {
+  .a-novel-select-trigger:hover:not(:disabled, :focus-visible, [aria-invalid="true"], [data-state="open"]) {
     border-color: var(--color-field-border);
     background: var(--color-control-surface-hover);
   }
 
-  .a-novel-select-trigger:focus-visible {
+  /* An open select reads as a focused field for as long as its list shows, whether or not the browser
+     shows its focus: a tap or a click focuses a button without it. */
+  .a-novel-select-trigger:is(:focus-visible, [data-state="open"]) {
     outline: none;
     box-shadow: var(--shadow-focus-ring);
     border-color: var(--color-control-border-focus);
@@ -395,8 +397,8 @@ The hidden named input submits the selected value. The caller validates required
     background: var(--color-control-surface-invalid);
   }
 
-  .a-novel-select-trigger.invalid:focus-visible,
-  .a-novel-select-trigger[aria-invalid="true"]:focus-visible {
+  .a-novel-select-trigger.invalid:is(:focus-visible, [data-state="open"]),
+  .a-novel-select-trigger[aria-invalid="true"]:is(:focus-visible, [data-state="open"]) {
     box-shadow: var(--shadow-invalid-focus-ring);
     border-color: var(--color-feedback-error-border);
     background: var(--color-control-surface-invalid);
@@ -424,7 +426,8 @@ The hidden named input submits the selected value. The caller validates required
     justify-self: start;
     gap: var(--space-1);
     z-index: var(--layer-dropdown);
-    inset-block-start: var(--space-2);
+    /* Clear of the trigger's focus glow. */
+    inset-block-start: var(--space-3);
     outline: none;
     box-shadow: var(--shadow-lg);
     border: var(--border-width-thin) solid var(--color-border-subtle);

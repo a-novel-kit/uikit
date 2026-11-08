@@ -78,18 +78,22 @@
 <style>
   .floating-surface {
     position: fixed;
-    transform: translate(-50%, -50%);
     z-index: var(--layer-dropdown);
     box-sizing: border-box;
     margin: 0;
-    inset: 50% auto auto 50%;
   }
 
+  /* An anchored surface keeps its owner's inset, which sets its distance from the source. */
   @supports (position-area: block-end) {
     .floating-surface {
       position-try-fallbacks: flip-block, flip-inline;
-      transform: none;
-      inset: unset;
+    }
+  }
+
+  @supports not (position-area: block-end) {
+    .floating-surface {
+      transform: translate(-50%, -50%);
+      inset: 50% auto auto 50%;
     }
   }
 </style>
