@@ -426,8 +426,8 @@ The hidden named input submits the selected value. The caller validates required
     justify-self: start;
     gap: var(--space-1);
     z-index: var(--layer-dropdown);
-    /* Clear of the trigger's focus glow. */
-    inset-block-start: var(--space-3);
+    /* Against the trigger's focus ring, without covering it. */
+    inset-block-start: var(--border-width-strong);
     outline: none;
     box-shadow: var(--shadow-lg);
     border: var(--border-width-thin) solid var(--color-border-subtle);
