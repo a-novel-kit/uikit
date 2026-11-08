@@ -74,6 +74,31 @@ it("is there at once when open from its first render, then plays its list out an
   expect(page.getByRole("listbox").element().getAnimations({ subtree: true })).not.toHaveLength(0);
 });
 
+it("sets its list against its trigger where the browser leaves it away, and keeps it there on scroll", async () => {
+  const unanchored = document.createElement("style");
+  unanchored.textContent = ".a-novel-select-content { position-area: none !important; }";
+  document.head.append(unanchored);
+  document.body.style.paddingBlock = "320px 2000px";
+
+  try {
+    render(Select, { controller: createSelectController<string>(), "aria-label": "Visibility", options });
+    const trigger = page.getByRole("combobox").element();
+    await userEvent.click(trigger);
+    const listbox = page.getByRole("listbox").element();
+    const gap = () => Math.round(listbox.getBoundingClientRect().top - trigger.getBoundingClientRect().bottom);
+
+    await expect.poll(gap).toBe(2);
+    expect(Math.round(listbox.getBoundingClientRect().left)).toBe(Math.round(trigger.getBoundingClientRect().left));
+
+    scrollBy(0, 120);
+    await expect.poll(gap).toBe(2);
+  } finally {
+    unanchored.remove();
+    document.body.style.removeProperty("padding-block");
+    scrollTo(0, 0);
+  }
+});
+
 it.each(openPaths)("shows the listbox at its trigger's width when opened by $path", async ({ open }) => {
   const controller = createSelectController<string>();
   render(Select, { controller, "aria-label": "Visibility", options });
