@@ -128,9 +128,11 @@ Renders numbered page controls. The caller updates `currentPage` or supplies URL
   .text {
     padding-inline: var(--space-3);
   }
-  .control:hover:not([aria-disabled="true"]):not(:disabled):not([aria-current="page"]) {
-    background: var(--color-action-ghost-hover);
-    color: var(--color-text-primary);
+  @media (hover: hover) {
+    .control:hover:not([aria-disabled="true"]):not(:disabled):not([aria-current="page"]) {
+      background: var(--color-action-ghost-hover);
+      color: var(--color-text-primary);
+    }
   }
   .control:focus-visible {
     outline: var(--focus-ring-width) solid var(--color-focus-ring);

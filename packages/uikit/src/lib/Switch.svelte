@@ -100,9 +100,11 @@ Provide a visible label or an accessible name.
     content: "";
   }
 
-  input:hover:not(:disabled, :focus-visible, :checked) {
-    border-color: var(--color-control-border-hover);
-    background: var(--color-action-neutral-hover);
+  @media (hover: hover) {
+    input:hover:not(:disabled, :focus-visible, :checked) {
+      border-color: var(--color-control-border-hover);
+      background: var(--color-action-neutral-hover);
+    }
   }
 
   input:checked {

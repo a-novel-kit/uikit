@@ -90,10 +90,12 @@ Renders an ordered navigation trail; the final item is always the current, unlin
     color: var(--color-text-secondary);
     text-decoration: none;
   }
-  a:hover {
-    color: var(--color-text-link-hover);
-    text-decoration: underline;
-    text-underline-offset: var(--space-1);
+  @media (hover: hover) {
+    a:hover {
+      color: var(--color-text-link-hover);
+      text-decoration: underline;
+      text-underline-offset: var(--space-1);
+    }
   }
   a:focus-visible {
     outline: var(--focus-ring-width) solid var(--color-focus-ring);

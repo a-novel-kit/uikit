@@ -2,6 +2,8 @@
 import Select from "./Select.svelte";
 import { type SelectController, createSelectController } from "./controllers.svelte";
 
+import { tick } from "svelte";
+
 import { expect, it } from "vitest";
 import { page, userEvent } from "vitest/browser";
 
@@ -51,6 +53,25 @@ it("sizes an initially open selection and respects rejected selection and dismis
   await input.click();
   await expect.element(listbox).toBeVisible();
   await expect.element(page.getByRole("option", { name: "Private" })).toHaveAttribute("aria-selected", "true");
+});
+
+it("is there at once when open from its first render, then plays its list out and back in", async () => {
+  const controller = createSelectController<string>({ initialOpen: true });
+  render(Select, { controller, "aria-label": "Visibility", options });
+  const listbox = page.getByRole("listbox").element();
+  await tick();
+  expect(listbox.getAnimations({ subtree: true })).toHaveLength(0);
+
+  controller.close();
+  await tick();
+
+  expect(listbox.isConnected).toBe(true);
+  await expect.poll(() => listbox.isConnected).toBe(false);
+
+  controller.open();
+  await tick();
+
+  expect(page.getByRole("listbox").element().getAnimations({ subtree: true })).not.toHaveLength(0);
 });
 
 it.each(openPaths)("shows the listbox at its trigger's width when opened by $path", async ({ open }) => {

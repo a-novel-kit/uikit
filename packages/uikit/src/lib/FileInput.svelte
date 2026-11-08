@@ -55,9 +55,11 @@ file selection remains owned by the browser.
     font-family: var(--font-family-interface);
   }
 
-  .file-input:hover:not(:disabled, :focus-visible, [aria-invalid="true"]) {
-    border-color: var(--color-field-border);
-    background: var(--color-control-surface-hover);
+  @media (hover: hover) {
+    .file-input:hover:not(:disabled, :focus-visible, [aria-invalid="true"]) {
+      border-color: var(--color-field-border);
+      background: var(--color-control-surface-hover);
+    }
   }
 
   .file-input:focus-visible {
@@ -93,8 +95,10 @@ file selection remains owned by the browser.
     font-weight: var(--font-weight-bold);
   }
 
-  .file-input:hover:not(:disabled, :focus-visible, [aria-invalid="true"])::file-selector-button {
-    background: var(--color-action-neutral-hover);
+  @media (hover: hover) {
+    .file-input:hover:not(:disabled, :focus-visible, [aria-invalid="true"])::file-selector-button {
+      background: var(--color-action-neutral-hover);
+    }
   }
 
   .file-input:disabled::file-selector-button {

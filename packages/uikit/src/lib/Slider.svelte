@@ -95,8 +95,10 @@ The default range is 0–100; the caller owns persistence and value validation.
     block-size: var(--control-height-md);
   }
 
-  input:hover:not(:disabled, :focus-visible) {
-    --slider-fill: var(--color-action-primary-hover);
+  @media (hover: hover) {
+    input:hover:not(:disabled, :focus-visible) {
+      --slider-fill: var(--color-action-primary-hover);
+    }
   }
 
   input:active:not(:disabled, :focus-visible) {

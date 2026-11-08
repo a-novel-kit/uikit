@@ -173,11 +173,16 @@ child with `autofocus` takes focus instead. Opening and closing fade the dialog 
     max-inline-size: none;
     max-block-size: calc(100dvb - 2 * var(--dialog-margin));
     overflow: auto;
+    overscroll-behavior: contain;
     color: var(--color-text-primary);
   }
   .dialog:not([open]) {
     translate: 0 var(--dialog-rise);
     opacity: 0;
+  }
+  /* A modal dialog holds the page behind it still, as a phone would otherwise scroll it under its menu. */
+  :global(:root:has(dialog.dialog:modal)) {
+    overflow: hidden;
   }
   .dialog:focus {
     outline: none;

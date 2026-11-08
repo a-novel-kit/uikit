@@ -341,9 +341,11 @@ The hidden named input submits the selected value. The caller validates required
     font-size: var(--font-size-md);
     font-family: var(--font-family-interface);
   }
-  .a-novel-combobox-input:hover:not(:disabled, :focus-visible, [aria-invalid="true"], :user-invalid) {
-    border-color: var(--color-field-border);
-    background: var(--color-control-surface-hover);
+  @media (hover: hover) {
+    .a-novel-combobox-input:hover:not(:disabled, :focus-visible, [aria-invalid="true"], :user-invalid) {
+      border-color: var(--color-field-border);
+      background: var(--color-control-surface-hover);
+    }
   }
   .a-novel-combobox-input:focus-visible {
     outline: none;
@@ -383,6 +385,12 @@ The hidden named input submits the selected value. The caller validates required
     flex-direction: column;
     justify-self: start;
     z-index: var(--layer-dropdown);
+    transition:
+      translate var(--duration-fast) var(--easing-standard),
+      border-color var(--duration-fast) var(--easing-standard),
+      box-shadow var(--duration-fast) var(--easing-standard),
+      overlay var(--duration-fast) allow-discrete,
+      display var(--duration-fast) allow-discrete;
     /* Against the field's focus ring, without covering it. */
     inset-block-start: var(--border-width-strong);
     outline: none;
@@ -406,11 +414,33 @@ The hidden named input submits the selected value. The caller validates required
   .options {
     display: grid;
     gap: var(--space-1);
+    transition: opacity var(--duration-fast) var(--easing-standard);
     padding: var(--space-1);
     min-block-size: 0;
     overflow-x: hidden;
     overflow-y: auto;
     overscroll-behavior-block: contain;
+  }
+  /* Opening fades the list in as it drops a little from its field, and closing plays it back. The
+     list's own opacity would cut its frost off from the page behind it, so each painted part fades on
+     its own. A list open from the first render is there at once. */
+  :global(.a-novel-combobox-content[popover]:not(:popover-open)) {
+    translate: 0 calc(-1 * var(--space-1));
+    box-shadow: none;
+    border-color: transparent;
+  }
+  :global(.a-novel-combobox-content[popover]:not(:popover-open)) .options {
+    opacity: 0;
+  }
+  @starting-style {
+    :global(.a-novel-combobox-content[data-animate]:popover-open) {
+      translate: 0 calc(-1 * var(--space-1));
+      box-shadow: none;
+      border-color: transparent;
+    }
+    :global(.a-novel-combobox-content[data-animate]:popover-open) .options {
+      opacity: 0;
+    }
   }
   :global(.a-novel-combobox-item) {
     display: flex;
@@ -469,15 +499,27 @@ The hidden named input submits the selected value. The caller validates required
 
     /* A blur reads only what lies under its own box, so a button crossing the list's edge stayed sharp
        there. The frost reaches past the list to blur what lies beyond its edges too, and the list's
-       clip trims it back to the list. */
+       clip trims it back to the list. It dims what it blurs, so a bright action behind the list stays
+       apart from its options. */
     :global(.a-novel-combobox-content::before) {
       position: absolute;
       z-index: -1;
-      -webkit-backdrop-filter: blur(var(--blur-md));
-      backdrop-filter: blur(var(--blur-md));
+      -webkit-backdrop-filter: blur(var(--blur-md)) var(--filter-dim);
+      backdrop-filter: blur(var(--blur-md)) var(--filter-dim);
+      transition: opacity var(--duration-fast) var(--easing-standard);
       inset: calc(var(--blur-md) * -2);
       background: var(--color-control-surface);
       content: "";
+    }
+
+    :global(.a-novel-combobox-content[popover]:not(:popover-open)::before) {
+      opacity: 0;
+    }
+
+    @starting-style {
+      :global(.a-novel-combobox-content[data-animate]:popover-open::before) {
+        opacity: 0;
+      }
     }
 
     :global(.a-novel-combobox-item[data-highlighted]:not([data-selected]):not([data-disabled])) {

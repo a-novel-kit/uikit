@@ -161,9 +161,11 @@ Use `createValueController` with a selected option value or `undefined`.
     content: "";
   }
 
-  input:hover:not(:disabled):not(:checked):not(:focus-visible) {
-    border-color: var(--color-control-border-hover);
-    background: var(--color-control-surface-hover);
+  @media (hover: hover) {
+    input:hover:not(:disabled):not(:checked):not(:focus-visible) {
+      border-color: var(--color-control-border-hover);
+      background: var(--color-control-surface-hover);
+    }
   }
 
   input:checked {

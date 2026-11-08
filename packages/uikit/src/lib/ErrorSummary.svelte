@@ -140,9 +140,11 @@ Mount after validation and enable `focusOnMount` when focus should move to the s
     text-underline-offset: var(--space-1);
   }
 
-  a:hover {
-    color: var(--color-action-danger-hover);
-    text-decoration-thickness: var(--border-width-strong);
+  @media (hover: hover) {
+    a:hover {
+      color: var(--color-action-danger-hover);
+      text-decoration-thickness: var(--border-width-strong);
+    }
   }
 
   a:focus-visible {

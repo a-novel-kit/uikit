@@ -51,6 +51,9 @@
   --blur-sm: calc(var(--blur-base) * var(--multiplier-2));
   --blur-md: calc(var(--blur-base) * var(--multiplier-4));
   --blur-lg: calc(var(--blur-base) * var(--multiplier-8));
+  /* Dims and desaturates what lies behind a frosted surface, so the surface's own colors stand clear
+     of the page's. */
+  --filter-dim: saturate(50%) brightness(75%);
 
   --control-height-sm: calc(var(--space-base) * var(--multiplier-7));
   --control-height-md: calc(var(--space-base) * var(--multiplier-8));

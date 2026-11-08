@@ -144,6 +144,19 @@ describe("Dialog browser lifecycle", () => {
     expect(getComputedStyle(dialog).opacity).toBe("1");
   });
 
+  it("holds the page behind it still while open", async () => {
+    const controller = createOpenController();
+    render(Dialog, { controller, title: "Account" });
+
+    controller.open();
+    await tick();
+    expect(getComputedStyle(document.documentElement).overflow).toBe("hidden");
+
+    controller.close();
+    await tick();
+    expect(getComputedStyle(document.documentElement).overflow).not.toBe("hidden");
+  });
+
   it("focuses the dialog itself on open, so no control lights a focus ring", async () => {
     const controller = createOpenController();
     render(Fixture, { controller });

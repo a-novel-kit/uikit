@@ -129,9 +129,11 @@ URLs and the current destination are supplied by the caller.
     text-decoration: none;
   }
 
-  a.item:hover:not([aria-current="page"]) {
-    background: var(--color-navigation-hover-surface);
-    color: var(--color-navigation-hover-text);
+  @media (hover: hover) {
+    a.item:hover:not([aria-current="page"]) {
+      background: var(--color-navigation-hover-surface);
+      color: var(--color-navigation-hover-text);
+    }
   }
   a.item:focus-visible {
     outline: var(--focus-ring-width) solid var(--color-focus-ring);
