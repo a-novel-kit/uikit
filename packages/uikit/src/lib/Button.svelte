@@ -1,7 +1,8 @@
 <!--
 @component
 Renders a styled native button. Defaults to `type="button"`; use `type="submit"` for form submission.
-Pass `href` for navigation: it renders a native link with the same appearance.
+Pass `href` for navigation: it renders a native link with the same appearance. A ghost or text link
+with `aria-current="page"` reads as the navigation's current item.
 
 ```svelte
 <script lang="ts">
@@ -233,12 +234,14 @@ Pass `href` for navigation: it renders a native link with the same appearance.
     font-weight: var(--font-weight-regular);
   }
 
-  :is(.outline, .ghost, .text):is(:hover, :active):not(:disabled):not([aria-pressed="true"]) {
+  :is(.outline, .ghost, .text):is(:hover, :active):not(:disabled):not([aria-pressed="true"]):not(
+      [aria-current="page"]
+    ) {
     background-color: var(--color-action-subtle-hover);
     color: var(--button-foreground-hover);
   }
 
-  :is(.outline, .ghost, .text):active:not(:disabled):not([aria-pressed="true"]) {
+  :is(.outline, .ghost, .text):active:not(:disabled):not([aria-pressed="true"]):not([aria-current="page"]) {
     background-color: var(--color-action-subtle-active);
   }
 
@@ -247,6 +250,13 @@ Pass `href` for navigation: it renders a native link with the same appearance.
     border-color: var(--button-selected-border);
     background-color: color-mix(in oklab, var(--button-selected-foreground) var(--color-mix-3), transparent);
     color: var(--button-selected-foreground);
+  }
+
+  /* A link to the page showing reads as the navigation's current item, as a rail's account link does
+     beside the NavList, and keeps that look under the pointer. */
+  :is(.ghost, .text)[aria-current="page"] {
+    background-color: var(--color-navigation-selected-surface);
+    color: var(--color-navigation-selected-text);
   }
 
   .button:disabled {

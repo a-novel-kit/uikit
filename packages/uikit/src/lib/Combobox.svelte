@@ -384,9 +384,11 @@ The hidden named input submits the selected value. The caller validates required
     inset-block-start: var(--space-2);
     outline: none;
     box-shadow: var(--shadow-lg);
-    border: 0;
+    border: var(--border-width-thin) solid var(--color-border-subtle);
     border-radius: var(--radius-lg);
-    background: var(--color-surface-island-strong);
+    /* The field's dark well, opaque so nothing under the list shows through it, and a subtle border
+       keeps it visible past the island it opens from. */
+    background: var(--color-surface-canvas);
     padding: var(--space-1);
     inline-size: var(--a-novel-combobox-anchor-width);
     min-inline-size: var(--a-novel-combobox-anchor-width);
@@ -450,12 +452,6 @@ The hidden named input submits the selected value. The caller validates required
   }
 
   @supports (backdrop-filter: blur(0)) or (-webkit-backdrop-filter: blur(0)) {
-    :global(.a-novel-combobox-content) {
-      -webkit-backdrop-filter: blur(var(--blur-md));
-      backdrop-filter: blur(var(--blur-md));
-      background: var(--color-surface-glass);
-    }
-
     :global(.a-novel-combobox-item[data-highlighted]:not([data-selected]):not([data-disabled])) {
       -webkit-backdrop-filter: blur(var(--blur-sm));
       backdrop-filter: blur(var(--blur-sm));

@@ -170,8 +170,18 @@ The hidden named input submits the selected value. The caller validates required
     closeListbox(true);
   }
 
+  // A tap on the trigger closes an open list by itself, as a press outside it, before the trigger's click
+  // arrives. The click acts on the state the press found, so it never reopens the list it just closed.
+  let openAtPress: boolean | undefined;
+
+  function handleTriggerPointerDown() {
+    openAtPress = controller.state.open;
+  }
+
   function handleTriggerClick() {
-    if (controller.state.open) closeListbox();
+    const wasOpen = openAtPress ?? controller.state.open;
+    openAtPress = undefined;
+    if (wasOpen) closeListbox();
     else openListbox();
   }
 
@@ -252,6 +262,7 @@ The hidden named input submits the selected value. The caller validates required
     data-state={controller.state.open ? "open" : "closed"}
     {disabled}
     {tabindex}
+    onpointerdown={handleTriggerPointerDown}
     onclick={handleTriggerClick}
     onkeydown={handleTriggerKeyDown}
   >
@@ -416,9 +427,11 @@ The hidden named input submits the selected value. The caller validates required
     inset-block-start: var(--space-2);
     outline: none;
     box-shadow: var(--shadow-lg);
-    border: 0;
+    border: var(--border-width-thin) solid var(--color-border-subtle);
     border-radius: var(--radius-lg);
-    background: var(--color-surface-island-strong);
+    /* The field's dark well, opaque so nothing under the list shows through it, and a subtle border
+       keeps it visible past the island it opens from. */
+    background: var(--color-surface-canvas);
     padding: var(--space-1);
     inline-size: var(--a-novel-select-anchor-width);
     min-inline-size: var(--a-novel-select-anchor-width);
@@ -475,12 +488,6 @@ The hidden named input submits the selected value. The caller validates required
   }
 
   @supports (backdrop-filter: blur(0)) or (-webkit-backdrop-filter: blur(0)) {
-    :global(.a-novel-select-content) {
-      -webkit-backdrop-filter: blur(var(--blur-md));
-      backdrop-filter: blur(var(--blur-md));
-      background: var(--color-surface-glass);
-    }
-
     :global(.a-novel-select-item[data-highlighted]:not([data-selected]):not([data-disabled])) {
       -webkit-backdrop-filter: blur(var(--blur-sm));
       backdrop-filter: blur(var(--blur-sm));
