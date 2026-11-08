@@ -1,6 +1,7 @@
+import I18nFixture from "../../test/I18nFixture.svelte";
 import FileInput from "./FileInput.svelte";
 
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, onTestFinished, vi } from "vitest";
 
 import { render } from "@testing-library/svelte";
 
@@ -21,6 +22,37 @@ describe("FileInput", () => {
     expect(input.accept).toBe(".pdf,.txt");
     expect(input.multiple).toBe(true);
     expect(input.getAttribute("aria-invalid")).toBe("true");
-    expect(input.className).toContain("lg");
+    expect(input.parentElement?.className).toContain("lg");
+  });
+
+  it.each([
+    { multiple: false, button: "Choisir un fichier" },
+    { multiple: true, button: "Choisir des fichiers" },
+  ])("words its button and placeholder in the app's language, multiple $multiple", ({ multiple, button }) => {
+    const props = { "aria-label": "Fichiers", multiple };
+    const { getByText } = render(I18nFixture, { props: { locale: "fr", component: FileInput, props } });
+
+    expect(getByText(button)).toBeTruthy();
+    expect(getByText("Aucun fichier choisi")).toBeTruthy();
+  });
+
+  it.each([
+    { value: ["chapter-one.pdf"], status: "chapter-one.pdf" },
+    { value: ["chapter-one.pdf", "notes.txt"], status: "2 files" },
+  ])("shows $status for the files its controller holds", ({ value, status }) => {
+    const controller = { state: { value }, setValue: () => undefined };
+    const { getByText } = render(FileInput, { props: { "aria-label": "Files", controller } });
+
+    expect(getByText(status)).toBeTruthy();
+  });
+
+  it("shows a selection the browser restored before it mounted", () => {
+    const restored = [new File(["text"], "restored.pdf")] as unknown as FileList;
+    const files = vi.spyOn(HTMLInputElement.prototype, "files", "get").mockReturnValue(restored);
+    onTestFinished(() => files.mockRestore());
+
+    const { getByText } = render(FileInput, { props: { "aria-label": "Files" } });
+
+    expect(getByText("restored.pdf")).toBeTruthy();
   });
 });

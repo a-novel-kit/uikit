@@ -106,7 +106,7 @@ export type { FieldControlProps, FieldProps } from "./Field.svelte";
 export { default as Fieldset } from "./Fieldset.svelte";
 export type { FieldsetProps } from "./Fieldset.svelte";
 export { default as FileInput } from "./FileInput.svelte";
-export type { FileInputProps } from "./FileInput.svelte";
+export type { FileInputController, FileInputProps } from "./FileInput.svelte";
 export { default as FormActions } from "./FormActions.svelte";
 export type { FormActionsProps } from "./FormActions.svelte";
 export { default as Grid } from "./Grid.svelte";

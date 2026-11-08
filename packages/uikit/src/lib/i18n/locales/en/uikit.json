@@ -31,6 +31,12 @@
   "errorSummary": {
     "title": "There is a problem"
   },
+  "fileInput": {
+    "choose": "Choose a file",
+    "chooseMany": "Choose files",
+    "count": "{{count}} files",
+    "placeholder": "No file chosen"
+  },
   "pagination": {
     "label": "Pagination",
     "next": "Next",
