@@ -429,8 +429,8 @@ The hidden named input submits the selected value. The caller validates required
     box-shadow: var(--shadow-lg);
     border: var(--border-width-thin) solid var(--color-border-subtle);
     border-radius: var(--radius-lg);
-    /* The field's dark well, opaque so nothing under the list shows through it, and a subtle border
-       keeps it visible past the island it opens from. */
+    /* The list takes the focused field's well, frosted where the browser blurs a backdrop and the
+       canvas's color where it cannot; a subtle border keeps it visible past the island it opens from. */
     background: var(--color-surface-canvas);
     padding: var(--space-1);
     inline-size: var(--a-novel-select-anchor-width);
@@ -488,6 +488,12 @@ The hidden named input submits the selected value. The caller validates required
   }
 
   @supports (backdrop-filter: blur(0)) or (-webkit-backdrop-filter: blur(0)) {
+    :global(.a-novel-select-content) {
+      -webkit-backdrop-filter: blur(var(--blur-md));
+      backdrop-filter: blur(var(--blur-md));
+      background: var(--color-control-surface-focus);
+    }
+
     :global(.a-novel-select-item[data-highlighted]:not([data-selected]):not([data-disabled])) {
       -webkit-backdrop-filter: blur(var(--blur-sm));
       backdrop-filter: blur(var(--blur-sm));

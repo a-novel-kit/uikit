@@ -1,8 +1,8 @@
 <!--
 @component
 Groups content on a tokenized surface with optional header and footer snippets.
-A raised card is frosted glass the app's lamp shines through. Inside another card, its veil adds to
-the parent's, a step lighter, with a stronger shadow, so a group of settings can hold one card per option.
+A raised card is frosted glass the app's lamp shines through. Inside another card, it keeps the
+parent's glass and stands out by its shadow alone, so a group of settings can hold one card per option.
 -->
 <script lang="ts" module>
   import type { Snippet } from "svelte";
@@ -58,12 +58,11 @@ the parent's, a step lighter, with a stronger shadow, so a group of settings can
     box-shadow: var(--shadow-ring);
     background: var(--color-surface-island-glass);
   }
-  /* A raised card inside another lays its veil on the parent's, so the lamp tints both alike and the
-     inner one reads a step lighter; a shadow gives it volume. Its muted text steps up to the secondary
-     shade, which keeps 4.9:1 under the lamp's brightest point where the muted shade falls to 3.3:1. */
+  /* A raised card inside another is the parent's own glass, so the lamp tints both alike and text
+     keeps the parent's contrast; only its shadow sets it apart. */
   .card :global(.card.surface-raised) {
-    --color-text-muted: var(--color-text-secondary);
     box-shadow: var(--shadow-md);
+    background: transparent;
   }
   .surface-overlay {
     box-shadow: var(--shadow-island);
