@@ -1,3 +1,12 @@
+import {
+  type AspectRatio,
+  type PictureFrameState,
+  type PictureSource,
+  centeredCrop,
+  panCrop,
+  zoomCrop,
+} from "./picture";
+
 /** State managed for content that can be open or closed. */
 export interface OpenState {
   /** Whether the content is visible. */
@@ -427,6 +436,52 @@ export function createComboboxController<Value>({
       if (Object.is(state.value, value)) return;
       state = { ...state, value };
       onValueChange?.(value);
+    },
+  };
+}
+
+/** Pure state transitions for a picture frame. Custom controllers may reject a request. */
+export interface PictureFrameController {
+  /** State rendered by the component. */
+  readonly state: PictureFrameState;
+  /** Moves the image under the frame by a distance given in fractions of the frame's width, on both axes. */
+  pan(dx: number, dy: number): void;
+  /** Zooms the image around a focus point given in fractions of the frame's width and height, the center by default. */
+  zoom(zoom: number, focusX?: number, focusY?: number): void;
+}
+
+/** Configuration for the default picture-frame controller. */
+export interface PictureFrameControllerOptions {
+  /** The image to frame, such as one `browserPictureFiles.open` decoded. */
+  source: PictureSource;
+  /** The frame's aspect ratio, which the saved picture keeps. */
+  ratio: AspectRatio;
+}
+
+/**
+ * Creates local reactive framing for one source, starting from its center at the widest zoom. The
+ * image always covers the frame, and the zoom stays between 1 and 4. Create one per chosen source.
+ *
+ * @example
+ * ```ts
+ * import { browserPictureFiles, createPictureFrameController } from "@a-novel-kit/uikit";
+ * const source = await browserPictureFiles.open(file);
+ * const background = createPictureFrameController({ source, ratio: { width: 16, height: 9 } });
+ * background.zoom(2);
+ * ```
+ */
+export function createPictureFrameController({ source, ratio }: PictureFrameControllerOptions): PictureFrameController {
+  let state = $state<PictureFrameState>({ source, ratio, crop: centeredCrop(source, ratio) });
+
+  return {
+    get state() {
+      return state;
+    },
+    pan: (dx, dy) => {
+      state = { ...state, crop: panCrop(state, dx, dy) };
+    },
+    zoom: (zoom, focusX, focusY) => {
+      state = { ...state, crop: zoomCrop(state, zoom, focusX, focusY) };
     },
   };
 }

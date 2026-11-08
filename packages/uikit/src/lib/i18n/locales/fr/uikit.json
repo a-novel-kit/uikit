@@ -39,6 +39,11 @@
   "passwordInput": {
     "show": "Afficher le mot de passe"
   },
+  "pictureFrame": {
+    "instructions": "Faites glisser l’image ou utilisez les flèches pour la déplacer. Zoomez avec le curseur, les touches + et -, la molette ou en pinçant.",
+    "label": "Cadre de l’image",
+    "zoom": "Zoom"
+  },
   "select": {
     "placeholder": "Sélectionnez une option"
   },

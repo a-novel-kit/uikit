@@ -1,0 +1,85 @@
+import * as Stories from "./PictureFrame.stories.svelte";
+
+import { Meta, ResponsiveStoryPair } from "@a-novel-kit/uikit-storybook";
+
+import { ArgTypes, Canvas } from "@storybook/addon-docs/blocks";
+
+<Meta of={Stories} />
+
+# Picture frame
+
+Frames an image a person chose at an exact aspect ratio, before the browser encodes it for a server.
+A drag or the arrow keys move the image, and the slider, the + and - keys, the mouse wheel or a pinch
+zoom it. The image always covers the frame.
+
+<ResponsiveStoryPair desktop={Stories.AvatarDesktop} mobile={Stories.AvatarMobile} meta={Stories} />
+<ResponsiveStoryPair desktop={Stories.BackgroundDesktop} mobile={Stories.BackgroundMobile} meta={Stories} />
+
+## Usage
+
+A `PictureRule` names what the server accepts: the exact ratio, the largest width, and the largest
+size in bytes. Open the chosen file, frame its source, and encode the framed picture under the rule.
+
+```svelte
+<script lang="ts">
+  import {
+    FileInput,
+    PictureFrame,
+    type PictureFrameController,
+    type PictureRule,
+    browserPictureFiles,
+    createPictureFrameController,
+  } from "@a-novel-kit/uikit";
+
+  const background: PictureRule = { ratio: { width: 16, height: 9 }, maxWidth: 1280, maxBytes: 524288 };
+  let frame = $state.raw<PictureFrameController>();
+
+  async function choose(event: Event & { currentTarget: HTMLInputElement }) {
+    const file = event.currentTarget.files?.[0];
+    if (!file) return;
+    if (frame) browserPictureFiles.release(frame.state.source);
+    frame = createPictureFrameController({ source: await browserPictureFiles.open(file), ratio: background.ratio });
+  }
+
+  const encode = (frame: PictureFrameController) =>
+    browserPictureFiles.encode(frame.state.source, frame.state.crop, background);
+</script>
+
+<FileInput accept="image/*" aria-label="Choose an image" onchange={choose} />
+{#if frame}
+  <PictureFrame controller={frame} label="Background frame" zoomLabel="Background zoom" />
+{/if}
+```
+
+`open` rejects a file the browser cannot decode, and the app reports it. `encode` draws the crop on
+an opaque white ground and resolves a still WebP, or a JPEG where the browser cannot encode WebP. It
+lowers the quality until the picture fits `maxBytes`, and resolves the last try when none does, for
+the server to refuse. Release each source once no frame shows it.
+
+The saved width is a whole multiple of the reduced ratio's width term, up to `maxWidth`, so its
+width and height keep the ratio exactly: a 16:9 picture is 16x9, 32x18, and so on up to 1280x720.
+
+An app that keeps the crop in its own model implements `PictureFrameController` over it with
+`centeredCrop`, `panCrop` and `zoomCrop`, the functions the default controller uses.
+
+## Shape and states
+
+Set `shape="circle"` when the app shows the picture as a round avatar: the frame dims what the
+circle hides, and the picture keeps the whole square. Set `disabled` while the picture saves.
+
+<ResponsiveStoryPair desktop={Stories.SavingDesktop} mobile={Stories.SavingMobile} meta={Stories} />
+
+The live example below runs the default controller.
+
+<Canvas of={Stories.Live} />
+
+## Accessibility
+
+The frame takes focus and carries the `application` role, since no widget role describes an area
+with its own keys and gestures. Its instructions describe it. Name each frame with `label`, and its
+slider with `zoomLabel`, when a form holds several. The slider gives pointer users without a wheel
+or a pinch a way to zoom. The default text ships in English and French.
+
+## API
+
+<ArgTypes of={Stories} />

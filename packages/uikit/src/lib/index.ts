@@ -17,6 +17,7 @@ export {
   createComboboxController,
   createConsentController,
   createOpenController,
+  createPictureFrameController,
   createPressedController,
   createSelectController,
   createValueController,
@@ -33,6 +34,8 @@ export type {
   OpenController,
   OpenControllerOptions,
   OpenState,
+  PictureFrameController,
+  PictureFrameControllerOptions,
   PressedController,
   PressedControllerOptions,
   PressedState,
@@ -42,6 +45,10 @@ export type {
   ValueControllerOptions,
   ValueState,
 } from "./controllers.svelte";
+export { browserPictureFiles } from "./pictureFiles";
+export type { PictureFiles } from "./pictureFiles";
+export { centeredCrop, panCrop, zoomCrop } from "./picture";
+export type { AspectRatio, PictureCrop, PictureFrameState, PictureRule, PictureSource } from "./picture";
 export type { ComponentSize, FeedbackState, FeedbackTone, LayoutGap, SelectionOption } from "./types";
 export { default as Accordion } from "./Accordion.svelte";
 export type { AccordionProps } from "./Accordion.svelte";
@@ -126,6 +133,8 @@ export { default as PanelHeader } from "./PanelHeader.svelte";
 export type { PanelHeaderProps } from "./PanelHeader.svelte";
 export { default as PasswordInput } from "./PasswordInput.svelte";
 export type { PasswordInputController, PasswordInputProps } from "./PasswordInput.svelte";
+export { default as PictureFrame } from "./PictureFrame.svelte";
+export type { PictureFrameProps } from "./PictureFrame.svelte";
 export { default as Popover } from "./Popover.svelte";
 export type { PopoverController, PopoverProps, PopoverTriggerAttributes } from "./Popover.svelte";
 export { default as Progress } from "./Progress.svelte";

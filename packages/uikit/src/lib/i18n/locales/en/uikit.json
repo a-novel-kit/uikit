@@ -39,6 +39,11 @@
   "passwordInput": {
     "show": "Show password"
   },
+  "pictureFrame": {
+    "instructions": "Drag the image or use the arrow keys to move it. Zoom with the slider, the + and - keys, the mouse wheel or a pinch.",
+    "label": "Picture frame",
+    "zoom": "Zoom"
+  },
   "select": {
     "placeholder": "Select an option"
   },
