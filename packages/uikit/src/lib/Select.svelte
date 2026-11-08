@@ -354,9 +354,11 @@ The hidden named input submits the selected value. The caller validates required
     text-align: start;
   }
 
-  .a-novel-select-trigger:hover:not(:disabled, :focus-visible, [aria-invalid="true"], [data-state="open"]) {
-    border-color: var(--color-field-border);
-    background: var(--color-control-surface-hover);
+  @media (hover: hover) {
+    .a-novel-select-trigger:hover:not(:disabled, :focus-visible, [aria-invalid="true"], [data-state="open"]) {
+      border-color: var(--color-field-border);
+      background: var(--color-control-surface-hover);
+    }
   }
 
   /* An open select reads as a focused field for as long as its list shows, whether or not the browser
@@ -428,6 +430,12 @@ The hidden named input submits the selected value. The caller validates required
     flex-direction: column;
     justify-self: start;
     z-index: var(--layer-dropdown);
+    transition:
+      translate var(--duration-fast) var(--easing-standard),
+      border-color var(--duration-fast) var(--easing-standard),
+      box-shadow var(--duration-fast) var(--easing-standard),
+      overlay var(--duration-fast) allow-discrete,
+      display var(--duration-fast) allow-discrete;
     /* Against the trigger's focus ring, without covering it. */
     inset-block-start: var(--border-width-strong);
     outline: none;
@@ -448,11 +456,33 @@ The hidden named input submits the selected value. The caller validates required
   .options {
     display: grid;
     gap: var(--space-1);
+    transition: opacity var(--duration-fast) var(--easing-standard);
     padding: var(--space-1);
     min-block-size: 0;
     overflow-x: hidden;
     overflow-y: auto;
     overscroll-behavior-block: contain;
+  }
+  /* Opening fades the list in as it drops a little from its field, and closing plays it back. The
+     list's own opacity would cut its frost off from the page behind it, so each painted part fades on
+     its own. A list open from the first render is there at once. */
+  :global(.a-novel-select-content[popover]:not(:popover-open)) {
+    translate: 0 calc(-1 * var(--space-1));
+    box-shadow: none;
+    border-color: transparent;
+  }
+  :global(.a-novel-select-content[popover]:not(:popover-open)) .options {
+    opacity: 0;
+  }
+  @starting-style {
+    :global(.a-novel-select-content[data-animate]:popover-open) {
+      translate: 0 calc(-1 * var(--space-1));
+      box-shadow: none;
+      border-color: transparent;
+    }
+    :global(.a-novel-select-content[data-animate]:popover-open) .options {
+      opacity: 0;
+    }
   }
 
   :global(.a-novel-select-item) {
@@ -507,15 +537,27 @@ The hidden named input submits the selected value. The caller validates required
 
     /* A blur reads only what lies under its own box, so a button crossing the list's edge stayed sharp
        there. The frost reaches past the list to blur what lies beyond its edges too, and the list's
-       clip trims it back to the list. */
+       clip trims it back to the list. It dims what it blurs, so a bright action behind the list stays
+       apart from its options. */
     :global(.a-novel-select-content::before) {
       position: absolute;
       z-index: -1;
-      -webkit-backdrop-filter: blur(var(--blur-md));
-      backdrop-filter: blur(var(--blur-md));
+      -webkit-backdrop-filter: blur(var(--blur-md)) var(--filter-dim);
+      backdrop-filter: blur(var(--blur-md)) var(--filter-dim);
+      transition: opacity var(--duration-fast) var(--easing-standard);
       inset: calc(var(--blur-md) * -2);
       background: var(--color-control-surface);
       content: "";
+    }
+
+    :global(.a-novel-select-content[popover]:not(:popover-open)::before) {
+      opacity: 0;
+    }
+
+    @starting-style {
+      :global(.a-novel-select-content[data-animate]:popover-open::before) {
+        opacity: 0;
+      }
     }
 
     :global(.a-novel-select-item[data-highlighted]:not([data-selected]):not([data-disabled])) {

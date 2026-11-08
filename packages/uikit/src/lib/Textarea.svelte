@@ -89,17 +89,19 @@ Styles a native multiline input. Native attributes and events target the textare
     color: var(--color-control-placeholder);
   }
 
-  .textarea:hover:not(
-      :has(
-        .control:disabled,
-        .control:read-only,
-        .control:focus-visible,
-        .control[aria-invalid="true"],
-        .control:user-invalid
-      )
-    ) {
-    border-color: var(--color-field-border);
-    background: var(--color-control-surface-hover);
+  @media (hover: hover) {
+    .textarea:hover:not(
+        :has(
+          .control:disabled,
+          .control:read-only,
+          .control:focus-visible,
+          .control[aria-invalid="true"],
+          .control:user-invalid
+        )
+      ) {
+      border-color: var(--color-field-border);
+      background: var(--color-control-surface-hover);
+    }
   }
 
   .textarea:has(.control:focus-visible) {

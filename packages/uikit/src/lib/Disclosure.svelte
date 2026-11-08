@@ -107,8 +107,10 @@ Controller methods may reject a toggle; the rendered disclosure follows the acce
     display: none;
   }
 
-  summary:hover:not([aria-disabled="true"]) {
-    background: var(--color-surface-glass-hover);
+  @media (hover: hover) {
+    summary:hover:not([aria-disabled="true"]) {
+      background: var(--color-surface-glass-hover);
+    }
   }
 
   summary:focus-visible {

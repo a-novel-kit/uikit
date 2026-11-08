@@ -79,8 +79,10 @@ Wraps a native table in a keyboard-scrollable region. Supply semantic table sect
     color: var(--color-text-secondary);
     font-weight: var(--font-weight-bold);
   }
-  table :global(tbody tr:hover) {
-    background: var(--color-surface-hover);
+  @media (hover: hover) {
+    table :global(tbody tr:hover) {
+      background: var(--color-surface-hover);
+    }
   }
   .compact {
     --table-padding: var(--space-2) var(--space-3);

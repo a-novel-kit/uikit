@@ -79,17 +79,19 @@ Native attributes and events target the input; `class` styles the surrounding su
     color: var(--color-control-placeholder);
   }
 
-  .input:hover:not(
-      :has(
-        .control:disabled,
-        .control:read-only,
-        .control:focus-visible,
-        .control[aria-invalid="true"],
-        .control:user-invalid
-      )
-    ) {
-    border-color: var(--color-field-border);
-    background: var(--color-control-surface-hover);
+  @media (hover: hover) {
+    .input:hover:not(
+        :has(
+          .control:disabled,
+          .control:read-only,
+          .control:focus-visible,
+          .control[aria-invalid="true"],
+          .control:user-invalid
+        )
+      ) {
+      border-color: var(--color-field-border);
+      background: var(--color-control-surface-hover);
+    }
   }
 
   .input:has(.control:focus-visible) {

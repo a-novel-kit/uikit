@@ -330,9 +330,11 @@ For a custom trigger, spread the snippet attributes onto a native button.
     font-size: var(--font-size-md);
     font-family: var(--font-family-interface);
   }
-  :global(.a-novel-menu-trigger:hover:not(:disabled, [data-state="open"])) {
-    border-color: var(--color-border-strong);
-    background: var(--color-action-neutral-hover);
+  @media (hover: hover) {
+    :global(.a-novel-menu-trigger:hover:not(:disabled, [data-state="open"])) {
+      border-color: var(--color-border-strong);
+      background: var(--color-action-neutral-hover);
+    }
   }
   :global(.a-novel-menu-trigger[data-state="open"]) {
     box-shadow: var(--shadow-glow-brand);

@@ -186,8 +186,10 @@ with `aria-current="page"` reads as the navigation's current item.
     color: var(--button-text);
   }
 
-  .solid:hover:not(:disabled):not([aria-pressed="true"]) {
-    background-color: var(--button-hover);
+  @media (hover: hover) {
+    .solid:hover:not(:disabled):not([aria-pressed="true"]) {
+      background-color: var(--button-hover);
+    }
   }
 
   .solid.brand:not(:disabled):not([aria-pressed="true"]) {
@@ -195,9 +197,11 @@ with `aria-current="page"` reads as the navigation's current item.
     background-image: var(--gradient-action-primary);
   }
 
-  .solid.brand:hover:not(:disabled):not([aria-pressed="true"]) {
-    box-shadow: var(--shadow-action-primary-hover);
-    background-image: var(--gradient-action-primary-hover);
+  @media (hover: hover) {
+    .solid.brand:hover:not(:disabled):not([aria-pressed="true"]) {
+      box-shadow: var(--shadow-action-primary-hover);
+      background-image: var(--gradient-action-primary-hover);
+    }
   }
 
   .solid.brand:active:not(:disabled):not([aria-pressed="true"]) {
@@ -217,8 +221,10 @@ with `aria-current="page"` reads as the navigation's current item.
     border-color: var(--button-border);
   }
 
-  .outline:hover:not(:disabled):not([aria-pressed="true"]) {
-    border-color: var(--button-border-hover);
+  @media (hover: hover) {
+    .outline:hover:not(:disabled):not([aria-pressed="true"]) {
+      border-color: var(--button-border-hover);
+    }
   }
 
   .outline,
@@ -234,15 +240,16 @@ with `aria-current="page"` reads as the navigation's current item.
     font-weight: var(--font-weight-regular);
   }
 
-  :is(.outline, .ghost, .text):is(:hover, :active):not(:disabled):not([aria-pressed="true"]):not(
-      [aria-current="page"]
-    ) {
-    background-color: var(--color-action-subtle-hover);
-    color: var(--button-foreground-hover);
+  @media (hover: hover) {
+    :is(.outline, .ghost, .text):hover:not(:disabled):not([aria-pressed="true"]):not([aria-current="page"]) {
+      background-color: var(--color-action-subtle-hover);
+      color: var(--button-foreground-hover);
+    }
   }
 
   :is(.outline, .ghost, .text):active:not(:disabled):not([aria-pressed="true"]):not([aria-current="page"]) {
     background-color: var(--color-action-subtle-active);
+    color: var(--button-foreground-hover);
   }
 
   :is(.outline, .ghost, .text)[aria-pressed="true"] {

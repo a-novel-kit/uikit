@@ -40,18 +40,21 @@ Renders a native anchor with inline or quiet styling. The caller owns the destin
     text-decoration: none;
   }
 
-  .link:hover {
-    color: var(--color-text-link-hover);
-    text-decoration-thickness: var(--border-width-strong);
-  }
+  @media (hover: hover) {
+    .link:hover {
+      color: var(--color-text-link-hover);
+      text-decoration-thickness: var(--border-width-strong);
+    }
 
-  .quiet:is(:hover, :active) {
-    background: var(--color-action-subtle-hover);
-    color: var(--color-action-primary-foreground-hover);
+    .quiet:hover {
+      background: var(--color-action-subtle-hover);
+      color: var(--color-action-primary-foreground-hover);
+    }
   }
 
   .quiet:active {
     background: var(--color-action-subtle-active);
+    color: var(--color-action-primary-foreground-hover);
   }
 
   .link:focus-visible {

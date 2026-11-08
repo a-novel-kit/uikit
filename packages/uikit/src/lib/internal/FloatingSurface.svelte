@@ -23,6 +23,8 @@
 </script>
 
 <script lang="ts">
+  import { untrack } from "svelte";
+
   let {
     open,
     source = null,
@@ -35,6 +37,33 @@
   }: FloatingSurfaceProps = $props();
 
   const supportsPopover = typeof HTMLElement !== "undefined" && "showPopover" in HTMLElement.prototype;
+
+  // A closing surface stays until its owner's exit transition ends, however it closed.
+  let shown = $state(untrack(() => open));
+  // A surface open from the first render, as a pinned story shows it, is there at once: only later
+  // openings play their owner's entry transition.
+  let still = $state(untrack(() => open));
+
+  $effect.pre(() => {
+    if (open) shown = true;
+    else still = false;
+  });
+
+  $effect(() => {
+    if (open || !element) return;
+
+    const surface = element;
+    if (supportsPopover && surface.matches(":popover-open")) surface.hidePopover();
+
+    const exits = surface.getAnimations?.({ subtree: true }) ?? [];
+    if (exits.length === 0) {
+      shown = false;
+      return;
+    }
+    void Promise.allSettled(exits.map((exit) => exit.finished)).then(() => {
+      if (!open) shown = false;
+    });
+  });
 
   // The browser reads the anchor when the surface shows, so a source that arrives later shows it again.
   let anchoredSource: HTMLElement | null = null;
@@ -63,10 +92,11 @@
   }
 </script>
 
-{#if open}
+{#if shown}
   <div
     bind:this={element}
     class="floating-surface {className}"
+    data-animate={still ? undefined : ""}
     popover={supportsPopover ? mode : undefined}
     ontoggle={handleToggle}
     {...rest}

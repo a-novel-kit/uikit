@@ -129,9 +129,11 @@ The caller manages their lifetime and removes dismissed entries; no automatic ti
     font-size: var(--font-size-xs);
     font-family: var(--font-family-interface);
   }
-  button:hover {
-    background: var(--color-action-ghost-hover);
-    color: var(--color-text-primary);
+  @media (hover: hover) {
+    button:hover {
+      background: var(--color-action-ghost-hover);
+      color: var(--color-text-primary);
+    }
   }
   button:focus-visible {
     outline: var(--focus-ring-width) solid var(--color-focus-ring);

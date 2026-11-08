@@ -41,9 +41,11 @@ the control, so the button shows only its icon, a background and a color.
     user-select: none;
   }
 
-  .field-button:hover:not(:disabled, [aria-pressed="true"]) {
-    background: var(--color-action-subtle-hover);
-    color: var(--color-text-primary);
+  @media (hover: hover) {
+    .field-button:hover:not(:disabled, [aria-pressed="true"]) {
+      background: var(--color-action-subtle-hover);
+      color: var(--color-text-primary);
+    }
   }
 
   .field-button:active:not(:disabled),

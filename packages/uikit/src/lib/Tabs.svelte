@@ -203,9 +203,11 @@ Every panel stays mounted; inactive panels are hidden. Initialize the controller
     border-block-end: 0;
     inline-size: 100%;
   }
-  .a-novel-tabs-trigger:hover:not([data-disabled], [data-state="active"]) {
-    background: var(--color-navigation-hover-surface);
-    color: var(--color-navigation-hover-text);
+  @media (hover: hover) {
+    .a-novel-tabs-trigger:hover:not([data-disabled], [data-state="active"]) {
+      background: var(--color-navigation-hover-surface);
+      color: var(--color-navigation-hover-text);
+    }
   }
   .a-novel-tabs-trigger[data-state="active"] {
     border-color: transparent;

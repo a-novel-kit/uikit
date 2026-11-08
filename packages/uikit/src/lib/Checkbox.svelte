@@ -101,9 +101,11 @@ Provide `label` or an accessible name; native input attributes are forwarded to 
     content: "";
   }
 
-  input:hover:not(:disabled):not(:checked):not(:indeterminate):not(:focus-visible) {
-    border-color: var(--color-control-border-hover);
-    background: var(--color-control-surface-hover);
+  @media (hover: hover) {
+    input:hover:not(:disabled):not(:checked):not(:indeterminate):not(:focus-visible) {
+      border-color: var(--color-control-border-hover);
+      background: var(--color-control-surface-hover);
+    }
   }
 
   input:checked,
