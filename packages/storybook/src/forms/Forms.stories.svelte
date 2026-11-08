@@ -83,6 +83,11 @@
   const compactNavigationController = fixedChecked();
   const hiddenPasswordController = fixedPressed();
   const shownPasswordController = fixedPressed(true);
+  const oneFileController = fixedValue<readonly string[]>(["chapter-one.pdf"]);
+  const severalFilesController = fixedValue<readonly string[]>(["chapter-one.pdf", "chapter-two.pdf", "notes.txt"]);
+  const longFileController = fixedValue<readonly string[]>([
+    "the-complete-annotated-manuscript-with-every-revision-and-editor-comment-final-v12.pdf",
+  ]);
 </script>
 
 <Story name="Text fields" asChild>
@@ -118,6 +123,46 @@
     <Field label="Reference files" hint="Choose one or more PDF, EPUB, or text files.">
       {#snippet children(control)}
         <FileInput {...control} name="references" accept=".pdf,.epub,.txt" multiple />
+      {/snippet}
+    </Field>
+  </div>
+</Story>
+
+<Story name="File upload states" asChild>
+  <div class="form">
+    <Field label="One file">
+      {#snippet children(control)}
+        <FileInput {...control} controller={oneFileController} />
+      {/snippet}
+    </Field>
+    <Field label="Several files">
+      {#snippet children(control)}
+        <FileInput {...control} controller={severalFilesController} multiple />
+      {/snippet}
+    </Field>
+    <Field label="Long file name">
+      {#snippet children(control)}
+        <FileInput {...control} controller={longFileController} />
+      {/snippet}
+    </Field>
+    <Field label="Invalid" error="Choose a PDF file.">
+      {#snippet children(control)}
+        <FileInput {...control} invalid />
+      {/snippet}
+    </Field>
+    <Field label="Disabled">
+      {#snippet children(control)}
+        <FileInput {...control} disabled />
+      {/snippet}
+    </Field>
+    <Field label="Small">
+      {#snippet children(control)}
+        <FileInput {...control} controlSize="sm" />
+      {/snippet}
+    </Field>
+    <Field label="Large">
+      {#snippet children(control)}
+        <FileInput {...control} controlSize="lg" />
       {/snippet}
     </Field>
   </div>
