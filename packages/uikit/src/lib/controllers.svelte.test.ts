@@ -2,6 +2,7 @@ import {
   createCheckedController,
   createComboboxController,
   createOpenController,
+  createPictureFrameController,
   createPressedController,
   createSelectController,
   createValueController,
@@ -85,5 +86,19 @@ describe("component controllers", () => {
     expect(controller.state.value).toBe(90);
     expect(onValueChange).toHaveBeenCalledOnce();
     expect(onValueChange).toHaveBeenCalledWith(90);
+  });
+
+  it("frames a source from its center, then keeps the image over the frame", () => {
+    const source = { url: "landscape.png", width: 1600, height: 1200 };
+    const controller = createPictureFrameController({ source, ratio: { width: 16, height: 9 } });
+    expect(controller.state).toEqual({ source, ratio: { width: 16, height: 9 }, crop: { zoom: 1, x: 0, y: 150 } });
+
+    controller.zoom(2);
+    controller.pan(0.1, 0.1);
+    expect(controller.state.crop).toEqual({ zoom: 2, x: 320, y: 295 });
+
+    controller.zoom(9, 0, 0);
+    controller.pan(-3, -3);
+    expect(controller.state.crop).toEqual({ zoom: 4, x: 1200, y: 975 });
   });
 });
