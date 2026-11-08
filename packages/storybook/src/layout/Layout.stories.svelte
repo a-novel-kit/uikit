@@ -61,7 +61,7 @@
     docs: {
       description: {
         story:
-          "A raised card is frosted glass the app's lamp shines through. A raised card inside it turns opaque with a small shadow, so one group holds a card per option.",
+          "A raised card is frosted glass the app's lamp shines through. A raised card inside it keeps the parent's glass and stands out by its shadow alone, so one group holds a card per option.",
       },
     },
   }}

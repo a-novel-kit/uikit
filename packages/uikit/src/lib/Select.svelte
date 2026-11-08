@@ -170,8 +170,18 @@ The hidden named input submits the selected value. The caller validates required
     closeListbox(true);
   }
 
+  // A tap on the trigger closes an open list by itself, as a press outside it, before the trigger's click
+  // arrives. The click acts on the state the press found, so it never reopens the list it just closed.
+  let openAtPress: boolean | undefined;
+
+  function handleTriggerPointerDown() {
+    openAtPress = controller.state.open;
+  }
+
   function handleTriggerClick() {
-    if (controller.state.open) closeListbox();
+    const wasOpen = openAtPress ?? controller.state.open;
+    openAtPress = undefined;
+    if (wasOpen) closeListbox();
     else openListbox();
   }
 
@@ -252,6 +262,7 @@ The hidden named input submits the selected value. The caller validates required
     data-state={controller.state.open ? "open" : "closed"}
     {disabled}
     {tabindex}
+    onpointerdown={handleTriggerPointerDown}
     onclick={handleTriggerClick}
     onkeydown={handleTriggerKeyDown}
   >
@@ -280,35 +291,37 @@ The hidden named input submits the selected value. The caller validates required
     style="--a-novel-select-anchor-width: {anchorWidth}"
     onOpenChange={handleSurfaceOpenChange}
   >
-    {#each options as option, index (option.value)}
-      <button
-        id={optionId(index)}
-        class="a-novel-select-item {allowDeselect ? 'deselectable' : ''}"
-        type="button"
-        tabindex={-1}
-        role="option"
-        aria-label={option.label}
-        aria-selected={controller.state.value === option.value}
-        aria-disabled={option.disabled || undefined}
-        data-option-index={index}
-        data-highlighted={activeIndex === index || undefined}
-        data-selected={controller.state.value === option.value || undefined}
-        data-disabled={option.disabled || undefined}
-        disabled={option.disabled}
-        onpointermove={() => {
-          if (!option.disabled) activeIndex = index;
-        }}
-        onpointerdown={(event) => event.preventDefault()}
-        onclick={() => selectOption(option)}
-      >
-        <span
-          >{#if renderOption}{@render renderOption(option)}{:else}{option.label}{/if}</span
+    <div class="options">
+      {#each options as option, index (option.value)}
+        <button
+          id={optionId(index)}
+          class="a-novel-select-item {allowDeselect ? 'deselectable' : ''}"
+          type="button"
+          tabindex={-1}
+          role="option"
+          aria-label={option.label}
+          aria-selected={controller.state.value === option.value}
+          aria-disabled={option.disabled || undefined}
+          data-option-index={index}
+          data-highlighted={activeIndex === index || undefined}
+          data-selected={controller.state.value === option.value || undefined}
+          data-disabled={option.disabled || undefined}
+          disabled={option.disabled}
+          onpointermove={() => {
+            if (!option.disabled) activeIndex = index;
+          }}
+          onpointerdown={(event) => event.preventDefault()}
+          onclick={() => selectOption(option)}
         >
-        {#if controller.state.value === option.value}
-          <CheckIcon size="var(--icon-size-sm)" aria-hidden="true" />
-        {/if}
-      </button>
-    {/each}
+          <span
+            >{#if renderOption}{@render renderOption(option)}{:else}{option.label}{/if}</span
+          >
+          {#if controller.state.value === option.value}
+            <CheckIcon size="var(--icon-size-sm)" aria-hidden="true" />
+          {/if}
+        </button>
+      {/each}
+    </div>
   </FloatingSurface>
 </div>
 
@@ -341,12 +354,14 @@ The hidden named input submits the selected value. The caller validates required
     text-align: start;
   }
 
-  .a-novel-select-trigger:hover:not(:disabled, :focus-visible, [aria-invalid="true"]) {
+  .a-novel-select-trigger:hover:not(:disabled, :focus-visible, [aria-invalid="true"], [data-state="open"]) {
     border-color: var(--color-field-border);
     background: var(--color-control-surface-hover);
   }
 
-  .a-novel-select-trigger:focus-visible {
+  /* An open select reads as a focused field for as long as its list shows, whether or not the browser
+     shows its focus: a tap or a click focuses a button without it. */
+  .a-novel-select-trigger:is(:focus-visible, [data-state="open"]) {
     outline: none;
     box-shadow: var(--shadow-focus-ring);
     border-color: var(--color-control-border-focus);
@@ -384,8 +399,8 @@ The hidden named input submits the selected value. The caller validates required
     background: var(--color-control-surface-invalid);
   }
 
-  .a-novel-select-trigger.invalid:focus-visible,
-  .a-novel-select-trigger[aria-invalid="true"]:focus-visible {
+  .a-novel-select-trigger.invalid:is(:focus-visible, [data-state="open"]),
+  .a-novel-select-trigger[aria-invalid="true"]:is(:focus-visible, [data-state="open"]) {
     box-shadow: var(--shadow-invalid-focus-ring);
     border-color: var(--color-feedback-error-border);
     background: var(--color-control-surface-invalid);
@@ -408,25 +423,36 @@ The hidden named input submits the selected value. The caller validates required
   }
 
   :global(.a-novel-select-content) {
-    display: grid;
+    display: flex;
     position-area: block-end span-inline-end;
+    flex-direction: column;
     justify-self: start;
-    gap: var(--space-1);
     z-index: var(--layer-dropdown);
-    inset-block-start: var(--space-2);
+    /* Against the trigger's focus ring, without covering it. */
+    inset-block-start: var(--border-width-strong);
     outline: none;
     box-shadow: var(--shadow-lg);
-    border: 0;
+    border: var(--border-width-thin) solid var(--color-border-subtle);
     border-radius: var(--radius-lg);
-    background: var(--color-surface-island-strong);
-    padding: var(--space-1);
+    /* The list takes the field's own well, frosted where the browser blurs a backdrop and the canvas's
+       color where it cannot; a subtle border keeps it visible past the island it opens from. */
+    background: var(--color-surface-canvas);
+    padding: 0;
     inline-size: var(--a-novel-select-anchor-width);
     min-inline-size: var(--a-novel-select-anchor-width);
     max-block-size: min(calc(100dvb - var(--space-8)), var(--control-menu-max-height));
+    overflow: clip;
+    color: var(--color-text-primary);
+  }
+  /* The options scroll inside the list, so the list's frost stays in place. */
+  .options {
+    display: grid;
+    gap: var(--space-1);
+    padding: var(--space-1);
+    min-block-size: 0;
     overflow-x: hidden;
     overflow-y: auto;
     overscroll-behavior-block: contain;
-    color: var(--color-text-primary);
   }
 
   :global(.a-novel-select-item) {
@@ -476,9 +502,20 @@ The hidden named input submits the selected value. The caller validates required
 
   @supports (backdrop-filter: blur(0)) or (-webkit-backdrop-filter: blur(0)) {
     :global(.a-novel-select-content) {
+      background: none;
+    }
+
+    /* A blur reads only what lies under its own box, so a button crossing the list's edge stayed sharp
+       there. The frost reaches past the list to blur what lies beyond its edges too, and the list's
+       clip trims it back to the list. */
+    :global(.a-novel-select-content::before) {
+      position: absolute;
+      z-index: -1;
       -webkit-backdrop-filter: blur(var(--blur-md));
       backdrop-filter: blur(var(--blur-md));
-      background: var(--color-surface-glass);
+      inset: calc(var(--blur-md) * -2);
+      background: var(--color-control-surface);
+      content: "";
     }
 
     :global(.a-novel-select-item[data-highlighted]:not([data-selected]):not([data-disabled])) {

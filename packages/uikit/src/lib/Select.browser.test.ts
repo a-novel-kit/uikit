@@ -74,3 +74,22 @@ it("closes the listbox when Tab moves focus away", async () => {
 
   expect(controller.state.open).toBe(false);
 });
+
+it("stays closed when a tap on its trigger closes the list before the trigger's click", async () => {
+  const controller = createSelectController<string>();
+  render(Select, { controller, "aria-label": "Visibility", options });
+  const trigger = page.getByRole("combobox").element() as HTMLElement;
+  await userEvent.click(trigger);
+  const listbox = page.getByRole("listbox").element() as HTMLElement;
+  await expect.element(page.getByRole("listbox")).toBeVisible();
+
+  // A touch press outside the list closes it on its own, and the click reaches the trigger only afterwards.
+  trigger.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true }));
+  const closed = new Promise((resolve) => listbox.addEventListener("toggle", resolve, { once: true }));
+  listbox.hidePopover();
+  await closed;
+  trigger.dispatchEvent(new MouseEvent("click", { bubbles: true, detail: 1 }));
+
+  expect(controller.state.open).toBe(false);
+  await expect.element(page.getByRole("listbox")).not.toBeInTheDocument();
+});

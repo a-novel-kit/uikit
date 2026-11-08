@@ -70,6 +70,23 @@
     >
   </Inline>
 </Story>
+<Story
+  name="Current page link"
+  parameters={{
+    docs: {
+      description: {
+        story:
+          'A ghost or text link to the page showing carries `aria-current="page"` and reads as the navigation\'s current item, as an account link in a rail does.',
+      },
+    },
+  }}
+  asChild
+>
+  <Inline gap="4" wrap role="group" aria-label="Current page link">
+    <Button href="#account" variant="ghost" tone="neutral" size="sm" aria-current="page">My account</Button>
+    <Button href="#privacy" variant="ghost" tone="neutral" size="sm">Privacy</Button>
+  </Inline>
+</Story>
 <Story name="Variants" asChild>
   <Inline gap="4" wrap role="group" aria-label="Button variants">
     <Button variant="solid">Solid</Button>
