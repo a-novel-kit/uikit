@@ -6,6 +6,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 const avatar = { ratio: { width: 1, height: 1 }, maxWidth: 512, maxBytes: 262144 };
 const background = { ratio: { width: 16, height: 9 }, maxWidth: 1280, maxBytes: 524288 };
+const logo = { maxWidth: 640, maxHeight: 320, maxBytes: 262144 };
 
 /** Draws an image with a transparent corner, as a photo a person might choose. */
 async function imageFile(width: number, height: number): Promise<File> {
@@ -28,6 +29,24 @@ async function encode(width: number, height: number, rule: typeof avatar): Promi
   } finally {
     browserPictureFiles.release(source);
   }
+}
+
+/** Opens an image of the given size and encodes it whole, under limits. */
+async function encodeWhole(width: number, height: number, limits: typeof logo): Promise<Blob> {
+  const source = await browserPictureFiles.open(await imageFile(width, height));
+  try {
+    return await browserPictureFiles.encodeWhole(source, limits);
+  } finally {
+    browserPictureFiles.release(source);
+  }
+}
+
+/** Reads the alpha of a picture's top-left pixel. */
+async function cornerAlpha(picture: Blob): Promise<number> {
+  const canvas = new OffscreenCanvas(1, 1);
+  const context = canvas.getContext("2d")!;
+  context.drawImage(await createImageBitmap(picture), 0, 0, 1, 1, 0, 0, 1, 1);
+  return context.getImageData(0, 0, 1, 1).data[3];
 }
 
 /** Replaces the browser's encoder for the duration of a test; `encode` gets the native one to call. */
@@ -113,5 +132,60 @@ describe("browserPictureFiles", () => {
 
     expect(picture.size).toBe(300 * 1024);
     expect(encoder.mock.calls.map(([, , quality]) => quality)).toEqual([0.9, 0.8, 0.7, 0.6, 0.5]);
+  });
+
+  describe("encodeWhole", () => {
+    it.each([
+      ["shrinks a large image only as far as the limits ask", [1600, 1200], [427, 320]],
+      ["keeps a small image at its own size", [300, 200], [300, 200]],
+    ])("%s, as a still WebP within the limits' bytes", async (_, [width, height], size) => {
+      const picture = await encodeWhole(width, height, logo);
+
+      expect(picture.type).toBe("image/webp");
+      expect(picture.size).toBeLessThanOrEqual(logo.maxBytes);
+      const bitmap = await createImageBitmap(picture);
+      expect([bitmap.width, bitmap.height]).toEqual(size);
+    });
+
+    it("keeps the image's transparent pixels transparent", async () => {
+      expect(await cornerAlpha(await encodeWhole(1600, 1200, logo))).toBe(0);
+    });
+
+    it("saves a transparent PNG where the browser cannot encode WebP, as Safari", async () => {
+      const encoder = stubEncoder((native, done, type, quality) =>
+        native(done, type === "image/webp" ? "image/png" : type, quality)
+      );
+
+      const picture = await encodeWhole(1600, 1200, logo);
+
+      expect(picture.type).toBe("image/png");
+      expect(encoder.mock.calls.map(([, type]) => type)).toEqual(["image/webp"]);
+      expect(await cornerAlpha(picture)).toBe(0);
+    });
+
+    it("lowers a WebP's quality until the picture fits the limits' bytes", async () => {
+      const encoder = stubEncoder((native, done, type, quality) => {
+        if (quality !== undefined && quality > 0.75) done(new Blob([new Uint8Array(300 * 1024)], { type }));
+        else native(done, type, quality);
+      });
+
+      const picture = await encodeWhole(1600, 1200, logo);
+
+      expect(picture.size).toBeLessThanOrEqual(logo.maxBytes);
+      expect(encoder.mock.calls.map(([, , quality]) => quality)).toEqual([0.9, 0.8, 0.7]);
+    });
+
+    it.each([
+      ["a WebP at the lowest quality", "image/webp", [0.9, 0.8, 0.7, 0.6, 0.5]],
+      ["a PNG, which has no quality to lower", "image/png", [0.9]],
+    ])("resolves %s still over the limits' bytes, for the server to refuse", async (_, type, qualities) => {
+      const encoder = stubEncoder((_native, done) => done(new Blob([new Uint8Array(300 * 1024)], { type })));
+
+      const picture = await encodeWhole(1600, 1200, logo);
+
+      expect(picture.size).toBe(300 * 1024);
+      expect(picture.type).toBe(type);
+      expect(encoder.mock.calls.map(([, , quality]) => quality)).toEqual(qualities);
+    });
   });
 });

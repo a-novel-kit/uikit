@@ -1,4 +1,12 @@
-import { type PictureCrop, type PictureRule, type PictureSource, cropSize, pictureSize } from "./picture";
+import {
+  type PictureCrop,
+  type PictureLimits,
+  type PictureRule,
+  type PictureSource,
+  cropSize,
+  pictureSize,
+  wholeSize,
+} from "./picture";
 
 /** The quality a picture is encoded at first, then the lower ones it tries until it fits the rule's size. */
 const bestQuality = 0.9;
@@ -18,8 +26,19 @@ export interface PictureFiles {
   release(source: PictureSource): void;
 }
 
+/** The browser side of keeping a whole picture: decoding a chosen file and encoding all of it. */
+export interface WholePictureFiles extends Pick<PictureFiles, "open" | "release"> {
+  /**
+   * Draws the whole source at its own proportions, shrunk only as far as the limits ask, and keeps
+   * its transparency. Encodes it as a still WebP at the best quality that fits `maxBytes`, or as a
+   * PNG where the browser cannot encode WebP. A picture still over `maxBytes` resolves as is, for
+   * the server to refuse.
+   */
+  encodeWhole(source: PictureSource, limits: PictureLimits): Promise<Blob>;
+}
+
 /** Reads and writes pictures with the browser's image decoder and canvas. */
-export const browserPictureFiles: PictureFiles = {
+export const browserPictureFiles: PictureFiles & WholePictureFiles = {
   async open(file) {
     const url = URL.createObjectURL(file);
     try {
@@ -48,6 +67,19 @@ export const browserPictureFiles: PictureFiles = {
 
     return await encodeWithin(canvas, rule.maxBytes);
   },
+  async encodeWhole(source, limits) {
+    const size = wholeSize(source, limits);
+    const canvas = document.createElement("canvas");
+    canvas.width = size.width;
+    canvas.height = size.height;
+
+    const context = canvas.getContext("2d");
+    if (!context) throw new Error("The browser has no 2D canvas.");
+    context.imageSmoothingQuality = "high";
+    context.drawImage(await decode(source.url), 0, 0, size.width, size.height);
+
+    return await encodeWithAlpha(canvas, limits.maxBytes);
+  },
   release(source) {
     URL.revokeObjectURL(source.url);
   },
@@ -70,9 +102,22 @@ async function encodeWithin(canvas: HTMLCanvasElement, maxBytes: number): Promis
     picture = await toBlob(canvas, type, bestQuality);
   }
 
+  return await lowerQualityWithin(canvas, picture, maxBytes);
+}
+
+/** Encodes a canvas as WebP at the best quality within `maxBytes`, or as PNG where the browser cannot encode WebP. */
+async function encodeWithAlpha(canvas: HTMLCanvasElement, maxBytes: number): Promise<Blob> {
+  const picture = await toBlob(canvas, "image/webp", bestQuality);
+  // Safari encodes no WebP: it answers with a PNG instead, which has no quality to lower.
+  return picture.type === "image/webp" ? await lowerQualityWithin(canvas, picture, maxBytes) : picture;
+}
+
+/** Encodes a canvas again, in the picture's own format, at lower qualities until it fits `maxBytes`. */
+async function lowerQualityWithin(canvas: HTMLCanvasElement, first: Blob, maxBytes: number): Promise<Blob> {
+  let picture = first;
   for (const quality of lowerQualities) {
     if (picture.size <= maxBytes) break;
-    picture = await toBlob(canvas, type, quality);
+    picture = await toBlob(canvas, first.type, quality);
   }
   return picture;
 }

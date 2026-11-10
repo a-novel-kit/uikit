@@ -1,0 +1,63 @@
+import * as Stories from "./StickyBar.stories.svelte";
+
+import { StickyBar } from "@a-novel-kit/uikit";
+import { Meta, ResponsiveStoryPair } from "@a-novel-kit/uikit-storybook";
+
+import { ArgTypes } from "@storybook/addon-docs/blocks";
+
+<Meta of={Stories} />
+
+# Sticky bar
+
+Keeps a page's actions in view while its content scrolls under them. The bar is the canvas's color without
+its lamp, translucent over a backdrop blur, so what passes under it frosts. A hairline sets it apart from
+the content. A browser without backdrop blur shows the plain canvas color.
+
+## Edges
+
+`edge="start"` keeps the bar at the top of the page, and `edge="end"` keeps it at the bottom. Place the
+bar before or after the content it stays over. Scroll the examples to try them:
+
+<ResponsiveStoryPair desktop={Stories.StartEdge} mobile={Stories.StartEdge} meta={Stories} />
+<ResponsiveStoryPair desktop={Stories.EndEdge} mobile={Stories.EndEdge} meta={Stories} />
+
+## Width
+
+`bleed` spans the page's `--layout-gutter`, so what scrolls under the bar never shows beside it, and keeps
+the bar's content in the column. Set it for a bar as wide as the page. Without it, the bar stays as
+wide as its parent:
+
+<ResponsiveStoryPair desktop={Stories.InsideTheColumn} mobile={Stories.InsideTheColumn} meta={Stories} />
+
+## Under an application shell
+
+The bar stays clear of a shell's own bars when the shell sets `--shell-sticky-top` and
+`--shell-sticky-bottom` to their sizes. Both default to `0`.
+
+<ResponsiveStoryPair desktop={Stories.UnderAShell} mobile={Stories.UnderAShell} meta={Stories} />
+
+## Usage
+
+```svelte
+<script lang="ts">
+  import { Button, StickyBar } from "@a-novel-kit/uikit";
+</script>
+
+<StickyBar edge="start" bleed>
+  <Button>New project</Button>
+</StickyBar>
+```
+
+The bar sticks inside its parent, so that parent must run the length of the content the bar stays over.
+Native attributes go on the root element, along with attachments and a `class` for a consumer's own layout rules,
+such as a bar that scrolls sideways.
+
+## Accessibility
+
+The bar is a `div` by default. Set `as="nav"` and an `aria-label` for a bar of links:
+
+<ResponsiveStoryPair desktop={Stories.Navigation} mobile={Stories.Navigation} meta={Stories} />
+
+## API
+
+<ArgTypes of={StickyBar} />

@@ -59,6 +59,32 @@ the server to refuse. Release each source once no frame shows it.
 The saved width is a whole multiple of the reduced ratio's width term, up to `maxWidth`, so its
 width and height keep the ratio exactly: a 16:9 picture is 16x9, 32x18, and so on up to 1280x720.
 
+## Whole pictures
+
+`encodeWhole` keeps the whole image at its own proportions, for a picture no frame crops, such as a logo.
+`PictureLimits` names what the server accepts: the largest width and height, and the largest size in
+bytes.
+
+```ts
+import { type PictureLimits, browserPictureFiles } from "@a-novel-kit/uikit";
+
+const limits: PictureLimits = { maxWidth: 640, maxHeight: 320, maxBytes: 262144 };
+
+async function encodeLogo(file: File) {
+  const source = await browserPictureFiles.open(file);
+  try {
+    return await browserPictureFiles.encodeWhole(source, limits);
+  } finally {
+    browserPictureFiles.release(source);
+  }
+}
+```
+
+The image shrinks only as far as the limits ask, is never enlarged, and keeps at least one pixel on a
+side. It keeps its transparency: the picture is a still WebP, or a PNG where the browser cannot encode
+WebP. A WebP lowers its quality until it fits `maxBytes`. A PNG has no quality to lower. A picture
+still over `maxBytes` resolves as is, for the server to refuse.
+
 An app that keeps the crop in its own model implements `PictureFrameController` over it with
 `centeredCrop`, `panCrop` and `zoomCrop`, the functions the default controller uses.
 
