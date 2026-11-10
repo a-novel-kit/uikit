@@ -1,4 +1,4 @@
-import { centeredCrop, cropSize, imagePlacement, maxZoom, panCrop, pictureSize, zoomCrop } from "./picture";
+import { centeredCrop, cropSize, imagePlacement, maxZoom, panCrop, pictureSize, wholeSize, zoomCrop } from "./picture";
 
 import { describe, expect, it } from "vitest";
 
@@ -143,5 +143,20 @@ describe("imagePlacement", () => {
       left: -50,
       top: -50,
     });
+  });
+});
+
+describe("wholeSize", () => {
+  const limits = { maxWidth: 512, maxHeight: 256, maxBytes: 262144 };
+
+  it.each([
+    ["a wide image, to its limit in width", 2048, 512, [512, 128]],
+    ["a tall image, to its limit in height", 512, 2048, [64, 256]],
+    ["an image over both limits, to the stricter one", 2048, 2048, [256, 256]],
+    ["an image exactly at its limits, not at all", 512, 256, [512, 256]],
+    ["an image inside its limits, never upward", 100, 50, [100, 50]],
+    ["a sliver, to at least one pixel on a side", 5120, 1, [512, 1]],
+  ])("shrinks %s", (_, width, height, [savedWidth, savedHeight]) => {
+    expect(wholeSize({ url: "", width, height }, limits)).toEqual({ width: savedWidth, height: savedHeight });
   });
 });

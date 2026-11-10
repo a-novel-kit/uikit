@@ -16,6 +16,16 @@ export interface PictureRule {
   maxBytes: number;
 }
 
+/** What a server accepts of a whole picture, which the browser shrinks it to fit. */
+export interface PictureLimits {
+  /** The largest width, in pixels. */
+  maxWidth: number;
+  /** The largest height, in pixels. */
+  maxHeight: number;
+  /** The largest size, in bytes. */
+  maxBytes: number;
+}
+
 /** A decoded image a person chose, which the browser shows from `url`. */
 export interface PictureSource {
   /** An address the browser loads the image from, such as an object URL. */
@@ -112,6 +122,15 @@ export function pictureSize(source: PictureSource, crop: PictureCrop, { ratio, m
   const kept = cropSize(source, ratio, crop.zoom).width;
   const units = Math.max(1, Math.min(Math.floor(maxWidth / unit.width), Math.round(kept / unit.width)));
   return { width: units * unit.width, height: units * unit.height };
+}
+
+/** The saved size of a whole picture: the source's proportions, shrunk only as far as the limits ask. */
+export function wholeSize(source: PictureSource, { maxWidth, maxHeight }: PictureLimits) {
+  const scale = Math.min(1, maxWidth / source.width, maxHeight / source.height);
+  return {
+    width: Math.max(1, Math.round(source.width * scale)),
+    height: Math.max(1, Math.round(source.height * scale)),
+  };
 }
 
 /** Keeps the rectangle inside the source, so the image always covers the frame. */

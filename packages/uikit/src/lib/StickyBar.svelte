@@ -1,0 +1,59 @@
+<!--
+@component
+A bar that stays at one edge of the page while content scrolls under it, behind frosted glass of the canvas.
+A shell whose own bars cover the page's edges sets `--shell-sticky-top` and `--shell-sticky-bottom` to their sizes,
+and the bar stays clear of them.
+-->
+<script lang="ts" module>
+  import type { HTMLAttributes } from "svelte/elements";
+
+  /** Props for a bar that stays at one edge of the scrolling page. */
+  export interface StickyBarProps extends HTMLAttributes<HTMLElement> {
+    /** The edge of the scrolling page the bar stays at. */
+    edge: "start" | "end";
+    /** Spans the page's `--layout-gutter`, so what scrolls under the bar never shows beside it; defaults to false. */
+    bleed?: boolean;
+    /** Root element of the bar, such as `nav` for a bar of links; defaults to `div`. */
+    as?: "div" | "nav";
+  }
+</script>
+
+<script lang="ts">
+  let { edge, bleed = false, as = "div", class: className = "", children, ...rest }: StickyBarProps = $props();
+</script>
+
+<svelte:element this={as} class="sticky-bar {edge} {className}" class:bleed {...rest}>
+  {@render children?.()}
+</svelte:element>
+
+<style>
+  .sticky-bar {
+    position: sticky;
+    z-index: var(--layer-sticky);
+    background: var(--color-surface-canvas);
+  }
+
+  .start {
+    inset-block-start: var(--shell-sticky-top, 0);
+    border-block-end: var(--border-width-thin) solid var(--color-border-subtle);
+  }
+
+  .end {
+    inset-block-end: var(--shell-sticky-bottom, 0);
+    border-block-start: var(--border-width-thin) solid var(--color-border-subtle);
+  }
+
+  .bleed {
+    margin-inline: calc(-1 * var(--layout-gutter));
+    padding-inline: var(--layout-gutter);
+  }
+
+  /* Where the browser blurs a backdrop, the canvas color turns to frosted glass of it. */
+  @supports (backdrop-filter: blur(0)) or (-webkit-backdrop-filter: blur(0)) {
+    .sticky-bar {
+      -webkit-backdrop-filter: blur(var(--blur-lg));
+      backdrop-filter: blur(var(--blur-lg));
+      background: color-mix(in oklab, var(--color-surface-canvas) var(--color-mix-12), transparent);
+    }
+  }
+</style>

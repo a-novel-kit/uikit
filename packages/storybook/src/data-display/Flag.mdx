@@ -1,0 +1,35 @@
+import * as Stories from "./Flag.stories.svelte";
+
+import { Flag } from "@a-novel-kit/uikit";
+
+import { ArgTypes, Canvas, Meta } from "@storybook/addon-docs/blocks";
+
+<Meta of={Stories} />
+
+# Flag
+
+Marks a language with its flag, at an icon's size. English takes the United States' flag. A light hairline
+keeps a flag's dark edge apart from the dark page.
+
+<Canvas of={Stories.Named} />
+
+## Usage
+
+```svelte
+<script lang="ts">
+  import { Flag } from "@a-novel-kit/uikit";
+</script>
+
+<Flag locale="fr" label="Français" />
+```
+
+## Accessibility
+
+With a `label`, the flag is an image of that name, for a flag that stands alone. Omit the `label`
+when text beside the flag names the language: the flag is then decorative, and assistive technology skips it.
+
+<Canvas of={Stories.BesideItsName} />
+
+## API
+
+<ArgTypes of={Flag} />
