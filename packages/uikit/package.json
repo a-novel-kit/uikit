@@ -42,7 +42,7 @@
     "@sveltejs/package": "^3.0.0",
     "@sveltejs/vite-plugin-svelte": "^7.0.1",
     "@testing-library/svelte": "^5.2.4",
-    "i18next": "^26.4.2",
+    "i18next": "^27.0.0",
     "jsdom": "^31.0.0",
     "svelte": "^5.55.8",
     "svelte-check": "^4.3.3",
@@ -50,7 +50,7 @@
   },
   "peerDependencies": {
     "@a-novel-kit/nodelib-i18n": "^2.11.0",
-    "i18next": "^26.7.2",
+    "i18next": "^27.0.0",
     "svelte": "^5.57.3"
   },
   "publishConfig": {
