@@ -71,7 +71,7 @@ supplies the wording and its policy link; the banner supplies the translated ans
     box-sizing: border-box;
     inset-block-end: var(--space-4);
     inset-inline-end: var(--space-4);
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-floating);
     border-radius: var(--radius-md);
     background: var(--color-surface-island-strong);
     padding: var(--space-4);

@@ -386,6 +386,13 @@
       color-mix(in oklab, var(--color-neutral-1) var(--color-mix-12), transparent),
     0 var(--space-4) var(--space-10) calc(-1 * var(--space-2))
       color-mix(in oklab, var(--color-neutral-1) var(--color-mix-10), transparent);
+  /* A surface floating over others, often at the screen's edge. Its shadow reaches every side, so
+     the surface parts from a card of the same color under it. */
+  --shadow-floating:
+    0 0 0 var(--border-width-thin)
+      color-mix(in oklab, var(--color-neutral-12) var(--color-mix-3), transparent),
+    0 0 var(--space-8) var(--space-2)
+      color-mix(in oklab, var(--color-neutral-1) var(--color-mix-12), transparent);
   /* The primary action glows: a slight gradient that lightens toward the top, and a soft underglow
      in its own color. The gradient only lightens, so its darkest stop is the measured text pair. */
   --gradient-action-primary: linear-gradient(
