@@ -93,6 +93,63 @@ describe("TagInput", () => {
     form.remove();
   });
 
+  it("keeps typed text that its controller refuses, and a tag it does not remove", async () => {
+    const controller = { state: { tags: ["maps", "noir"] }, add: () => false, remove: () => {} };
+    const { getByRole } = render(TagInput, { props: { "aria-label": "Tags", name: "tags", controller } });
+    const input = getByRole("textbox", { name: "Tags" }) as HTMLInputElement;
+
+    await fireEvent.input(input, { target: { value: "western horr" } });
+    expect(input.value).toBe("western horr");
+
+    input.value = "horror";
+    await fireEvent.keyDown(input, { key: "Enter" });
+    await fireEvent.blur(input);
+    expect(input.value).toBe("horror");
+
+    input.value = "";
+    await fireEvent.keyDown(input, { key: "Backspace" });
+    expect(input.value).toBe("");
+  });
+
+  it("keeps a half-typed word as typed when the window, not the field, loses focus", async () => {
+    const { input, sent } = renderTags();
+    input.focus();
+    input.value = "slow-bu";
+
+    await fireEvent.blur(input);
+
+    expect(sent()).toEqual([]);
+    expect(input.value).toBe("slow-bu");
+  });
+
+  it("ends tags only once input method text is composed", async () => {
+    const { input, sent } = renderTags();
+
+    await fireEvent.input(input, { target: { value: "ni hao" }, isComposing: true });
+    expect(sent()).toEqual([]);
+    input.value = "nihao";
+    expect(await fireEvent.keyDown(input, { key: "Enter", keyCode: 229 })).toBe(true);
+    expect(sent()).toEqual([]);
+
+    input.value = "ni hao";
+    await fireEvent.compositionEnd(input);
+    expect(sent()).toEqual(["ni"]);
+    expect(input.value).toBe("hao");
+  });
+
+  it("sends its tags to the form it names, and stays required for assistive technology once filled", () => {
+    const other = document.body.appendChild(document.createElement("form"));
+    other.id = "other";
+    const controller = createTagInputController({ initialTags: ["maps", "slow-burn"] });
+    const { getByRole } = render(TagInput, {
+      props: { "aria-label": "Tags", name: "tags", form: "other", controller, required: true },
+    });
+
+    expect(new FormData(other).getAll("tags")).toEqual(["maps", "slow-burn", ""]);
+    expect(getByRole("textbox", { name: "Tags" }).getAttribute("aria-required")).toBe("true");
+    other.remove();
+  });
+
   it("offers no cross while disabled", () => {
     const controller = createTagInputController({ initialTags: ["maps"] });
     const { queryByRole } = render(TagInput, { props: { "aria-label": "Tags", controller, disabled: true } });

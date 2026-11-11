@@ -97,6 +97,7 @@
   const oneFileController = fixedValue<readonly string[]>(["chapter-one.pdf"]);
   const severalFilesController = fixedValue<readonly string[]>(["chapter-one.pdf", "chapter-two.pdf", "notes.txt"]);
   const tagsController = fixedTags(["slow-burn", "années-50", "maps"]);
+  const longTagController = fixedTags(["a-tag-that-runs-far-longer-than-its-field-holds-on-one-line", "maps"]);
   const chosenGenresController = fixedValue<readonly string[]>(["fantasy", "mystery"]);
   const coverController = fixedValue<readonly string[]>(["cover.png"]);
   const longFileController = fixedValue<readonly string[]>([
@@ -217,6 +218,28 @@
         <TagInput {...control} name="disabled" controller={tagsController} disabled />
       {/snippet}
     </Field>
+    <Field label="Readonly">
+      {#snippet children(control)}
+        <TagInput {...control} name="readonly" controller={tagsController} readonly />
+      {/snippet}
+    </Field>
+    <Field label="Small">
+      {#snippet children(control)}
+        <TagInput {...control} name="small" controller={tagsController} controlSize="sm" />
+      {/snippet}
+    </Field>
+    <Field label="Large">
+      {#snippet children(control)}
+        <TagInput {...control} name="large" controller={tagsController} controlSize="lg" />
+      {/snippet}
+    </Field>
+    <div class="narrow">
+      <Field label="A long tag wraps">
+        {#snippet children(control)}
+          <TagInput {...control} name="long" controller={longTagController} />
+        {/snippet}
+      </Field>
+    </div>
   </div>
 </Story>
 
@@ -231,7 +254,7 @@
     />
     <ChipGroup legend="Accent" name="accent" tone="accent" options={genreOptions} controller={chosenGenresController} />
     <ChipGroup legend="Invalid" error="Up to 10 genres." name="invalid" options={genreOptions} />
-    <ChipGroup legend="Disabled" name="disabled" options={genreOptions} disabled />
+    <ChipGroup legend="Disabled" name="disabled" options={genreOptions} controller={chosenGenresController} disabled />
   </div>
 </Story>
 

@@ -105,7 +105,7 @@
     docs: {
       description: {
         story:
-          "Each item of a collection is a ghost card: the canvas's own color under a raised card's veil, ring and blur. It lights as a raised card under the pointer. The items run down one column before the next, each as tall as it needs.",
+          "Each item of a collection is a ghost card: the canvas's own color under a raised card's veil and blur, ringed as a divider. It lights as a raised card under the pointer, or once something in it takes the keyboard's focus. The items run down one column before the next, each as tall as it needs.",
       },
     },
   }}

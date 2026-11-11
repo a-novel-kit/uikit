@@ -31,7 +31,8 @@ appearance, or use `Link` for an inline text link.
 <Canvas of={ButtonStories.Variants} />
 
 Outline and ghost buttons share translucent hover and active layers tinted with their text color.
-Their pressed state keeps the selected tone; solid buttons keep a filled surface.
+A pressed outline button keeps its tone and border. A pressed ghost or text button reads as the navigation's
+current item, blue whatever its tone, with no border or glow. Solid buttons keep a filled surface.
 
 ## Tones
 
@@ -55,8 +56,8 @@ Use `md` by default, `sm` in compact controls, and `lg` in spacious layouts.
 
 ## States
 
-`aria-pressed="true"` creates a persistent brand or neutral toggle. Neutral toggles remain neutral
-when selected. Danger buttons trigger destructive actions and do not represent selection. Selected
+`aria-pressed="true"` creates a persistent brand or neutral toggle. A solid or outline toggle keeps
+its tone when selected; a ghost or text toggle turns blue, as the navigation's current item. Danger buttons trigger destructive actions and do not represent selection. Selected
 buttons remain unchanged on hover and active interaction. Use the native `disabled` attribute when an
 action is unavailable.
 

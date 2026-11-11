@@ -50,7 +50,7 @@ export function fixedCombobox<Value extends string>(
   return { ...fixedSelect(value, open), state: { open, value, query }, setQuery: ignore };
 }
 
-/** Pins a tag input's tags; typing still shows in the field, but ends no tag. */
+/** Pins a tag input's tags: it refuses every tag, so what is typed stays in the field. */
 export function fixedTags(tags: readonly string[] = []): TagInputController {
-  return { state: { tags }, add: ignore, remove: ignore };
+  return { state: { tags }, add: () => false, remove: ignore };
 }

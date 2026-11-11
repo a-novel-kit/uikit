@@ -54,6 +54,8 @@ describe("FileInput", () => {
     await expect.element(page.getByText("No file chosen")).toBeVisible();
     expect(new FormData(form).getAll("files").filter((file) => file instanceof File && file.size > 0)).toEqual([]);
     expect(cleared).toBe(1);
+    // The cross may leave with the choice, so the field holds the focus it had.
+    expect(document.activeElement).toBe(input.element());
   });
 
   it("shows the name of the chosen file", async () => {

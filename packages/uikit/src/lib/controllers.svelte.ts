@@ -497,15 +497,18 @@ export interface TagInputState {
 export interface TagInputController {
   /** State rendered by the component. */
   readonly state: TagInputState;
-  /** Adds the tag the text normalizes to, unless it is empty or already there. */
-  add(text: string): void;
+  /**
+   * Adds the tag the text normalizes to, unless it is empty or already there. Reports whether the text now stands as
+   * a tag, or normalizes to nothing: false only when the controller refuses it, and the field keeps the text.
+   */
+  add(text: string): boolean;
   /** Removes the tag at `index`. */
   remove(index: number): void;
 }
 
 /** Configuration for the default tag input controller. */
 export interface TagInputControllerOptions {
-  /** Initial tags, taken as they are. */
+  /** Initial tags, each kept once. */
   initialTags?: readonly string[];
   /** Turns typed text into a tag; lower-kebab-case by default. */
   normalize?: (text: string) => string;
@@ -529,7 +532,7 @@ export function createTagInputController({
   normalize = kebabTag,
   onTagsChange,
 }: TagInputControllerOptions = {}): TagInputController {
-  let state = $state<TagInputState>({ tags: initialTags });
+  let state = $state<TagInputState>({ tags: [...new Set(initialTags)] });
 
   function setTags(tags: readonly string[]) {
     state = { tags };
@@ -543,6 +546,7 @@ export function createTagInputController({
     add: (text) => {
       const tag = normalize(text);
       if (tag && !state.tags.includes(tag)) setTags([...state.tags, tag]);
+      return true;
     },
     remove: (index) => {
       if (index in state.tags) setTags(state.tags.toSpliced(index, 1));

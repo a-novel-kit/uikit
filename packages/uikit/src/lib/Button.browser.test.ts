@@ -144,6 +144,14 @@ describe("low-emphasis action feedback", () => {
   });
 });
 
+describe("borderless buttons", () => {
+  it.each(["ghost", "text"] as const)("keeps a disabled %s button borderless", (variant) => {
+    const { getByRole } = render(Button, { variant, disabled: true, "aria-label": "Preview" });
+
+    expect(getComputedStyle(getByRole("button")).borderColor).toBe(resolveColor("transparent"));
+  });
+});
+
 describe("label centering", () => {
   it.each([
     ["normal", 400],

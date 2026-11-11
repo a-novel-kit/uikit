@@ -533,8 +533,8 @@
   --layout-sidebar-min: calc(var(--font-size-base) * var(--multiplier-12));
   --layout-island-gap: var(--space-3);
   --layout-readable-measure: 68ch;
-  /* The longest line that stays readable, WCAG 1.4.8's 80 characters, for a short block set in a
-     narrow surface, such as a card's summary. */
+  /* A longer measure for a short block set in a narrow surface, such as a card's summary, where a few
+     extra characters per line cost less than another line. */
   --layout-readable-measure-long: 80ch;
 
   --layer-step: 10;

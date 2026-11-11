@@ -14,6 +14,8 @@ describe("kebabTag", () => {
     { text: "เรื่อง", tag: "เรื่อง" },
     { text: "हिंदी", tag: "हिंदी" },
     { text: "ラーメン 屋", tag: "ラーメン-屋" },
+    { text: "می\u200Cخواهم", tag: "می\u200Cخواهم" },
+    { text: "क्\u200Dष", tag: "क्\u200Dष" },
   ])("writes $text as $tag", ({ text, tag }) => {
     expect(kebabTag(text)).toBe(tag);
   });

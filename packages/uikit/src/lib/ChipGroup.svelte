@@ -65,7 +65,8 @@ the form receives every chosen value under `name`, in the options' order; the co
 
   // The checkbox flips before its change event, so it takes back whatever the controller refuses.
   function choose(input: HTMLInputElement) {
-    controller.setValue(input.checked ? [...chosen, input.value] : chosen.filter((value) => value !== input.value));
+    const others = chosen.filter((value) => value !== input.value);
+    controller.setValue(input.checked ? [...others, input.value] : others);
     input.checked = controller.state.value.includes(input.value);
   }
 </script>
@@ -86,6 +87,7 @@ the form receives every chosen value under `name`, in the options' order; the co
           value={option.value}
           checked={chosen.includes(option.value)}
           disabled={option.disabled}
+          aria-invalid={error ? true : undefined}
           onchange={(event) => choose(event.currentTarget)}
         />
         {option.label}
@@ -185,15 +187,24 @@ the form receives every chosen value under `name`, in the options' order; the co
     color: var(--color-text-inverse);
   }
 
+  /* The ring stays clear of the next chip, the chips' gap apart. */
   .chip:has(:focus-visible) {
     outline: var(--focus-ring-width) solid var(--color-focus-ring);
-    outline-offset: var(--focus-ring-offset);
+    outline-offset: var(--border-width-strong);
   }
 
+  /* A disabled chip keeps its choice visible, as a disabled TagInput keeps its tags lit. */
   .chip:has(:disabled) {
     cursor: not-allowed;
+  }
+
+  .chip:has(:disabled:not(:checked)) {
     background: var(--color-control-surface-disabled);
     color: var(--color-control-disabled-text);
+  }
+
+  .chip:has(:checked:disabled) {
+    box-shadow: none;
   }
 
   .hint,
@@ -214,7 +225,12 @@ the form receives every chosen value under `name`, in the options' order; the co
     color: var(--color-feedback-error-text);
   }
 
+  /* Forced colors drop the chip's fill, so a border keeps its shape, as Badge does. */
   @media (forced-colors: active) {
+    .chip {
+      border: var(--border-width-thin) solid CanvasText;
+    }
+
     .chip:has(:checked) {
       outline: var(--border-width-strong) solid Highlight;
     }

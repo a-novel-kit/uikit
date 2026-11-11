@@ -71,6 +71,8 @@ Native attributes and events target the input; `class` styles the surrounding su
     if (field) {
       field.value = "";
       showSelection(field);
+      // The caller may drop the cross with the choice, so the field takes the focus it held.
+      field.focus();
     }
     onclear?.();
   }

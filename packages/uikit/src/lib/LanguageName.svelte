@@ -5,10 +5,12 @@ as a select's option, so every language choice in the platform reads the same.
 
 ```svelte
 <script lang="ts">
-  import { LanguageName, Select, type SelectOption } from "@a-novel-kit/uikit";
+  import { createSelectController, LanguageName, Select, type SelectOption } from "@a-novel-kit/uikit";
+
+  const language = createSelectController<"fr">({ initialValue: "fr" });
 </script>
 
-<Select options={[{ value: "fr", label: "Français" }]}>
+<Select options={[{ value: "fr", label: "Français" }]} controller={language}>
   {#snippet renderOption(option: SelectOption<"fr">)}<LanguageName locale={option.value} name={option.label} />{/snippet}
 </Select>
 ```

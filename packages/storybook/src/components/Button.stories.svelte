@@ -102,6 +102,26 @@
     <Button tone="danger">Danger</Button>
   </Inline>
 </Story>
+<Story
+  name="Chosen by variant"
+  parameters={{
+    docs: {
+      description: {
+        story:
+          "A chosen outline button keeps its tone and border. A chosen ghost or text button reads as the navigation's current item, blue whatever its tone, without a border or glow, and stays borderless while disabled.",
+      },
+    },
+  }}
+  asChild
+>
+  <Inline gap="4" wrap role="group" aria-label="Chosen buttons by variant">
+    <Button variant="outline" tone="neutral" aria-pressed="true">Outline</Button>
+    <Button variant="ghost" tone="neutral" aria-pressed="true">Ghost</Button>
+    <Button variant="text" tone="neutral" aria-pressed="true">Text</Button>
+    <Button variant="ghost" tone="neutral" disabled>Disabled ghost</Button>
+    <Button variant="text" tone="neutral" disabled>Disabled text</Button>
+  </Inline>
+</Story>
 <Story name="Icon and text" asChild>
   <Button><SaveIcon size="var(--icon-size-sm)" aria-hidden="true" />Save changes</Button>
 </Story>

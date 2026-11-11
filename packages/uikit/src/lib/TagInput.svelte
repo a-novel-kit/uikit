@@ -54,6 +54,7 @@ Native attributes and events target the text input; `class` styles the surroundi
     oninput,
     onkeydown,
     onblur,
+    oncompositionend,
     "aria-invalid": ariaInvalid,
     class: className = "",
     ...rest
@@ -67,29 +68,39 @@ Native attributes and events target the text input; `class` styles the surroundi
 
   let field = $state<HTMLInputElement>();
 
-  /** Ends a tag at every separator; what follows the last one stays as typed. */
+  /**
+   * Ends a tag at every separator; what follows the last one stays as typed. A part the controller refuses stays in
+   * the field, so the writer keeps what they typed.
+   */
   function takeTags(input: HTMLInputElement) {
     const parts = input.value.split(/[\s,]+/u);
     const typing = parts.pop() ?? "";
     if (parts.length === 0) return;
 
-    for (const part of parts) controller.add(part);
-    input.value = typing;
+    const refused = parts.filter((part) => !controller.add(part));
+    if (refused.length < parts.length) input.value = [...refused, typing].join(" ");
   }
 
   function finishTag(input: HTMLInputElement) {
-    controller.add(input.value);
-    input.value = "";
+    if (controller.add(input.value)) input.value = "";
   }
 
+  // Text still being composed with an input method is not the writer's yet: it ends its tags once composed.
   function handleInput(event: Event & { currentTarget: EventTarget & HTMLInputElement }) {
     oninput?.(event);
+    if (!(event instanceof InputEvent && event.isComposing)) takeTags(event.currentTarget);
+  }
+
+  function handleCompositionEnd(event: CompositionEvent & { currentTarget: EventTarget & HTMLInputElement }) {
+    oncompositionend?.(event);
     takeTags(event.currentTarget);
   }
 
   function handleKeydown(event: KeyboardEvent & { currentTarget: EventTarget & HTMLInputElement }) {
     onkeydown?.(event);
-    if (event.defaultPrevented || event.isComposing || !editable) return;
+    // WebKit sends the Enter that confirms a composition after it ends, as key code 229.
+    const composing = event.isComposing || event.keyCode === 229;
+    if (event.defaultPrevented || composing || !editable) return;
 
     const input = event.currentTarget;
     if (event.key === "Enter" && input.value.trim()) {
@@ -98,15 +109,18 @@ Native attributes and events target the text input; `class` styles the surroundi
       finishTag(input);
     } else if (event.key === "Backspace" && input.value === "" && tags.length > 0) {
       event.preventDefault();
-      const last = tags[tags.length - 1];
-      controller.remove(tags.length - 1);
-      input.value = last;
+      const count = tags.length;
+      const last = tags[count - 1];
+      controller.remove(count - 1);
+      if (controller.state.tags.length < count) input.value = last;
     }
   }
 
-  // Leaving the field keeps what was typed as a tag, so pressing the form's button sends it.
+  // Leaving the field keeps what was typed as a tag, so pressing the form's button sends it. A blur that leaves the
+  // input focused is the window losing focus, and the word being typed stays as typed.
   function handleBlur(event: FocusEvent & { currentTarget: EventTarget & HTMLInputElement }) {
     onblur?.(event);
+    if (document.activeElement === event.currentTarget) return;
     if (event.currentTarget.value.trim()) finishTag(event.currentTarget);
   }
 
@@ -117,7 +131,7 @@ Native attributes and events target the text input; `class` styles the surroundi
   }
 </script>
 
-<span class="tag-input {controlSize} {className}" class:invalid={isInvalid}>
+<div class="tag-input {controlSize} {className}" class:invalid={isInvalid}>
   {#if tags.length > 0}
     <ul class="tags">
       {#each tags as tag, index (tag)}
@@ -136,7 +150,7 @@ Native attributes and events target the text input; `class` styles the surroundi
               </button>
             {/if}
           </Badge>
-          <input type="hidden" {name} value={tag} {disabled} />
+          <input type="hidden" {name} value={tag} {disabled} form={rest.form} />
         </li>
       {/each}
     </ul>
@@ -152,13 +166,15 @@ Native attributes and events target the text input; `class` styles the surroundi
     {disabled}
     {readonly}
     required={required && tags.length === 0}
+    aria-required={required || undefined}
     {...rest}
     aria-invalid={isInvalid || undefined}
     oninput={handleInput}
     onkeydown={handleKeydown}
     onblur={handleBlur}
+    oncompositionend={handleCompositionEnd}
   />
-</span>
+</div>
 
 <style>
   .tag-input {
@@ -192,6 +208,7 @@ Native attributes and events target the text input; `class` styles the surroundi
     display: inline-flex;
     align-items: center;
     gap: var(--space-1);
+    overflow-wrap: anywhere;
   }
 
   /* A button inside a field stays ghost: its icon, a color, and a light veil under the pointer. */
@@ -205,6 +222,14 @@ Native attributes and events target the text input; `class` styles the surroundi
     background: transparent;
     padding: 0;
     color: inherit;
+    font: inherit;
+  }
+
+  /* Without scripting nothing removes a tag, so the crosses stay hidden. */
+  @media (scripting: none) {
+    .remove {
+      display: none;
+    }
   }
 
   @media (hover: hover) {

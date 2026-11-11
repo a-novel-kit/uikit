@@ -275,4 +275,9 @@ with `aria-current="page"` reads as the navigation's current item.
     background-color: var(--color-action-disabled-surface);
     color: var(--color-action-disabled-text);
   }
+
+  /* A ghost or text button stays borderless while disabled too. */
+  .button:is(.ghost, .text):disabled {
+    border-color: transparent;
+  }
 </style>

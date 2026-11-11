@@ -1,4 +1,4 @@
-# Upgrading to the next release
+# Upgrading to NEXT
 
 Form and dialog actions follow one rule, Studio's lamp turns magenta, the file input turns compact, and uikit gains
 a tag input, a chip group and a language name.
@@ -6,7 +6,8 @@ a tag input, a chip group and a language name.
 ## Do I need to act?
 
 **Required if you pass `align` to `FormActions` or `ActionGroup`, or use `--color-lamp-violet`.** Both are gone, and
-type checking fails on `align` until it goes.
+type checking fails on `align` until it goes. Every app's screenshots change anyway: actions that sat at the start
+of their line, with no `align`, now end it.
 
 ## Drop `align` from form and dialog actions
 
@@ -51,18 +52,22 @@ finds none. Show a chosen image above the field, never inside it:
  }
 ```
 
+Nothing fails if you miss this: the unknown token leaves the lamp ember. Check the light behind the page once you
+upgrade.
+
 ## Notes
 
-- `Badge` takes `tone="accent"`, the magenta for a distinction that reports nothing, rarer than `brand`. Badges drop
+- `Badge` takes `tone="accent"`, the magenta for a distinction that reports nothing, rarer than `brand`, from the
+  new `--color-accent-text` token. Badges drop
   to the regular weight, so screenshots that show one change.
 - A chosen ghost or text button (`aria-pressed="true"`) draws no border or glow any more: it turns blue, as the
   navigation's current item, whatever its tone. An outline button keeps its selection. Screenshots that show one
   change.
 - `--layout-readable-measure-long` (80ch) bounds a short block set in a card, beside the 68ch running-text measure.
-- `Card` takes `surface="ghost"`, one item of a collection: the canvas's color under a raised card's veil, ring and
-  blur, lit as a raised card under the pointer.
+- `Card` takes `surface="ghost"`, one item of a collection: the canvas's color under a raised card's veil and blur,
+  ringed as a divider, lit as a raised card under the pointer or the keyboard's focus.
 - `TagInput` and `createTagInputController` collect tags as GitHub's topics do; `kebabTag` writes text in
-  lower-kebab-case.
+  lower-kebab-case. A controller's `add` reports whether it took the text, so a tag it refuses stays typed.
 - `ChipGroup` picks options under a field's label, each a chip in the field's well, sized as a badge.
 - `LanguageName` sets a language's flag beside its name, for every language select.
 - `FileInput` takes `onclear`, a cross that removes the choice.

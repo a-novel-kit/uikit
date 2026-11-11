@@ -22,6 +22,25 @@ describe("ChipGroup", () => {
     expect(getByRole("checkbox", { name: "Western" })).toHaveProperty("disabled", true);
   });
 
+  it("marks every choice invalid while the group shows an error", () => {
+    const { getAllByRole } = render(ChipGroup, {
+      props: { legend: "Genres", error: "Too many.", name: "genres", options },
+    });
+
+    expect(getAllByRole("checkbox").map((box) => box.getAttribute("aria-invalid"))).toEqual(["true", "true", "true"]);
+  });
+
+  it("adds a value once even when its checkbox fell out of step", async () => {
+    const controller = createValueController<readonly string[]>({ initialValue: ["fantasy"] });
+    const { getByRole } = render(ChipGroup, { props: { legend: "Genres", name: "genres", options, controller } });
+    const fantasy = getByRole("checkbox", { name: "Fantasy" }) as HTMLInputElement;
+
+    fantasy.checked = false;
+    await fireEvent.click(fantasy);
+
+    expect(controller.state.value).toEqual(["fantasy"]);
+  });
+
   it("takes back a choice its controller refuses", async () => {
     const controller = { state: { value: [] }, setValue: () => {} };
     const { getByRole } = render(ChipGroup, { props: { legend: "Genres", name: "genres", options, controller } });

@@ -118,6 +118,13 @@ describe("component controllers", () => {
     expect(onTagsChange.mock.calls).toEqual([[["maps", "slow-burn"]], [["slow-burn"]]]);
   });
 
+  it("keeps each initial tag once, and reports that it took every text", () => {
+    const tags = createTagInputController({ initialTags: ["maps", "maps", "noir"] });
+
+    expect(tags.state.tags).toEqual(["maps", "noir"]);
+    expect([tags.add("Slow Burn"), tags.add("maps"), tags.add(" -- ")]).toEqual([true, true, true]);
+  });
+
   it("normalizes tags with the caller's rule", () => {
     const tags = createTagInputController({ normalize: (text) => text.trim().toUpperCase() });
 

@@ -3,8 +3,8 @@
 Groups content on a tokenized surface with optional header and footer snippets.
 A raised card is frosted glass the app's lamp shines through. Inside another card, it keeps the
 parent's glass and stands out by its shadow alone, so a group of settings can hold one card per option.
-A ghost card is one item of a collection: the canvas's own color under a raised card's veil, ring and
-blur, lit as a raised card under the pointer.
+A ghost card is one item of a collection: the canvas's own color under a raised card's veil and blur,
+ringed as a divider, and lit as a raised card under the pointer or once something in it takes the keyboard's focus.
 -->
 <script lang="ts" module>
   import type { Snippet } from "svelte";
@@ -78,6 +78,9 @@ blur, lit as a raised card under the pointer.
     .surface-ghost:hover {
       background: var(--color-surface-island-glass);
     }
+  }
+  .surface-ghost:has(:focus-visible) {
+    background: var(--color-surface-island-glass);
   }
   .surface-overlay {
     box-shadow: var(--shadow-island);
