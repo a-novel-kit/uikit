@@ -22,6 +22,15 @@ describe("ChipGroup", () => {
     expect(getByRole("checkbox", { name: "Western" })).toHaveProperty("disabled", true);
   });
 
+  it("takes back a choice its controller refuses", async () => {
+    const controller = { state: { value: [] }, setValue: () => {} };
+    const { getByRole } = render(ChipGroup, { props: { legend: "Genres", name: "genres", options, controller } });
+
+    await fireEvent.click(getByRole("checkbox", { name: "Fantasy" }));
+
+    expect(getByRole("checkbox", { name: "Fantasy" })).toHaveProperty("checked", false);
+  });
+
   it("adds a chosen value after the others, and drops an unchosen one", async () => {
     const controller = createValueController<readonly string[]>({ initialValue: ["mystery"] });
     const { getByRole } = render(ChipGroup, { props: { legend: "Genres", name: "genres", options, controller } });

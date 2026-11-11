@@ -2,7 +2,7 @@
 @component
 Picks any number of short options under a label, as a field does: each option is a chip in the field's well, lit
 when chosen. Each chip is a native checkbox, so the keyboard, assistive technology and the form need nothing else:
-the form receives every chosen value under `name`, in the order they were chosen.
+the form receives every chosen value under `name`, in the options' order; the controller keeps the order of choice.
 
 ```svelte
 <script lang="ts">
@@ -63,8 +63,10 @@ the form receives every chosen value under `name`, in the order they were chosen
   const hintId = $derived(hint ? `${id}-hint` : undefined);
   const errorId = $derived(error ? `${id}-error` : undefined);
 
-  function choose(value: string, checked: boolean) {
-    controller.setValue(checked ? [...chosen, value] : chosen.filter((candidate) => candidate !== value));
+  // The checkbox flips before its change event, so it takes back whatever the controller refuses.
+  function choose(input: HTMLInputElement) {
+    controller.setValue(input.checked ? [...chosen, input.value] : chosen.filter((value) => value !== input.value));
+    input.checked = controller.state.value.includes(input.value);
   }
 </script>
 
@@ -84,7 +86,7 @@ the form receives every chosen value under `name`, in the order they were chosen
           value={option.value}
           checked={chosen.includes(option.value)}
           disabled={option.disabled}
-          onchange={(event) => choose(option.value, event.currentTarget.checked)}
+          onchange={(event) => choose(event.currentTarget)}
         />
         {option.label}
       </label>

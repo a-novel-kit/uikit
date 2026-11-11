@@ -51,6 +51,8 @@ Native attributes and events target the input; `class` styles the surrounding su
 
   const { t } = useMessages();
 
+  let field = $state<HTMLInputElement>();
+
   const isInvalid = $derived(resolveInvalidState(invalid, ariaInvalid));
   const chosen = $derived(controller.state.value);
   const status = $derived(
@@ -61,6 +63,16 @@ Native attributes and events target the input; `class` styles the surrounding su
 
   function showSelection(input: HTMLInputElement) {
     controller.setValue(Array.from(input.files ?? [], (file) => file.name));
+  }
+
+  // The cross empties the input itself, so the form sends nothing and the same file chosen again still reports a
+  // change.
+  function clear() {
+    if (field) {
+      field.value = "";
+      showSelection(field);
+    }
+    onclear?.();
   }
 
   // The app's handler may empty the field, so the selection is read after it.
@@ -83,6 +95,7 @@ Native attributes and events target the input; `class` styles the surrounding su
 
 <span class="file-input {controlSize} {className}">
   <input
+    bind:this={field}
     type="file"
     class="control"
     {...rest}
@@ -99,7 +112,7 @@ Native attributes and events target the input; `class` styles the surrounding su
     {#if onclear}
       <!-- Above the transparent input, so a click removes the choice instead of opening the picker. -->
       <span class="clear">
-        <FieldButton aria-label={t("fileInput.clear")} disabled={rest.disabled} onclick={onclear}>
+        <FieldButton aria-label={t("fileInput.clear")} disabled={rest.disabled} onclick={clear}>
           <XIcon size="var(--icon-size-sm)" aria-hidden="true" />
         </FieldButton>
       </span>

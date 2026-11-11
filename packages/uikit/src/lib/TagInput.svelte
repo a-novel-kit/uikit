@@ -50,6 +50,7 @@ Native attributes and events target the text input; `class` styles the surroundi
     name,
     disabled,
     readonly,
+    required,
     oninput,
     onkeydown,
     onblur,
@@ -88,7 +89,7 @@ Native attributes and events target the text input; `class` styles the surroundi
 
   function handleKeydown(event: KeyboardEvent & { currentTarget: EventTarget & HTMLInputElement }) {
     onkeydown?.(event);
-    if (event.defaultPrevented || event.isComposing) return;
+    if (event.defaultPrevented || event.isComposing || !editable) return;
 
     const input = event.currentTarget;
     if (event.key === "Enter" && input.value.trim()) {
@@ -135,7 +136,7 @@ Native attributes and events target the text input; `class` styles the surroundi
               </button>
             {/if}
           </Badge>
-          <input type="hidden" {name} value={tag} />
+          <input type="hidden" {name} value={tag} {disabled} />
         </li>
       {/each}
     </ul>
@@ -150,6 +151,7 @@ Native attributes and events target the text input; `class` styles the surroundi
     {name}
     {disabled}
     {readonly}
+    required={required && tags.length === 0}
     {...rest}
     aria-invalid={isInvalid || undefined}
     oninput={handleInput}

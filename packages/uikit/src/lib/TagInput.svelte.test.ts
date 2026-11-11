@@ -62,6 +62,37 @@ describe("TagInput", () => {
     expect(document.activeElement).toBe(input);
   });
 
+  it("asks for a tag while required and empty, and is satisfied once it holds one", () => {
+    const empty = createTagInputController();
+    const filled = createTagInputController({ initialTags: ["maps"] });
+    const { getAllByRole } = render(TagInput, { props: { "aria-label": "Tags", controller: empty, required: true } });
+    render(TagInput, { props: { "aria-label": "Tags", controller: filled, required: true } });
+
+    const [asking, satisfied] = getAllByRole("textbox", { name: "Tags" }) as HTMLInputElement[];
+    expect(asking.checkValidity()).toBe(false);
+    expect(satisfied.checkValidity()).toBe(true);
+  });
+
+  it("keeps its tags from Backspace while readonly, and sends none while disabled", async () => {
+    const form = document.body.appendChild(document.createElement("form"));
+    const readonly = createTagInputController({ initialTags: ["maps", "slow-burn"] });
+    const disabled = createTagInputController({ initialTags: ["maps"] });
+    const { getByRole } = render(TagInput, {
+      target: form,
+      props: { "aria-label": "Readonly", name: "kept", controller: readonly, readonly: true },
+    });
+    render(TagInput, {
+      target: form,
+      props: { "aria-label": "Off", name: "off", controller: disabled, disabled: true },
+    });
+
+    await fireEvent.keyDown(getByRole("textbox", { name: "Readonly" }), { key: "Backspace" });
+
+    expect(readonly.state.tags).toEqual(["maps", "slow-burn"]);
+    expect(new FormData(form).getAll("off")).toEqual([]);
+    form.remove();
+  });
+
   it("offers no cross while disabled", () => {
     const controller = createTagInputController({ initialTags: ["maps"] });
     const { queryByRole } = render(TagInput, { props: { "aria-label": "Tags", controller, disabled: true } });

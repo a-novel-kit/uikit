@@ -10,6 +10,10 @@ describe("kebabTag", () => {
     { text: "Huis-Clos!", tag: "huis-clos" },
     { text: "été", tag: "été" },
     { text: "-- !", tag: "" },
+    { text: "İstanbul", tag: "i\u0307stanbul" },
+    { text: "เรื่อง", tag: "เรื่อง" },
+    { text: "हिंदी", tag: "हिंदी" },
+    { text: "ラーメン 屋", tag: "ラーメン-屋" },
   ])("writes $text as $tag", ({ text, tag }) => {
     expect(kebabTag(text)).toBe(tag);
   });

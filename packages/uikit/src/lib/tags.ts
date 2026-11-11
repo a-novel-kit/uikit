@@ -1,9 +1,12 @@
-/** Runs that cannot sit inside a tag: anything but lowercase or caseless letters and decimal digits. */
-const separators = /[^\p{Ll}\p{Lo}\p{Nd}]+/u;
+/**
+ * Runs that cannot sit inside a tag: anything but lowercase, modifier or caseless letters, marks and decimal digits.
+ * Marks and modifier letters keep whole the words of scripts that write with them, as Thai, Hindi or Japanese do.
+ */
+const separators = /[^\p{Ll}\p{Lm}\p{Lo}\p{M}\p{Nd}]+/u;
 
 /**
- * Turns text into a lower-kebab-case tag: lowercase letters, caseless letters and digits, in runs joined by single
- * hyphens. Text without any of them gives an empty string.
+ * Turns text into a lower-kebab-case tag: lowercase, modifier and caseless letters, marks and digits, in runs joined
+ * by single hyphens, precomposed (NFC). Text without any of them gives an empty string.
  *
  * @example
  * ```ts

@@ -43,6 +43,19 @@ describe("FileInput", () => {
     expect(cross.contains(centerOf(cross))).toBe(true);
   });
 
+  it("empties the field with its cross, so the same file chosen again reports a change", async () => {
+    let cleared = 0;
+    const { form, input } = inForm({ name: "files", onclear: () => cleared++ });
+    await userEvent.upload(input, chapter);
+    await expect.element(page.getByText("chapter-one.pdf")).toBeVisible();
+
+    await page.getByRole("button", { name: "Remove the file" }).click();
+
+    await expect.element(page.getByText("No file chosen")).toBeVisible();
+    expect(new FormData(form).getAll("files").filter((file) => file instanceof File && file.size > 0)).toEqual([]);
+    expect(cleared).toBe(1);
+  });
+
   it("shows the name of the chosen file", async () => {
     const { input } = inForm();
 
