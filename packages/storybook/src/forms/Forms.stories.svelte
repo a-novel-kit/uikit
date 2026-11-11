@@ -2,6 +2,7 @@
   import {
     Button,
     Checkbox,
+    ChipGroup,
     Combobox,
     ErrorSummary,
     Field,
@@ -16,6 +17,7 @@
     Slider,
     Stack,
     Switch,
+    TagInput,
     Textarea,
   } from "@a-novel-kit/uikit";
 
@@ -50,6 +52,15 @@
     { value: "vi", label: "Vietnamese" },
   ] as const;
 
+  const genreOptions = [
+    { value: "fantasy", label: "Fantasy" },
+    { value: "mystery", label: "Mystery" },
+    { value: "romance", label: "Romance" },
+    { value: "scienceFiction", label: "Science fiction" },
+    { value: "thriller", label: "Thriller" },
+    { value: "western", label: "Western", disabled: true },
+  ];
+
   const { Story } = defineMeta({
     title: "Forms/Controls",
     tags: ["autodocs"],
@@ -65,7 +76,7 @@
 </script>
 
 <script lang="ts">
-  import { fixedChecked, fixedCombobox, fixedPressed, fixedSelect, fixedValue } from "../controllers";
+  import { fixedChecked, fixedCombobox, fixedPressed, fixedSelect, fixedTags, fixedValue } from "../controllers";
 
   type Visibility = (typeof visibilityOptions)[number]["value"];
   type Language = (typeof languageOptions)[number]["value"];
@@ -85,6 +96,9 @@
   const shownPasswordController = fixedPressed(true);
   const oneFileController = fixedValue<readonly string[]>(["chapter-one.pdf"]);
   const severalFilesController = fixedValue<readonly string[]>(["chapter-one.pdf", "chapter-two.pdf", "notes.txt"]);
+  const tagsController = fixedTags(["slow-burn", "années-50", "maps"]);
+  const chosenGenresController = fixedValue<readonly string[]>(["fantasy", "mystery"]);
+  const coverController = fixedValue<readonly string[]>(["cover.png"]);
   const longFileController = fixedValue<readonly string[]>([
     "the-complete-annotated-manuscript-with-every-revision-and-editor-comment-final-v12.pdf",
   ]);
@@ -165,6 +179,59 @@
         <FileInput {...control} controlSize="lg" />
       {/snippet}
     </Field>
+  </div>
+</Story>
+
+<Story name="File upload with a preview" asChild>
+  <div class="narrow">
+    <Field label="Logo" hint="Shown in place of the title.">
+      {#snippet children(control)}
+        <div class="previewed">
+          <span class="preview" aria-hidden="true"></span>
+          <FileInput {...control} controller={coverController} accept="image/*" onclear={() => {}} />
+        </div>
+      {/snippet}
+    </Field>
+  </div>
+</Story>
+
+<Story name="Tags" asChild>
+  <div class="form">
+    <Field label="Tags" hint="A space ends a tag.">
+      {#snippet children(control)}
+        <TagInput {...control} name="tags" controller={tagsController} maxlength={24} />
+      {/snippet}
+    </Field>
+    <Field label="Empty" hint="A space ends a tag.">
+      {#snippet children(control)}
+        <TagInput {...control} name="empty" placeholder="slow-burn" />
+      {/snippet}
+    </Field>
+    <Field label="Invalid" error="Up to 10 tags.">
+      {#snippet children(control)}
+        <TagInput {...control} name="invalid" controller={tagsController} />
+      {/snippet}
+    </Field>
+    <Field label="Disabled">
+      {#snippet children(control)}
+        <TagInput {...control} name="disabled" controller={tagsController} disabled />
+      {/snippet}
+    </Field>
+  </div>
+</Story>
+
+<Story name="Chips" asChild>
+  <div class="form">
+    <ChipGroup
+      legend="Genres"
+      hint="Up to 10."
+      name="genres"
+      options={genreOptions}
+      controller={chosenGenresController}
+    />
+    <ChipGroup legend="Accent" name="accent" tone="accent" options={genreOptions} controller={chosenGenresController} />
+    <ChipGroup legend="Invalid" error="Up to 10 genres." name="invalid" options={genreOptions} />
+    <ChipGroup legend="Disabled" name="disabled" options={genreOptions} disabled />
   </div>
 </Story>
 
@@ -419,5 +486,17 @@
   }
   .count {
     margin-inline-start: auto;
+  }
+  /* A chosen image sits above its field. */
+  .previewed {
+    display: grid;
+    gap: var(--space-2);
+  }
+  .preview {
+    display: block;
+    border-radius: var(--radius-sm);
+    background: var(--gradient-action-primary);
+    inline-size: var(--space-24);
+    block-size: var(--space-16);
   }
 </style>

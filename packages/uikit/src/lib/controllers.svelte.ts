@@ -6,6 +6,7 @@ import {
   panCrop,
   zoomCrop,
 } from "./picture";
+import { kebabTag } from "./tags";
 
 /** State managed for content that can be open or closed. */
 export interface OpenState {
@@ -482,6 +483,69 @@ export function createPictureFrameController({ source, ratio }: PictureFrameCont
     },
     zoom: (zoom, focusX, focusY) => {
       state = { ...state, crop: zoomCrop(state, zoom, focusX, focusY) };
+    },
+  };
+}
+
+/** State managed for a tag input. */
+export interface TagInputState {
+  /** The tags, in the order they were added, each once. */
+  tags: readonly string[];
+}
+
+/** Pure state transitions for a tag input. */
+export interface TagInputController {
+  /** State rendered by the component. */
+  readonly state: TagInputState;
+  /** Adds the tag the text normalizes to, unless it is empty or already there. */
+  add(text: string): void;
+  /** Removes the tag at `index`. */
+  remove(index: number): void;
+}
+
+/** Configuration for the default tag input controller. */
+export interface TagInputControllerOptions {
+  /** Initial tags, taken as they are. */
+  initialTags?: readonly string[];
+  /** Turns typed text into a tag; lower-kebab-case by default. */
+  normalize?: (text: string) => string;
+  /** Runs after the default controller changes the tags. */
+  onTagsChange?: (tags: readonly string[]) => void;
+}
+
+/**
+ * Creates local reactive tag state. Added text is normalized, and an empty or repeated tag is ignored. The caller
+ * owns limits and persistence.
+ *
+ * @example
+ * ```ts
+ * import { createTagInputController } from "@a-novel-kit/uikit";
+ * const tags = createTagInputController();
+ * tags.add("Slow Burn"); // tags.state.tags: ["slow-burn"]
+ * ```
+ */
+export function createTagInputController({
+  initialTags = [],
+  normalize = kebabTag,
+  onTagsChange,
+}: TagInputControllerOptions = {}): TagInputController {
+  let state = $state<TagInputState>({ tags: initialTags });
+
+  function setTags(tags: readonly string[]) {
+    state = { tags };
+    onTagsChange?.(tags);
+  }
+
+  return {
+    get state() {
+      return state;
+    },
+    add: (text) => {
+      const tag = normalize(text);
+      if (tag && !state.tags.includes(tag)) setTags([...state.tags, tag]);
+    },
+    remove: (index) => {
+      if (index in state.tags) setTags(state.tags.toSpliced(index, 1));
     },
   };
 }

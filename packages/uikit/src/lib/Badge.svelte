@@ -7,8 +7,8 @@ Labels a category or status compactly. Use InlineMessage when changes need live 
 
   /** Props for a compact categorical label or status. */
   export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
-    /** Semantic treatment of the badge. */
-    tone?: "neutral" | "brand" | "highlight" | "success" | "warning" | "danger";
+    /** Semantic treatment of the badge. `accent` sets a distinction apart in magenta, rarer than `brand`. */
+    tone?: "neutral" | "brand" | "accent" | "highlight" | "success" | "warning" | "danger";
   }
 </script>
 
@@ -30,7 +30,7 @@ Labels a category or status compactly. Use InlineMessage when changes need live 
     inline-size: fit-content;
     max-inline-size: 100%;
     color: var(--color-text-inverse);
-    font-weight: var(--font-weight-bold);
+    font-weight: var(--font-weight-regular);
     font-size: var(--font-size-xs);
     line-height: var(--line-height-compact);
     font-family: var(--font-family-interface);
@@ -45,6 +45,10 @@ Labels a category or status compactly. Use InlineMessage when changes need live 
 
   .brand {
     --badge-accent: var(--color-feedback-info-text);
+  }
+
+  .accent {
+    --badge-accent: var(--color-accent-text);
   }
 
   .highlight {

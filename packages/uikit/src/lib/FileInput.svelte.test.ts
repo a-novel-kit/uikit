@@ -3,7 +3,7 @@ import FileInput from "./FileInput.svelte";
 
 import { describe, expect, it, onTestFinished, vi } from "vitest";
 
-import { render } from "@testing-library/svelte";
+import { fireEvent, render } from "@testing-library/svelte";
 
 describe("FileInput", () => {
   it("forwards native file constraints and invalid state", () => {
@@ -25,15 +25,12 @@ describe("FileInput", () => {
     expect(input.parentElement?.className).toContain("lg");
   });
 
-  it.each([
-    { multiple: false, button: "Choisir un fichier" },
-    { multiple: true, button: "Choisir des fichiers" },
-  ])("words its button and placeholder in the app's language, multiple $multiple", ({ multiple, button }) => {
-    const props = { "aria-label": "Fichiers", multiple };
-    const { getByText } = render(I18nFixture, { props: { locale: "fr", component: FileInput, props } });
+  it("words its placeholder in the app's language, with no button of its own", () => {
+    const props = { "aria-label": "Fichiers" };
+    const { getByText, queryAllByRole } = render(I18nFixture, { props: { locale: "fr", component: FileInput, props } });
 
-    expect(getByText(button)).toBeTruthy();
     expect(getByText("Aucun fichier choisi")).toBeTruthy();
+    expect(queryAllByRole("button")).toHaveLength(0);
   });
 
   it.each([
@@ -54,5 +51,14 @@ describe("FileInput", () => {
     const { getByText } = render(FileInput, { props: { "aria-label": "Files" } });
 
     expect(getByText("restored.pdf")).toBeTruthy();
+  });
+
+  it("removes the choice with its cross, which a click on reaches before the picker", async () => {
+    const onclear = vi.fn();
+    const { getByRole } = render(FileInput, { props: { "aria-label": "Logo", onclear } });
+
+    await fireEvent.click(getByRole("button", { name: "Remove the file" }));
+
+    expect(onclear).toHaveBeenCalledOnce();
   });
 });

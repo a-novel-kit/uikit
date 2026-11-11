@@ -1,0 +1,290 @@
+<!--
+@component
+A text field that turns what the reader types into tags, as GitHub's topics do. A space, a comma or Enter ends a tag,
+Backspace in the empty field takes the last tag back as text, and each tag's cross removes it. The default controller
+writes tags in lower-kebab-case. The form receives each tag under `name`, then the text still being typed, empty
+once scripting has turned it into tags, so a form without scripting still sends what was typed.
+Native attributes and events target the text input; `class` styles the surrounding field.
+
+```svelte
+<script lang="ts">
+  import { Field, TagInput } from "@a-novel-kit/uikit";
+</script>
+
+<Field label="Tags" hint="A space ends a tag.">
+  {#snippet children(control)}
+    <TagInput {...control} name="tags" maxlength={24} />
+  {/snippet}
+</Field>
+```
+-->
+<script lang="ts" module>
+  import type { TagInputController } from "./controllers.svelte";
+  import type { ComponentSize } from "./types";
+
+  import type { HTMLInputAttributes } from "svelte/elements";
+
+  /** Props for a text field that collects tags. */
+  export interface TagInputProps extends Omit<HTMLInputAttributes, "type" | "value"> {
+    /** Sets the control height and type scale. */
+    controlSize?: ComponentSize;
+    /** Applies the invalid surface and focus treatment. */
+    invalid?: boolean;
+    /** State owner of the tags; each input has its own by default. */
+    controller?: TagInputController;
+  }
+</script>
+
+<script lang="ts">
+  import Badge from "./Badge.svelte";
+  import { createTagInputController } from "./controllers.svelte";
+  import { useMessages } from "./internal/i18n";
+  import { resolveInvalidState } from "./selection";
+
+  import { X as XIcon } from "@lucide/svelte";
+
+  let {
+    controlSize = "md",
+    invalid = false,
+    controller = createTagInputController(),
+    name,
+    disabled,
+    readonly,
+    oninput,
+    onkeydown,
+    onblur,
+    "aria-invalid": ariaInvalid,
+    class: className = "",
+    ...rest
+  }: TagInputProps = $props();
+
+  const { t } = useMessages();
+
+  const isInvalid = $derived(resolveInvalidState(invalid, ariaInvalid));
+  const tags = $derived(controller.state.tags);
+  const editable = $derived(!disabled && !readonly);
+
+  let field = $state<HTMLInputElement>();
+
+  /** Ends a tag at every separator; what follows the last one stays as typed. */
+  function takeTags(input: HTMLInputElement) {
+    const parts = input.value.split(/[\s,]+/u);
+    const typing = parts.pop() ?? "";
+    if (parts.length === 0) return;
+
+    for (const part of parts) controller.add(part);
+    input.value = typing;
+  }
+
+  function finishTag(input: HTMLInputElement) {
+    controller.add(input.value);
+    input.value = "";
+  }
+
+  function handleInput(event: Event & { currentTarget: EventTarget & HTMLInputElement }) {
+    oninput?.(event);
+    takeTags(event.currentTarget);
+  }
+
+  function handleKeydown(event: KeyboardEvent & { currentTarget: EventTarget & HTMLInputElement }) {
+    onkeydown?.(event);
+    if (event.defaultPrevented || event.isComposing) return;
+
+    const input = event.currentTarget;
+    if (event.key === "Enter" && input.value.trim()) {
+      // A tag being typed ends here; an empty field lets Enter submit the form.
+      event.preventDefault();
+      finishTag(input);
+    } else if (event.key === "Backspace" && input.value === "" && tags.length > 0) {
+      event.preventDefault();
+      const last = tags[tags.length - 1];
+      controller.remove(tags.length - 1);
+      input.value = last;
+    }
+  }
+
+  // Leaving the field keeps what was typed as a tag, so pressing the form's button sends it.
+  function handleBlur(event: FocusEvent & { currentTarget: EventTarget & HTMLInputElement }) {
+    onblur?.(event);
+    if (event.currentTarget.value.trim()) finishTag(event.currentTarget);
+  }
+
+  // The removed tag's button leaves the page, so the text input takes the focus it held.
+  function removeTag(index: number) {
+    controller.remove(index);
+    field?.focus();
+  }
+</script>
+
+<span class="tag-input {controlSize} {className}" class:invalid={isInvalid}>
+  {#if tags.length > 0}
+    <ul class="tags">
+      {#each tags as tag, index (tag)}
+        <li>
+          <Badge tone="brand" class="tag">
+            {tag}
+            {#if editable}
+              <button
+                type="button"
+                class="remove"
+                aria-label={t("tagInput.remove", { tag })}
+                onclick={() => removeTag(index)}
+              >
+                <!-- The cross follows the tag's text size, under the smallest icon. -->
+                <XIcon size="1em" aria-hidden="true" />
+              </button>
+            {/if}
+          </Badge>
+          <input type="hidden" {name} value={tag} />
+        </li>
+      {/each}
+    </ul>
+  {/if}
+  <input
+    bind:this={field}
+    type="text"
+    class="control"
+    autocomplete="off"
+    autocapitalize="none"
+    spellcheck="false"
+    {name}
+    {disabled}
+    {readonly}
+    {...rest}
+    aria-invalid={isInvalid || undefined}
+    oninput={handleInput}
+    onkeydown={handleKeydown}
+    onblur={handleBlur}
+  />
+</span>
+
+<style>
+  .tag-input {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-1-5);
+    transition:
+      background-color var(--duration-fast) var(--easing-standard),
+      border-color var(--duration-fast) var(--easing-standard),
+      box-shadow var(--duration-fast) var(--easing-standard);
+    box-sizing: border-box;
+    border: var(--border-width-thin) solid var(--color-field-border);
+    border-radius: var(--radius-md);
+    background: var(--color-control-surface);
+    inline-size: 100%;
+    min-inline-size: 0;
+  }
+
+  .tags {
+    display: contents;
+  }
+
+  li {
+    display: flex;
+    min-inline-size: 0;
+  }
+
+  /* A tag keeps its badge's look, its cross set in its text. */
+  .tag-input :global(.tag) {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+  }
+
+  /* A button inside a field stays ghost: its icon, a color, and a light veil under the pointer. */
+  .remove {
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    margin-inline-end: calc(var(--space-1) * -1);
+    border-width: 0;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    padding: 0;
+    color: inherit;
+  }
+
+  @media (hover: hover) {
+    .remove:hover {
+      background: color-mix(in oklab, var(--color-text-inverse) var(--color-mix-2), transparent);
+    }
+  }
+
+  .remove:focus-visible {
+    outline: var(--focus-ring-width) solid var(--color-focus-ring);
+    outline-offset: var(--focus-ring-offset);
+  }
+
+  .control {
+    flex: 1 1 var(--space-24);
+    appearance: none;
+    box-sizing: border-box;
+    outline: none;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    min-inline-size: 0;
+    color: var(--color-control-text);
+    font: inherit;
+    line-height: var(--line-height-compact);
+    font-family: var(--font-family-interface);
+  }
+
+  .control::placeholder {
+    color: var(--color-control-placeholder);
+  }
+
+  @media (hover: hover) {
+    .tag-input:hover:not(.invalid, :has(.control:disabled, .control:read-only, .control:focus-visible)) {
+      background: var(--color-control-surface-hover);
+    }
+  }
+
+  .tag-input:has(.control:focus-visible) {
+    box-shadow: var(--shadow-focus-ring);
+    border-color: var(--color-control-border-focus);
+    background: var(--color-control-surface-focus);
+  }
+
+  @media (forced-colors: active) {
+    .tag-input:has(.control:focus-visible) {
+      outline: var(--border-width-strong) solid Highlight;
+      outline-offset: var(--focus-ring-offset);
+    }
+  }
+
+  .tag-input:has(.control:disabled) {
+    cursor: not-allowed;
+    background: var(--color-control-surface-disabled);
+  }
+
+  .control:disabled {
+    color: var(--color-control-disabled-text);
+  }
+
+  .tag-input.invalid {
+    border-color: var(--color-feedback-error-border);
+    background: var(--color-control-surface-invalid);
+  }
+
+  .tag-input.invalid:has(.control:focus-visible) {
+    box-shadow: var(--shadow-invalid-focus-ring);
+  }
+
+  .sm {
+    padding: var(--space-1) var(--space-3);
+    min-block-size: var(--control-height-sm);
+    font-size: var(--font-size-sm);
+  }
+  .md {
+    padding: var(--space-1) var(--space-3);
+    min-block-size: var(--control-height-md);
+    font-size: var(--font-size-md);
+  }
+  .lg {
+    padding: var(--space-2) var(--space-4);
+    min-block-size: var(--control-height-lg);
+    font-size: var(--font-size-lg);
+  }
+</style>

@@ -292,6 +292,9 @@
     var(--color-surface-subtle)
   );
   --color-feedback-info-text: var(--base-brand);
+  /* The magenta for a distinction that reports nothing, such as a project's genres: rarer than the brand
+     blue, never a failure. Dark text keeps 5.2:1 on it. */
+  --color-accent-text: var(--base-pressure);
   /* Signal highlights what deserves notice without calling for action, such as an upcoming change. */
   --color-feedback-highlight-surface: color-mix(
     in oklab,
@@ -473,7 +476,7 @@
      application colors it with --color-lamp on its root element, so people tell the apps apart at
      a glance; an ember lights any application that sets none. */
   --color-lamp-ember: color-mix(in oklch, var(--base-signal) var(--color-mix-11), var(--base-pressure));
-  --color-lamp-violet: color-mix(in oklch, var(--base-brand), var(--base-pressure));
+  --color-lamp-magenta: var(--base-pressure);
   --lamp-color: var(--color-lamp, var(--color-lamp-ember));
   --lamp-peak: var(--color-mix-3);
   --gradient-lamp: radial-gradient(
@@ -530,6 +533,9 @@
   --layout-sidebar-min: calc(var(--font-size-base) * var(--multiplier-12));
   --layout-island-gap: var(--space-3);
   --layout-readable-measure: 68ch;
+  /* The longest line that stays readable, WCAG 1.4.8's 80 characters, for a short block set in a
+     narrow surface, such as a card's summary. */
+  --layout-readable-measure-long: 80ch;
 
   --layer-step: 10;
   --layer-base: 0;

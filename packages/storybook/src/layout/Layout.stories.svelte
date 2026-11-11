@@ -3,6 +3,21 @@
 
   import { defineMeta } from "@storybook/addon-svelte-csf";
 
+  const ghostItems = [
+    { title: "The harbor lights", text: "A short one." },
+    {
+      title: "The cartographer",
+      text: "A mapmaker who only draws places that no longer exist is hired to chart a town that has not been built yet.",
+    },
+    { title: "Salt and ash", text: "Two sisters, one inn, and the winter that closes the pass." },
+    { title: "Notebooks", text: "A building, six floors, a single night without power." },
+    {
+      title: "The long table",
+      text: "A family gathers every summer at the same house, and every summer someone leaves a letter under a plate. This year, the letter is addressed to the house.",
+    },
+    { title: "Lantern", text: "A play in three acts." },
+  ];
+
   const { Story } = defineMeta({
     title: "Layout/Primitives",
     tags: ["autodocs"],
@@ -84,6 +99,34 @@
   </Container>
 </Story>
 
+<Story
+  name="Ghost cards"
+  parameters={{
+    docs: {
+      description: {
+        story:
+          "Each item of a collection is a ghost card: the canvas's own color under a raised card's veil, ring and blur. It lights as a raised card under the pointer. The items run down one column before the next, each as tall as it needs.",
+      },
+    },
+  }}
+  asChild
+>
+  <Container size="lg">
+    <ul class="mosaic">
+      {#each ghostItems as item (item.title)}
+        <li>
+          <Card surface="ghost">
+            <Stack gap="2">
+              <strong>{item.title}</strong>
+              <span class="muted">{item.text}</span>
+            </Stack>
+          </Card>
+        </li>
+      {/each}
+    </ul>
+  </Container>
+</Story>
+
 <Story name="Split pane" asChild>
   <Container size="lg">
     <SplitPane>
@@ -104,6 +147,18 @@
 </Story>
 
 <style>
+  /* The items run down one column before the next, each as tall as it needs. */
+  .mosaic {
+    column-gap: var(--space-4);
+    columns: 3 14rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .mosaic > li {
+    break-inside: avoid;
+    padding-block-end: var(--space-4);
+  }
   strong {
     color: var(--color-text-primary);
     font-family: var(--font-family-interface);

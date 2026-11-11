@@ -29,6 +29,20 @@ describe("FileInput", () => {
     expect(control.height).toBeCloseTo(surface.height - 2, 0);
   });
 
+  it("opens the picker from its folder icon, and removes the choice from its cross", () => {
+    const { input } = inForm({ onclear: () => undefined });
+    const control = input.element();
+    const surface = control.parentElement!;
+    const centerOf = (element: Element) => {
+      const box = element.getBoundingClientRect();
+      return document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2);
+    };
+    const cross = page.getByRole("button", { name: "Remove the file" }).element();
+
+    expect(centerOf(surface.querySelector(".browse")!)).toBe(control);
+    expect(cross.contains(centerOf(cross))).toBe(true);
+  });
+
   it("shows the name of the chosen file", async () => {
     const { input } = inForm();
 

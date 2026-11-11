@@ -65,8 +65,18 @@ describe("low-emphasis action feedback", () => {
     );
   }
 
+  /** Hovers and presses the button, and expects its look to stay the one it had. */
+  async function expectSteady(button: HTMLElement, look: ReturnType<typeof appearance>) {
+    await userEvent.hover(button);
+    await expect.poll(() => appearance(button)).toEqual(look);
+    button.focus();
+    await userEvent.keyboard("[Space>]");
+    await expect.poll(() => appearance(button)).toEqual(look);
+    await userEvent.keyboard("[/Space]");
+  }
+
   it.each(["brand", "neutral", "danger"] as const)(
-    "keeps %s selection identical across variants and pointer states",
+    "keeps an outline %s selection in its own color across pointer states",
     async (tone) => {
       const { getByRole, rerender } = render(Button, {
         variant: "outline",
@@ -77,17 +87,33 @@ describe("low-emphasis action feedback", () => {
       const button = getByRole("button");
       const selected = appearance(button);
       expect(selected.background).toContain("/ 0.1875)");
-      for (const variant of ["outline", "ghost", "text"] as const) {
-        await rerender({ variant });
-        await userEvent.hover(button);
-        await expect.poll(() => appearance(button)).toEqual(selected);
-        button.focus();
-        await userEvent.keyboard("[Space>]");
-        await expect.poll(() => appearance(button)).toEqual(selected);
-        await userEvent.keyboard("[/Space]");
-      }
+      await expectSteady(button, selected);
       await rerender({ disabled: true });
       await expect.poll(() => getComputedStyle(button).boxShadow).toBe("none");
+    }
+  );
+
+  it.each(["brand", "neutral", "danger"] as const)(
+    "turns a chosen ghost or text %s button blue, as the navigation's current item, without a border or glow",
+    async (tone) => {
+      const chosen = {
+        background: resolveColor("var(--color-navigation-selected-surface)"),
+        border: resolveColor("transparent"),
+        color: resolveColor("var(--color-navigation-selected-text)"),
+        shadow: "none",
+      };
+      const { getByRole, rerender } = render(Button, {
+        variant: "ghost",
+        tone,
+        "aria-pressed": true,
+        "aria-label": "Preview",
+      });
+      const button = getByRole("button");
+      for (const variant of ["ghost", "text"] as const) {
+        await rerender({ variant });
+        await expect.poll(() => appearance(button)).toEqual(chosen);
+        await expectSteady(button, chosen);
+      }
     }
   );
 

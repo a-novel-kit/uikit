@@ -72,14 +72,15 @@ A value outside this table is an exception: it sits beside a comment naming its 
 
 Widths come from the layout tokens, never from a hand-picked size.
 
-| Token                       | Use                                                      | Size      |
-| --------------------------- | -------------------------------------------------------- | --------- |
-| `--layout-container-xs`     | Compact dialogs, `Dialog size="sm"`                      | 26.67 rem |
-| `--layout-container-sm`     | Forms, settings pages and dialogs, `Container size="sm"` | 40 rem    |
-| `--layout-container-md`     | Wider pages, `Container size="md"`                       | 64 rem    |
-| `--layout-container-lg`     | Full application pages, `Container`'s default            | 80 rem    |
-| `--layout-readable-measure` | Running text, `Container size="readable"` and `Prose`    | 68 ch     |
-| `--layout-sidebar`          | A navigation rail or a split pane's side                 | 15.28 rem |
+| Token                            | Use                                                      | Size      |
+| -------------------------------- | -------------------------------------------------------- | --------- |
+| `--layout-container-xs`          | Compact dialogs, `Dialog size="sm"`                      | 26.67 rem |
+| `--layout-container-sm`          | Forms, settings pages and dialogs, `Container size="sm"` | 40 rem    |
+| `--layout-container-md`          | Wider pages, `Container size="md"`                       | 64 rem    |
+| `--layout-container-lg`          | Full application pages, `Container`'s default            | 80 rem    |
+| `--layout-readable-measure`      | Running text, `Container size="readable"` and `Prose`    | 68 ch     |
+| `--layout-readable-measure-long` | A short block in a card, such as a project's premise     | 80 ch     |
+| `--layout-sidebar`               | A navigation rail or a split pane's side                 | 15.28 rem |
 
 Every page fills the viewport's height with `100dvb`, and the root keeps `min-inline-size: 20rem`:
 WCAG 1.4.10 reflows content down to 320 CSS pixels, and a narrower window scrolls instead.

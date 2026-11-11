@@ -1,5 +1,5 @@
 <script module lang="ts">
-  import { Flag, Inline, Stack } from "@a-novel-kit/uikit";
+  import { Flag, Inline, LanguageName, Stack } from "@a-novel-kit/uikit";
 
   import { defineMeta } from "@storybook/addon-svelte-csf";
 
@@ -26,10 +26,7 @@
 <Story name="Beside its name" asChild>
   <Stack gap="2">
     {#each languages as language (language.locale)}
-      <Inline gap="2">
-        <Flag locale={language.locale} />
-        <span>{language.name}</span>
-      </Inline>
+      <LanguageName locale={language.locale} name={language.name} />
     {/each}
   </Stack>
 </Story>

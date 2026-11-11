@@ -252,16 +252,17 @@ with `aria-current="page"` reads as the navigation's current item.
     color: var(--button-foreground-hover);
   }
 
-  :is(.outline, .ghost, .text)[aria-pressed="true"] {
+  .outline[aria-pressed="true"] {
     box-shadow: var(--button-glow);
     border-color: var(--button-selected-border);
     background-color: color-mix(in oklab, var(--button-selected-foreground) var(--color-mix-3), transparent);
     color: var(--button-selected-foreground);
   }
 
-  /* A link to the page showing reads as the navigation's current item, as a rail's account link does
-     beside the NavList, and keeps that look under the pointer. */
-  :is(.ghost, .text)[aria-current="page"] {
+  /* A ghost or text button draws no border or glow in any state. Chosen, or linking to the page
+     showing, it reads as the navigation's current item, blue whatever its tone, as a rail's account
+     link does beside the NavList, and keeps that look under the pointer. */
+  :is(.ghost, .text):is([aria-pressed="true"], [aria-current="page"]) {
     background-color: var(--color-navigation-selected-surface);
     color: var(--color-navigation-selected-text);
   }

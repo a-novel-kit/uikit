@@ -5,6 +5,7 @@ import {
   createPictureFrameController,
   createPressedController,
   createSelectController,
+  createTagInputController,
   createValueController,
 } from "./controllers.svelte";
 
@@ -100,5 +101,27 @@ describe("component controllers", () => {
     controller.zoom(9, 0, 0);
     controller.pan(-3, -3);
     expect(controller.state.crop).toEqual({ zoom: 4, x: 1200, y: 975 });
+  });
+
+  it("adds normalized tags once, removes them by position, and reports each change", () => {
+    const onTagsChange = vi.fn();
+    const tags = createTagInputController({ initialTags: ["maps"], onTagsChange });
+
+    tags.add("Slow Burn");
+    tags.add("slow-burn");
+    tags.add(" -- ");
+    expect(tags.state.tags).toEqual(["maps", "slow-burn"]);
+
+    tags.remove(0);
+    tags.remove(5);
+    expect(tags.state.tags).toEqual(["slow-burn"]);
+    expect(onTagsChange.mock.calls).toEqual([[["maps", "slow-burn"]], [["slow-burn"]]]);
+  });
+
+  it("normalizes tags with the caller's rule", () => {
+    const tags = createTagInputController({ normalize: (text) => text.trim().toUpperCase() });
+
+    tags.add(" fantasy ");
+    expect(tags.state.tags).toEqual(["FANTASY"]);
   });
 });

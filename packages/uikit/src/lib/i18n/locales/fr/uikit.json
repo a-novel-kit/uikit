@@ -32,8 +32,7 @@
     "title": "Il y a un problème"
   },
   "fileInput": {
-    "choose": "Choisir un fichier",
-    "chooseMany": "Choisir des fichiers",
+    "clear": "Retirer le fichier",
     "count": "{{count}} fichiers",
     "placeholder": "Aucun fichier choisi"
   },
@@ -56,6 +55,9 @@
   "table": {
     "captioned": "Tableau: {{caption}}",
     "uncaptioned": "Tableau défilant"
+  },
+  "tagInput": {
+    "remove": "Retirer {{tag}}"
   },
   "toastRegion": {
     "dismiss": "Fermer",
