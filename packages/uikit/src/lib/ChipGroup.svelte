@@ -124,15 +124,18 @@ never sends; the controller keeps the order of choice.
   }
 
   /* The chips sit in a field's well, which outlines only an error. */
+  /* As a medium field: a button's height and the same inset, growing with its rows. */
   .chips {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: var(--space-1-5);
     box-sizing: border-box;
     border: var(--border-width-thin) solid var(--color-field-border);
     border-radius: var(--radius-md);
     background: var(--color-control-surface);
-    padding: var(--space-2);
+    padding: var(--space-1) var(--space-3);
+    min-block-size: var(--control-height-md);
   }
 
   .invalid .chips {

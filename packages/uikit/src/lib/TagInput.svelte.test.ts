@@ -1,5 +1,6 @@
 import TagInput from "./TagInput.svelte";
 import { createTagInputController } from "./controllers.svelte";
+import { kebabTag, splitTags } from "./tags";
 
 import { describe, expect, it } from "vitest";
 
@@ -62,6 +63,29 @@ describe("TagInput", () => {
 
     expect(controller.state.tags).toEqual(["maps"]);
     expect(new FormData(form).getAll("tags")).toEqual(["maps", "noir"]);
+    form.remove();
+  });
+
+  it("sends what a server reads as the very tags the field holds", async () => {
+    const form = document.body.appendChild(document.createElement("form"));
+    const controller = createTagInputController({ initialTags: ["maps"] });
+    const { getByRole } = render(TagInput, { target: form, props: { "aria-label": "Tags", name: "tags", controller } });
+    const input = getByRole("textbox", { name: "Tags" }) as HTMLInputElement;
+
+    // A capital whose mark has no precomposed form, then its lowercase, then a repeat: one tag each time.
+    await fireEvent.input(input, { target: { value: ["T\u0308", "\u1e97", "Maps", "noir "].join(" ") } });
+    const read = [
+      ...new Set(
+        new FormData(form)
+          .getAll("tags")
+          .flatMap((entry) => splitTags(String(entry)))
+          .map(kebabTag)
+          .filter(Boolean)
+      ),
+    ];
+
+    expect(read).toEqual(controller.state.tags);
+    expect(controller.state.tags).toEqual(["maps", "\u1e97", "noir"]);
     form.remove();
   });
 
@@ -173,7 +197,6 @@ describe("TagInput", () => {
 
     input.value = "horror";
     await fireEvent.keyDown(input, { key: "Enter" });
-    await fireEvent.blur(input);
     expect(input.value).toBe("horror");
 
     input.value = "";

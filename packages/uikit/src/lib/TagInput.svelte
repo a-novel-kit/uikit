@@ -58,7 +58,6 @@ Native attributes and events target the text input; `class` styles the surroundi
     required,
     oninput,
     onkeydown,
-    onblur,
     oncompositionend,
     "aria-invalid": ariaInvalid,
     "aria-describedby": describedBy,
@@ -179,7 +178,6 @@ Native attributes and events target the text input; `class` styles the surroundi
     aria-invalid={isInvalid || undefined}
     oninput={handleInput}
     onkeydown={handleKeydown}
-    {onblur}
     oncompositionend={handleCompositionEnd}
   />
   <VisuallyHidden id={statusId} role="status">{status}</VisuallyHidden>

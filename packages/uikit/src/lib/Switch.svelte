@@ -13,7 +13,10 @@ Provide a visible label or an accessible name.
   export type SwitchController = CheckedController;
 
   /** Props for a native checkbox presented as an immediate on/off switch. */
-  export interface SwitchProps extends Omit<HTMLInputAttributes, "type" | "role" | "checked" | "onchange"> {
+  export interface SwitchProps extends Omit<
+    HTMLInputAttributes,
+    "type" | "role" | "checked" | "defaultChecked" | "onchange"
+  > {
     /** Label content beside the switch. */
     label?: Content;
     /** Supporting content shown below the label. */

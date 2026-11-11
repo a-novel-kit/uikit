@@ -6,6 +6,7 @@ describe("kebabTag", () => {
   it.each([
     { text: "Slow Burn", tag: "slow-burn" },
     { text: "Années 50", tag: "années-50" },
+    { text: "T\u0308", tag: "\u1e97" },
     { text: "  roman_maritime--  ", tag: "roman-maritime" },
     { text: "Huis-Clos!", tag: "huis-clos" },
     { text: "e\u0301te\u0301", tag: "été" },

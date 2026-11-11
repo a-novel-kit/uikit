@@ -95,6 +95,19 @@ describe("Combobox", () => {
     form.remove();
   });
 
+  it("names its shown label in the chosen option's language while closed", () => {
+    const languages = [{ value: "fr", label: "Français", lang: "fr" }];
+    const { getByRole } = render(Combobox, {
+      props: {
+        "aria-label": "Language",
+        controller: createComboboxController({ initialValue: "fr" }),
+        options: languages,
+      },
+    });
+
+    expect(getByRole("combobox", { name: "Language" }).getAttribute("lang")).toBe("fr");
+  });
+
   it("names an option in the language it gives", async () => {
     const languages = [{ value: "fr", label: "Français", lang: "fr" }];
     const { getByRole } = render(Combobox, {

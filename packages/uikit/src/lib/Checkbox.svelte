@@ -13,7 +13,7 @@ Provide `label` or an accessible name; native input attributes are forwarded to 
   export type CheckboxController = CheckedController;
 
   /** Props for a native checkbox with optional supporting content. */
-  export interface CheckboxProps extends Omit<HTMLInputAttributes, "type" | "checked" | "onchange"> {
+  export interface CheckboxProps extends Omit<HTMLInputAttributes, "type" | "checked" | "defaultChecked" | "onchange"> {
     /** Label content beside the checkbox. */
     label?: Content;
     /** Supporting content shown below the label. */

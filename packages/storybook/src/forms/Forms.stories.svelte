@@ -96,6 +96,8 @@
   const densityController = fixedValue<string | undefined>("comfortable");
   const scaleController = fixedValue(72);
   const languageController = fixedCombobox<Language>("en", true);
+  const disabledVisibilityController = fixedSelect<Visibility>("private");
+  const disabledLanguageController = fixedCombobox<Language>("fr");
   const compactNavigationController = fixedChecked();
   const hiddenPasswordController = fixedPressed();
   const shownPasswordController = fixedPressed(true);
@@ -316,6 +318,51 @@
       <ChipGroup legend="A long label wraps" name="long" options={longGenreOptions} />
     </div>
     <ChipGroup legend="Disabled" name="disabled" options={genreOptions} controller={chosenGenresController} disabled />
+  </div>
+</Story>
+
+<Story
+  name="Disabled with an error"
+  parameters={{
+    docs: {
+      description: {
+        story:
+          "A field disabled while it still shows an error keeps its error look, as a form disabled while it saves keeps the refusal it shows.",
+      },
+    },
+  }}
+  asChild
+>
+  <div class="form">
+    <Field label="Title" error="Give the project a title.">
+      {#snippet children(control)}<Input {...control} disabled />{/snippet}
+    </Field>
+    <Field label="Tags" error="Up to 10 tags.">
+      {#snippet children(control)}
+        <TagInput {...control} name="disabled-tags" controller={tagsController} disabled />
+      {/snippet}
+    </Field>
+    <Field label="Logo" error="Choose an image under 256 KiB.">
+      {#snippet children(control)}<FileInput {...control} controller={coverController} disabled />{/snippet}
+    </Field>
+    <ChipGroup
+      legend="Genres"
+      error="Up to 10 genres."
+      name="disabled-genres"
+      options={genreOptions}
+      controller={chosenGenresController}
+      disabled
+    />
+    <Field label="Visibility" error="Choose who sees the project.">
+      {#snippet children(control)}
+        <Select {...control} controller={disabledVisibilityController} options={visibilityOptions} disabled />
+      {/snippet}
+    </Field>
+    <Field label="Language" error="Choose a language.">
+      {#snippet children(control)}
+        <Combobox {...control} controller={disabledLanguageController} options={languageOptions} disabled />
+      {/snippet}
+    </Field>
   </div>
 </Story>
 

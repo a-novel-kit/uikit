@@ -16,6 +16,17 @@ function resolveColor(value: string) {
 }
 
 describe("ChipGroup", () => {
+  it("keeps a medium field's height while its chips fit one row", () => {
+    const options = [{ value: "fantasy", label: "Fantasy" }];
+    const { container } = render(ChipGroup, { props: { legend: "Genres", name: "genres", options } });
+    const probe = document.body.appendChild(document.createElement("div"));
+    probe.style.blockSize = "var(--control-height-md)";
+    const height = probe.getBoundingClientRect().height;
+    probe.remove();
+
+    expect(container.querySelector(".chips")!.getBoundingClientRect().height).toBeCloseTo(height, 0);
+  });
+
   it("reaches past a short chip's edges to the 24px minimum target", () => {
     const options = [{ value: "a", label: "A" }];
     const { container } = render(ChipGroup, { props: { legend: "Letters", name: "letters", options } });

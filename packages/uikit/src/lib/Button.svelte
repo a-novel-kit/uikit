@@ -318,6 +318,10 @@ item.
     opacity: var(--opacity-disabled);
   }
 
+  .button[aria-pressed="true"]:disabled::before {
+    box-shadow: none;
+  }
+
   /* A ghost or text button stays borderless while disabled too. */
   .button:is(.ghost, .text):disabled {
     border-color: transparent;

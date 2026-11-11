@@ -1,4 +1,5 @@
 /// <reference types="vite/client" />
+import NestedCardsFixture from "../../test/NestedCardsFixture.svelte";
 import Card from "./Card.svelte";
 
 import { createRawSnippet } from "svelte";
@@ -40,5 +41,12 @@ describe("Card", () => {
     expect(document.activeElement?.textContent).toBe("Lantern");
     expect(await settledBackground(card)).toBe(resolveColor("var(--color-surface-island-glass)"));
     expect(resting).not.toBe(resolveColor("var(--color-surface-island-glass)"));
+  });
+
+  it("keeps a ghost card inside another card on its parent's glass", () => {
+    const { container } = render(NestedCardsFixture);
+
+    const nested = container.querySelector(".card .card")!;
+    expect(getComputedStyle(nested).backdropFilter).toBe("none");
   });
 });

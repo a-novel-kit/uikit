@@ -161,6 +161,7 @@ describe("chosen toggles", () => {
         .poll(() => getComputedStyle(button).backgroundColor)
         .toBe(resolveColor("var(--color-navigation-selected-surface)"));
       expect(Number(getComputedStyle(button).opacity)).toBeLessThan(1);
+      expect(getComputedStyle(button, "::before").boxShadow).toBe("none");
     }
   );
 });

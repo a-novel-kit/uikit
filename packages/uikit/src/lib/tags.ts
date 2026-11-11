@@ -38,5 +38,7 @@ const word = new RegExp(String.raw`[${rune}](?:[${rune}\p{M}\u200C\u200D]*[${run
  * ```
  */
 export function kebabTag(text: string): string {
-  return text.normalize("NFC").toLowerCase().match(word)?.join("-") ?? "";
+  // Lowercasing comes first: some capitals have no precomposed form with their mark while their lowercase does, so
+  // normalizing after it keeps every tag precomposed, as the server requires.
+  return text.toLowerCase().normalize("NFC").match(word)?.join("-") ?? "";
 }
