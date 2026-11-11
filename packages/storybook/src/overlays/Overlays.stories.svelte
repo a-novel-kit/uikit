@@ -87,7 +87,7 @@
       </IconButton>
     {/snippet}
     {#snippet actions()}
-      <Button variant="ghost" tone="neutral" onclick={() => controller.close()}>Cancel</Button>
+      <Button variant="text" tone="neutral" onclick={() => controller.close()}>Cancel</Button>
       <Button tone="danger" onclick={() => controller.close()}>Archive</Button>
     {/snippet}
     <p class="dialog-copy">Other people will lose access until the item is restored.</p>
@@ -237,7 +237,7 @@
       {/each}
     </Stack>
     {#snippet actions()}
-      <Button variant="ghost" tone="neutral" onclick={controller.close}>Cancel</Button>
+      <Button variant="text" tone="neutral" onclick={controller.close}>Cancel</Button>
       <Button onclick={controller.close}>Save preferences</Button>
     {/snippet}
   </Dialog>

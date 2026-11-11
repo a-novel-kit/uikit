@@ -326,10 +326,15 @@ item.
     box-shadow: none;
   }
 
-  /* Dimming would halve the user's own disabled color. */
+  /* Dimming would halve the user's own disabled color, and a disabled choice's outline and indicator take it too. */
   @media (forced-colors: active) {
     .button[aria-pressed="true"]:disabled {
       opacity: 1;
+      outline-color: GrayText;
+    }
+
+    .button[aria-pressed="true"]:disabled::before {
+      background: GrayText;
     }
   }
 

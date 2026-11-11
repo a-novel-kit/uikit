@@ -64,6 +64,8 @@ upgrade.
   draws no border or glow any more, but for its indicator's: it turns blue, as the navigation's current item, whatever
   its tone. An outline button keeps its selection, and a disabled ghost or text button loses its border. A disabled
   choice, on a button or a chip, stays visible, dimmed. Screenshots that show one change.
+- A disabled `Combobox` or `FileInput` keeps its error look, as `Input` does, and a disabled `Combobox` drops its
+  border, as a disabled `Input`'s well does. A required `FileInput` the form found empty shows the error look.
 - `--layout-readable-measure-long` (80ch) bounds a short block set in a card, beside the 68ch running-text measure.
 - `Card` takes `surface="ghost"`, one item of a collection: the canvas's color under a raised card's veil and blur,
   ringed as a divider, lit as a raised card under the pointer or the keyboard's focus.

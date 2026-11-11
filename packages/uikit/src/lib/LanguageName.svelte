@@ -12,7 +12,9 @@ the option's accessible name is its label, which assistive technology then reads
 </script>
 
 <Select options={[{ value: "fr", label: "Français", lang: "fr" }]} controller={language}>
-  {#snippet renderOption(option: SelectOption<"fr">)}<LanguageName locale={option.value} name={option.label} />{/snippet}
+  {#snippet renderOption(option: SelectOption<"fr">)}
+    <LanguageName locale={option.value} name={option.label} />
+  {/snippet}
 </Select>
 ```
 -->

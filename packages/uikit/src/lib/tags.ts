@@ -8,7 +8,8 @@ const tagSeparators = /[\s,\u060c\u3001\uff0c]+/u;
  * @example
  * ```ts
  * import { kebabTag, splitTags } from "@a-novel-kit/uikit";
- * const tags = [...new Set(form.getAll("tags").flatMap((entry) => splitTags(String(entry))).map(kebabTag).filter(Boolean))];
+ * const entries = form.getAll("tags").flatMap((entry) => splitTags(String(entry)));
+ * const tags = [...new Set(entries.map(kebabTag).filter(Boolean))];
  * ```
  */
 export function splitTags(text: string): string[] {

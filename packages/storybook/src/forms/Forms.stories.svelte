@@ -106,6 +106,8 @@
   const tagsController = fixedTags(["slow-burn", "années-50", "maps"]);
   const longTagController = fixedTags(["a-tag-that-runs-far-longer-than-its-field-holds-on-one-line", "maps"]);
   const chosenGenresController = fixedValue<readonly string[]>(["fantasy", "mystery", "western"]);
+  // Leaves the disabled Western unchosen, so the enabled group shows a disabled option as well.
+  const someGenresController = fixedValue<readonly string[]>(["fantasy", "mystery"]);
   const coverController = fixedValue<readonly string[]>(["cover.png"]);
   const longFileController = fixedValue<readonly string[]>([
     "the-complete-annotated-manuscript-with-every-revision-and-editor-comment-final-v12.pdf",
@@ -304,7 +306,7 @@
       hint="Up to 10."
       name="genres"
       options={genreOptions}
-      controller={chosenGenresController}
+      controller={someGenresController}
     />
     <ChipGroup legend="Accent" name="accent" tone="accent" options={genreOptions} controller={chosenGenresController} />
     <ChipGroup

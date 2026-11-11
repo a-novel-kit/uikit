@@ -42,7 +42,7 @@
         description="Stack controls vertical rhythm; Inline aligns related controls and wraps when space runs out."
       >
         {#snippet actions()}
-          <Button variant="ghost" tone="neutral">Cancel</Button>
+          <Button variant="text" tone="neutral">Cancel</Button>
           <Button>Save layout</Button>
         {/snippet}
       </PageHeader>

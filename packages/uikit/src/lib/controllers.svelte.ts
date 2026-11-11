@@ -234,7 +234,7 @@ export function createPressedController({
 /** State managed for a single-value control. */
 export interface ValueState<Value> {
   /** Current control value. */
-  value: Value;
+  readonly value: Value;
 }
 
 /** Pure state transitions for a single-value control. */
@@ -491,7 +491,7 @@ export function createPictureFrameController({ source, ratio }: PictureFrameCont
 /** State managed for a tag input. */
 export interface TagInputState {
   /** The tags, in the order they were added, each once. */
-  tags: readonly string[];
+  readonly tags: readonly string[];
 }
 
 /** Pure state transitions for a tag input. */

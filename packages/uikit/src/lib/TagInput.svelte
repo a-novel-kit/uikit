@@ -84,18 +84,18 @@ Native attributes and events target the text input; `class` styles the surroundi
 
   /**
    * Ends a tag at every separator; what follows the last one stays as typed, unless the writer ends the field with
-   * Enter. A part the controller refuses stays in the field, so the writer keeps what they typed.
+   * Enter. A word the controller refuses stays in the field, so the writer keeps what they typed; the empty parts a
+   * separator at either end leaves never reach it, but leave the field. Reports whether the controller took a word,
+   * so an Enter that ends only refused ones submits the form.
    */
-  // Reports whether the controller took any word, so an Enter that ends only refused ones submits the form.
   function takeTags(input: HTMLInputElement, ending = false) {
     const parts = splitTags(input.value);
     const typing = ending ? "" : (parts.pop() ?? "");
-    if (parts.length === 0) return false;
+    const words = parts.filter(Boolean);
 
-    const refused = parts.filter((part) => !controller.add(part));
-    if (refused.length === parts.length) return false;
-    input.value = (ending ? refused : [...refused, typing]).join(" ");
-    return true;
+    const refused = words.filter((word) => !controller.add(word));
+    if (refused.length < parts.length) input.value = (ending ? refused : [...refused, typing]).join(" ");
+    return refused.length < words.length;
   }
 
   // Text still being composed with an input method is not the writer's yet: it ends its tags once composed.

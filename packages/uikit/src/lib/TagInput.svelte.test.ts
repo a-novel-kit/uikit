@@ -187,7 +187,7 @@ describe("TagInput", () => {
     form.remove();
   });
 
-  it("keeps typed text that its controller refuses, lets Enter submit it, and keeps a tag it does not remove", async () => {
+  it("keeps refused text, lets Enter submit it, and keeps a tag its controller does not remove", async () => {
     const controller = { state: { tags: ["maps", "noir"] }, add: () => false, remove: () => {} };
     const { getByRole } = render(TagInput, { props: { "aria-label": "Tags", name: "tags", controller } });
     const input = getByRole("textbox", { name: "Tags" }) as HTMLInputElement;
@@ -202,6 +202,30 @@ describe("TagInput", () => {
     input.value = "";
     await fireEvent.keyDown(input, { key: "Backspace" });
     expect(input.value).toBe("");
+  });
+
+  it("asks its controller only about words, never the empty parts a separator leaves", async () => {
+    const inner = createTagInputController();
+    const asked: string[] = [];
+    // Refuses what would make no tag, as a controller that validates the tag it makes does, and one word besides.
+    const add = (text: string) => (asked.push(text), text !== "nsfw" && kebabTag(text) !== "" && inner.add(text));
+    const controller = {
+      get state() {
+        return inner.state;
+      },
+      add,
+      remove: inner.remove,
+    };
+    const { getByRole } = render(TagInput, { props: { "aria-label": "Tags", name: "tags", controller } });
+    const input = getByRole("textbox", { name: "Tags" }) as HTMLInputElement;
+
+    await fireEvent.input(input, { target: { value: " noir " } });
+    expect(asked).toEqual(["noir"]);
+    expect(input.value).toBe("");
+
+    input.value = " nsfw";
+    expect(await fireEvent.keyDown(input, { key: "Enter" })).toBe(true);
+    expect(input.value).toBe("nsfw");
   });
 
   it("ends tags only once input method text is composed", async () => {
