@@ -159,8 +159,11 @@
   --color-text-secondary: var(--color-neutral-11);
   --color-text-muted: var(--color-neutral-10);
   --color-text-subtle: var(--color-neutral-9);
-  /* A field hint reads a step quieter than muted text and keeps 5.4:1 on every island that holds a field. */
-  --color-text-hint: color-mix(in oklab, var(--color-text-muted), var(--color-text-subtle));
+  /* A field hint reads as muted text, set apart from its label by its smaller size. A frosted card lets the lamp
+     through, so a hint any quieter fails 4.5:1 near the lamp; this one keeps at least 4.8:1 on a frosted card under
+     any palette lamp up to three quarters of its peak, which only the viewport's corner exceeds, where navigation
+     sits, and 6.6:1 in a dialog. */
+  --color-text-hint: var(--color-text-muted);
   --color-text-disabled: var(--color-neutral-8);
   --color-text-inverse: var(--color-neutral-1);
   --color-text-accent: var(--base-brand);
