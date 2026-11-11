@@ -512,7 +512,7 @@ export interface TagInputControllerOptions {
   initialTags?: readonly string[];
   /** Turns typed text into a tag; lower-kebab-case by default. */
   normalize?: (text: string) => string;
-  /** Runs after the default controller changes the tags. */
+  /** Runs after the default controller changes the tags, once per tag a paste adds. */
   onTagsChange?: (tags: readonly string[]) => void;
 }
 
@@ -532,7 +532,7 @@ export function createTagInputController({
   normalize = kebabTag,
   onTagsChange,
 }: TagInputControllerOptions = {}): TagInputController {
-  // Replaced whole on every change, so it needs no deep proxy: a long paste stays linear and the tags stay cloneable.
+  // Replaced whole on every change, so it needs no deep proxy and the tags stay cloneable.
   let state = $state.raw<TagInputState>({ tags: [...new Set(initialTags)] });
 
   function setTags(tags: readonly string[]) {

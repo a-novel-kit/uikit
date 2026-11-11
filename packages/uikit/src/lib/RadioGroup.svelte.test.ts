@@ -25,6 +25,17 @@ describe("RadioGroup", () => {
     form.remove();
   });
 
+  it("sends its choice to the form it names", () => {
+    const other = document.body.appendChild(document.createElement("form"));
+    other.id = "other-radio";
+    const options = [{ value: "fr", label: "French" }];
+    const controller = createValueController<string | undefined>({ initialValue: "fr" });
+    render(RadioGroup, { props: { legend: "Language", name: "language", options, controller, form: "other-radio" } });
+
+    expect(new FormData(other).get("language")).toBe("fr");
+    other.remove();
+  });
+
   it("names an option in the language it gives", () => {
     const options = [
       { value: "en", label: "English", lang: "en" },

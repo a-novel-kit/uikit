@@ -42,7 +42,14 @@ Provide a visible label or an accessible name.
       {#if description}<span class="description"><RenderContent content={description} /></span>{/if}
     </span>
   {/if}
-  <input checked={controller.state.checked} type="checkbox" role="switch" onchange={handleChange} {...rest} />
+  <input
+    checked={controller.state.checked}
+    defaultChecked={controller.state.checked}
+    type="checkbox"
+    role="switch"
+    onchange={handleChange}
+    {...rest}
+  />
 </label>
 
 <style>

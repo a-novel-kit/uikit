@@ -59,6 +59,16 @@ describe("FileInput", () => {
     expect(document.activeElement).toBe(input.element());
   });
 
+  it("keeps its error look while disabled, as Input does", () => {
+    const { input } = inForm({ invalid: true, disabled: true });
+    const probe = document.body.appendChild(document.createElement("span"));
+    probe.style.backgroundColor = "var(--color-feedback-error-border)";
+    const error = getComputedStyle(probe).backgroundColor;
+    probe.remove();
+
+    expect(getComputedStyle(input.element().parentElement!).borderTopColor).toBe(error);
+  });
+
   it("shows the error look once its form finds it required and empty", async () => {
     const { form, input } = inForm({ required: true });
 

@@ -51,17 +51,21 @@ describe("TagInput", () => {
     expect(input.value).toBe("slow-burn");
   });
 
-  it("keeps the text being typed as tags when the field loses focus", async () => {
-    const { input, sent } = renderTags();
+  it("leaves the typed word in the field when it loses focus, for the form to send after the tags", async () => {
+    const form = document.body.appendChild(document.createElement("form"));
+    const controller = createTagInputController({ initialTags: ["maps"] });
+    const { getByRole } = render(TagInput, { target: form, props: { "aria-label": "Tags", name: "tags", controller } });
+    const input = getByRole("textbox", { name: "Tags" }) as HTMLInputElement;
 
-    input.value = "huis clos";
+    input.value = "noir";
     await fireEvent.blur(input);
 
-    expect(sent()).toEqual(["huis", "clos"]);
-    expect(input.value).toBe("");
+    expect(controller.state.tags).toEqual(["maps"]);
+    expect(new FormData(form).getAll("tags")).toEqual(["maps", "noir"]);
+    form.remove();
   });
 
-  it("keeps only the words its controller refuses when the field ends", async () => {
+  it("keeps only the words its controller refuses when Enter ends the field", async () => {
     const controller = createTagInputController();
     const blocking = {
       get state() {
@@ -175,17 +179,6 @@ describe("TagInput", () => {
     input.value = "";
     await fireEvent.keyDown(input, { key: "Backspace" });
     expect(input.value).toBe("");
-  });
-
-  it("keeps a half-typed word as typed when the window, not the field, loses focus", async () => {
-    const { input, sent } = renderTags();
-    input.focus();
-    input.value = "slow-bu";
-
-    await fireEvent.blur(input);
-
-    expect(sent()).toEqual([]);
-    expect(input.value).toBe("slow-bu");
   });
 
   it("ends tags only once input method text is composed", async () => {

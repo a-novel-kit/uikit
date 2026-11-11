@@ -122,7 +122,9 @@
         <Button variant="text" {tone} aria-pressed="true">Text</Button>
         <Button variant="ghost" {tone} disabled>Disabled ghost</Button>
         <Button variant="text" {tone} disabled>Disabled text</Button>
-        <Button variant="ghost" {tone} aria-pressed="true" disabled>Chosen, disabled</Button>
+        <Button variant="outline" {tone} aria-pressed="true" disabled>Outline, chosen, disabled</Button>
+        <Button variant="ghost" {tone} aria-pressed="true" disabled>Ghost, chosen, disabled</Button>
+        <Button variant="text" {tone} aria-pressed="true" disabled>Text, chosen, disabled</Button>
       </Inline>
     {/each}
   </Stack>

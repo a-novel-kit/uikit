@@ -295,6 +295,7 @@ item.
 
     /* Forced colors paint the indicator Canvas, so it keeps its line in the text color. */
     :is(.ghost, .text)[aria-pressed="true"]::before {
+      box-shadow: none;
       background: CanvasText;
       forced-color-adjust: none;
     }

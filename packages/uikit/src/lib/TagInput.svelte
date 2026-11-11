@@ -85,7 +85,7 @@ Native attributes and events target the text input; `class` styles the surroundi
 
   /**
    * Ends a tag at every separator; what follows the last one stays as typed, unless the writer ends the field with
-   * Enter or by leaving it. A part the controller refuses stays in the field, so the writer keeps what they typed.
+   * Enter. A part the controller refuses stays in the field, so the writer keeps what they typed.
    */
   function takeTags(input: HTMLInputElement, ending = false) {
     const parts = splitTags(input.value);
@@ -126,14 +126,6 @@ Native attributes and events target the text input; `class` styles the surroundi
       controller.remove(count - 1);
       if (controller.state.tags.length < count) input.value = last;
     }
-  }
-
-  // Leaving the field keeps what was typed as a tag, so pressing the form's button sends it. A blur that leaves the
-  // input focused is the window losing focus, and the word being typed stays as typed.
-  function handleBlur(event: FocusEvent & { currentTarget: EventTarget & HTMLInputElement }) {
-    onblur?.(event);
-    if (document.activeElement === event.currentTarget) return;
-    if (event.currentTarget.value.trim()) takeTags(event.currentTarget, true);
   }
 
   // The removed tag's button leaves the page, so the text input takes the focus it held.
@@ -187,7 +179,7 @@ Native attributes and events target the text input; `class` styles the surroundi
     aria-invalid={isInvalid || undefined}
     oninput={handleInput}
     onkeydown={handleKeydown}
-    onblur={handleBlur}
+    {onblur}
     oncompositionend={handleCompositionEnd}
   />
   <VisuallyHidden id={statusId} role="status">{status}</VisuallyHidden>
@@ -228,7 +220,8 @@ Native attributes and events target the text input; `class` styles the surroundi
     overflow-wrap: anywhere;
   }
 
-  /* A button inside a field stays ghost: its icon, a color, and a light veil under the pointer. */
+  /* A button inside a field stays ghost: its icon, a color, and a veil of its own color under the pointer. It is
+     built here rather than from FieldButton, whose square would not fit a 20px badge. */
   .remove {
     display: grid;
     position: relative;
@@ -259,7 +252,7 @@ Native attributes and events target the text input; `class` styles the surroundi
 
   @media (hover: hover) {
     .remove:hover {
-      background: color-mix(in oklab, var(--color-text-inverse) var(--color-mix-2), transparent);
+      background: var(--color-action-subtle-hover);
     }
   }
 

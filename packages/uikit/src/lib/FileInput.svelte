@@ -183,6 +183,14 @@ Native attributes and events target the input; `class` styles the surrounding su
     background: var(--color-control-surface-focus);
   }
 
+  /* Before the error rules, as in Input, so a disabled field keeps its error look. */
+  .file-input:has(.control:disabled) {
+    cursor: not-allowed;
+    border-color: var(--color-field-border);
+    background: var(--color-control-surface-disabled);
+    color: var(--color-control-disabled-text);
+  }
+
   /* As Input's: an error, or a required field the form found empty, keeps its look while focused. */
   .file-input:has(.control[aria-invalid="true"], .control:user-invalid) {
     border-color: var(--color-feedback-error-border);
@@ -191,13 +199,6 @@ Native attributes and events target the input; `class` styles the surrounding su
 
   .file-input:has(.control[aria-invalid="true"]:focus-visible, .control:user-invalid:focus-visible) {
     box-shadow: var(--shadow-invalid-focus-ring);
-  }
-
-  .file-input:has(.control:disabled) {
-    cursor: not-allowed;
-    border-color: var(--color-field-border);
-    background: var(--color-control-surface-disabled);
-    color: var(--color-control-disabled-text);
   }
 
   .status {

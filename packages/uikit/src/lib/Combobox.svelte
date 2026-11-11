@@ -225,6 +225,7 @@ The hidden named input submits the selected value. The caller validates required
       type="text"
       role="combobox"
       value={inputValue}
+      defaultValue={inputValue}
       {placeholder}
       {autocomplete}
       {disabled}

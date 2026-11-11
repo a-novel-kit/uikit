@@ -35,6 +35,16 @@ describe("ChipGroup", () => {
     expect(Number(getComputedStyle(chip).opacity)).toBeLessThan(1);
   });
 
+  it("keeps its error surface while disabled", () => {
+    const options = [{ value: "fantasy", label: "Fantasy" }];
+    const { container } = render(ChipGroup, {
+      props: { legend: "Genres", name: "genres", options, disabled: true, error: "Too many." },
+    });
+
+    const well = container.querySelector(".chips")!;
+    expect(getComputedStyle(well).backgroundColor).toBe(resolveColor("var(--color-control-surface-invalid)"));
+  });
+
   it("dims its well while disabled", () => {
     const options = [{ value: "fantasy", label: "Fantasy" }];
     const { container } = render(ChipGroup, { props: { legend: "Genres", name: "genres", options, disabled: true } });

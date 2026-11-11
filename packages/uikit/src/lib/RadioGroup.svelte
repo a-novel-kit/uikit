@@ -80,6 +80,7 @@ Use `createValueController` with a selected option value or `undefined`.
           disabled={option.disabled}
           aria-label={option.label}
           lang={option.lang}
+          form={rest.form}
         />
         <span class="copy">
           {#if renderOption}

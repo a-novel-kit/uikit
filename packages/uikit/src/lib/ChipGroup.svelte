@@ -204,7 +204,7 @@ never sends; the controller keeps the order of choice.
     cursor: not-allowed;
   }
 
-  .chip-group:disabled .chips {
+  .chip-group:disabled:not(.invalid) .chips {
     background: var(--color-control-surface-disabled);
   }
 
@@ -245,6 +245,7 @@ never sends; the controller keeps the order of choice.
 
     /* The choice fills the chip, so the outline stays free for the focus ring. */
     .chip:has(:checked) {
+      box-shadow: none;
       background: Highlight;
       color: HighlightText;
       forced-color-adjust: none;
