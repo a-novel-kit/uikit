@@ -32,7 +32,7 @@
     "title": "Il y a un problème"
   },
   "fileInput": {
-    "clear": "Retirer le fichier",
+    "clear": "Retirer {{name}}",
     "count": "{{count}} fichiers",
     "placeholder": "Aucun fichier choisi"
   },
@@ -57,6 +57,9 @@
     "uncaptioned": "Tableau défilant"
   },
   "tagInput": {
+    "count": "{{count}} étiquettes",
+    "none": "Aucune étiquette",
+    "one": "1 étiquette",
     "remove": "Retirer {{tag}}"
   },
   "toastRegion": {

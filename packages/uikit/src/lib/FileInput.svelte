@@ -22,7 +22,10 @@ Native attributes and events target the input; `class` styles the surrounding su
     invalid?: boolean;
     /** State owner of the file names the field shows; each input has its own by default. */
     controller?: FileInputController;
-    /** Removes the choice; shows a cross at the end of the field while it is set. The caller empties its own state. */
+    /**
+     * Removes the choice; shows a cross at the end of the field once a file is chosen, named after it. The caller
+     * empties its own state.
+     */
     onclear?: () => void;
   }
 </script>
@@ -111,10 +114,10 @@ Native attributes and events target the input; `class` styles the surrounding su
     {status}
   </span>
   <span class="end">
-    {#if onclear}
+    {#if onclear && chosen.length > 0}
       <!-- Above the transparent input, so a click removes the choice instead of opening the picker. -->
       <span class="clear">
-        <FieldButton aria-label={t("fileInput.clear")} disabled={rest.disabled} onclick={clear}>
+        <FieldButton aria-label={t("fileInput.clear", { name: status })} disabled={rest.disabled} onclick={clear}>
           <XIcon size="var(--icon-size-sm)" aria-hidden="true" />
         </FieldButton>
       </span>
@@ -161,7 +164,9 @@ Native attributes and events target the input; `class` styles the surrounding su
   }
 
   @media (hover: hover) {
-    .file-input:hover:not(:has(.control:disabled, .control:focus-visible, .control[aria-invalid="true"])) {
+    .file-input:hover:not(
+        :has(.control:disabled, .control:focus-visible, .control[aria-invalid="true"], .control:user-invalid)
+      ) {
       border-color: var(--color-field-border);
       background: var(--color-control-surface-hover);
     }
@@ -177,12 +182,13 @@ Native attributes and events target the input; `class` styles the surrounding su
     background: var(--color-control-surface-focus);
   }
 
-  .file-input:has(.control[aria-invalid="true"]) {
+  /* As Input's: an error, or a required field the form found empty, keeps its look while focused. */
+  .file-input:has(.control[aria-invalid="true"], .control:user-invalid) {
     border-color: var(--color-feedback-error-border);
     background: var(--color-control-surface-invalid);
   }
 
-  .file-input:has(.control[aria-invalid="true"]:focus-visible) {
+  .file-input:has(.control[aria-invalid="true"]:focus-visible, .control:user-invalid:focus-visible) {
     box-shadow: var(--shadow-invalid-focus-ring);
   }
 

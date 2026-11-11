@@ -108,7 +108,7 @@
     docs: {
       description: {
         story:
-          "A chosen outline button keeps its tone and border. A chosen ghost or text button reads as the navigation's current item, blue whatever its tone, without a border or glow, and stays borderless while disabled.",
+          "A chosen outline button keeps its tone and border. A chosen ghost or text button reads as the navigation's current item, blue whatever its tone, with its indicator and without a border or glow, and stays borderless while disabled. A disabled choice stays visible, dimmed.",
       },
     },
   }}
@@ -122,6 +122,7 @@
         <Button variant="text" {tone} aria-pressed="true">Text</Button>
         <Button variant="ghost" {tone} disabled>Disabled ghost</Button>
         <Button variant="text" {tone} disabled>Disabled text</Button>
+        <Button variant="ghost" {tone} aria-pressed="true" disabled>Chosen, disabled</Button>
       </Inline>
     {/each}
   </Stack>

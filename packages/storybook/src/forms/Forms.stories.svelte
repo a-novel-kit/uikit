@@ -98,7 +98,7 @@
   const severalFilesController = fixedValue<readonly string[]>(["chapter-one.pdf", "chapter-two.pdf", "notes.txt"]);
   const tagsController = fixedTags(["slow-burn", "années-50", "maps"]);
   const longTagController = fixedTags(["a-tag-that-runs-far-longer-than-its-field-holds-on-one-line", "maps"]);
-  const chosenGenresController = fixedValue<readonly string[]>(["fantasy", "mystery"]);
+  const chosenGenresController = fixedValue<readonly string[]>(["fantasy", "mystery", "western"]);
   const coverController = fixedValue<readonly string[]>(["cover.png"]);
   const longFileController = fixedValue<readonly string[]>([
     "the-complete-annotated-manuscript-with-every-revision-and-editor-comment-final-v12.pdf",
@@ -236,7 +236,7 @@
   <div class="form">
     <Field label="Tags" hint="A space ends a tag.">
       {#snippet children(control)}
-        <TagInput {...control} name="tags" controller={tagsController} maxlength={24} />
+        <TagInput {...control} name="tags" controller={tagsController} />
       {/snippet}
     </Field>
     <Field label="Empty" hint="A space ends a tag.">

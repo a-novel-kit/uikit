@@ -2,7 +2,8 @@
 @component
 Picks any number of short options under a label, as a field does: each option is a chip in the field's well, lit
 when chosen. Each chip is a native checkbox, so the keyboard, assistive technology and the form need nothing else:
-the form receives every chosen value under `name`, in the options' order; the controller keeps the order of choice.
+the form receives every chosen value under `name`, in the options' order, except a disabled option's, which a form
+never sends; the controller keeps the order of choice.
 
 ```svelte
 <script lang="ts">
@@ -157,6 +158,7 @@ the form receives every chosen value under `name`, in the options' order; the co
     line-height: var(--line-height-compact);
     font-family: var(--font-family-interface);
     user-select: none;
+    overflow-wrap: anywhere;
   }
 
   .chip input {
@@ -208,7 +210,9 @@ the form receives every chosen value under `name`, in the options' order; the co
     color: var(--color-control-disabled-text);
   }
 
+  /* A chosen option that is disabled stays visible, dimmed: the form will not send it. */
   .chip:has(:checked:disabled) {
+    opacity: var(--opacity-disabled);
     box-shadow: none;
   }
 
@@ -241,6 +245,21 @@ the form receives every chosen value under `name`, in the options' order; the co
       background: Highlight;
       color: HighlightText;
       forced-color-adjust: none;
+    }
+
+    /* The fill is not forced, so neither is the ring around it. */
+    .chip:has(:focus-visible) {
+      outline-color: Highlight;
+    }
+
+    .chip:has(:disabled:not(:checked)) {
+      border-color: GrayText;
+      color: GrayText;
+    }
+
+    .chip:has(:checked:disabled) {
+      background: GrayText;
+      color: Canvas;
     }
   }
 </style>

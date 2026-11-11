@@ -32,12 +32,12 @@ describe("TagInput", () => {
     expect(sent()).toEqual(["科幻", "奇幻", "ラーメン", "noir"]);
   });
 
-  it("ends a tag at Enter, and lets an empty field's Enter through", async () => {
+  it("ends the tags typed at Enter, as a separator does, and lets an empty field's Enter through", async () => {
     const { input, sent } = renderTags();
 
     input.value = "Années 50";
     expect(await fireEvent.keyDown(input, { key: "Enter" })).toBe(false);
-    expect(sent()).toEqual(["années-50"]);
+    expect(sent()).toEqual(["années", "50"]);
 
     expect(await fireEvent.keyDown(input, { key: "Enter" })).toBe(true);
   });
@@ -51,14 +51,48 @@ describe("TagInput", () => {
     expect(input.value).toBe("slow-burn");
   });
 
-  it("keeps the text being typed as a tag when the field loses focus", async () => {
+  it("keeps the text being typed as tags when the field loses focus", async () => {
     const { input, sent } = renderTags();
 
     input.value = "huis clos";
     await fireEvent.blur(input);
 
-    expect(sent()).toEqual(["huis-clos"]);
+    expect(sent()).toEqual(["huis", "clos"]);
     expect(input.value).toBe("");
+  });
+
+  it("keeps only the words its controller refuses when the field ends", async () => {
+    const controller = createTagInputController();
+    const blocking = {
+      get state() {
+        return controller.state;
+      },
+      add: (text: string) => text !== "nsfw" && controller.add(text),
+      remove: controller.remove,
+    };
+    const { getByRole } = render(TagInput, { props: { "aria-label": "Tags", name: "tags", controller: blocking } });
+    const input = getByRole("textbox", { name: "Tags" }) as HTMLInputElement;
+
+    input.value = "nsfw horror";
+    await fireEvent.keyDown(input, { key: "Enter" });
+
+    expect(controller.state.tags).toEqual(["horror"]);
+    expect(input.value).toBe("nsfw");
+  });
+
+  it("tells assistive technology how many tags it holds", async () => {
+    const { getByRole, input } = renderTags(["maps"]);
+    const status = getByRole("status");
+    expect(status.textContent).toBe("1 tag");
+
+    await fireEvent.input(input, { target: { value: "noir " } });
+    expect(status.textContent).toBe("2 tags");
+
+    await fireEvent.keyDown(input, { key: "Backspace" });
+    await fireEvent.keyDown(input, { key: "Backspace" });
+    input.value = "";
+    await fireEvent.keyDown(input, { key: "Backspace" });
+    expect(status.textContent).toBe("No tags");
   });
 
   it("removes a tag with its cross and gives the focus back to the field", async () => {

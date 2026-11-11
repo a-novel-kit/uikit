@@ -13,7 +13,7 @@ Native attributes and events target the text input; `class` styles the surroundi
 
 <Field label="Tags" hint="A space ends a tag.">
   {#snippet children(control)}
-    <TagInput {...control} name="tags" maxlength={24} />
+    <TagInput {...control} name="tags" />
   {/snippet}
 </Field>
 ```
@@ -37,6 +37,7 @@ Native attributes and events target the text input; `class` styles the surroundi
 
 <script lang="ts">
   import Badge from "./Badge.svelte";
+  import VisuallyHidden from "./VisuallyHidden.svelte";
   import { createTagInputController } from "./controllers.svelte";
   import { useMessages } from "./internal/i18n";
   import { resolveInvalidState } from "./selection";
@@ -65,25 +66,29 @@ Native attributes and events target the text input; `class` styles the surroundi
   const isInvalid = $derived(resolveInvalidState(invalid, ariaInvalid));
   const tags = $derived(controller.state.tags);
   const editable = $derived(!disabled && !readonly);
+  // The status region tells assistive technology how many tags the field holds as it changes.
+  const status = $derived(
+    tags.length === 0
+      ? t("tagInput.none")
+      : tags.length === 1
+        ? t("tagInput.one")
+        : t("tagInput.count", { count: String(tags.length) })
+  );
 
   let field = $state<HTMLInputElement>();
 
   /**
-   * Ends a tag at every separator; what follows the last one stays as typed. A part the controller refuses stays in
-   * the field, so the writer keeps what they typed.
+   * Ends a tag at every separator; what follows the last one stays as typed, unless the writer ends the field with
+   * Enter or by leaving it. A part the controller refuses stays in the field, so the writer keeps what they typed.
    */
-  function takeTags(input: HTMLInputElement) {
+  function takeTags(input: HTMLInputElement, ending = false) {
     // Commas from other scripts end a tag too: Arabic, ideographic and full-width.
     const parts = input.value.split(/[\s,،、，]+/u);
-    const typing = parts.pop() ?? "";
+    const typing = ending ? "" : (parts.pop() ?? "");
     if (parts.length === 0) return;
 
     const refused = parts.filter((part) => !controller.add(part));
-    if (refused.length < parts.length) input.value = [...refused, typing].join(" ");
-  }
-
-  function finishTag(input: HTMLInputElement) {
-    if (controller.add(input.value)) input.value = "";
+    if (refused.length < parts.length) input.value = (ending ? refused : [...refused, typing]).join(" ");
   }
 
   // Text still being composed with an input method is not the writer's yet: it ends its tags once composed.
@@ -108,7 +113,7 @@ Native attributes and events target the text input; `class` styles the surroundi
     if (event.key === "Enter" && input.value.trim()) {
       // A tag being typed ends here; an empty field lets Enter submit the form.
       event.preventDefault();
-      finishTag(input);
+      takeTags(input, true);
     } else if (event.key === "Backspace" && input.value === "" && tags.length > 0) {
       event.preventDefault();
       const count = tags.length;
@@ -123,7 +128,7 @@ Native attributes and events target the text input; `class` styles the surroundi
   function handleBlur(event: FocusEvent & { currentTarget: EventTarget & HTMLInputElement }) {
     onblur?.(event);
     if (document.activeElement === event.currentTarget) return;
-    if (event.currentTarget.value.trim()) finishTag(event.currentTarget);
+    if (event.currentTarget.value.trim()) takeTags(event.currentTarget, true);
   }
 
   // The removed tag's button leaves the page, so the text input takes the focus it held.
@@ -176,6 +181,7 @@ Native attributes and events target the text input; `class` styles the surroundi
     onblur={handleBlur}
     oncompositionend={handleCompositionEnd}
   />
+  <VisuallyHidden role="status">{status}</VisuallyHidden>
 </div>
 
 <style>
@@ -216,6 +222,7 @@ Native attributes and events target the text input; `class` styles the surroundi
   /* A button inside a field stays ghost: its icon, a color, and a light veil under the pointer. */
   .remove {
     display: grid;
+    position: relative;
     place-items: center;
     cursor: pointer;
     margin-inline-end: calc(var(--space-1) * -1);
@@ -225,6 +232,13 @@ Native attributes and events target the text input; `class` styles the surroundi
     padding: 0;
     color: inherit;
     font: inherit;
+  }
+
+  /* An unseen hit area grows the cross to an icon button's size without moving the tag. */
+  .remove::after {
+    position: absolute;
+    inset: calc((1em - var(--icon-size-lg)) / 2);
+    content: "";
   }
 
   /* Without scripting nothing removes a tag, so the crosses stay hidden. */

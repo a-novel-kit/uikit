@@ -268,10 +268,26 @@ item.
     color: var(--color-navigation-selected-text);
   }
 
-  /* Forced colors drop the blue surface, so a Highlight border marks the current item, as NavList does. */
+  /* A chosen toggle also carries the navigation's indicator under its label, which no hover draws, so a
+     brand toggle under the pointer never reads as chosen. */
+  :is(.ghost, .text)[aria-pressed="true"] {
+    position: relative;
+  }
+
+  :is(.ghost, .text)[aria-pressed="true"]::before {
+    position: absolute;
+    inset-block: auto 0;
+    inset-inline: var(--space-2);
+    box-shadow: var(--shadow-indicator-brand);
+    background: var(--color-navigation-selected-indicator);
+    block-size: var(--border-width-strong);
+    content: "";
+  }
+
+  /* Forced colors drop the blue surface, so an outline marks the current item, as NavList's does. */
   @media (forced-colors: active) {
-    :is(.ghost, .text):is([aria-pressed="true"], [aria-current="page"]) {
-      border-color: Highlight;
+    :is(.ghost, .text):is([aria-pressed="true"], [aria-current="page"]):not(:focus-visible) {
+      outline: var(--border-width-thin) solid CanvasText;
     }
   }
 
@@ -279,9 +295,17 @@ item.
     opacity: 1;
     cursor: not-allowed;
     box-shadow: none;
+  }
+
+  .button:disabled:not([aria-pressed="true"]) {
     border-color: var(--color-action-disabled-border);
     background-color: var(--color-action-disabled-surface);
     color: var(--color-action-disabled-text);
+  }
+
+  /* A disabled choice stays visible, dimmed, as a disabled chosen chip does. */
+  .button[aria-pressed="true"]:disabled {
+    opacity: var(--opacity-disabled);
   }
 
   /* A ghost or text button stays borderless while disabled too. */

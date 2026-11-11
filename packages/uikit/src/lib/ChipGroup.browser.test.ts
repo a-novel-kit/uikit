@@ -16,6 +16,15 @@ function resolveColor(value: string) {
 }
 
 describe("ChipGroup", () => {
+  it("dims a chosen option that is disabled", () => {
+    const options = [{ value: "western", label: "Western", disabled: true }];
+    const controller = { state: { value: ["western"] }, setValue: () => {} };
+    const { container } = render(ChipGroup, { props: { legend: "Genres", name: "genres", options, controller } });
+
+    const chip = container.querySelector(".chip")!;
+    expect(Number(getComputedStyle(chip).opacity)).toBeLessThan(1);
+  });
+
   it("dims its well while disabled", () => {
     const options = [{ value: "fantasy", label: "Fantasy" }];
     const { container } = render(ChipGroup, { props: { legend: "Genres", name: "genres", options, disabled: true } });

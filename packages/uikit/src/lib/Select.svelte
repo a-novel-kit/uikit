@@ -266,7 +266,7 @@ The hidden named input submits the selected value. The caller validates required
     onclick={handleTriggerClick}
     onkeydown={handleTriggerKeyDown}
   >
-    <span data-select-value>
+    <span data-select-value lang={selectedOption?.lang}>
       {#if selectedOption}
         {#if renderOption}{@render renderOption(selectedOption)}{:else}{selectedOption.label}{/if}
       {:else}

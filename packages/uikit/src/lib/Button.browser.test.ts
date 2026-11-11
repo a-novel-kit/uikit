@@ -144,6 +144,27 @@ describe("low-emphasis action feedback", () => {
   });
 });
 
+describe("chosen toggles", () => {
+  it.each(["ghost", "text"] as const)(
+    "marks a chosen %s toggle with an indicator no hover draws, and keeps a disabled choice visible",
+    async (variant) => {
+      const { getByRole, rerender } = render(Button, { variant, "aria-pressed": false, "aria-label": "Snap" });
+      const button = getByRole("button");
+      await userEvent.hover(button);
+      expect(getComputedStyle(button, "::before").content).toBe("none");
+
+      await rerender({ "aria-pressed": true });
+      expect(getComputedStyle(button, "::before").content).not.toBe("none");
+
+      await rerender({ "aria-pressed": true, disabled: true });
+      await expect
+        .poll(() => getComputedStyle(button).backgroundColor)
+        .toBe(resolveColor("var(--color-navigation-selected-surface)"));
+      expect(Number(getComputedStyle(button).opacity)).toBeLessThan(1);
+    }
+  );
+});
+
 describe("borderless buttons", () => {
   it.each(["ghost", "text"] as const)("keeps a disabled %s button borderless", (variant) => {
     const { getByRole } = render(Button, { variant, disabled: true, "aria-label": "Preview" });

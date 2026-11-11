@@ -490,7 +490,7 @@
   /* iOS ignores a fixed background, so the canvas paints its fill on a layer fixed to the viewport
      behind the page, and the root element keeps the plain canvas color accessibility checks measure
      text against. Navigation stays in the viewport's corner, so the light it carries lines up with
-     the canvas in every browser; its text keeps muted 4.8:1 and links 4.9:1 under any palette lamp.
+     the canvas in every browser; its text keeps at least 4.6:1, muted or linked, under any palette lamp.
      Frosted islands let the canvas's light through. */
   --fill-canvas: var(--gradient-lamp) fixed, var(--color-surface-canvas);
   --fill-navigation: var(--gradient-lamp) fixed, var(--color-surface-island-strong);

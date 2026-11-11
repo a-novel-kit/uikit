@@ -30,14 +30,15 @@ describe("FileInput", () => {
   });
 
   it("opens the picker from its folder icon, and removes the choice from its cross", () => {
-    const { input } = inForm({ onclear: () => undefined });
+    const controller = { state: { value: ["chapter-one.pdf"] }, setValue: () => undefined };
+    const { input } = inForm({ onclear: () => undefined, controller });
     const control = input.element();
     const surface = control.parentElement!;
     const centerOf = (element: Element) => {
       const box = element.getBoundingClientRect();
       return document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2);
     };
-    const cross = page.getByRole("button", { name: "Remove the file" }).element();
+    const cross = page.getByRole("button", { name: "Remove chapter-one.pdf" }).element();
 
     expect(centerOf(surface.querySelector(".browse")!)).toBe(control);
     expect(cross.contains(centerOf(cross))).toBe(true);
@@ -49,13 +50,27 @@ describe("FileInput", () => {
     await userEvent.upload(input, chapter);
     await expect.element(page.getByText("chapter-one.pdf")).toBeVisible();
 
-    await page.getByRole("button", { name: "Remove the file" }).click();
+    await page.getByRole("button", { name: "Remove chapter-one.pdf" }).click();
 
     await expect.element(page.getByText("No file chosen")).toBeVisible();
     expect(new FormData(form).getAll("files").filter((file) => file instanceof File && file.size > 0)).toEqual([]);
     expect(cleared).toBe(1);
     // The cross may leave with the choice, so the field holds the focus it had.
     expect(document.activeElement).toBe(input.element());
+  });
+
+  it("shows the error look once its form finds it required and empty", async () => {
+    const { form, input } = inForm({ required: true });
+
+    form.requestSubmit();
+
+    const surface = input.element().parentElement!;
+    await Promise.all(surface.getAnimations().map((animation) => animation.finished));
+    const probe = document.body.appendChild(document.createElement("span"));
+    probe.style.backgroundColor = "var(--color-feedback-error-border)";
+    const error = getComputedStyle(probe).backgroundColor;
+    probe.remove();
+    expect(getComputedStyle(surface).borderTopColor).toBe(error);
   });
 
   it("shows the name of the chosen file", async () => {

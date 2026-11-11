@@ -102,6 +102,10 @@ describe("Select", () => {
     await tick();
 
     expect(getByRole("option", { name: "Français" }).getAttribute("lang")).toBe("fr");
+    // The value the field shows carries the chosen option's language too.
+    controller.select("fr");
+    await tick();
+    expect(getByRole("combobox").querySelector("[data-select-value]")?.getAttribute("lang")).toBe("fr");
   });
 
   it("gives a listbox its controller opened an active option", async () => {

@@ -1,8 +1,8 @@
 <!--
 @component
 Lays out actions at their natural width, side by side at the end of the line, and stacked full width below
-35rem. Preserves source order, so the primary action comes last: at the end on a wide screen, under the thumb on a
-phone. Use ButtonGroup when the controls also need a named group.
+35rem. Put the primary action last: source order is kept, so it ends the line on a wide screen and sits under the
+thumb on a phone. Use ButtonGroup when the controls also need a named group.
 -->
 <script lang="ts" module>
   import type { HTMLAttributes } from "svelte/elements";

@@ -72,4 +72,6 @@ upgrade.
 - `ChipGroup` picks options under a field's label, each a chip in the field's well, sized as a badge.
 - `LanguageName` sets a language's flag beside its name, for every language select. A select option takes `lang`,
   so assistive technology reads the name in its own language.
-- `FileInput` takes `onclear`, a cross that removes the choice.
+- `FileInput` takes `onclear`, a cross that removes the choice once a file is chosen, named after it.
+- A chosen ghost or text toggle carries the navigation's indicator under its label, and a disabled choice, on a
+  button or a chip, stays visible, dimmed.
