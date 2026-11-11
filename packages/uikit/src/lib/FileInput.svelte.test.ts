@@ -53,7 +53,7 @@ describe("FileInput", () => {
     expect(getByText("restored.pdf")).toBeTruthy();
   });
 
-  it("removes the choice with its cross, which a click on reaches before the picker", async () => {
+  it("calls onclear from its cross", async () => {
     const onclear = vi.fn();
     const { getByRole } = render(FileInput, { props: { "aria-label": "Logo", onclear } });
 

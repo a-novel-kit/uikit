@@ -58,10 +58,11 @@ upgrade.
 ## Notes
 
 - `Badge` takes `tone="accent"`, the magenta for a distinction that reports nothing, rarer than `brand`, from the
-  new `--color-accent-text` token. Badges drop
-  to the regular weight, so screenshots that show one change.
-- A chosen ghost or text button (`aria-pressed="true"`) draws no border or glow any more: it turns blue, as the
-  navigation's current item, whatever its tone. An outline button keeps its selection. Screenshots that show one
+  new `--color-accent-secondary` token.
+- Badges drop to the regular weight, so screenshots that show one change.
+- A chosen ghost or text button (`aria-pressed="true"`, as a pressed `ToggleButton` or `ToolbarToggleButton` sets)
+  draws no border or glow any more: it turns blue, as the navigation's current item, whatever its tone. An outline
+  button keeps its selection, and a disabled ghost or text button loses its border. Screenshots that show one
   change.
 - `--layout-readable-measure-long` (80ch) bounds a short block set in a card, beside the 68ch running-text measure.
 - `Card` takes `surface="ghost"`, one item of a collection: the canvas's color under a raised card's veil and blur,
@@ -69,5 +70,6 @@ upgrade.
 - `TagInput` and `createTagInputController` collect tags as GitHub's topics do; `kebabTag` writes text in
   lower-kebab-case. A controller's `add` reports whether it took the text, so a tag it refuses stays typed.
 - `ChipGroup` picks options under a field's label, each a chip in the field's well, sized as a badge.
-- `LanguageName` sets a language's flag beside its name, for every language select.
+- `LanguageName` sets a language's flag beside its name, for every language select. A select option takes `lang`,
+  so assistive technology reads the name in its own language.
 - `FileInput` takes `onclear`, a cross that removes the choice.

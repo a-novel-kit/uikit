@@ -1,7 +1,8 @@
 <!--
 @component
 A language's flag and its name, set in that language so a reader lost in another one still finds theirs. Render it
-as a select's option, so every language choice in the platform reads the same.
+as a select's option, so every language choice in the platform reads the same, and give the option its `lang` too:
+the option's accessible name is its label, which assistive technology then reads in that language.
 
 ```svelte
 <script lang="ts">
@@ -10,7 +11,7 @@ as a select's option, so every language choice in the platform reads the same.
   const language = createSelectController<"fr">({ initialValue: "fr" });
 </script>
 
-<Select options={[{ value: "fr", label: "Français" }]} controller={language}>
+<Select options={[{ value: "fr", label: "Français", lang: "fr" }]} controller={language}>
   {#snippet renderOption(option: SelectOption<"fr">)}<LanguageName locale={option.value} name={option.label} />{/snippet}
 </Select>
 ```

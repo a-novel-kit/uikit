@@ -16,6 +16,8 @@ export interface SelectionOption<Value extends string> {
   value: Value;
   /** Plain-text label used for display, filtering, and accessibility. */
   label: string;
+  /** Language of the label when it differs from the page's, as a language's own name does. Select sets it. */
+  lang?: string;
   /** Prevents the option from being selected. */
   disabled?: boolean;
 }

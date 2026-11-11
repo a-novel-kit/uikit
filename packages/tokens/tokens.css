@@ -292,9 +292,9 @@
     var(--color-surface-subtle)
   );
   --color-feedback-info-text: var(--base-brand);
-  /* The magenta for a distinction that reports nothing, such as a project's genres: rarer than the brand
-     blue, never a failure. Dark text keeps 5.2:1 on it. */
-  --color-accent-text: var(--base-pressure);
+  /* The second accent: the magenta for a distinction that reports nothing, such as a project's genres,
+     rarer than the brand blue and never a failure. Dark text keeps 5.2:1 on it. */
+  --color-accent-secondary: var(--base-pressure);
   /* Signal highlights what deserves notice without calling for action, such as an upcoming change. */
   --color-feedback-highlight-surface: color-mix(
     in oklab,
@@ -490,7 +490,7 @@
   /* iOS ignores a fixed background, so the canvas paints its fill on a layer fixed to the viewport
      behind the page, and the root element keeps the plain canvas color accessibility checks measure
      text against. Navigation stays in the viewport's corner, so the light it carries lines up with
-     the canvas in every browser; its text keeps muted 5.2:1 and links 4.9:1 under any palette lamp.
+     the canvas in every browser; its text keeps muted 4.8:1 and links 4.9:1 under any palette lamp.
      Frosted islands let the canvas's light through. */
   --fill-canvas: var(--gradient-lamp) fixed, var(--color-surface-canvas);
   --fill-navigation: var(--gradient-lamp) fixed, var(--color-surface-island-strong);

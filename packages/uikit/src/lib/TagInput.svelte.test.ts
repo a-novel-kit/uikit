@@ -24,6 +24,14 @@ describe("TagInput", () => {
     expect(input.value).toBe("tw");
   });
 
+  it("ends a tag at the Arabic, ideographic and full-width commas too", async () => {
+    const { input, sent } = renderTags();
+
+    await fireEvent.input(input, { target: { value: "科幻，奇幻、ラーメン،noir " } });
+
+    expect(sent()).toEqual(["科幻", "奇幻", "ラーメン", "noir"]);
+  });
+
   it("ends a tag at Enter, and lets an empty field's Enter through", async () => {
     const { input, sent } = renderTags();
 
@@ -135,6 +143,15 @@ describe("TagInput", () => {
     await fireEvent.compositionEnd(input);
     expect(sent()).toEqual(["ni"]);
     expect(input.value).toBe("hao");
+  });
+
+  it("takes the last tag back on a Backspace an Android keyboard sends as key code 229", async () => {
+    const { input, sent } = renderTags(["maps", "slow-burn"]);
+
+    await fireEvent.keyDown(input, { key: "Backspace", keyCode: 229 });
+
+    expect(sent()).toEqual(["maps"]);
+    expect(input.value).toBe("slow-burn");
   });
 
   it("sends its tags to the form it names, and stays required for assistive technology once filled", () => {

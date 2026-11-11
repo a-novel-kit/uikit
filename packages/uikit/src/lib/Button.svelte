@@ -1,8 +1,9 @@
 <!--
 @component
 Renders a styled native button. Defaults to `type="button"`; use `type="submit"` for form submission.
-Pass `href` for navigation: it renders a native link with the same appearance. A ghost or text link
-with `aria-current="page"` reads as the navigation's current item.
+Pass `href` for navigation: it renders a native link with the same appearance. A ghost or text button
+chosen with `aria-pressed`, or a ghost or text link with `aria-current="page"`, reads as the navigation's current
+item.
 
 ```svelte
 <script lang="ts">
@@ -265,6 +266,13 @@ with `aria-current="page"` reads as the navigation's current item.
   :is(.ghost, .text):is([aria-pressed="true"], [aria-current="page"]) {
     background-color: var(--color-navigation-selected-surface);
     color: var(--color-navigation-selected-text);
+  }
+
+  /* Forced colors drop the blue surface, so a Highlight border marks the current item, as NavList does. */
+  @media (forced-colors: active) {
+    :is(.ghost, .text):is([aria-pressed="true"], [aria-current="page"]) {
+      border-color: Highlight;
+    }
   }
 
   .button:disabled {

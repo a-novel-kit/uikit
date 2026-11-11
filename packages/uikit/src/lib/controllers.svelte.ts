@@ -508,7 +508,7 @@ export interface TagInputController {
 
 /** Configuration for the default tag input controller. */
 export interface TagInputControllerOptions {
-  /** Initial tags, each kept once. */
+  /** Initial tags, taken as written, each kept once. */
   initialTags?: readonly string[];
   /** Turns typed text into a tag; lower-kebab-case by default. */
   normalize?: (text: string) => string;

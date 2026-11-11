@@ -1,7 +1,7 @@
 <script module lang="ts">
   import type { ComponentProps } from "svelte";
 
-  import { Button, Inline } from "@a-novel-kit/uikit";
+  import { Button, Inline, Stack } from "@a-novel-kit/uikit";
 
   import { Save as SaveIcon } from "@lucide/svelte";
   import { defineMeta } from "@storybook/addon-svelte-csf";
@@ -114,13 +114,17 @@
   }}
   asChild
 >
-  <Inline gap="4" wrap role="group" aria-label="Chosen buttons by variant">
-    <Button variant="outline" tone="neutral" aria-pressed="true">Outline</Button>
-    <Button variant="ghost" tone="neutral" aria-pressed="true">Ghost</Button>
-    <Button variant="text" tone="neutral" aria-pressed="true">Text</Button>
-    <Button variant="ghost" tone="neutral" disabled>Disabled ghost</Button>
-    <Button variant="text" tone="neutral" disabled>Disabled text</Button>
-  </Inline>
+  <Stack gap="3">
+    {#each ["brand", "neutral"] as const as tone (tone)}
+      <Inline gap="4" wrap role="group" aria-label="Chosen {tone} buttons by variant">
+        <Button variant="outline" {tone} aria-pressed="true">Outline</Button>
+        <Button variant="ghost" {tone} aria-pressed="true">Ghost</Button>
+        <Button variant="text" {tone} aria-pressed="true">Text</Button>
+        <Button variant="ghost" {tone} disabled>Disabled ghost</Button>
+        <Button variant="text" {tone} disabled>Disabled text</Button>
+      </Inline>
+    {/each}
+  </Stack>
 </Story>
 <Story name="Icon and text" asChild>
   <Button><SaveIcon size="var(--icon-size-sm)" aria-hidden="true" />Save changes</Button>

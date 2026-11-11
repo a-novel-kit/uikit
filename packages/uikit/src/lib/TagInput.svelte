@@ -73,7 +73,8 @@ Native attributes and events target the text input; `class` styles the surroundi
    * the field, so the writer keeps what they typed.
    */
   function takeTags(input: HTMLInputElement) {
-    const parts = input.value.split(/[\s,]+/u);
+    // Commas from other scripts end a tag too: Arabic, ideographic and full-width.
+    const parts = input.value.split(/[\s,،、，]+/u);
     const typing = parts.pop() ?? "";
     if (parts.length === 0) return;
 
@@ -98,8 +99,9 @@ Native attributes and events target the text input; `class` styles the surroundi
 
   function handleKeydown(event: KeyboardEvent & { currentTarget: EventTarget & HTMLInputElement }) {
     onkeydown?.(event);
-    // WebKit sends the Enter that confirms a composition after it ends, as key code 229.
-    const composing = event.isComposing || event.keyCode === 229;
+    // WebKit sends the Enter that confirms a composition after it ends, as key code 229. Only that Enter counts:
+    // Android keyboards send 229 for every key, Backspace included.
+    const composing = event.isComposing || (event.key === "Enter" && event.keyCode === 229);
     if (event.defaultPrevented || composing || !editable) return;
 
     const input = event.currentTarget;
@@ -238,9 +240,11 @@ Native attributes and events target the text input; `class` styles the surroundi
     }
   }
 
+  /* The ring sits inside the badge in its text color: the brand ring would vanish on the brand badge, and an outer
+     ring would cover the tag's last letter. */
   .remove:focus-visible {
-    outline: var(--focus-ring-width) solid var(--color-focus-ring);
-    outline-offset: var(--focus-ring-offset);
+    outline: var(--border-width-strong) solid var(--color-text-inverse);
+    outline-offset: 0;
   }
 
   .control {
@@ -263,7 +267,10 @@ Native attributes and events target the text input; `class` styles the surroundi
   }
 
   @media (hover: hover) {
-    .tag-input:hover:not(.invalid, :has(.control:disabled, .control:read-only, .control:focus-visible)) {
+    .tag-input:hover:not(
+        .invalid,
+        :has(.control:disabled, .control:read-only, .control:focus-visible, .control:user-invalid)
+      ) {
       background: var(--color-control-surface-hover);
     }
   }
@@ -290,17 +297,21 @@ Native attributes and events target the text input; `class` styles the surroundi
     color: var(--color-control-disabled-text);
   }
 
-  .tag-input.invalid {
+  /* As Input's: an error, or a required field the form found empty, keeps its look while focused. */
+  .tag-input:is(.invalid, :has(.control:user-invalid)) {
     border-color: var(--color-feedback-error-border);
     background: var(--color-control-surface-invalid);
   }
 
-  .tag-input.invalid:has(.control:focus-visible) {
+  .tag-input:is(.invalid, :has(.control:user-invalid)):has(.control:focus-visible) {
     box-shadow: var(--shadow-invalid-focus-ring);
+    border-color: var(--color-feedback-error-border);
+    background: var(--color-control-surface-invalid);
   }
 
+  /* A small field keeps a small button's height once it holds a tag. */
   .sm {
-    padding: var(--space-1) var(--space-3);
+    padding: calc(var(--space-1) / var(--multiplier-2)) var(--space-3);
     min-block-size: var(--control-height-sm);
     font-size: var(--font-size-sm);
   }

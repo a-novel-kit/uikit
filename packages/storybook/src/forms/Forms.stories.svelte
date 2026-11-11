@@ -145,6 +145,31 @@
 
 <Story name="File upload states" asChild>
   <div class="form">
+    <Field label="Chosen, with its cross">
+      {#snippet children(control)}
+        <FileInput {...control} controller={coverController} onclear={() => {}} />
+      {/snippet}
+    </Field>
+    <Field label="Chosen, invalid" error="Choose an image under 256 KiB.">
+      {#snippet children(control)}
+        <FileInput {...control} controller={coverController} onclear={() => {}} />
+      {/snippet}
+    </Field>
+    <Field label="Chosen, disabled">
+      {#snippet children(control)}
+        <FileInput {...control} controller={coverController} onclear={() => {}} disabled />
+      {/snippet}
+    </Field>
+    <Field label="Chosen, small">
+      {#snippet children(control)}
+        <FileInput {...control} controller={coverController} onclear={() => {}} controlSize="sm" />
+      {/snippet}
+    </Field>
+    <Field label="Chosen, large">
+      {#snippet children(control)}
+        <FileInput {...control} controller={coverController} onclear={() => {}} controlSize="lg" />
+      {/snippet}
+    </Field>
     <Field label="One file">
       {#snippet children(control)}
         <FileInput {...control} controller={oneFileController} />
@@ -196,7 +221,18 @@
   </div>
 </Story>
 
-<Story name="Tags" asChild>
+<Story
+  name="Tags"
+  parameters={{
+    docs: {
+      description: {
+        story:
+          "A space, a comma (Arabic, ideographic and full-width ones included) or Enter ends a tag; Backspace in the empty field takes the last tag back as text, and each tag's cross removes it. Text an input method is still composing stays as typed. The controller writes tags in lower-kebab-case through `kebabTag` and owns limits: its `add` reports whether it took the text, so a tag it refuses stays typed. The form receives each tag under `name`.",
+      },
+    },
+  }}
+  asChild
+>
   <div class="form">
     <Field label="Tags" hint="A space ends a tag.">
       {#snippet children(control)}
@@ -243,7 +279,18 @@
   </div>
 </Story>
 
-<Story name="Chips" asChild>
+<Story
+  name="Chips"
+  parameters={{
+    docs: {
+      description: {
+        story:
+          "Each chip is a native checkbox under the group's legend, so Tab, Space and assistive technology work as for any checkbox. The controller holds the chosen values in the order of choice and may refuse one, which the chip then takes back; the form receives them in the options' order. A disabled group dims its well and keeps its choice visible.",
+      },
+    },
+  }}
+  asChild
+>
   <div class="form">
     <ChipGroup
       legend="Genres"
@@ -253,7 +300,13 @@
       controller={chosenGenresController}
     />
     <ChipGroup legend="Accent" name="accent" tone="accent" options={genreOptions} controller={chosenGenresController} />
-    <ChipGroup legend="Invalid" error="Up to 10 genres." name="invalid" options={genreOptions} />
+    <ChipGroup
+      legend="Invalid"
+      error="Up to 10 genres."
+      name="invalid"
+      options={genreOptions}
+      controller={chosenGenresController}
+    />
     <ChipGroup legend="Disabled" name="disabled" options={genreOptions} controller={chosenGenresController} disabled />
   </div>
 </Story>

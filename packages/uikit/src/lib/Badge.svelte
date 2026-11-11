@@ -48,7 +48,7 @@ Labels a category or status compactly. Use InlineMessage when changes need live 
   }
 
   .accent {
-    --badge-accent: var(--color-accent-text);
+    --badge-accent: var(--color-accent-secondary);
   }
 
   .highlight {

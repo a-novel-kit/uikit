@@ -117,7 +117,7 @@
         <li>
           <Card surface="ghost">
             <Stack gap="2">
-              <strong>{item.title}</strong>
+              <a href="#{item.title}">{item.title}</a>
               <span class="muted">{item.text}</span>
             </Stack>
           </Card>
@@ -158,6 +158,11 @@
   .mosaic > li {
     break-inside: avoid;
     padding-block-end: var(--space-4);
+  }
+  .mosaic a {
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-bold);
+    font-family: var(--font-family-interface);
   }
   strong {
     color: var(--color-text-primary);

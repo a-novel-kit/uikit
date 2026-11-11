@@ -88,6 +88,7 @@ the form receives every chosen value under `name`, in the options' order; the co
           checked={chosen.includes(option.value)}
           disabled={option.disabled}
           aria-invalid={error ? true : undefined}
+          form={rest.form}
           onchange={(event) => choose(event.currentTarget)}
         />
         {option.label}
@@ -178,7 +179,7 @@ the form receives every chosen value under `name`, in the options' order; the co
   }
 
   .accent {
-    --chip-chosen: var(--color-accent-text);
+    --chip-chosen: var(--color-accent-secondary);
   }
 
   .chip:has(:checked) {
@@ -193,9 +194,13 @@ the form receives every chosen value under `name`, in the options' order; the co
     outline-offset: var(--border-width-strong);
   }
 
-  /* A disabled chip keeps its choice visible, as a disabled TagInput keeps its tags lit. */
+  /* A disabled group dims its well, as a disabled TagInput does, and its chips keep their choice visible. */
   .chip:has(:disabled) {
     cursor: not-allowed;
+  }
+
+  .chip-group:disabled .chips {
+    background: var(--color-control-surface-disabled);
   }
 
   .chip:has(:disabled:not(:checked)) {
@@ -231,8 +236,11 @@ the form receives every chosen value under `name`, in the options' order; the co
       border: var(--border-width-thin) solid CanvasText;
     }
 
+    /* The choice fills the chip, so the outline stays free for the focus ring. */
     .chip:has(:checked) {
-      outline: var(--border-width-strong) solid Highlight;
+      background: Highlight;
+      color: HighlightText;
+      forced-color-adjust: none;
     }
   }
 </style>

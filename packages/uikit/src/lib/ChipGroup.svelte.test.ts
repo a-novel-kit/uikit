@@ -41,6 +41,16 @@ describe("ChipGroup", () => {
     expect(controller.state.value).toEqual(["fantasy"]);
   });
 
+  it("sends its choices to the form it names", () => {
+    const other = document.body.appendChild(document.createElement("form"));
+    other.id = "other";
+    const controller = createValueController<readonly string[]>({ initialValue: ["fantasy"] });
+    render(ChipGroup, { props: { legend: "Genres", name: "genres", options, controller, form: "other" } });
+
+    expect(new FormData(other).getAll("genres")).toEqual(["fantasy"]);
+    other.remove();
+  });
+
   it("takes back a choice its controller refuses", async () => {
     const controller = { state: { value: [] }, setValue: () => {} };
     const { getByRole } = render(ChipGroup, { props: { legend: "Genres", name: "genres", options, controller } });

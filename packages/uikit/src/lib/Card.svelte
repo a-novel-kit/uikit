@@ -79,7 +79,8 @@ ringed as a divider, and lit as a raised card under the pointer or once somethin
       background: var(--color-surface-island-glass);
     }
   }
-  .surface-ghost:has(:focus-visible) {
+  /* Svelte scopes a selector inside :has(), so the focus a consumer's link or button takes reaches it only as global. */
+  .surface-ghost:has(:global(:focus-visible)) {
     background: var(--color-surface-island-glass);
   }
   .surface-overlay {
