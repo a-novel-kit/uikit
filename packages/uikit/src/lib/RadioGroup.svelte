@@ -75,6 +75,7 @@ Use `createValueController` with a selected option value or `undefined`.
           {name}
           value={option.value}
           checked={controller.state.value === option.value}
+          defaultChecked={controller.state.value === option.value}
           onchange={handleChange}
           disabled={option.disabled}
           aria-label={option.label}

@@ -27,8 +27,8 @@ wide screen and as wide as the form on a phone.
 ## Expect a compact file input
 
 `FileInput` drops its "Choose a file" button. The field shows the chosen file's name, a folder icon sits at its end,
-and a click anywhere on it opens the picker. Its API is unchanged, but a test that looked for the button's text now
-finds none. Show a chosen image above the field, never inside it:
+and a click anywhere on it opens the picker. Its existing props are unchanged, and it gains `onClear`, but a test
+that looked for the button's text now finds none. Show a chosen image above the field, never inside it:
 
 ```svelte
 <Field label="Logo">
@@ -70,6 +70,8 @@ upgrade.
   ringed as a divider, lit as a raised card under the pointer or the keyboard's focus.
 - `TagInput` and `createTagInputController` collect tags as GitHub's topics do; `kebabTag` writes text in
   lower-kebab-case, and `splitTags` splits a form entry where the field ends a tag, for a server. A controller's `add` reports whether it took the text, so a tag it refuses stays typed.
+- `Checkbox`, `RadioGroup` and `ChipGroup` keep their controller's choice through a form reset, as SvelteKit's
+  `enhance` does after a successful action, so the next submission sends what they show.
 - `ChipGroup` picks options under a field's label, each a chip in the field's well, sized as a badge.
 - `LanguageName` sets a language's flag beside its name, for every language select. A select option takes `lang`,
   so assistive technology reads the name in its own language.

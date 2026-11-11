@@ -51,7 +51,14 @@ Provide `label` or an accessible name; native input attributes are forwarded to 
 </script>
 
 <label class="choice {className}">
-  <input bind:this={input} checked={controller.state.checked} type="checkbox" onchange={handleChange} {...rest} />
+  <input
+    bind:this={input}
+    checked={controller.state.checked}
+    defaultChecked={controller.state.checked}
+    type="checkbox"
+    onchange={handleChange}
+    {...rest}
+  />
   {#if label || description}
     <span class="copy">
       {#if label}<span class="label"><RenderContent content={label} /></span>{/if}

@@ -267,6 +267,10 @@ Native attributes and events target the input; `class` styles the surrounding su
     .file-input:has(.control:disabled) :is(.status, .browse) {
       color: GrayText;
     }
+
+    .status.empty {
+      color: GrayText;
+    }
   }
 
   /* Without scripting nothing follows the selection, so the browser's own control shows it. */
@@ -281,6 +285,11 @@ Native attributes and events target the input; `class` styles the surrounding su
     .status,
     .end {
       display: none;
+    }
+
+    /* The native control brings its own height, so the field drops the padding it keeps for the icons. */
+    .file-input {
+      padding-block: 0;
     }
   }
 </style>

@@ -532,7 +532,8 @@ export function createTagInputController({
   normalize = kebabTag,
   onTagsChange,
 }: TagInputControllerOptions = {}): TagInputController {
-  let state = $state<TagInputState>({ tags: [...new Set(initialTags)] });
+  // Replaced whole on every change, so it needs no deep proxy: a long paste stays linear and the tags stay cloneable.
+  let state = $state.raw<TagInputState>({ tags: [...new Set(initialTags)] });
 
   function setTags(tags: readonly string[]) {
     state = { tags };

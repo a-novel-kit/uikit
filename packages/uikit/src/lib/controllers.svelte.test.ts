@@ -122,6 +122,7 @@ describe("component controllers", () => {
     const tags = createTagInputController({ initialTags: ["maps", "maps", "noir"] });
 
     expect(tags.state.tags).toEqual(["maps", "noir"]);
+    expect(structuredClone(tags.state.tags)).toEqual(["maps", "noir"]);
     expect([tags.add("Slow Burn"), tags.add("maps"), tags.add(" -- ")]).toEqual([true, true, true]);
   });
 

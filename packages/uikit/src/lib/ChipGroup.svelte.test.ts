@@ -58,6 +58,36 @@ describe("ChipGroup", () => {
     expect(getByText("Français").closest("label")?.getAttribute("lang")).toBe("fr");
   });
 
+  it("keeps its controller's choice through a form reset", async () => {
+    const form = document.body.appendChild(document.createElement("form"));
+    const controller = createValueController<readonly string[]>({ initialValue: ["fantasy"] });
+    const { getByRole } = render(ChipGroup, {
+      target: form,
+      props: { legend: "Genres", name: "genres", options, controller },
+    });
+
+    await fireEvent.click(getByRole("checkbox", { name: "Mystery" }));
+    form.reset();
+
+    expect(new FormData(form).getAll("genres")).toEqual(["fantasy", "mystery"]);
+    form.remove();
+  });
+
+  it("joins a caller's description to its hint and error", () => {
+    const { getByRole } = render(ChipGroup, {
+      props: {
+        legend: "Genres",
+        hint: "Up to 10.",
+        error: "Too many.",
+        name: "genres",
+        options,
+        "aria-describedby": "extra",
+      },
+    });
+
+    expect(getByRole("group", { name: "Genres" }).getAttribute("aria-describedby")?.split(" ")).toHaveLength(3);
+  });
+
   it("takes back a choice its controller refuses", async () => {
     const controller = { state: { value: [] }, setValue: () => {} };
     const { getByRole } = render(ChipGroup, { props: { legend: "Genres", name: "genres", options, controller } });

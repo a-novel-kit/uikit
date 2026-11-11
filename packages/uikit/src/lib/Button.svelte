@@ -263,7 +263,8 @@ item.
   /* A ghost or text button draws no border or glow in any state; only a chosen toggle's indicator
      glows, as NavList's does. Chosen, or linking to the page showing, it reads as the navigation's
      current item, blue whatever its tone, as a rail's account link does beside the NavList, and keeps
-     that look under the pointer. */
+     that look under the pointer. A current link carries no indicator: it stands beside NavList,
+     whose current item marks its start edge. */
   :is(.ghost, .text):is([aria-pressed="true"], [aria-current="page"]) {
     background-color: var(--color-navigation-selected-surface);
     color: var(--color-navigation-selected-text);
@@ -290,6 +291,12 @@ item.
   @media (forced-colors: active) {
     :is(.button[aria-pressed="true"], :is(.ghost, .text)[aria-current="page"]):not(:focus-visible) {
       outline: var(--border-width-thin) solid CanvasText;
+    }
+
+    /* Forced colors paint the indicator Canvas, so it keeps its line in the text color. */
+    :is(.ghost, .text)[aria-pressed="true"]::before {
+      background: CanvasText;
+      forced-color-adjust: none;
     }
   }
 

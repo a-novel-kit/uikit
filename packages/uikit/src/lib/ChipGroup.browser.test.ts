@@ -16,6 +16,16 @@ function resolveColor(value: string) {
 }
 
 describe("ChipGroup", () => {
+  it("reaches past a short chip's edges to the 24px minimum target", () => {
+    const options = [{ value: "a", label: "A" }];
+    const { container } = render(ChipGroup, { props: { legend: "Letters", name: "letters", options } });
+
+    // The token resolves to 23.98px through its rem arithmetic, so the target is read to the whole pixel.
+    const target = container.querySelector(".chip input")!.getBoundingClientRect();
+    expect(Math.round(target.height)).toBeGreaterThanOrEqual(24);
+    expect(Math.round(target.width)).toBeGreaterThanOrEqual(24);
+  });
+
   it("dims a chosen option that is disabled", () => {
     const options = [{ value: "western", label: "Western", disabled: true }];
     const controller = { state: { value: ["western"] }, setValue: () => {} };

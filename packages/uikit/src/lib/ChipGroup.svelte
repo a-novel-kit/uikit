@@ -57,6 +57,7 @@ never sends; the controller keeps the order of choice.
     tone = "brand",
     controller = createValueController<readonly string[]>({ initialValue: [] }),
     class: className = "",
+    "aria-describedby": describedBy,
     ...rest
   }: ChipGroupProps = $props();
 
@@ -75,8 +76,8 @@ never sends; the controller keeps the order of choice.
 <fieldset
   class="chip-group {tone} {className}"
   class:invalid={Boolean(error)}
-  aria-describedby={[hintId, errorId].filter(Boolean).join(" ") || undefined}
   {...rest}
+  aria-describedby={[describedBy, hintId, errorId].filter(Boolean).join(" ") || undefined}
 >
   <legend><RenderContent content={legend} /></legend>
   <div class="chips">
@@ -87,6 +88,7 @@ never sends; the controller keeps the order of choice.
           {name}
           value={option.value}
           checked={chosen.includes(option.value)}
+          defaultChecked={chosen.includes(option.value)}
           disabled={option.disabled}
           aria-invalid={error ? true : undefined}
           form={rest.form}
@@ -161,12 +163,13 @@ never sends; the controller keeps the order of choice.
     overflow-wrap: anywhere;
   }
 
+  /* The unseen checkbox covers the chip, and reaches past a short chip's edges to the 24px minimum target. */
   .chip input {
     position: absolute;
     opacity: 0;
     cursor: inherit;
     margin: 0;
-    inset: 0;
+    inset: min(0px, calc((100% - var(--icon-size-lg)) / 2));
   }
 
   @media (hover: hover) {

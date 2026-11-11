@@ -8,7 +8,7 @@ const tagSeparators = /[\s,\u060c\u3001\uff0c]+/u;
  * @example
  * ```ts
  * import { kebabTag, splitTags } from "@a-novel-kit/uikit";
- * form.getAll("tags").flatMap((entry) => splitTags(String(entry))).map(kebabTag).filter(Boolean);
+ * const tags = [...new Set(form.getAll("tags").flatMap((entry) => splitTags(String(entry))).map(kebabTag).filter(Boolean))];
  * ```
  */
 export function splitTags(text: string): string[] {
@@ -21,7 +21,8 @@ const rune = String.raw`\p{Ll}\p{Lm}\p{Lo}\p{Nd}`;
 /**
  * A word of a tag starts with a letter or digit and may go on with marks and the zero-width joiners, which keep whole
  * the words of scripts that write with them, as Thai, Hindi, Persian or Japanese do. A mark or joiner left alone, as
- * an emoji's variation selector is, starts no word.
+ * an emoji's variation selector is, starts no word; after a letter or digit it stays, so a keycap digit keeps its
+ * keycap.
  */
 const word = new RegExp(String.raw`[${rune}](?:[${rune}\p{M}\u200C\u200D]*[${rune}\p{M}])?`, "gu");
 

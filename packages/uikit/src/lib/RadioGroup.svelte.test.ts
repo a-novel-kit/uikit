@@ -3,9 +3,28 @@ import { createValueController } from "./controllers.svelte";
 
 import { describe, expect, it } from "vitest";
 
-import { render } from "@testing-library/svelte";
+import { fireEvent, render } from "@testing-library/svelte";
 
 describe("RadioGroup", () => {
+  it("keeps its controller's choice through a form reset", async () => {
+    const form = document.body.appendChild(document.createElement("form"));
+    const options = [
+      { value: "en", label: "English" },
+      { value: "fr", label: "French" },
+    ];
+    const controller = createValueController<string | undefined>({ initialValue: "en" });
+    const { getByRole } = render(RadioGroup, {
+      target: form,
+      props: { legend: "Language", name: "language", options, controller },
+    });
+
+    await fireEvent.click(getByRole("radio", { name: "French" }));
+    form.reset();
+
+    expect(new FormData(form).get("language")).toBe("fr");
+    form.remove();
+  });
+
   it("names an option in the language it gives", () => {
     const options = [
       { value: "en", label: "English", lang: "en" },
