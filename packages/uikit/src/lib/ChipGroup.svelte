@@ -148,6 +148,7 @@ never sends; the controller keeps the order of choice.
   .chip {
     display: inline-flex;
     position: relative;
+    justify-content: center;
     align-items: center;
     transition:
       background-color var(--duration-fast) var(--easing-standard),
@@ -158,6 +159,7 @@ never sends; the controller keeps the order of choice.
     background: var(--color-action-neutral);
     padding-inline: var(--space-1-5);
     padding-block: calc(var(--space-1) / var(--multiplier-2));
+    min-inline-size: var(--icon-size-lg);
     color: var(--color-text-secondary);
     font-size: var(--font-size-xs);
     line-height: var(--line-height-compact);
@@ -166,7 +168,8 @@ never sends; the controller keeps the order of choice.
     overflow-wrap: anywhere;
   }
 
-  /* The unseen checkbox covers the chip, and reaches past a short chip's edges to the 24px minimum target. */
+  /* The unseen checkbox covers the chip, and reaches past its block edges to the 24px minimum target. A chip is at
+     least that wide, so two short chips' targets never overlap. */
   .chip input {
     position: absolute;
     opacity: 0;
@@ -265,6 +268,7 @@ never sends; the controller keeps the order of choice.
     }
 
     .chip:has(:checked:disabled) {
+      opacity: 1;
       background: GrayText;
       color: Canvas;
     }

@@ -139,7 +139,7 @@ describe("TagInput", () => {
   it("keeps the focus on a cross whose removal its controller refuses", async () => {
     const controller = { state: { tags: ["maps"] }, add: () => true, remove: () => {} };
     const { getByRole } = render(TagInput, { props: { "aria-label": "Tags", controller } });
-    const cross = getByRole("button", { name: "Remove maps" });
+    const cross = getByRole("button", { name: "Remove the maps tag" });
     cross.focus();
 
     await fireEvent.click(cross);
@@ -150,7 +150,7 @@ describe("TagInput", () => {
   it("removes a tag with its cross and gives the focus back to the field", async () => {
     const { getByRole, input, sent } = renderTags(["maps", "slow-burn"]);
 
-    await fireEvent.click(getByRole("button", { name: "Remove maps" }));
+    await fireEvent.click(getByRole("button", { name: "Remove the maps tag" }));
 
     expect(sent()).toEqual(["slow-burn"]);
     expect(document.activeElement).toBe(input);
@@ -187,7 +187,7 @@ describe("TagInput", () => {
     form.remove();
   });
 
-  it("keeps typed text that its controller refuses, and a tag it does not remove", async () => {
+  it("keeps typed text that its controller refuses, lets Enter submit it, and keeps a tag it does not remove", async () => {
     const controller = { state: { tags: ["maps", "noir"] }, add: () => false, remove: () => {} };
     const { getByRole } = render(TagInput, { props: { "aria-label": "Tags", name: "tags", controller } });
     const input = getByRole("textbox", { name: "Tags" }) as HTMLInputElement;
@@ -196,7 +196,7 @@ describe("TagInput", () => {
     expect(input.value).toBe("western horr");
 
     input.value = "horror";
-    await fireEvent.keyDown(input, { key: "Enter" });
+    expect(await fireEvent.keyDown(input, { key: "Enter" })).toBe(true);
     expect(input.value).toBe("horror");
 
     input.value = "";

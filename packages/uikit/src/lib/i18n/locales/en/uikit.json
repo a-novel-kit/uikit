@@ -60,7 +60,7 @@
     "count": "{{count}} tags",
     "none": "No tags",
     "one": "1 tag",
-    "remove": "Remove {{tag}}"
+    "remove": "Remove the {{tag}} tag"
   },
   "toastRegion": {
     "dismiss": "Dismiss",

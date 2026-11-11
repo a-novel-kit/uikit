@@ -86,13 +86,16 @@ Native attributes and events target the text input; `class` styles the surroundi
    * Ends a tag at every separator; what follows the last one stays as typed, unless the writer ends the field with
    * Enter. A part the controller refuses stays in the field, so the writer keeps what they typed.
    */
+  // Reports whether the controller took any word, so an Enter that ends only refused ones submits the form.
   function takeTags(input: HTMLInputElement, ending = false) {
     const parts = splitTags(input.value);
     const typing = ending ? "" : (parts.pop() ?? "");
-    if (parts.length === 0) return;
+    if (parts.length === 0) return false;
 
     const refused = parts.filter((part) => !controller.add(part));
-    if (refused.length < parts.length) input.value = (ending ? refused : [...refused, typing]).join(" ");
+    if (refused.length === parts.length) return false;
+    input.value = (ending ? refused : [...refused, typing]).join(" ");
+    return true;
   }
 
   // Text still being composed with an input method is not the writer's yet: it ends its tags once composed.
@@ -115,9 +118,8 @@ Native attributes and events target the text input; `class` styles the surroundi
 
     const input = event.currentTarget;
     if (event.key === "Enter" && input.value.trim()) {
-      // A tag being typed ends here; an empty field lets Enter submit the form.
-      event.preventDefault();
-      takeTags(input, true);
+      // A tag being typed ends here; an empty field, or one holding only refused words, lets Enter submit the form.
+      if (takeTags(input, true)) event.preventDefault();
     } else if (event.key === "Backspace" && input.value === "" && tags.length > 0) {
       event.preventDefault();
       const count = tags.length;
@@ -295,18 +297,6 @@ Native attributes and events target the text input; `class` styles the surroundi
     background: var(--color-control-surface-focus);
   }
 
-  @media (forced-colors: active) {
-    .tag-input:has(.control:focus-visible) {
-      outline: var(--border-width-strong) solid Highlight;
-      outline-offset: var(--focus-ring-offset);
-    }
-
-    .tag-input:has(.control:disabled) :global(.tag) {
-      border-color: GrayText;
-      color: GrayText;
-    }
-  }
-
   .tag-input:has(.control:disabled) {
     cursor: not-allowed;
     background: var(--color-control-surface-disabled);
@@ -325,6 +315,20 @@ Native attributes and events target the text input; `class` styles the surroundi
 
   .control:disabled {
     color: var(--color-control-disabled-text);
+  }
+
+  /* After the dimming, which would halve the user's own disabled color. */
+  @media (forced-colors: active) {
+    .tag-input:has(.control:focus-visible) {
+      outline: var(--border-width-strong) solid Highlight;
+      outline-offset: var(--focus-ring-offset);
+    }
+
+    .tag-input:has(.control:disabled) :global(.tag) {
+      opacity: 1;
+      border-color: GrayText;
+      color: GrayText;
+    }
   }
 
   /* As Input's: an error, or a required field the form found empty, keeps its look while focused. */

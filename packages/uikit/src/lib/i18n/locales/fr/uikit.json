@@ -60,7 +60,7 @@
     "count": "{{count}} étiquettes",
     "none": "Aucune étiquette",
     "one": "1 étiquette",
-    "remove": "Retirer {{tag}}"
+    "remove": "Retirer l’étiquette {{tag}}"
   },
   "toastRegion": {
     "dismiss": "Fermer",

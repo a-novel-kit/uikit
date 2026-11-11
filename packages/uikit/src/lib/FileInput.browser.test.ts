@@ -59,6 +59,16 @@ describe("FileInput", () => {
     expect(document.activeElement).toBe(input.element());
   });
 
+  it("hides its cross while disabled, a disabled fieldset's included, as TagInput does", () => {
+    const fieldset = document.body.appendChild(document.createElement("fieldset"));
+    fieldset.disabled = true;
+    onTestFinished(() => fieldset.remove());
+    const controller = { state: { value: ["chapter-one.pdf"] }, setValue: () => undefined };
+    render(FileInput, { target: fieldset, props: { "aria-label": "Files", onClear: () => undefined, controller } });
+
+    expect(fieldset.querySelector(".clear")!.getBoundingClientRect().width).toBe(0);
+  });
+
   it("keeps its error look while disabled, as Input does", () => {
     const { input } = inForm({ invalid: true, disabled: true });
     const probe = document.body.appendChild(document.createElement("span"));

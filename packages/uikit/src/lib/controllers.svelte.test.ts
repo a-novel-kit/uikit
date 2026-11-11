@@ -89,6 +89,14 @@ describe("component controllers", () => {
     expect(onValueChange).toHaveBeenCalledWith(90);
   });
 
+  it("keeps a chosen list plain, so it clones", () => {
+    const chips = createValueController<readonly string[]>({ initialValue: ["noir"] });
+
+    chips.setValue(["noir", "thriller"]);
+
+    expect(structuredClone(chips.state.value)).toEqual(["noir", "thriller"]);
+  });
+
   it("frames a source from its center, then keeps the image over the frame", () => {
     const source = { url: "landscape.png", width: 1600, height: 1200 };
     const controller = createPictureFrameController({ source, ratio: { width: 16, height: 9 } });

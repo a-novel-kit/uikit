@@ -226,7 +226,6 @@ The hidden named input submits the selected value. The caller validates required
       role="combobox"
       value={inputValue}
       defaultValue={inputValue}
-      lang={controller.state.open ? undefined : selectedOption?.lang}
       {placeholder}
       {autocomplete}
       {disabled}

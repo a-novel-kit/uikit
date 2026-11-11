@@ -222,6 +222,7 @@ Native attributes and events target the input; `class` styles the surrounding su
   .end {
     display: inline-flex;
     flex: none;
+    gap: var(--space-1);
     margin-inline-end: calc(-1 * (var(--space-2) + var(--border-width-thin)));
     margin-block: calc(var(--control-height-nested) / -2);
   }
@@ -229,6 +230,12 @@ Native attributes and events target the input; `class` styles the surrounding su
   .clear {
     display: inline-flex;
     position: relative;
+  }
+
+  /* A disabled field removes nothing, so its cross hides, as TagInput's do. A disabled fieldset disables the cross
+     without this component knowing, so it hides on its own state. */
+  .clear:has(:global(:disabled)) {
+    display: none;
   }
 
   /* The folder sits where a field's button would, the size of one, and lights with the field. */

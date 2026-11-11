@@ -83,8 +83,8 @@ ringed as a divider, and lit as a raised card under the pointer or once somethin
   .surface-ghost:has(:global(:focus-visible)) {
     background: var(--color-surface-island-glass);
   }
-  /* A ghost card inside another card is the parent's own glass, as a nested raised card is: a second blur and veil
-     would light it past its parent and drop its text below 4.5:1. */
+  /* A ghost card inside another card drops its own blur, and lit, it is the parent's own glass, as a nested raised
+     card is: a second blur and veil would light it past its parent and drop its text below 4.5:1. */
   .card :global(.card.surface-ghost) {
     -webkit-backdrop-filter: none;
     backdrop-filter: none;

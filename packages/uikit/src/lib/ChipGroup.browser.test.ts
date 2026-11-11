@@ -31,10 +31,23 @@ describe("ChipGroup", () => {
     const options = [{ value: "a", label: "A" }];
     const { container } = render(ChipGroup, { props: { legend: "Letters", name: "letters", options } });
 
-    // The token resolves to 23.98px through its rem arithmetic, so the target is read to the whole pixel.
+    // Layout rounds the chip's fractional height, which leaves the target at 23.98px, so it is read to the whole pixel.
     const target = container.querySelector(".chip input")!.getBoundingClientRect();
     expect(Math.round(target.height)).toBeGreaterThanOrEqual(24);
     expect(Math.round(target.width)).toBeGreaterThanOrEqual(24);
+  });
+
+  it("keeps two narrow chips' targets apart", () => {
+    const options = [
+      { value: "i", label: "I" },
+      { value: "l", label: "l" },
+    ];
+    const { container } = render(ChipGroup, { props: { legend: "Letters", name: "letters", options } });
+
+    const [first, second] = Array.from(container.querySelectorAll(".chip input"), (input) =>
+      input.getBoundingClientRect()
+    );
+    expect(first.right).toBeLessThanOrEqual(second.left);
   });
 
   it("dims a chosen option that is disabled", () => {

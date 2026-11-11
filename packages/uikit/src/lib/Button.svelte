@@ -141,7 +141,11 @@ item.
     --button-glow: var(--shadow-glow-pressure-strong);
   }
 
+  /* A chosen toggle is positioned for its indicator, so it paints over its neighbors' outlines; a focused button
+     rises above it. */
   .button:focus-visible {
+    position: relative;
+    z-index: 1;
     outline: var(--focus-ring-width) solid var(--color-focus-ring);
     outline-offset: var(--focus-ring-offset);
   }
@@ -320,6 +324,13 @@ item.
 
   .button[aria-pressed="true"]:disabled::before {
     box-shadow: none;
+  }
+
+  /* Dimming would halve the user's own disabled color. */
+  @media (forced-colors: active) {
+    .button[aria-pressed="true"]:disabled {
+      opacity: 1;
+    }
   }
 
   /* A ghost or text button stays borderless while disabled too. */

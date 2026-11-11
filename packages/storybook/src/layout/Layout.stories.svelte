@@ -127,6 +127,35 @@
   </Container>
 </Story>
 
+<Story
+  name="Ghost cards in a card"
+  parameters={{
+    docs: {
+      description: {
+        story:
+          "A ghost card inside a raised card drops its own blur, and lit, it takes its parent's glass, as a nested raised card does, so its text keeps its contrast.",
+      },
+    },
+  }}
+  asChild
+>
+  <Container size="sm">
+    <Card>
+      <Stack gap="4">
+        <strong>Recent projects</strong>
+        {#each ghostItems.slice(0, 3) as item (item.title)}
+          <Card surface="ghost">
+            <Stack gap="2">
+              <a class="item-link" href="#{item.title}">{item.title}</a>
+              <span class="muted">{item.text}</span>
+            </Stack>
+          </Card>
+        {/each}
+      </Stack>
+    </Card>
+  </Container>
+</Story>
+
 <Story name="Split pane" asChild>
   <Container size="lg">
     <SplitPane>
@@ -159,7 +188,8 @@
     break-inside: avoid;
     padding-block-end: var(--space-4);
   }
-  .mosaic a {
+  .mosaic a,
+  .item-link {
     color: var(--color-text-primary);
     font-weight: var(--font-weight-bold);
     font-family: var(--font-family-interface);

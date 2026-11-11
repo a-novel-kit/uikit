@@ -268,7 +268,8 @@ export function createValueController<Value>({
   initialValue,
   onValueChange,
 }: ValueControllerOptions<Value>): ValueController<Value> {
-  let state = $state<ValueState<Value>>({ value: initialValue });
+  // Replaced whole on each change, so a value such as a chip choice stays a plain array that clones.
+  let state = $state.raw<ValueState<Value>>({ value: initialValue });
 
   return {
     get state() {
