@@ -81,7 +81,7 @@ never sends; the controller keeps the order of choice.
   <legend><RenderContent content={legend} /></legend>
   <div class="chips">
     {#each options as option (option.value)}
-      <label class="chip">
+      <label class="chip" lang={option.lang}>
         <input
           type="checkbox"
           {name}

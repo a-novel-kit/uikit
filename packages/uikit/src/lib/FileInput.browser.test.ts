@@ -31,7 +31,7 @@ describe("FileInput", () => {
 
   it("opens the picker from its folder icon, and removes the choice from its cross", () => {
     const controller = { state: { value: ["chapter-one.pdf"] }, setValue: () => undefined };
-    const { input } = inForm({ onclear: () => undefined, controller });
+    const { input } = inForm({ onClear: () => undefined, controller });
     const control = input.element();
     const surface = control.parentElement!;
     const centerOf = (element: Element) => {
@@ -46,7 +46,7 @@ describe("FileInput", () => {
 
   it("empties the field with its cross, so the same file chosen again reports a change", async () => {
     let cleared = 0;
-    const { form, input } = inForm({ name: "files", onclear: () => cleared++ });
+    const { form, input } = inForm({ name: "files", onClear: () => cleared++ });
     await userEvent.upload(input, chapter);
     await expect.element(page.getByText("chapter-one.pdf")).toBeVisible();
 

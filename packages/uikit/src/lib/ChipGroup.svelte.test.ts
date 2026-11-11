@@ -51,6 +51,13 @@ describe("ChipGroup", () => {
     other.remove();
   });
 
+  it("names an option in the language it gives", () => {
+    const languages = [{ value: "fr", label: "Français", lang: "fr" }];
+    const { getByText } = render(ChipGroup, { props: { legend: "Languages", name: "languages", options: languages } });
+
+    expect(getByText("Français").closest("label")?.getAttribute("lang")).toBe("fr");
+  });
+
   it("takes back a choice its controller refuses", async () => {
     const controller = { state: { value: [] }, setValue: () => {} };
     const { getByRole } = render(ChipGroup, { props: { legend: "Genres", name: "genres", options, controller } });

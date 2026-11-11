@@ -260,9 +260,10 @@ item.
     color: var(--button-selected-foreground);
   }
 
-  /* A ghost or text button draws no border or glow in any state. Chosen, or linking to the page
-     showing, it reads as the navigation's current item, blue whatever its tone, as a rail's account
-     link does beside the NavList, and keeps that look under the pointer. */
+  /* A ghost or text button draws no border or glow in any state; only a chosen toggle's indicator
+     glows, as NavList's does. Chosen, or linking to the page showing, it reads as the navigation's
+     current item, blue whatever its tone, as a rail's account link does beside the NavList, and keeps
+     that look under the pointer. */
   :is(.ghost, .text):is([aria-pressed="true"], [aria-current="page"]) {
     background-color: var(--color-navigation-selected-surface);
     color: var(--color-navigation-selected-text);
@@ -284,9 +285,10 @@ item.
     content: "";
   }
 
-  /* Forced colors drop the blue surface, so an outline marks the current item, as NavList's does. */
+  /* Forced colors drop every surface and glow, so an outline marks a chosen button of any variant and the current
+     item, as NavList's does. */
   @media (forced-colors: active) {
-    :is(.ghost, .text):is([aria-pressed="true"], [aria-current="page"]):not(:focus-visible) {
+    :is(.button[aria-pressed="true"], :is(.ghost, .text)[aria-current="page"]):not(:focus-visible) {
       outline: var(--border-width-thin) solid CanvasText;
     }
   }

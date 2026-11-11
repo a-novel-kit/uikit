@@ -35,7 +35,7 @@ finds none. Show a chosen image above the field, never inside it:
   {#snippet children(control)}
     <div class="logo">
       {#if src}<img {src} alt="" />{/if}
-      <FileInput {...control} accept="image/*" onclear={src ? remove : undefined} />
+      <FileInput {...control} accept="image/*" onClear={src ? remove : undefined} />
     </div>
   {/snippet}
 </Field>
@@ -61,17 +61,18 @@ upgrade.
   new `--color-accent-secondary` token.
 - Badges drop to the regular weight, so screenshots that show one change.
 - A chosen ghost or text button (`aria-pressed="true"`, as a pressed `ToggleButton` or `ToolbarToggleButton` sets)
-  draws no border or glow any more: it turns blue, as the navigation's current item, whatever its tone. An outline
+  draws no border or glow any more, but for its indicator's: it turns blue, as the navigation's current item,
+  whatever its tone. An outline
   button keeps its selection, and a disabled ghost or text button loses its border. Screenshots that show one
   change.
 - `--layout-readable-measure-long` (80ch) bounds a short block set in a card, beside the 68ch running-text measure.
 - `Card` takes `surface="ghost"`, one item of a collection: the canvas's color under a raised card's veil and blur,
   ringed as a divider, lit as a raised card under the pointer or the keyboard's focus.
 - `TagInput` and `createTagInputController` collect tags as GitHub's topics do; `kebabTag` writes text in
-  lower-kebab-case. A controller's `add` reports whether it took the text, so a tag it refuses stays typed.
+  lower-kebab-case, and `splitTags` splits a form entry where the field ends a tag, for a server. A controller's `add` reports whether it took the text, so a tag it refuses stays typed.
 - `ChipGroup` picks options under a field's label, each a chip in the field's well, sized as a badge.
 - `LanguageName` sets a language's flag beside its name, for every language select. A select option takes `lang`,
   so assistive technology reads the name in its own language.
-- `FileInput` takes `onclear`, a cross that removes the choice once a file is chosen, named after it.
+- `FileInput` takes `onClear`, a cross that removes the choice once a file is chosen, named after it.
 - A chosen ghost or text toggle carries the navigation's indicator under its label, and a disabled choice, on a
   button or a chip, stays visible, dimmed.

@@ -1,3 +1,20 @@
+/** Where TagInput ends a tag: whitespace, and Latin, Arabic, ideographic or full-width commas. */
+const tagSeparators = /[\s,\u060c\u3001\uff0c]+/u;
+
+/**
+ * Splits typed text where a TagInput ends a tag: whitespace, and Latin, Arabic, ideographic or full-width commas. A
+ * server that reads a TagInput's form entries splits each with it before `kebabTag`, as the field does.
+ *
+ * @example
+ * ```ts
+ * import { kebabTag, splitTags } from "@a-novel-kit/uikit";
+ * form.getAll("tags").flatMap((entry) => splitTags(String(entry))).map(kebabTag).filter(Boolean);
+ * ```
+ */
+export function splitTags(text: string): string[] {
+  return text.split(tagSeparators);
+}
+
 /** Lowercase, modifier and caseless letters and decimal digits: what a tag's word starts with. */
 const rune = String.raw`\p{Ll}\p{Lm}\p{Lo}\p{Nd}`;
 

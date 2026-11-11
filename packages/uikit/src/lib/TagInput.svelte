@@ -2,8 +2,10 @@
 @component
 A text field that turns what the reader types into tags, as GitHub's topics do. A space, a comma or Enter ends a tag,
 Backspace in the empty field takes the last tag back as text, and each tag's cross removes it. The default controller
-writes tags in lower-kebab-case. The form receives each tag under `name`, then the text still being typed, empty
-once scripting has turned it into tags, so a form without scripting still sends what was typed.
+writes tags in lower-kebab-case. The form receives each tag under `name`, then the field's text: what is still being
+typed, a word the controller refused, or, without scripting, everything typed. A server reads them all with
+`form.getAll(name).flatMap((entry) => splitTags(String(entry))).map(kebabTag)`, splitting where the field does, and
+validates every tag, refused words included.
 Native attributes and events target the text input; `class` styles the surrounding field.
 
 ```svelte
@@ -41,6 +43,7 @@ Native attributes and events target the text input; `class` styles the surroundi
   import { createTagInputController } from "./controllers.svelte";
   import { useMessages } from "./internal/i18n";
   import { resolveInvalidState } from "./selection";
+  import { splitTags } from "./tags";
 
   import { X as XIcon } from "@lucide/svelte";
 
@@ -57,11 +60,13 @@ Native attributes and events target the text input; `class` styles the surroundi
     onblur,
     oncompositionend,
     "aria-invalid": ariaInvalid,
+    "aria-describedby": describedBy,
     class: className = "",
     ...rest
   }: TagInputProps = $props();
 
   const { t } = useMessages();
+  const statusId = $props.id();
 
   const isInvalid = $derived(resolveInvalidState(invalid, ariaInvalid));
   const tags = $derived(controller.state.tags);
@@ -82,8 +87,7 @@ Native attributes and events target the text input; `class` styles the surroundi
    * Enter or by leaving it. A part the controller refuses stays in the field, so the writer keeps what they typed.
    */
   function takeTags(input: HTMLInputElement, ending = false) {
-    // Commas from other scripts end a tag too: Arabic, ideographic and full-width.
-    const parts = input.value.split(/[\s,،、，]+/u);
+    const parts = splitTags(input.value);
     const typing = ending ? "" : (parts.pop() ?? "");
     if (parts.length === 0) return;
 
@@ -133,8 +137,9 @@ Native attributes and events target the text input; `class` styles the surroundi
 
   // The removed tag's button leaves the page, so the text input takes the focus it held.
   function removeTag(index: number) {
+    const count = tags.length;
     controller.remove(index);
-    field?.focus();
+    if (controller.state.tags.length < count) field?.focus();
   }
 </script>
 
@@ -143,7 +148,9 @@ Native attributes and events target the text input; `class` styles the surroundi
     <ul class="tags">
       {#each tags as tag, index (tag)}
         <li>
-          <Badge tone="brand" class="tag">
+          <!-- A disabled field's tags dim, and aria-disabled tells the accessibility check they are exempt from
+               contrast, as a disabled control is. -->
+          <Badge tone="brand" class="tag" aria-disabled={disabled || undefined}>
             {tag}
             {#if editable}
               <button
@@ -175,13 +182,14 @@ Native attributes and events target the text input; `class` styles the surroundi
     required={required && tags.length === 0}
     aria-required={required || undefined}
     {...rest}
+    aria-describedby={[describedBy, statusId].filter(Boolean).join(" ")}
     aria-invalid={isInvalid || undefined}
     oninput={handleInput}
     onkeydown={handleKeydown}
     onblur={handleBlur}
     oncompositionend={handleCompositionEnd}
   />
-  <VisuallyHidden role="status">{status}</VisuallyHidden>
+  <VisuallyHidden id={statusId} role="status">{status}</VisuallyHidden>
 </div>
 
 <style>
@@ -234,7 +242,7 @@ Native attributes and events target the text input; `class` styles the surroundi
     font: inherit;
   }
 
-  /* An unseen hit area grows the cross to an icon button's size without moving the tag. */
+  /* An unseen hit area grows the cross to the 24px minimum target without moving the tag. */
   .remove::after {
     position: absolute;
     inset: calc((1em - var(--icon-size-lg)) / 2);
@@ -300,11 +308,27 @@ Native attributes and events target the text input; `class` styles the surroundi
       outline: var(--border-width-strong) solid Highlight;
       outline-offset: var(--focus-ring-offset);
     }
+
+    .tag-input:has(.control:disabled) :global(.tag) {
+      border-color: GrayText;
+      color: GrayText;
+    }
   }
 
   .tag-input:has(.control:disabled) {
     cursor: not-allowed;
     background: var(--color-control-surface-disabled);
+  }
+
+  /* A disabled field dims its tags, as a disabled chip or button dims its choice. A disabled fieldset disables the
+     crosses without this component knowing, so they hide on their own state. */
+  .tag-input:has(.control:disabled) :global(.tag) {
+    opacity: var(--opacity-disabled);
+    box-shadow: none;
+  }
+
+  .remove:disabled {
+    display: none;
   }
 
   .control:disabled {

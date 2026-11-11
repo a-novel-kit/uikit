@@ -52,6 +52,11 @@
     { value: "vi", label: "Vietnamese" },
   ] as const;
 
+  const longGenreOptions = [
+    { value: "speculative", label: "Speculative-historical-alternate-timeline" },
+    { value: "noir", label: "Noir" },
+  ];
+
   const genreOptions = [
     { value: "fantasy", label: "Fantasy" },
     { value: "mystery", label: "Mystery" },
@@ -147,27 +152,27 @@
   <div class="form">
     <Field label="Chosen, with its cross">
       {#snippet children(control)}
-        <FileInput {...control} controller={coverController} onclear={() => {}} />
+        <FileInput {...control} controller={coverController} onClear={() => {}} />
       {/snippet}
     </Field>
     <Field label="Chosen, invalid" error="Choose an image under 256 KiB.">
       {#snippet children(control)}
-        <FileInput {...control} controller={coverController} onclear={() => {}} />
+        <FileInput {...control} controller={coverController} onClear={() => {}} />
       {/snippet}
     </Field>
     <Field label="Chosen, disabled">
       {#snippet children(control)}
-        <FileInput {...control} controller={coverController} onclear={() => {}} disabled />
+        <FileInput {...control} controller={coverController} onClear={() => {}} disabled />
       {/snippet}
     </Field>
     <Field label="Chosen, small">
       {#snippet children(control)}
-        <FileInput {...control} controller={coverController} onclear={() => {}} controlSize="sm" />
+        <FileInput {...control} controller={coverController} onClear={() => {}} controlSize="sm" />
       {/snippet}
     </Field>
     <Field label="Chosen, large">
       {#snippet children(control)}
-        <FileInput {...control} controller={coverController} onclear={() => {}} controlSize="lg" />
+        <FileInput {...control} controller={coverController} onClear={() => {}} controlSize="lg" />
       {/snippet}
     </Field>
     <Field label="One file">
@@ -214,7 +219,7 @@
       {#snippet children(control)}
         <div class="previewed">
           <span class="preview" aria-hidden="true"></span>
-          <FileInput {...control} controller={coverController} accept="image/*" onclear={() => {}} />
+          <FileInput {...control} controller={coverController} accept="image/*" onClear={() => {}} />
         </div>
       {/snippet}
     </Field>
@@ -307,6 +312,9 @@
       options={genreOptions}
       controller={chosenGenresController}
     />
+    <div class="narrow">
+      <ChipGroup legend="A long label wraps" name="long" options={longGenreOptions} />
+    </div>
     <ChipGroup legend="Disabled" name="disabled" options={genreOptions} controller={chosenGenresController} disabled />
   </div>
 </Story>

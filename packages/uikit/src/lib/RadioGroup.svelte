@@ -78,12 +78,13 @@ Use `createValueController` with a selected option value or `undefined`.
           onchange={handleChange}
           disabled={option.disabled}
           aria-label={option.label}
+          lang={option.lang}
         />
         <span class="copy">
           {#if renderOption}
             {@render renderOption(option)}
           {:else}
-            <span class="label">{option.label}</span>
+            <span class="label" lang={option.lang}>{option.label}</span>
             {#if option.description}
               <span class="description"><RenderContent content={option.description} /></span>
             {/if}

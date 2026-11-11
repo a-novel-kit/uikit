@@ -108,7 +108,7 @@
     docs: {
       description: {
         story:
-          "A chosen outline button keeps its tone and border. A chosen ghost or text button reads as the navigation's current item, blue whatever its tone, with its indicator and without a border or glow, and stays borderless while disabled. A disabled choice stays visible, dimmed.",
+          "A chosen outline button keeps its tone and border. A chosen ghost or text button reads as the navigation's current item, blue whatever its tone, with no border or glow but its indicator's, as NavList's, and stays borderless while disabled. A disabled choice stays visible, dimmed.",
       },
     },
   }}

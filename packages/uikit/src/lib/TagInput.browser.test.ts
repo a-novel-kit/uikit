@@ -32,6 +32,17 @@ async function settled(element: Element, property: "backgroundColor" | "borderTo
 }
 
 describe("TagInput", () => {
+  it("dims its tags and hides their crosses inside a disabled fieldset", () => {
+    const fieldset = document.body.appendChild(document.createElement("fieldset"));
+    fieldset.disabled = true;
+    onTestFinished(() => fieldset.remove());
+    const controller = createTagInputController({ initialTags: ["maps"] });
+    const { container } = render(TagInput, { target: fieldset, props: { "aria-label": "Tags", controller } });
+
+    expect(Number(getComputedStyle(container.querySelector(".tag")!).opacity)).toBeLessThan(1);
+    expect(getComputedStyle(container.querySelector(".remove")!).display).toBe("none");
+  });
+
   it("keeps its error look while focused", async () => {
     const { getByRole, container } = render(TagInput, { props: { "aria-label": "Tags", invalid: true } });
 

@@ -53,15 +53,15 @@ describe("FileInput", () => {
     expect(getByText("restored.pdf")).toBeTruthy();
   });
 
-  it("calls onclear from its cross, named after the chosen file, and offers none before a choice", async () => {
-    const onclear = vi.fn();
+  it("calls onClear from its cross, named after the chosen file, and offers none before a choice", async () => {
+    const onClear = vi.fn();
     const chosen = { state: { value: ["logo.png"] }, setValue: () => undefined };
-    const { getByRole } = render(FileInput, { props: { "aria-label": "Logo", onclear, controller: chosen } });
-    const empty = render(FileInput, { props: { "aria-label": "Background", onclear } });
+    const { getByRole } = render(FileInput, { props: { "aria-label": "Logo", onClear, controller: chosen } });
+    const empty = render(FileInput, { props: { "aria-label": "Background", onClear } });
 
     await fireEvent.click(getByRole("button", { name: "Remove logo.png" }));
 
-    expect(onclear).toHaveBeenCalledOnce();
+    expect(onClear).toHaveBeenCalledOnce();
     expect(empty.container.querySelector("button")).toBeNull();
   });
 });

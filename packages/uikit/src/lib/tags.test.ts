@@ -1,4 +1,4 @@
-import { kebabTag } from "./tags";
+import { kebabTag, splitTags } from "./tags";
 
 import { describe, expect, it } from "vitest";
 
@@ -21,5 +21,13 @@ describe("kebabTag", () => {
     { text: "rock👩\u200D💻star", tag: "rock-star" },
   ])("writes $text as $tag", ({ text, tag }) => {
     expect(kebabTag(text)).toBe(tag);
+  });
+});
+
+describe("splitTags", () => {
+  it("splits where a TagInput ends a tag, so a server reads its entries the same way", () => {
+    const entry = ["科幻", "奇幻、noir", "slow burn،maps"].join("，");
+
+    expect(splitTags(entry).map(kebabTag)).toEqual(["科幻", "奇幻", "noir", "slow", "burn", "maps"]);
   });
 });

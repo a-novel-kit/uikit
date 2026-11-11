@@ -89,10 +89,34 @@ describe("TagInput", () => {
     expect(status.textContent).toBe("2 tags");
 
     await fireEvent.keyDown(input, { key: "Backspace" });
-    await fireEvent.keyDown(input, { key: "Backspace" });
+    expect(status.textContent).toBe("1 tag");
+
     input.value = "";
     await fireEvent.keyDown(input, { key: "Backspace" });
     expect(status.textContent).toBe("No tags");
+  });
+
+  it("describes the field with its tag count, after Field's own description", () => {
+    const controller = createTagInputController({ initialTags: ["maps", "noir", "western"] });
+    const { getByRole } = render(TagInput, {
+      props: { "aria-label": "Tags", "aria-describedby": "tags-hint", controller },
+    });
+
+    const input = getByRole("textbox", { name: "Tags" });
+    const [hint, status] = input.getAttribute("aria-describedby")!.split(" ");
+    expect(hint).toBe("tags-hint");
+    expect(document.getElementById(status)?.textContent).toBe("3 tags");
+  });
+
+  it("keeps the focus on a cross whose removal its controller refuses", async () => {
+    const controller = { state: { tags: ["maps"] }, add: () => true, remove: () => {} };
+    const { getByRole } = render(TagInput, { props: { "aria-label": "Tags", controller } });
+    const cross = getByRole("button", { name: "Remove maps" });
+    cross.focus();
+
+    await fireEvent.click(cross);
+
+    expect(document.activeElement).toBe(cross);
   });
 
   it("removes a tag with its cross and gives the focus back to the field", async () => {

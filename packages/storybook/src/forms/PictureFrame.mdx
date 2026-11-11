@@ -45,10 +45,10 @@ size in bytes. Open the chosen file, frame its source, and encode the framed pic
     browserPictureFiles.encode(frame.state.source, frame.state.crop, background);
 </script>
 
-<FileInput accept="image/*" aria-label="Choose an image" onchange={choose} />
 {#if frame}
   <PictureFrame controller={frame} label="Background frame" zoomLabel="Background zoom" />
 {/if}
+<FileInput accept="image/*" aria-label="Choose an image" onchange={choose} />
 ```
 
 `open` rejects a file the browser cannot decode, and the app reports it. `encode` draws the crop on

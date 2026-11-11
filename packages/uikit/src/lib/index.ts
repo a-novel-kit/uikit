@@ -53,7 +53,7 @@ export { browserPictureFiles } from "./pictureFiles";
 export type { PictureFiles, WholePictureFiles } from "./pictureFiles";
 export { centeredCrop, panCrop, zoomCrop } from "./picture";
 export type { AspectRatio, PictureCrop, PictureFrameState, PictureLimits, PictureRule, PictureSource } from "./picture";
-export { kebabTag } from "./tags";
+export { kebabTag, splitTags } from "./tags";
 export type { ComponentSize, FeedbackState, FeedbackTone, LayoutGap, SelectionOption } from "./types";
 export { default as Accordion } from "./Accordion.svelte";
 export type { AccordionProps } from "./Accordion.svelte";

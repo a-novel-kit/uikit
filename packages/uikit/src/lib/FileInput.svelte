@@ -1,7 +1,7 @@
 <!--
 @component
 Styles a native file picker as a field: the chosen file's name, then a folder icon at its end. The whole field opens
-the picker, and `onclear` adds a cross before the icon that removes the choice. Read selected files from the native
+the picker, and `onClear` adds a cross before the icon that removes the choice. Read selected files from the native
 change event; file selection remains owned by the browser. Show a chosen image above the field, never inside it.
 Native attributes and events target the input; `class` styles the surrounding surface.
 -->
@@ -26,7 +26,7 @@ Native attributes and events target the input; `class` styles the surrounding su
      * Removes the choice; shows a cross at the end of the field once a file is chosen, named after it. The caller
      * empties its own state.
      */
-    onclear?: () => void;
+    onClear?: () => void;
   }
 </script>
 
@@ -45,7 +45,7 @@ Native attributes and events target the input; `class` styles the surrounding su
     controlSize = "md",
     invalid = false,
     controller = createValueController<readonly string[]>({ initialValue: [] }),
-    onclear,
+    onClear,
     onchange,
     "aria-invalid": ariaInvalid,
     class: className = "",
@@ -77,7 +77,7 @@ Native attributes and events target the input; `class` styles the surrounding su
       // The caller may drop the cross with the choice, so the field takes the focus it held.
       field.focus();
     }
-    onclear?.();
+    onClear?.();
   }
 
   // The app's handler may empty the field, so the selection is read after it.
@@ -109,12 +109,13 @@ Native attributes and events target the input; `class` styles the surrounding su
     {@attach followForm}
   />
   <!-- Browsers word their own control in their interface language, and no attribute changes it. The
-       input stays on top, transparent, and tells assistive technology what these show. -->
+       input stays on top, transparent, and tells assistive technology what these show. `aria-disabled` reaches no
+       reader here: it tells the accessibility check that a disabled field's placeholder is exempt from contrast. -->
   <span class="status" class:empty={chosen.length === 0} aria-hidden="true" aria-disabled={rest.disabled || undefined}>
     {status}
   </span>
   <span class="end">
-    {#if onclear && chosen.length > 0}
+    {#if onClear && chosen.length > 0}
       <!-- Above the transparent input, so a click removes the choice instead of opening the picker. -->
       <span class="clear">
         <FieldButton aria-label={t("fileInput.clear", { name: status })} disabled={rest.disabled} onclick={clear}>
@@ -261,6 +262,10 @@ Native attributes and events target the input; `class` styles the surrounding su
     .file-input:has(.control:focus-visible) {
       outline: var(--border-width-strong) solid Highlight;
       outline-offset: var(--focus-ring-offset);
+    }
+
+    .file-input:has(.control:disabled) :is(.status, .browse) {
+      color: GrayText;
     }
   }
 
