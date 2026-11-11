@@ -68,6 +68,28 @@ describe("shared dark theme", () => {
     expect(foreground.contrast(background, "WCAG21")).toBeGreaterThanOrEqual(5);
   });
 
+  // The lamp is brightest in the viewport's corner, where navigation sits; a card that holds a field starts further
+  // out, where at most three quarters of the peak reaches it.
+  it.each([
+    ["ember", "var(--color-lamp-ember)"],
+    ["magenta", "var(--base-pressure)"],
+    ["brand", "var(--base-brand)"],
+    ["signal", "var(--base-signal)"],
+  ])("keeps a field hint readable on a frosted card under the %s lamp", (_, lamp) => {
+    const layers = [
+      "var(--color-surface-canvas)",
+      `color-mix(in oklab, ${lamp} calc(var(--lamp-peak) * 0.75), transparent)`,
+      "var(--color-surface-island-glass)",
+    ].map((layer) => {
+      const element = document.body.appendChild(document.createElement("span"));
+      element.style.backgroundColor = layer;
+      return getComputedStyle(element).backgroundColor;
+    });
+    const background = renderedColor(...layers);
+    const { foreground } = sample("--color-surface-canvas", "--color-text-hint");
+    expect(foreground.contrast(background, "WCAG21")).toBeGreaterThanOrEqual(4.8);
+  });
+
   it.each(["canvas", "raised", "island-strong"])(
     "keeps field errors readable on %s with contrast headroom",
     (surface) => {
