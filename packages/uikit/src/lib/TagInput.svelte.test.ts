@@ -89,6 +89,21 @@ describe("TagInput", () => {
     form.remove();
   });
 
+  it("makes the word being typed a tag when its form resets, since the form sent it", async () => {
+    const form = document.body.appendChild(document.createElement("form"));
+    const controller = createTagInputController({ initialTags: ["maps"] });
+    const { getByRole } = render(TagInput, { target: form, props: { "aria-label": "Tags", name: "tags", controller } });
+    const input = getByRole("textbox", { name: "Tags" }) as HTMLInputElement;
+
+    await fireEvent.input(input, { target: { value: "noir" } });
+    expect(new FormData(form).getAll("tags")).toEqual(["maps", "noir"]);
+    form.reset();
+
+    expect(controller.state.tags).toEqual(["maps", "noir"]);
+    expect(input.value).toBe("");
+    form.remove();
+  });
+
   it("keeps only the words its controller refuses when Enter ends the field", async () => {
     const controller = createTagInputController();
     const blocking = {

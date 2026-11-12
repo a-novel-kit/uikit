@@ -338,8 +338,12 @@ item.
     }
   }
 
-  /* A ghost or text button stays borderless while disabled too. */
+  /* A ghost or text button stays borderless while disabled too, and an unchosen one stays bare text. */
   .button:is(.ghost, .text):disabled {
     border-color: transparent;
+  }
+
+  .button:is(.ghost, .text):disabled:not([aria-pressed="true"]) {
+    background-color: transparent;
   }
 </style>

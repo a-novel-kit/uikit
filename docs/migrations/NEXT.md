@@ -6,9 +6,8 @@ a tag input, a chip group and a language name.
 ## Do I need to act?
 
 **Required if you pass `align` to `FormActions` or `ActionGroup`, `defaultChecked` to `Checkbox` or `Switch`, or use
-`--color-lamp-violet`.** They are gone, and type checking fails on `align` and `defaultChecked` until they go: the
-controller sets a box's default now, so pass `createCheckedController({ initialChecked: true })` instead. Every app's
-screenshots change anyway: actions that sat at the start of their line, with no `align`, now end it.
+`--color-lamp-violet`.** They are gone, and type checking fails on `align` and `defaultChecked` until they go. Every
+app's screenshots change anyway: actions that sat at the start of their line, with no `align`, now end it.
 
 ## Drop `align` from form and dialog actions
 
@@ -56,13 +55,23 @@ that looked for the button's text now finds none. Show a chosen image above the 
 Nothing fails if you miss this: the unknown token leaves the lamp ember. Check the light behind the page once you
 upgrade.
 
+## Set a box's default through its controller
+
+`Checkbox` and `Switch` take no `defaultChecked`: their controller sets it, so a form reset returns the box to the
+controller's choice, and the next submission sends what it shows. Type checking fails until the prop goes.
+
+```diff
+-<Checkbox label="Notify me" controller={createCheckedController()} defaultChecked />
++<Checkbox label="Notify me" controller={createCheckedController({ initialChecked: true })} />
+```
+
 ## Notes
 
 - `Badge` takes `tone="accent"`, the magenta for a distinction that reports nothing, rarer than `brand`, from the new
   `--color-accent-secondary` token. Badges drop to the regular weight, so screenshots that show one change.
-- A chosen ghost or text button (`aria-pressed="true"`, as a pressed `ToggleButton` or `ToolbarToggleButton` sets)
-  draws no border or glow any more, but for its indicator's: it turns blue, as the navigation's current item, whatever
-  its tone. An outline button keeps its selection, and a disabled ghost or text button loses its border. A disabled
+- A chosen ghost or text button (`aria-pressed="true"`, as a pressed `ToggleButton` or `ToolbarToggleButton` sets) draws
+  no border or glow any more, but for its indicator's: it turns blue, as the navigation's current item, whatever its
+  tone. An outline button keeps its selection, and a disabled ghost or text button loses its border and fill. A disabled
   choice, on a button or a chip, stays visible, dimmed. Screenshots that show one change.
 - A disabled `Combobox` or `FileInput` keeps its error look, as `Input` does, and a disabled `Combobox` drops its
   border, as a disabled `Input`'s well does. A required `FileInput` the form found empty shows the error look.
@@ -75,7 +84,9 @@ upgrade.
 - `ChipGroup` picks options under a field's label, each a chip in the field's well, sized as a badge.
 - `Checkbox`, `Switch`, `RadioGroup` and `ChipGroup` keep their controller's choice through a form reset, as SvelteKit's
   `enhance` runs after a successful action, so the next submission sends what they show; `Combobox` keeps its shown
-  label.
+  label, and `TagInput` makes the word being typed a tag, since the form sent it.
+- `createValueController` replaces its state whole, as `createTagInputController` does: `state.value` is read-only,
+  and an object or array value changed in place no longer updates the control, so pass a new value to `setValue`.
 - `LanguageName` sets a language's flag beside its name, for every language select. `SelectionOption` takes `lang`,
   which Select, Combobox, RadioGroup and ChipGroup set on the option, so assistive technology reads each name in its
   own language.

@@ -27,8 +27,14 @@ Native attributes and events target the text input; `class` styles the surroundi
 
   import type { HTMLInputAttributes } from "svelte/elements";
 
-  /** Props for a text field that collects tags. */
-  export interface TagInputProps extends Omit<HTMLInputAttributes, "type" | "value"> {
+  /**
+   * Props for a text field that collects tags. A length or pattern would bound everything typed, refused words
+   * included, not one tag, so the field takes none: the controller limits each tag.
+   */
+  export interface TagInputProps extends Omit<
+    HTMLInputAttributes,
+    "type" | "value" | "maxlength" | "minlength" | "pattern"
+  > {
     /** Sets the control height and type scale. */
     controlSize?: ComponentSize;
     /** Applies the invalid surface and focus treatment. */
@@ -45,6 +51,8 @@ Native attributes and events target the text input; `class` styles the surroundi
   import { useMessages } from "./internal/i18n";
   import { resolveInvalidState } from "./selection";
   import { splitTags } from "./tags";
+
+  import type { Attachment } from "svelte/attachments";
 
   import { X as XIcon } from "@lucide/svelte";
 
@@ -109,6 +117,15 @@ Native attributes and events target the text input; `class` styles the surroundi
     takeTags(event.currentTarget);
   }
 
+  // The form sent the word being typed, so a reset, as SvelteKit's enhance runs after a successful action, makes it a
+  // tag before the field empties: the field then shows what the server took. The form fires reset before resetting.
+  const commitOnReset: Attachment<HTMLInputElement> = (input) => {
+    const form = input.form;
+    const commit = () => takeTags(input, true);
+    form?.addEventListener("reset", commit);
+    return () => form?.removeEventListener("reset", commit);
+  };
+
   function handleKeydown(event: KeyboardEvent & { currentTarget: EventTarget & HTMLInputElement }) {
     onkeydown?.(event);
     // WebKit sends the Enter that confirms a composition after it ends, as key code 229. Only that Enter counts:
@@ -169,6 +186,7 @@ Native attributes and events target the text input; `class` styles the surroundi
     class="control"
     autocomplete="off"
     autocapitalize="none"
+    autocorrect="off"
     spellcheck="false"
     {name}
     {disabled}
@@ -181,6 +199,7 @@ Native attributes and events target the text input; `class` styles the surroundi
     oninput={handleInput}
     onkeydown={handleKeydown}
     oncompositionend={handleCompositionEnd}
+    {@attach commitOnReset}
   />
   <VisuallyHidden id={statusId} role="status">{status}</VisuallyHidden>
 </div>

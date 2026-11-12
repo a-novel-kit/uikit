@@ -2,6 +2,7 @@
   import { Button, Card, Container, Grid, Inline, PageHeader, SplitPane, Stack } from "@a-novel-kit/uikit";
 
   import { defineMeta } from "@storybook/addon-svelte-csf";
+  import { expect, within } from "storybook/test";
 
   const ghostItems = [
     { title: "The harbor lights", text: "A short one." },
@@ -17,6 +18,13 @@
     },
     { title: "Lantern", text: "A play in three acts." },
   ];
+
+  // Focuses the first card's link, so the screenshot and the accessibility check see a card lit.
+  async function lightFirstCard({ canvasElement }: { canvasElement: HTMLElement }) {
+    const [link] = within(canvasElement).getAllByRole("link");
+    link.focus();
+    await expect(link).toHaveFocus();
+  }
 
   const { Story } = defineMeta({
     title: "Layout/Primitives",
@@ -101,6 +109,7 @@
 
 <Story
   name="Ghost cards"
+  play={lightFirstCard}
   parameters={{
     docs: {
       description: {
@@ -129,6 +138,7 @@
 
 <Story
   name="Ghost cards in a card"
+  play={lightFirstCard}
   parameters={{
     docs: {
       description: {

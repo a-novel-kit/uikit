@@ -56,10 +56,10 @@ describe("low-emphasis action feedback", () => {
         await userEvent.keyboard("[/Space]");
         expect(parseFloat(getComputedStyle(button).outlineWidth)).toBeGreaterThan(0);
 
+        // A disabled outline button fills; a disabled ghost or text button stays bare text.
+        const disabledSurface = variant === "outline" ? "var(--color-action-disabled-surface)" : "transparent";
         await rerender({ disabled: true });
-        await expect
-          .poll(() => getComputedStyle(button).backgroundColor)
-          .toBe(resolveColor("var(--color-action-disabled-surface)"));
+        await expect.poll(() => getComputedStyle(button).backgroundColor).toBe(resolveColor(disabledSurface));
         expect(getComputedStyle(button).boxShadow).toBe("none");
       }
     );

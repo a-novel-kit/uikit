@@ -70,7 +70,9 @@ ringed as a divider, and lit as a raised card under the pointer or once somethin
      collection of them reads as the page itself until the pointer lights one. With no surface of its
      own to set it apart, its ring takes a divider's strength. */
   .surface-ghost {
-    transition: background-color var(--duration-fast) var(--easing-standard);
+    transition:
+      background-color var(--duration-fast) var(--easing-standard),
+      box-shadow var(--duration-fast) var(--easing-standard);
     box-shadow: 0 0 0 var(--border-width-thin) var(--color-border-divider);
     background: color-mix(in oklab, var(--color-surface-canvas) var(--color-mix-2), transparent);
   }
