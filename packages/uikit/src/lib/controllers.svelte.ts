@@ -6,6 +6,7 @@ import {
   panCrop,
   zoomCrop,
 } from "./picture";
+import { kebabTag } from "./tags";
 
 /** State managed for content that can be open or closed. */
 export interface OpenState {
@@ -233,7 +234,7 @@ export function createPressedController({
 /** State managed for a single-value control. */
 export interface ValueState<Value> {
   /** Current control value. */
-  value: Value;
+  readonly value: Value;
 }
 
 /** Pure state transitions for a single-value control. */
@@ -267,7 +268,8 @@ export function createValueController<Value>({
   initialValue,
   onValueChange,
 }: ValueControllerOptions<Value>): ValueController<Value> {
-  let state = $state<ValueState<Value>>({ value: initialValue });
+  // Replaced whole on each change, so a value such as a chip choice stays a plain array that clones.
+  let state = $state.raw<ValueState<Value>>({ value: initialValue });
 
   return {
     get state() {
@@ -482,6 +484,74 @@ export function createPictureFrameController({ source, ratio }: PictureFrameCont
     },
     zoom: (zoom, focusX, focusY) => {
       state = { ...state, crop: zoomCrop(state, zoom, focusX, focusY) };
+    },
+  };
+}
+
+/** State managed for a tag input. */
+export interface TagInputState {
+  /** The tags, in the order they were added, each once. */
+  readonly tags: readonly string[];
+}
+
+/** Pure state transitions for a tag input. */
+export interface TagInputController {
+  /** State rendered by the component. */
+  readonly state: TagInputState;
+  /**
+   * Adds the tag the text normalizes to, unless it is empty or already there. Reports whether the text now stands as
+   * a tag, or normalizes to nothing: false only when the controller refuses it, and the field keeps the text.
+   */
+  add(text: string): boolean;
+  /** Removes the tag at `index`. */
+  remove(index: number): void;
+}
+
+/** Configuration for the default tag input controller. */
+export interface TagInputControllerOptions {
+  /** Initial tags, taken as written, each kept once. */
+  initialTags?: readonly string[];
+  /** Turns typed text into a tag; lower-kebab-case by default. */
+  normalize?: (text: string) => string;
+  /** Runs after the default controller changes the tags, once per tag a paste adds. */
+  onTagsChange?: (tags: readonly string[]) => void;
+}
+
+/**
+ * Creates local reactive tag state. Added text is normalized, and an empty or repeated tag is ignored. The caller
+ * owns limits and persistence.
+ *
+ * @example
+ * ```ts
+ * import { createTagInputController } from "@a-novel-kit/uikit";
+ * const tags = createTagInputController();
+ * tags.add("Slow Burn"); // tags.state.tags: ["slow-burn"]
+ * ```
+ */
+export function createTagInputController({
+  initialTags = [],
+  normalize = kebabTag,
+  onTagsChange,
+}: TagInputControllerOptions = {}): TagInputController {
+  // Replaced whole on every change, so it needs no deep proxy and the tags stay cloneable.
+  let state = $state.raw<TagInputState>({ tags: [...new Set(initialTags)] });
+
+  function setTags(tags: readonly string[]) {
+    state = { tags };
+    onTagsChange?.(tags);
+  }
+
+  return {
+    get state() {
+      return state;
+    },
+    add: (text) => {
+      const tag = normalize(text);
+      if (tag && !state.tags.includes(tag)) setTags([...state.tags, tag]);
+      return true;
+    },
+    remove: (index) => {
+      if (index in state.tags) setTags(state.tags.toSpliced(index, 1));
     },
   };
 }

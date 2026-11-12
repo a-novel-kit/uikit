@@ -266,7 +266,7 @@ The hidden named input submits the selected value. The caller validates required
     onclick={handleTriggerClick}
     onkeydown={handleTriggerKeyDown}
   >
-    <span data-select-value>
+    <span data-select-value lang={selectedOption?.lang}>
       {#if selectedOption}
         {#if renderOption}{@render renderOption(selectedOption)}{:else}{selectedOption.label}{/if}
       {:else}
@@ -300,6 +300,7 @@ The hidden named input submits the selected value. The caller validates required
           tabindex={-1}
           role="option"
           aria-label={option.label}
+          lang={option.lang}
           aria-selected={controller.state.value === option.value}
           aria-disabled={option.disabled || undefined}
           data-option-index={index}

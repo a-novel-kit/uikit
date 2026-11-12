@@ -90,9 +90,9 @@
 
 {#snippet statusLabels()}
   <Inline gap="2" wrap>
-    <Badge>Draft</Badge><Badge tone="brand">Active</Badge><Badge tone="highlight">New</Badge><Badge tone="success"
-      >Ready</Badge
-    ><Badge tone="warning">Review</Badge><Badge tone="danger">Failed</Badge>
+    <Badge>Draft</Badge><Badge tone="brand">Active</Badge><Badge tone="accent">Fantasy</Badge><Badge tone="highlight"
+      >New</Badge
+    ><Badge tone="success">Ready</Badge><Badge tone="warning">Review</Badge><Badge tone="danger">Failed</Badge>
   </Inline>
 {/snippet}
 

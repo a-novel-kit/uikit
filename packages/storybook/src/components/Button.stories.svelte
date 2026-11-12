@@ -1,7 +1,7 @@
 <script module lang="ts">
   import type { ComponentProps } from "svelte";
 
-  import { Button, Inline } from "@a-novel-kit/uikit";
+  import { Button, Inline, Stack } from "@a-novel-kit/uikit";
 
   import { Save as SaveIcon } from "@lucide/svelte";
   import { defineMeta } from "@storybook/addon-svelte-csf";
@@ -101,6 +101,33 @@
     <Button tone="neutral">Neutral</Button>
     <Button tone="danger">Danger</Button>
   </Inline>
+</Story>
+<Story
+  name="Chosen by variant"
+  parameters={{
+    docs: {
+      description: {
+        story:
+          "A chosen outline button keeps its tone and border. A chosen ghost or text button reads as the navigation's current item, blue whatever its tone, with no border or glow but its indicator's, as NavList's, and stays borderless while disabled. A disabled choice stays visible, dimmed.",
+      },
+    },
+  }}
+  asChild
+>
+  <Stack gap="3">
+    {#each ["brand", "neutral"] as const as tone (tone)}
+      <Inline gap="4" wrap role="group" aria-label="Chosen {tone} buttons by variant">
+        <Button variant="outline" {tone} aria-pressed="true">Outline</Button>
+        <Button variant="ghost" {tone} aria-pressed="true">Ghost</Button>
+        <Button variant="text" {tone} aria-pressed="true">Text</Button>
+        <Button variant="ghost" {tone} disabled>Disabled ghost</Button>
+        <Button variant="text" {tone} disabled>Disabled text</Button>
+        <Button variant="outline" {tone} aria-pressed="true" disabled>Outline, chosen, disabled</Button>
+        <Button variant="ghost" {tone} aria-pressed="true" disabled>Ghost, chosen, disabled</Button>
+        <Button variant="text" {tone} aria-pressed="true" disabled>Text, chosen, disabled</Button>
+      </Inline>
+    {/each}
+  </Stack>
 </Story>
 <Story name="Icon and text" asChild>
   <Button><SaveIcon size="var(--icon-size-sm)" aria-hidden="true" />Save changes</Button>

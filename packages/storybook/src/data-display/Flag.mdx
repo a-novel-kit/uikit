@@ -27,8 +27,18 @@ keeps a flag's dark edge apart from the dark page.
 
 With a `label`, the flag is an image of that name, for a flag that stands alone. Omit the `label`
 when text beside the flag names the language: the flag is then decorative, and assistive technology skips it.
+`LanguageName` sets that pair, the name in its own language, and is how every language choice reads, as a select's
+option included.
 
 <Canvas of={Stories.BesideItsName} />
+
+```svelte
+<script lang="ts">
+  import { LanguageName } from "@a-novel-kit/uikit";
+</script>
+
+<LanguageName locale="fr" name="Français" />
+```
 
 ## API
 

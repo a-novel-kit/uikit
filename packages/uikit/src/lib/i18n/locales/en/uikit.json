@@ -32,8 +32,7 @@
     "title": "There is a problem"
   },
   "fileInput": {
-    "choose": "Choose a file",
-    "chooseMany": "Choose files",
+    "clear": "Remove {{name}}",
     "count": "{{count}} files",
     "placeholder": "No file chosen"
   },
@@ -56,6 +55,12 @@
   "table": {
     "captioned": "Table: {{caption}}",
     "uncaptioned": "Scrollable table"
+  },
+  "tagInput": {
+    "count": "{{count}} tags",
+    "none": "No tags",
+    "one": "1 tag",
+    "remove": "Remove the {{tag}} tag"
   },
   "toastRegion": {
     "dismiss": "Dismiss",

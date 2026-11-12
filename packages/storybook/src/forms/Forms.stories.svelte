@@ -2,6 +2,7 @@
   import {
     Button,
     Checkbox,
+    ChipGroup,
     Combobox,
     ErrorSummary,
     Field,
@@ -16,6 +17,7 @@
     Slider,
     Stack,
     Switch,
+    TagInput,
     Textarea,
   } from "@a-novel-kit/uikit";
 
@@ -50,6 +52,20 @@
     { value: "vi", label: "Vietnamese" },
   ] as const;
 
+  const longGenreOptions = [
+    { value: "speculative", label: "Speculative-historical-alternate-timeline" },
+    { value: "noir", label: "Noir" },
+  ];
+
+  const genreOptions = [
+    { value: "fantasy", label: "Fantasy" },
+    { value: "mystery", label: "Mystery" },
+    { value: "romance", label: "Romance" },
+    { value: "scienceFiction", label: "Science fiction" },
+    { value: "thriller", label: "Thriller" },
+    { value: "western", label: "Western", disabled: true },
+  ];
+
   const { Story } = defineMeta({
     title: "Forms/Controls",
     tags: ["autodocs"],
@@ -65,7 +81,7 @@
 </script>
 
 <script lang="ts">
-  import { fixedChecked, fixedCombobox, fixedPressed, fixedSelect, fixedValue } from "../controllers";
+  import { fixedChecked, fixedCombobox, fixedPressed, fixedSelect, fixedTags, fixedValue } from "../controllers";
 
   type Visibility = (typeof visibilityOptions)[number]["value"];
   type Language = (typeof languageOptions)[number]["value"];
@@ -80,11 +96,19 @@
   const densityController = fixedValue<string | undefined>("comfortable");
   const scaleController = fixedValue(72);
   const languageController = fixedCombobox<Language>("en", true);
+  const disabledVisibilityController = fixedSelect<Visibility>("private");
+  const disabledLanguageController = fixedCombobox<Language>("fr");
   const compactNavigationController = fixedChecked();
   const hiddenPasswordController = fixedPressed();
   const shownPasswordController = fixedPressed(true);
   const oneFileController = fixedValue<readonly string[]>(["chapter-one.pdf"]);
   const severalFilesController = fixedValue<readonly string[]>(["chapter-one.pdf", "chapter-two.pdf", "notes.txt"]);
+  const tagsController = fixedTags(["slow-burn", "années-50", "maps"]);
+  const longTagController = fixedTags(["a-tag-that-runs-far-longer-than-its-field-holds-on-one-line", "maps"]);
+  const chosenGenresController = fixedValue<readonly string[]>(["fantasy", "mystery", "western"]);
+  // Leaves the disabled Western unchosen, so the enabled group shows a disabled option as well.
+  const someGenresController = fixedValue<readonly string[]>(["fantasy", "mystery"]);
+  const coverController = fixedValue<readonly string[]>(["cover.png"]);
   const longFileController = fixedValue<readonly string[]>([
     "the-complete-annotated-manuscript-with-every-revision-and-editor-comment-final-v12.pdf",
   ]);
@@ -130,6 +154,31 @@
 
 <Story name="File upload states" asChild>
   <div class="form">
+    <Field label="Chosen, with its cross">
+      {#snippet children(control)}
+        <FileInput {...control} controller={coverController} onClear={() => {}} />
+      {/snippet}
+    </Field>
+    <Field label="Chosen, invalid" error="Choose an image under 256 KiB.">
+      {#snippet children(control)}
+        <FileInput {...control} controller={coverController} onClear={() => {}} />
+      {/snippet}
+    </Field>
+    <Field label="Chosen, disabled">
+      {#snippet children(control)}
+        <FileInput {...control} controller={coverController} onClear={() => {}} disabled />
+      {/snippet}
+    </Field>
+    <Field label="Chosen, small">
+      {#snippet children(control)}
+        <FileInput {...control} controller={coverController} onClear={() => {}} controlSize="sm" />
+      {/snippet}
+    </Field>
+    <Field label="Chosen, large">
+      {#snippet children(control)}
+        <FileInput {...control} controller={coverController} onClear={() => {}} controlSize="lg" />
+      {/snippet}
+    </Field>
     <Field label="One file">
       {#snippet children(control)}
         <FileInput {...control} controller={oneFileController} />
@@ -163,6 +212,157 @@
     <Field label="Large">
       {#snippet children(control)}
         <FileInput {...control} controlSize="lg" />
+      {/snippet}
+    </Field>
+  </div>
+</Story>
+
+<Story name="File upload with a preview" asChild>
+  <div class="narrow">
+    <Field label="Logo" hint="Shown in place of the title.">
+      {#snippet children(control)}
+        <div class="previewed">
+          <span class="preview" aria-hidden="true"></span>
+          <FileInput {...control} controller={coverController} accept="image/*" onClear={() => {}} />
+        </div>
+      {/snippet}
+    </Field>
+  </div>
+</Story>
+
+<Story
+  name="Tags"
+  parameters={{
+    docs: {
+      description: {
+        story:
+          "A space, a comma (Arabic, ideographic and full-width ones included) or Enter ends a tag; Backspace in the empty field takes the last tag back as text, and each tag's cross removes it. Text an input method is still composing stays as typed. The controller writes tags in lower-kebab-case through `kebabTag` and owns limits: its `add` reports whether it took the text, so a tag it refuses stays typed. The form receives each tag under `name`.",
+      },
+    },
+  }}
+  asChild
+>
+  <div class="form">
+    <Field label="Tags" hint="A space ends a tag.">
+      {#snippet children(control)}
+        <TagInput {...control} name="tags" controller={tagsController} />
+      {/snippet}
+    </Field>
+    <Field label="Empty" hint="A space ends a tag.">
+      {#snippet children(control)}
+        <TagInput {...control} name="empty" placeholder="slow-burn" />
+      {/snippet}
+    </Field>
+    <Field label="Invalid" error="Up to 10 tags.">
+      {#snippet children(control)}
+        <TagInput {...control} name="invalid" controller={tagsController} />
+      {/snippet}
+    </Field>
+    <Field label="Disabled">
+      {#snippet children(control)}
+        <TagInput {...control} name="disabled" controller={tagsController} disabled />
+      {/snippet}
+    </Field>
+    <Field label="Readonly">
+      {#snippet children(control)}
+        <TagInput {...control} name="readonly" controller={tagsController} readonly />
+      {/snippet}
+    </Field>
+    <Field label="Small">
+      {#snippet children(control)}
+        <TagInput {...control} name="small" controller={tagsController} controlSize="sm" />
+      {/snippet}
+    </Field>
+    <Field label="Large">
+      {#snippet children(control)}
+        <TagInput {...control} name="large" controller={tagsController} controlSize="lg" />
+      {/snippet}
+    </Field>
+    <div class="narrow">
+      <Field label="A long tag wraps">
+        {#snippet children(control)}
+          <TagInput {...control} name="long" controller={longTagController} />
+        {/snippet}
+      </Field>
+    </div>
+  </div>
+</Story>
+
+<Story
+  name="Chips"
+  parameters={{
+    docs: {
+      description: {
+        story:
+          "Each chip is a native checkbox under the group's legend, so Tab, Space and assistive technology work as for any checkbox. The controller holds the chosen values in the order of choice and may refuse one, which the chip then takes back; the form receives them in the options' order. A disabled group dims its well and keeps its choice visible.",
+      },
+    },
+  }}
+  asChild
+>
+  <div class="form">
+    <ChipGroup
+      legend="Genres"
+      hint="Up to 10."
+      name="genres"
+      options={genreOptions}
+      controller={someGenresController}
+    />
+    <ChipGroup legend="Accent" name="accent" tone="accent" options={genreOptions} controller={chosenGenresController} />
+    <ChipGroup
+      legend="Invalid"
+      error="Up to 10 genres."
+      name="invalid"
+      options={genreOptions}
+      controller={chosenGenresController}
+    />
+    <div class="narrow">
+      <ChipGroup legend="A long label wraps" name="long" options={longGenreOptions} />
+    </div>
+    <ChipGroup legend="Disabled" name="disabled" options={genreOptions} controller={chosenGenresController} disabled />
+  </div>
+</Story>
+
+<Story
+  name="Disabled with an error"
+  parameters={{
+    docs: {
+      description: {
+        story:
+          "A field disabled while it still shows an error keeps its error look, as a form disabled while it saves keeps the refusal it shows.",
+      },
+    },
+  }}
+  asChild
+>
+  <div class="form">
+    <Field label="Title" error="Give the project a title.">
+      {#snippet children(control)}<Input {...control} disabled />{/snippet}
+    </Field>
+    <Field label="Tags" error="Up to 10 tags.">
+      {#snippet children(control)}
+        <TagInput {...control} name="disabled-tags" controller={tagsController} disabled />
+      {/snippet}
+    </Field>
+    <Field label="Logo" error="Choose an image under 256 KiB.">
+      {#snippet children(control)}<FileInput {...control} controller={coverController} disabled />{/snippet}
+    </Field>
+    <ChipGroup
+      legend="Genres"
+      error="Up to 10 genres."
+      name="disabled-genres"
+      options={genreOptions}
+      controller={chosenGenresController}
+      disabled
+    />
+    <Field label="Visibility" error="Choose who sees the project.">
+      {#snippet children(control)}
+        <Select {...control} controller={disabledVisibilityController} options={visibilityOptions} disabled />
+      {/snippet}
+    </Field>
+    <Field label="Language" error="Choose a language.">
+      {#snippet children(control)}
+        <Combobox {...control} controller={disabledLanguageController} options={languageOptions} disabled />
       {/snippet}
     </Field>
   </div>
@@ -419,5 +619,17 @@
   }
   .count {
     margin-inline-start: auto;
+  }
+  /* A chosen image sits above its field. */
+  .previewed {
+    display: grid;
+    gap: var(--space-2);
+  }
+  .preview {
+    display: block;
+    border-radius: var(--radius-sm);
+    background: var(--gradient-action-primary);
+    inline-size: var(--space-24);
+    block-size: var(--space-16);
   }
 </style>

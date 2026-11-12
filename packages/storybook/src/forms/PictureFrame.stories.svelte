@@ -73,7 +73,7 @@
   >
     {#snippet headerActions()}{@render closeAction(opened)}{/snippet}
     <PictureFrame controller={avatar} shape="circle" />
-    <FormActions align="stretch"><Button>Save picture</Button></FormActions>
+    <FormActions><Button>Save picture</Button></FormActions>
   </Dialog>
 {/snippet}
 
@@ -81,7 +81,7 @@
   <Dialog controller={opened} title="Project background" description="Move and zoom the image to frame the background.">
     {#snippet headerActions()}{@render closeAction(opened)}{/snippet}
     <PictureFrame controller={background} label="Background frame" zoomLabel="Background zoom" disabled={saving} />
-    <FormActions align="stretch">
+    <FormActions>
       <Button disabled={saving}>{saving ? "Saving background…" : "Save background"}</Button>
     </FormActions>
   </Dialog>

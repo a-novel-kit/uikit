@@ -225,6 +225,7 @@ The hidden named input submits the selected value. The caller validates required
       type="text"
       role="combobox"
       value={inputValue}
+      defaultValue={inputValue}
       {placeholder}
       {autocomplete}
       {disabled}
@@ -281,6 +282,7 @@ The hidden named input submits the selected value. The caller validates required
           tabindex={-1}
           role="option"
           aria-label={option.label}
+          lang={option.lang}
           aria-selected={controller.state.value === option.value}
           aria-disabled={option.disabled || undefined}
           data-option-index={index}
@@ -352,6 +354,13 @@ The hidden named input submits the selected value. The caller validates required
     border-color: var(--color-control-border-focus);
     background: var(--color-control-surface-focus);
   }
+  /* Before the error rules, as in Input, so a disabled field keeps its error look, and its border stays a well's. */
+  .a-novel-combobox-input:disabled {
+    cursor: not-allowed;
+    border-color: var(--color-field-border);
+    background: var(--color-control-surface-disabled);
+    color: var(--color-control-disabled-text);
+  }
   .a-novel-combobox-input[aria-invalid="true"],
   .a-novel-combobox-input:user-invalid {
     border-color: var(--color-feedback-error-border);
@@ -364,12 +373,6 @@ The hidden named input submits the selected value. The caller validates required
   }
   .a-novel-combobox-input::placeholder {
     color: var(--color-control-placeholder);
-  }
-  .a-novel-combobox-input:disabled {
-    cursor: not-allowed;
-    border-color: var(--color-border-subtle);
-    background: var(--color-control-surface-disabled);
-    color: var(--color-control-disabled-text);
   }
   .trigger {
     display: grid;

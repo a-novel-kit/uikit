@@ -15,7 +15,7 @@ export const coreColors = [
   {
     family: "pressure",
     label: "Pressure",
-    role: "Urgency / caution / failure",
+    role: "Urgency / caution / failure / second accent",
   },
   {
     family: "signal",
@@ -119,7 +119,7 @@ components.
 
 Brand is the base and marks interaction. Signal highlights what deserves notice without calling for
 action, such as a success or an upcoming change. Pressure marks errors and anything that needs
-immediate attention.
+immediate attention, and, rarer than the brand, a distinction that reports nothing.
 
 ## Semantic roles
 
@@ -182,6 +182,11 @@ text.
 Selected text reads in signal amber on a translucent brand veil (`--color-selection-{text,surface}`).
 No other state pairs them, so a selection stands out on every surface. Buttons, tabs and menus are
 not selectable.
+
+The pressure magenta also sets apart a distinction that reports nothing, such as a project's genres
+(`--color-accent-secondary`), as `Badge tone="accent"` and `ChipGroup tone="accent"` do. It reads 5.2:1
+against inverse text. Each app's lamp takes one hue (`--color-lamp-{ember,magenta}`): Account's ember,
+Studio's magenta.
 
 ## Primitive ramps
 

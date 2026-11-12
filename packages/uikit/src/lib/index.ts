@@ -20,6 +20,7 @@ export {
   createPictureFrameController,
   createPressedController,
   createSelectController,
+  createTagInputController,
   createValueController,
 } from "./controllers.svelte";
 export type {
@@ -41,6 +42,9 @@ export type {
   PressedState,
   SelectControllerOptions,
   SelectState,
+  TagInputController,
+  TagInputControllerOptions,
+  TagInputState,
   ValueController,
   ValueControllerOptions,
   ValueState,
@@ -49,6 +53,7 @@ export { browserPictureFiles } from "./pictureFiles";
 export type { PictureFiles, WholePictureFiles } from "./pictureFiles";
 export { centeredCrop, panCrop, zoomCrop } from "./picture";
 export type { AspectRatio, PictureCrop, PictureFrameState, PictureLimits, PictureRule, PictureSource } from "./picture";
+export { kebabTag, splitTags } from "./tags";
 export type { ComponentSize, FeedbackState, FeedbackTone, LayoutGap, SelectionOption } from "./types";
 export { default as Accordion } from "./Accordion.svelte";
 export type { AccordionProps } from "./Accordion.svelte";
@@ -105,6 +110,8 @@ export { default as Field } from "./Field.svelte";
 export type { FieldControlProps, FieldProps } from "./Field.svelte";
 export { default as Fieldset } from "./Fieldset.svelte";
 export type { FieldsetProps } from "./Fieldset.svelte";
+export { default as ChipGroup } from "./ChipGroup.svelte";
+export type { ChipGroupController, ChipGroupProps } from "./ChipGroup.svelte";
 export { default as FileInput } from "./FileInput.svelte";
 export type { FileInputController, FileInputProps } from "./FileInput.svelte";
 export { default as Flag } from "./Flag.svelte";
@@ -121,6 +128,8 @@ export { default as InlineMessage } from "./InlineMessage.svelte";
 export type { InlineMessageProps } from "./InlineMessage.svelte";
 export { default as Input } from "./Input.svelte";
 export type { InputProps } from "./Input.svelte";
+export { default as LanguageName } from "./LanguageName.svelte";
+export type { LanguageNameProps } from "./LanguageName.svelte";
 export { default as Link } from "./Link.svelte";
 export type { LinkProps } from "./Link.svelte";
 export { default as Meter } from "./Meter.svelte";
@@ -171,6 +180,8 @@ export { default as Table } from "./Table.svelte";
 export type { TableProps } from "./Table.svelte";
 export { default as Tabs } from "./Tabs.svelte";
 export type { TabItem, TabsController, TabsProps } from "./Tabs.svelte";
+export { default as TagInput } from "./TagInput.svelte";
+export type { TagInputProps } from "./TagInput.svelte";
 export { default as Textarea } from "./Textarea.svelte";
 export type { TextareaProps } from "./Textarea.svelte";
 export { default as ToastRegion } from "./ToastRegion.svelte";

@@ -142,7 +142,7 @@ child with `autofocus` takes focus instead. Opening and closing fade the dialog 
   <div class="panel">
     <PanelHeader {title} {description} {titleId} {descriptionId} actions={headerActions} />
     {#if children}<div class="content">{@render children()}</div>{/if}
-    {#if actions}<footer><ActionGroup align="end" children={actions} /></footer>{/if}
+    {#if actions}<footer><ActionGroup children={actions} /></footer>{/if}
   </div>
 </dialog>
 

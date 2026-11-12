@@ -18,8 +18,8 @@
           {#snippet feedback()}
             {#if error}<Alert tone="error" title="Changes could not be saved. Please try again." />{/if}
           {/snippet}
+          <Button variant="text" tone="neutral">Cancel</Button>
           <Button type="submit">Save changes</Button>
-          <Button variant="ghost" tone="neutral">Cancel</Button>
         </FormActions>
       </Stack>
     </form>

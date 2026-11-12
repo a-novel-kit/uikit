@@ -1,7 +1,8 @@
 <!--
 @component
-Styles a native file picker in the app's language. Read selected files from the native change event;
-file selection remains owned by the browser.
+Styles a native file picker as a field: the chosen file's name, then a folder icon at its end. The whole field opens
+the picker, and `onClear` adds a cross before the icon that removes the choice. Read selected files from the native
+change event; file selection remains owned by the browser. Show a chosen image above the field, never inside it.
 Native attributes and events target the input; `class` styles the surrounding surface.
 -->
 <script lang="ts" module>
@@ -19,24 +20,32 @@ Native attributes and events target the input; `class` styles the surrounding su
     controlSize?: ComponentSize;
     /** Applies the invalid surface and focus treatment. */
     invalid?: boolean;
-    /** State owner of the file names shown beside the button; each input has its own by default. */
+    /** State owner of the file names the field shows; each input has its own by default. */
     controller?: FileInputController;
+    /**
+     * Removes the choice; shows a cross at the end of the field once a file is chosen, named after it. The caller
+     * empties its own state.
+     */
+    onClear?: () => void;
   }
 </script>
 
 <script lang="ts">
   import { createValueController } from "./controllers.svelte";
+  import FieldButton from "./internal/FieldButton.svelte";
   import { useMessages } from "./internal/i18n";
   import { resolveInvalidState } from "./selection";
 
   import { untrack } from "svelte";
   import type { Attachment } from "svelte/attachments";
 
+  import { FolderOpen as FolderIcon, X as XIcon } from "@lucide/svelte";
+
   let {
     controlSize = "md",
     invalid = false,
     controller = createValueController<readonly string[]>({ initialValue: [] }),
-    multiple,
+    onClear,
     onchange,
     "aria-invalid": ariaInvalid,
     class: className = "",
@@ -44,6 +53,8 @@ Native attributes and events target the input; `class` styles the surrounding su
   }: FileInputProps = $props();
 
   const { t } = useMessages();
+
+  let field = $state<HTMLInputElement>();
 
   const isInvalid = $derived(resolveInvalidState(invalid, ariaInvalid));
   const chosen = $derived(controller.state.value);
@@ -55,6 +66,18 @@ Native attributes and events target the input; `class` styles the surrounding su
 
   function showSelection(input: HTMLInputElement) {
     controller.setValue(Array.from(input.files ?? [], (file) => file.name));
+  }
+
+  // The cross empties the input itself, so the form sends nothing and the same file chosen again still reports a
+  // change.
+  function clear() {
+    if (field) {
+      field.value = "";
+      showSelection(field);
+      // The caller may drop the cross with the choice, so the field takes the focus it held.
+      field.focus();
+    }
+    onClear?.();
   }
 
   // The app's handler may empty the field, so the selection is read after it.
@@ -77,26 +100,40 @@ Native attributes and events target the input; `class` styles the surrounding su
 
 <span class="file-input {controlSize} {className}">
   <input
+    bind:this={field}
     type="file"
     class="control"
-    {multiple}
     {...rest}
     aria-invalid={isInvalid || undefined}
     onchange={handleChange}
     {@attach followForm}
   />
   <!-- Browsers word their own control in their interface language, and no attribute changes it. The
-       input stays on top, transparent, and tells assistive technology what these show. -->
-  <span class="button" aria-hidden="true" aria-disabled={rest.disabled || undefined}>
-    {multiple ? t("fileInput.chooseMany") : t("fileInput.choose")}
+       input stays on top, transparent, and tells assistive technology what these show. `aria-disabled` reaches no
+       reader here: it tells the accessibility check that a disabled field's placeholder is exempt from contrast. -->
+  <span class="status" class:empty={chosen.length === 0} aria-hidden="true" aria-disabled={rest.disabled || undefined}>
+    {status}
   </span>
-  <span class="status" aria-hidden="true" aria-disabled={rest.disabled || undefined}>{status}</span>
+  <span class="end">
+    {#if onClear && chosen.length > 0}
+      <!-- Above the transparent input, so a click removes the choice instead of opening the picker. -->
+      <span class="clear">
+        <FieldButton aria-label={t("fileInput.clear", { name: status })} disabled={rest.disabled} onclick={clear}>
+          <XIcon size="var(--icon-size-sm)" aria-hidden="true" />
+        </FieldButton>
+      </span>
+    {/if}
+    <!-- Under the transparent input, so a click on it opens the picker as the rest of the field does. -->
+    <span class="browse" aria-hidden="true"><FolderIcon size="var(--icon-size-sm)" /></span>
+  </span>
 </span>
 
 <style>
   .file-input {
     display: flex;
     position: relative;
+    align-items: center;
+    gap: var(--space-2);
     transition:
       background-color var(--duration-fast) var(--easing-standard),
       border-color var(--duration-fast) var(--easing-standard),
@@ -108,8 +145,7 @@ Native attributes and events target the input; `class` styles the surrounding su
     background: var(--color-control-surface);
     inline-size: 100%;
     min-inline-size: 0;
-    overflow: clip;
-    color: var(--color-text-muted);
+    color: var(--color-control-text);
     line-height: var(--line-height-compact);
     font-family: var(--font-family-interface);
   }
@@ -129,14 +165,20 @@ Native attributes and events target the input; `class` styles the surrounding su
   }
 
   @media (hover: hover) {
-    .file-input:hover:not(:has(.control:disabled, .control:focus-visible, .control[aria-invalid="true"])) {
+    .file-input:hover:not(
+        :has(.control:disabled, .control:focus-visible, .control[aria-invalid="true"], .control:user-invalid)
+      ) {
       border-color: var(--color-field-border);
       background: var(--color-control-surface-hover);
     }
 
-    .file-input:hover:not(:has(.control:disabled, .control:focus-visible, .control[aria-invalid="true"])) .button {
-      background: var(--color-action-neutral-hover);
+    .file-input:hover:not(:has(.control:disabled)) .browse {
+      color: var(--color-text-primary);
     }
+  }
+
+  .file-input:has(.control:focus-visible) .browse {
+    color: var(--color-text-primary);
   }
 
   .file-input:has(.control:focus-visible) {
@@ -145,15 +187,7 @@ Native attributes and events target the input; `class` styles the surrounding su
     background: var(--color-control-surface-focus);
   }
 
-  .file-input:has(.control[aria-invalid="true"]) {
-    border-color: var(--color-feedback-error-border);
-    background: var(--color-control-surface-invalid);
-  }
-
-  .file-input:has(.control[aria-invalid="true"]:focus-visible) {
-    box-shadow: var(--shadow-invalid-focus-ring);
-  }
-
+  /* Before the error rules, as in Input, so a disabled field keeps its error look. */
   .file-input:has(.control:disabled) {
     cursor: not-allowed;
     border-color: var(--color-field-border);
@@ -161,62 +195,93 @@ Native attributes and events target the input; `class` styles the surrounding su
     color: var(--color-control-disabled-text);
   }
 
-  .button {
-    display: flex;
-    align-items: center;
-    border-inline-end: var(--border-width-thin) solid var(--color-border-default);
-    background: var(--color-action-neutral);
-    color: var(--color-action-neutral-text);
-    font-weight: var(--font-weight-bold);
+  /* As Input's: an error, or a required field the form found empty, keeps its look while focused. */
+  .file-input:has(.control[aria-invalid="true"], .control:user-invalid) {
+    border-color: var(--color-feedback-error-border);
+    background: var(--color-control-surface-invalid);
   }
 
-  .file-input:has(.control:disabled) .button {
-    border-color: var(--color-action-disabled-border);
-    background: var(--color-action-disabled-surface);
-    color: var(--color-action-disabled-text);
+  .file-input:has(.control[aria-invalid="true"]:focus-visible, .control:user-invalid:focus-visible) {
+    box-shadow: var(--shadow-invalid-focus-ring);
   }
 
   .status {
     flex: 1 1 0;
-    align-self: center;
-    padding-inline-end: var(--space-3);
     min-inline-size: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
+  .status.empty {
+    color: var(--color-control-placeholder);
+  }
+
+  .file-input:has(.control:disabled) :is(.status, .browse) {
+    color: var(--color-control-disabled-text);
+  }
+
+  /* A zero-height margin box keeps the field at its own height: the icons overlap its padding, as far
+     from the inline end as from the block edges of a medium field, as a password's toggle does. */
+  .end {
+    display: inline-flex;
+    flex: none;
+    gap: var(--space-1);
+    margin-inline-end: calc(-1 * (var(--space-2) + var(--border-width-thin)));
+    margin-block: calc(var(--control-height-nested) / -2);
+  }
+
+  .clear {
+    display: inline-flex;
+    position: relative;
+  }
+
+  /* A disabled field removes nothing, so its cross hides, as TagInput's do. A disabled fieldset disables the cross
+     without this component knowing, so it hides on its own state. */
+  .clear:has(:global(:disabled)) {
+    display: none;
+  }
+
+  /* The folder sits where a field's button would, the size of one, and lights with the field. */
+  .browse {
+    display: grid;
+    place-items: center;
+    transition: color var(--duration-fast) var(--easing-standard);
+    inline-size: var(--control-height-nested);
+    block-size: var(--control-height-nested);
+    color: var(--color-text-muted);
+  }
+
   .sm {
+    padding: var(--space-1) var(--space-3);
     min-block-size: var(--control-height-sm);
     font-size: var(--font-size-sm);
   }
-  .sm .button {
-    margin-inline-end: var(--space-3);
-    padding: var(--space-1) var(--space-3);
-  }
 
   .md {
+    padding: var(--space-1) var(--space-3);
     min-block-size: var(--control-height-md);
     font-size: var(--font-size-md);
   }
-  .md .button {
-    margin-inline-end: var(--space-3);
-    padding: var(--space-1) var(--space-4);
-  }
 
   .lg {
+    padding: var(--space-2) var(--space-4);
     min-block-size: var(--control-height-lg);
     font-size: var(--font-size-lg);
-  }
-  .lg .button {
-    margin-inline-end: var(--space-4);
-    padding: var(--space-2) var(--space-6);
   }
 
   @media (forced-colors: active) {
     .file-input:has(.control:focus-visible) {
       outline: var(--border-width-strong) solid Highlight;
       outline-offset: var(--focus-ring-offset);
+    }
+
+    .file-input:has(.control:disabled) :is(.status, .browse) {
+      color: GrayText;
+    }
+
+    .status.empty {
+      color: GrayText;
     }
   }
 
@@ -229,9 +294,14 @@ Native attributes and events target the input; `class` styles the surrounding su
       font: inherit;
     }
 
-    .button,
-    .status {
+    .status,
+    .end {
       display: none;
+    }
+
+    /* The native control brings its own height, so the field drops the padding it keeps for the icons. */
+    .file-input {
+      padding-block: 0;
     }
   }
 </style>

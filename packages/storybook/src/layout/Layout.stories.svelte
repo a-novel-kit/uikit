@@ -2,6 +2,30 @@
   import { Button, Card, Container, Grid, Inline, PageHeader, SplitPane, Stack } from "@a-novel-kit/uikit";
 
   import { defineMeta } from "@storybook/addon-svelte-csf";
+  import { expect, within } from "storybook/test";
+
+  const ghostItems = [
+    { title: "The harbor lights", text: "A short one." },
+    {
+      title: "The cartographer",
+      text: "A mapmaker who only draws places that no longer exist is hired to chart a town that has not been built yet.",
+    },
+    { title: "Salt and ash", text: "Two sisters, one inn, and the winter that closes the pass." },
+    { title: "Notebooks", text: "A building, six floors, a single night without power." },
+    {
+      title: "The long table",
+      text: "A family gathers every summer at the same house, and every summer someone leaves a letter under a plate. This year, the letter is addressed to the house.",
+    },
+    { title: "Lantern", text: "A play in three acts." },
+  ];
+
+  // Focuses the first card's link as the keyboard would, so the screenshot and the accessibility check see a card lit,
+  // even after an earlier click in the same page.
+  async function lightFirstCard({ canvasElement }: { canvasElement: HTMLElement }) {
+    const [link] = within(canvasElement).getAllByRole("link");
+    link.focus({ focusVisible: true });
+    await expect(link.matches(":focus-visible")).toBe(true);
+  }
 
   const { Story } = defineMeta({
     title: "Layout/Primitives",
@@ -27,7 +51,7 @@
         description="Stack controls vertical rhythm; Inline aligns related controls and wraps when space runs out."
       >
         {#snippet actions()}
-          <Button variant="ghost" tone="neutral">Cancel</Button>
+          <Button variant="text" tone="neutral">Cancel</Button>
           <Button>Save layout</Button>
         {/snippet}
       </PageHeader>
@@ -84,6 +108,65 @@
   </Container>
 </Story>
 
+<Story
+  name="Ghost cards"
+  play={lightFirstCard}
+  parameters={{
+    docs: {
+      description: {
+        story:
+          "Each item of a collection is a ghost card: the canvas's own color under a raised card's veil and blur, ringed as a divider. It lights as a raised card under the pointer, or once something in it takes the keyboard's focus. The items run down one column before the next, each as tall as it needs.",
+      },
+    },
+  }}
+  asChild
+>
+  <Container size="lg">
+    <ul class="mosaic">
+      {#each ghostItems as item (item.title)}
+        <li>
+          <Card surface="ghost">
+            <Stack gap="2">
+              <a href="#{item.title}">{item.title}</a>
+              <span class="muted">{item.text}</span>
+            </Stack>
+          </Card>
+        </li>
+      {/each}
+    </ul>
+  </Container>
+</Story>
+
+<Story
+  name="Ghost cards in a card"
+  play={lightFirstCard}
+  parameters={{
+    docs: {
+      description: {
+        story:
+          "A ghost card inside a raised card drops its own blur, and lit, it takes its parent's glass, as a nested raised card does, so its text keeps its contrast.",
+      },
+    },
+  }}
+  asChild
+>
+  <Container size="sm">
+    <Card>
+      <Stack gap="4">
+        <strong>Recent projects</strong>
+        {#each ghostItems.slice(0, 3) as item (item.title)}
+          <Card surface="ghost">
+            <Stack gap="2">
+              <a class="item-link" href="#{item.title}">{item.title}</a>
+              <span class="muted">{item.text}</span>
+            </Stack>
+          </Card>
+        {/each}
+      </Stack>
+    </Card>
+  </Container>
+</Story>
+
 <Story name="Split pane" asChild>
   <Container size="lg">
     <SplitPane>
@@ -104,6 +187,24 @@
 </Story>
 
 <style>
+  /* The items run down one column before the next, each as tall as it needs. */
+  .mosaic {
+    column-gap: var(--space-4);
+    columns: 3 14rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .mosaic > li {
+    break-inside: avoid;
+    padding-block-end: var(--space-4);
+  }
+  .mosaic a,
+  .item-link {
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-bold);
+    font-family: var(--font-family-interface);
+  }
   strong {
     color: var(--color-text-primary);
     font-family: var(--font-family-interface);

@@ -87,7 +87,7 @@
       </IconButton>
     {/snippet}
     {#snippet actions()}
-      <Button variant="ghost" tone="neutral" onclick={() => controller.close()}>Cancel</Button>
+      <Button variant="text" tone="neutral" onclick={() => controller.close()}>Cancel</Button>
       <Button tone="danger" onclick={() => controller.close()}>Archive</Button>
     {/snippet}
     <p class="dialog-copy">Other people will lose access until the item is restored.</p>
@@ -111,7 +111,7 @@
             >{/snippet}
           {#snippet children(control)}<Input {...control} type="password" autocomplete="current-password" />{/snippet}
         </Field>
-        <FormActions align="stretch"><Button type="submit">Log in</Button></FormActions>
+        <FormActions><Button type="submit">Log in</Button></FormActions>
       </Stack>
     </form>
   </Dialog>
@@ -156,7 +156,7 @@
     {/snippet}
     <Stack gap="4" style="inline-size: min(20rem, 75vi)">
       <PanelHeader title="Export a copy" description="The original stays in your workspace." />
-      <ActionGroup align="end">
+      <ActionGroup>
         <Button onclick={controller.close}>Export</Button>
       </ActionGroup>
     </Stack>
@@ -237,7 +237,7 @@
       {/each}
     </Stack>
     {#snippet actions()}
-      <Button variant="ghost" tone="neutral" onclick={controller.close}>Cancel</Button>
+      <Button variant="text" tone="neutral" onclick={controller.close}>Cancel</Button>
       <Button onclick={controller.close}>Save preferences</Button>
     {/snippet}
   </Dialog>

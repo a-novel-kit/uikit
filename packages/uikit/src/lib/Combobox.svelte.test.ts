@@ -78,6 +78,34 @@ describe("Combobox", () => {
     expect(content?.style.getPropertyValue("--a-novel-combobox-menu-max-height")).toBe("8rem");
   });
 
+  it("keeps its shown label through a form reset", () => {
+    const form = document.body.appendChild(document.createElement("form"));
+    const { getByRole } = render(Combobox, {
+      target: form,
+      props: {
+        "aria-label": "Language",
+        controller: createComboboxController<string>({ initialValue: "fr" }),
+        options,
+      },
+    });
+
+    form.reset();
+
+    expect((getByRole("combobox", { name: "Language" }) as HTMLInputElement).value).toBe("French");
+    form.remove();
+  });
+
+  it("names an option in the language it gives", async () => {
+    const languages = [{ value: "fr", label: "Français", lang: "fr" }];
+    const { getByRole } = render(Combobox, {
+      props: { "aria-label": "Language", controller: createComboboxController<string>(), options: languages },
+    });
+
+    await fireEvent.focus(getByRole("combobox", { name: "Language" }));
+
+    expect(getByRole("option", { name: "Français" }).getAttribute("lang")).toBe("fr");
+  });
+
   it("keeps option labels when custom visuals replace their content", async () => {
     const renderOption = createRawSnippet<[ComboboxOption<string>]>((option) => ({
       render: () => `<span data-testid="option-${option().value}"><svg aria-hidden="true"></svg></span>`,

@@ -1,8 +1,9 @@
 <!--
 @component
 Renders a styled native button. Defaults to `type="button"`; use `type="submit"` for form submission.
-Pass `href` for navigation: it renders a native link with the same appearance. A ghost or text link
-with `aria-current="page"` reads as the navigation's current item.
+Pass `href` for navigation: it renders a native link with the same appearance. A ghost or text button
+chosen with `aria-pressed`, or a ghost or text link with `aria-current="page"`, reads as the navigation's current
+item.
 
 ```svelte
 <script lang="ts">
@@ -140,7 +141,11 @@ with `aria-current="page"` reads as the navigation's current item.
     --button-glow: var(--shadow-glow-pressure-strong);
   }
 
+  /* A chosen toggle is positioned for its indicator, so it paints over its neighbors' outlines; a focused button
+     rises above it. */
   .button:focus-visible {
+    position: relative;
+    z-index: 1;
     outline: var(--focus-ring-width) solid var(--color-focus-ring);
     outline-offset: var(--focus-ring-offset);
   }
@@ -252,26 +257,88 @@ with `aria-current="page"` reads as the navigation's current item.
     color: var(--button-foreground-hover);
   }
 
-  :is(.outline, .ghost, .text)[aria-pressed="true"] {
+  .outline[aria-pressed="true"] {
     box-shadow: var(--button-glow);
     border-color: var(--button-selected-border);
     background-color: color-mix(in oklab, var(--button-selected-foreground) var(--color-mix-3), transparent);
     color: var(--button-selected-foreground);
   }
 
-  /* A link to the page showing reads as the navigation's current item, as a rail's account link does
-     beside the NavList, and keeps that look under the pointer. */
-  :is(.ghost, .text)[aria-current="page"] {
+  /* A ghost or text button draws no border or glow in any state; only a chosen toggle's indicator
+     glows, as NavList's does. Chosen, or linking to the page showing, it reads as the navigation's
+     current item, blue whatever its tone, as a rail's account link does beside the NavList, and keeps
+     that look under the pointer. A current link carries no indicator: it stands beside NavList,
+     whose current item marks its start edge. */
+  :is(.ghost, .text):is([aria-pressed="true"], [aria-current="page"]) {
     background-color: var(--color-navigation-selected-surface);
     color: var(--color-navigation-selected-text);
+  }
+
+  /* A chosen toggle also carries the navigation's indicator under its label, which no hover draws, so a
+     brand toggle under the pointer never reads as chosen. */
+  :is(.ghost, .text)[aria-pressed="true"] {
+    position: relative;
+  }
+
+  :is(.ghost, .text)[aria-pressed="true"]::before {
+    position: absolute;
+    inset-block: auto 0;
+    inset-inline: var(--space-2);
+    box-shadow: var(--shadow-indicator-brand);
+    background: var(--color-navigation-selected-indicator);
+    block-size: var(--border-width-strong);
+    content: "";
+  }
+
+  /* Forced colors drop every surface and glow, so an outline marks a chosen button of any variant and the current
+     item, as NavList's does. */
+  @media (forced-colors: active) {
+    :is(.button[aria-pressed="true"], :is(.ghost, .text)[aria-current="page"]):not(:focus-visible) {
+      outline: var(--border-width-thin) solid CanvasText;
+    }
+
+    /* Forced colors paint the indicator Canvas, so it keeps its line in the text color. */
+    :is(.ghost, .text)[aria-pressed="true"]::before {
+      box-shadow: none;
+      background: CanvasText;
+      forced-color-adjust: none;
+    }
   }
 
   .button:disabled {
     opacity: 1;
     cursor: not-allowed;
     box-shadow: none;
+  }
+
+  .button:disabled:not([aria-pressed="true"]) {
+    color: var(--color-action-disabled-text);
+  }
+
+  /* A ghost or text button has no border or fill to dim, so it stays bare text while disabled. */
+  .button:is(.solid, .outline):disabled:not([aria-pressed="true"]) {
     border-color: var(--color-action-disabled-border);
     background-color: var(--color-action-disabled-surface);
-    color: var(--color-action-disabled-text);
+  }
+
+  /* A disabled choice stays visible, dimmed, as a disabled chosen chip does. */
+  .button[aria-pressed="true"]:disabled {
+    opacity: var(--opacity-disabled);
+  }
+
+  .button[aria-pressed="true"]:disabled::before {
+    box-shadow: none;
+  }
+
+  /* Dimming would halve the user's own disabled color, and a disabled choice's outline and indicator take it too. */
+  @media (forced-colors: active) {
+    .button[aria-pressed="true"]:disabled {
+      opacity: 1;
+      outline-color: GrayText;
+    }
+
+    .button[aria-pressed="true"]:disabled::before {
+      background: GrayText;
+    }
   }
 </style>

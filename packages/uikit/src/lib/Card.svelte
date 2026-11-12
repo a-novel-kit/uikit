@@ -3,6 +3,8 @@
 Groups content on a tokenized surface with optional header and footer snippets.
 A raised card is frosted glass the app's lamp shines through. Inside another card, it keeps the
 parent's glass and stands out by its shadow alone, so a group of settings can hold one card per option.
+A ghost card is one item of a collection: the canvas's own color under a raised card's veil and blur,
+ringed as a divider, and lit as a raised card under the pointer or once something in it takes the keyboard's focus.
 -->
 <script lang="ts" module>
   import type { Snippet } from "svelte";
@@ -11,7 +13,7 @@ parent's glass and stands out by its shadow alone, so a group of settings can ho
   /** Props for a composable content surface. */
   export interface CardProps extends HTMLAttributes<HTMLDivElement> {
     /** Semantic surface depth. */
-    surface?: "plain" | "subtle" | "raised" | "overlay";
+    surface?: "plain" | "subtle" | "raised" | "ghost" | "overlay";
     /** Internal spacing applied around all card regions. */
     padding?: "none" | "sm" | "md" | "lg";
     /** Region rendered before the content. */
@@ -64,6 +66,42 @@ parent's glass and stands out by its shadow alone, so a group of settings can ho
     box-shadow: var(--shadow-md);
     background: transparent;
   }
+  /* A ghost card is a raised card dark as the canvas, the same veil in the canvas's color, so a
+     collection of them reads as the page itself until the pointer lights one. With no surface of its
+     own to set it apart, its ring takes a divider's strength. */
+  .surface-ghost {
+    transition:
+      background-color var(--duration-fast) var(--easing-standard),
+      box-shadow var(--duration-fast) var(--easing-standard);
+    box-shadow: 0 0 0 var(--border-width-thin) var(--color-border-divider);
+    background: color-mix(in oklab, var(--color-surface-canvas) var(--color-mix-2), transparent);
+  }
+  @media (hover: hover) {
+    .surface-ghost:hover {
+      background: var(--color-surface-island-glass);
+    }
+  }
+  /* Svelte scopes a selector inside :has(), so the focus a consumer's link or button takes reaches it only as
+     global. */
+  .surface-ghost:has(:global(:focus-visible)) {
+    background: var(--color-surface-island-glass);
+  }
+  /* A ghost card inside another card drops its own blur, and lit, it is the parent's own glass, as a nested raised
+     card is: a second blur and veil would light it past its parent and drop its text below 4.5:1. */
+  .card :global(.card.surface-ghost) {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  @media (hover: hover) {
+    .card :global(.card.surface-ghost:hover) {
+      box-shadow: var(--shadow-md);
+      background: transparent;
+    }
+  }
+  .card :global(.card.surface-ghost:has(:focus-visible)) {
+    box-shadow: var(--shadow-md);
+    background: transparent;
+  }
   .surface-overlay {
     box-shadow: var(--shadow-island);
     background: var(--color-surface-island-strong);
@@ -91,7 +129,8 @@ parent's glass and stands out by its shadow alone, so a group of settings can ho
   }
 
   @supports (backdrop-filter: blur(0)) or (-webkit-backdrop-filter: blur(0)) {
-    .surface-raised {
+    .surface-raised,
+    .surface-ghost {
       -webkit-backdrop-filter: blur(var(--blur-md));
       backdrop-filter: blur(var(--blur-md));
     }

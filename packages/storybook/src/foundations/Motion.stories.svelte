@@ -31,7 +31,7 @@
     docs: {
       description: {
         story:
-          "The application paints `--fill-canvas` on its root element and colors the lamp with `--color-lamp` there, such as `--color-lamp-violet`, so each app is recognizable at a glance. An ember lights any app that sets none. Navigation the lamp crosses uses `--fill-navigation`.",
+          "The application paints `--fill-canvas` on its root element and colors the lamp with `--color-lamp` there, such as `--color-lamp-magenta`, so each app is recognizable at a glance. An ember lights any app that sets none. Navigation the lamp crosses uses `--fill-navigation`.",
       },
     },
   }}

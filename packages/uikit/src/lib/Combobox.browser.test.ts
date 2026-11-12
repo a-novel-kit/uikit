@@ -37,6 +37,24 @@ const anchorWidthOnShow = () =>
   });
 
 describe("Combobox browser interactions", () => {
+  it("keeps its error look while disabled, as Input does", () => {
+    render(Combobox, {
+      props: {
+        "aria-label": "Language",
+        "aria-invalid": true,
+        disabled: true,
+        controller: createComboboxController<string>(),
+        options,
+      },
+    });
+    const probe = document.body.appendChild(document.createElement("span"));
+    probe.style.backgroundColor = "var(--color-feedback-error-border)";
+    const error = getComputedStyle(probe).backgroundColor;
+    probe.remove();
+
+    expect(getComputedStyle(page.getByRole("combobox", { name: "Language" }).element()).borderTopColor).toBe(error);
+  });
+
   it.each([false, true])("renders the controller's fixed query and visibility (open: %s)", async (open) => {
     const controller: ComboboxController<string> = {
       state: { open, value: "en", query: "" },

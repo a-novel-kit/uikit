@@ -5,6 +5,7 @@ import {
   createPictureFrameController,
   createPressedController,
   createSelectController,
+  createTagInputController,
   createValueController,
 } from "./controllers.svelte";
 
@@ -88,6 +89,14 @@ describe("component controllers", () => {
     expect(onValueChange).toHaveBeenCalledWith(90);
   });
 
+  it("keeps a chosen list plain, so it clones", () => {
+    const chips = createValueController<readonly string[]>({ initialValue: ["noir"] });
+
+    chips.setValue(["noir", "thriller"]);
+
+    expect(structuredClone(chips.state.value)).toEqual(["noir", "thriller"]);
+  });
+
   it("frames a source from its center, then keeps the image over the frame", () => {
     const source = { url: "landscape.png", width: 1600, height: 1200 };
     const controller = createPictureFrameController({ source, ratio: { width: 16, height: 9 } });
@@ -100,5 +109,35 @@ describe("component controllers", () => {
     controller.zoom(9, 0, 0);
     controller.pan(-3, -3);
     expect(controller.state.crop).toEqual({ zoom: 4, x: 1200, y: 975 });
+  });
+
+  it("adds normalized tags once, removes them by position, and reports each change", () => {
+    const onTagsChange = vi.fn();
+    const tags = createTagInputController({ initialTags: ["maps"], onTagsChange });
+
+    tags.add("Slow Burn");
+    tags.add("slow-burn");
+    tags.add(" -- ");
+    expect(tags.state.tags).toEqual(["maps", "slow-burn"]);
+
+    tags.remove(0);
+    tags.remove(5);
+    expect(tags.state.tags).toEqual(["slow-burn"]);
+    expect(onTagsChange.mock.calls).toEqual([[["maps", "slow-burn"]], [["slow-burn"]]]);
+  });
+
+  it("keeps each initial tag once, and reports that it took every text", () => {
+    const tags = createTagInputController({ initialTags: ["maps", "maps", "noir"] });
+
+    expect(tags.state.tags).toEqual(["maps", "noir"]);
+    expect(structuredClone(tags.state.tags)).toEqual(["maps", "noir"]);
+    expect([tags.add("Slow Burn"), tags.add("maps"), tags.add(" -- ")]).toEqual([true, true, true]);
+  });
+
+  it("normalizes tags with the caller's rule", () => {
+    const tags = createTagInputController({ normalize: (text) => text.trim().toUpperCase() });
+
+    tags.add(" fantasy ");
+    expect(tags.state.tags).toEqual(["FANTASY"]);
   });
 });

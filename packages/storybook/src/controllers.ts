@@ -5,6 +5,7 @@ import type {
   OpenController,
   PressedController,
   SelectController,
+  TagInputController,
   ValueController,
 } from "@a-novel-kit/uikit";
 
@@ -47,4 +48,9 @@ export function fixedCombobox<Value extends string>(
   query = ""
 ): ComboboxController<Value> {
   return { ...fixedSelect(value, open), state: { open, value, query }, setQuery: ignore };
+}
+
+/** Pins a tag input's tags: it refuses every tag, so what is typed stays in the field. */
+export function fixedTags(tags: readonly string[] = []): TagInputController {
+  return { state: { tags }, add: () => false, remove: ignore };
 }

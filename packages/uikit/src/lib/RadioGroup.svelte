@@ -75,15 +75,18 @@ Use `createValueController` with a selected option value or `undefined`.
           {name}
           value={option.value}
           checked={controller.state.value === option.value}
+          defaultChecked={controller.state.value === option.value}
           onchange={handleChange}
           disabled={option.disabled}
           aria-label={option.label}
+          lang={option.lang}
+          form={rest.form}
         />
         <span class="copy">
           {#if renderOption}
             {@render renderOption(option)}
           {:else}
-            <span class="label">{option.label}</span>
+            <span class="label" lang={option.lang}>{option.label}</span>
             {#if option.description}
               <span class="description"><RenderContent content={option.description} /></span>
             {/if}

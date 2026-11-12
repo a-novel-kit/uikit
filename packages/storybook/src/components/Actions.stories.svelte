@@ -144,7 +144,7 @@
     docs: {
       description: {
         story:
-          "Outline buttons, ghost buttons, and quiet links tint hover and active backgrounds with their own text color. Pressed controls retain their tone and emphasis on every surface.",
+          "Outline buttons, ghost buttons, and quiet links tint hover and active backgrounds with their own text color. A pressed outline keeps its tone, and a pressed ghost or text control reads as the navigation's current item, on every surface.",
       },
     },
   }}

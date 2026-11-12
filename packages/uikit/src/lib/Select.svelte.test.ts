@@ -92,6 +92,22 @@ describe("Select", () => {
     expect(onValueChange).toHaveBeenCalledOnce();
   });
 
+  it("names an option in the language it gives", async () => {
+    const languages = [
+      { value: "en", label: "English", lang: "en" },
+      { value: "fr", label: "Français", lang: "fr" },
+    ];
+    const controller = createSelectController({ initialValue: "en", initialOpen: true });
+    const { getByRole } = render(Select, { props: { "aria-label": "Language", controller, options: languages } });
+    await tick();
+
+    expect(getByRole("option", { name: "Français" }).getAttribute("lang")).toBe("fr");
+    // The value the field shows carries the chosen option's language too.
+    controller.select("fr");
+    await tick();
+    expect(getByRole("combobox").querySelector("[data-select-value]")?.getAttribute("lang")).toBe("fr");
+  });
+
   it("gives a listbox its controller opened an active option", async () => {
     const controller: SelectController<string> = {
       state: { open: true, value: undefined },

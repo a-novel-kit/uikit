@@ -56,17 +56,27 @@ describe("low-emphasis action feedback", () => {
         await userEvent.keyboard("[/Space]");
         expect(parseFloat(getComputedStyle(button).outlineWidth)).toBeGreaterThan(0);
 
+        // A disabled outline button fills; a disabled ghost or text button stays bare text.
+        const disabledSurface = variant === "outline" ? "var(--color-action-disabled-surface)" : "transparent";
         await rerender({ disabled: true });
-        await expect
-          .poll(() => getComputedStyle(button).backgroundColor)
-          .toBe(resolveColor("var(--color-action-disabled-surface)"));
+        await expect.poll(() => getComputedStyle(button).backgroundColor).toBe(resolveColor(disabledSurface));
         expect(getComputedStyle(button).boxShadow).toBe("none");
       }
     );
   }
 
+  /** Hovers and presses the button, and expects its look to stay the one it had. */
+  async function expectSteady(button: HTMLElement, look: ReturnType<typeof appearance>) {
+    await userEvent.hover(button);
+    await expect.poll(() => appearance(button)).toEqual(look);
+    button.focus();
+    await userEvent.keyboard("[Space>]");
+    await expect.poll(() => appearance(button)).toEqual(look);
+    await userEvent.keyboard("[/Space]");
+  }
+
   it.each(["brand", "neutral", "danger"] as const)(
-    "keeps %s selection identical across variants and pointer states",
+    "keeps an outline %s selection in its own color across pointer states",
     async (tone) => {
       const { getByRole, rerender } = render(Button, {
         variant: "outline",
@@ -77,17 +87,33 @@ describe("low-emphasis action feedback", () => {
       const button = getByRole("button");
       const selected = appearance(button);
       expect(selected.background).toContain("/ 0.1875)");
-      for (const variant of ["outline", "ghost", "text"] as const) {
-        await rerender({ variant });
-        await userEvent.hover(button);
-        await expect.poll(() => appearance(button)).toEqual(selected);
-        button.focus();
-        await userEvent.keyboard("[Space>]");
-        await expect.poll(() => appearance(button)).toEqual(selected);
-        await userEvent.keyboard("[/Space]");
-      }
+      await expectSteady(button, selected);
       await rerender({ disabled: true });
       await expect.poll(() => getComputedStyle(button).boxShadow).toBe("none");
+    }
+  );
+
+  it.each(["brand", "neutral", "danger"] as const)(
+    "turns a chosen ghost or text %s button blue, as the navigation's current item, without a border or glow",
+    async (tone) => {
+      const chosen = {
+        background: resolveColor("var(--color-navigation-selected-surface)"),
+        border: resolveColor("transparent"),
+        color: resolveColor("var(--color-navigation-selected-text)"),
+        shadow: "none",
+      };
+      const { getByRole, rerender } = render(Button, {
+        variant: "ghost",
+        tone,
+        "aria-pressed": true,
+        "aria-label": "Preview",
+      });
+      const button = getByRole("button");
+      for (const variant of ["ghost", "text"] as const) {
+        await rerender({ variant });
+        await expect.poll(() => appearance(button)).toEqual(chosen);
+        await expectSteady(button, chosen);
+      }
     }
   );
 
@@ -115,6 +141,36 @@ describe("low-emphasis action feedback", () => {
     await expectFeedback(link, "--color-mix-2");
     await rerender({ variant: "inline" });
     await expect.poll(() => getComputedStyle(link).backgroundColor).toBe(inlineBackground);
+  });
+});
+
+describe("chosen toggles", () => {
+  it.each(["ghost", "text"] as const)(
+    "marks a chosen %s toggle with an indicator no hover draws, and keeps a disabled choice visible",
+    async (variant) => {
+      const { getByRole, rerender } = render(Button, { variant, "aria-pressed": false, "aria-label": "Snap" });
+      const button = getByRole("button");
+      await userEvent.hover(button);
+      expect(getComputedStyle(button, "::before").content).toBe("none");
+
+      await rerender({ "aria-pressed": true });
+      expect(getComputedStyle(button, "::before").content).not.toBe("none");
+
+      await rerender({ "aria-pressed": true, disabled: true });
+      await expect
+        .poll(() => getComputedStyle(button).backgroundColor)
+        .toBe(resolveColor("var(--color-navigation-selected-surface)"));
+      expect(Number(getComputedStyle(button).opacity)).toBeLessThan(1);
+      expect(getComputedStyle(button, "::before").boxShadow).toBe("none");
+    }
+  );
+});
+
+describe("borderless buttons", () => {
+  it.each(["ghost", "text"] as const)("keeps a disabled %s button borderless", (variant) => {
+    const { getByRole } = render(Button, { variant, disabled: true, "aria-label": "Preview" });
+
+    expect(getComputedStyle(getByRole("button")).borderColor).toBe(resolveColor("transparent"));
   });
 });
 

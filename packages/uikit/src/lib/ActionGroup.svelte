@@ -1,24 +1,21 @@
 <!--
 @component
-Lays out actions at their natural width on desktop and stacked full width below 35rem.
-`align="stretch"` keeps them stacked full width on every screen, for a narrow form's single action.
-Preserves source order. Use ButtonGroup when the controls also need a named group.
+Lays out actions at their natural width, side by side at the end of the line, and stacked full width below
+35rem. Put the primary action last: source order is kept, so it ends the line on a wide screen and sits under the
+thumb on a phone. Use ButtonGroup when the controls also need a named group.
 -->
 <script lang="ts" module>
   import type { HTMLAttributes } from "svelte/elements";
 
   /** Responsive layout for composed buttons and links. */
-  export interface ActionGroupProps extends HTMLAttributes<HTMLDivElement> {
-    /** Alignment on wider viewports; defaults to start. Stretch fills the width on every viewport. */
-    align?: "start" | "end" | "stretch";
-  }
+  export type ActionGroupProps = HTMLAttributes<HTMLDivElement>;
 </script>
 
 <script lang="ts">
-  let { align = "start", class: className = "", children, ...rest }: ActionGroupProps = $props();
+  let { class: className = "", children, ...rest }: ActionGroupProps = $props();
 </script>
 
-<div class="actions {align} {className}" {...rest}>
+<div class="actions {className}" {...rest}>
   {@render children?.()}
 </div>
 
@@ -29,13 +26,11 @@ Preserves source order. Use ButtonGroup when the controls also need a named grou
     min-inline-size: 0;
   }
   @media (min-width: 35rem) {
-    .actions:not(.stretch) {
+    .actions {
       display: flex;
       flex-wrap: wrap;
-      align-items: center;
-    }
-    .end {
       justify-content: flex-end;
+      align-items: center;
     }
   }
 </style>
