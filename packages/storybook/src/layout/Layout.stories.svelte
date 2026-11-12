@@ -19,11 +19,12 @@
     { title: "Lantern", text: "A play in three acts." },
   ];
 
-  // Focuses the first card's link, so the screenshot and the accessibility check see a card lit.
+  // Focuses the first card's link as the keyboard would, so the screenshot and the accessibility check see a card lit,
+  // even after an earlier click in the same page.
   async function lightFirstCard({ canvasElement }: { canvasElement: HTMLElement }) {
     const [link] = within(canvasElement).getAllByRole("link");
-    link.focus();
-    await expect(link).toHaveFocus();
+    link.focus({ focusVisible: true });
+    await expect(link.matches(":focus-visible")).toBe(true);
   }
 
   const { Story } = defineMeta({

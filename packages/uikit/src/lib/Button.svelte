@@ -312,9 +312,13 @@ item.
   }
 
   .button:disabled:not([aria-pressed="true"]) {
+    color: var(--color-action-disabled-text);
+  }
+
+  /* A ghost or text button has no border or fill to dim, so it stays bare text while disabled. */
+  .button:is(.solid, .outline):disabled:not([aria-pressed="true"]) {
     border-color: var(--color-action-disabled-border);
     background-color: var(--color-action-disabled-surface);
-    color: var(--color-action-disabled-text);
   }
 
   /* A disabled choice stays visible, dimmed, as a disabled chosen chip does. */
@@ -336,14 +340,5 @@ item.
     .button[aria-pressed="true"]:disabled::before {
       background: GrayText;
     }
-  }
-
-  /* A ghost or text button stays borderless while disabled too, and an unchosen one stays bare text. */
-  .button:is(.ghost, .text):disabled {
-    border-color: transparent;
-  }
-
-  .button:is(.ghost, .text):disabled:not([aria-pressed="true"]) {
-    background-color: transparent;
   }
 </style>

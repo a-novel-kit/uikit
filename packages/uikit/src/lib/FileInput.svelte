@@ -177,6 +177,10 @@ Native attributes and events target the input; `class` styles the surrounding su
     }
   }
 
+  .file-input:has(.control:focus-visible) .browse {
+    color: var(--color-text-primary);
+  }
+
   .file-input:has(.control:focus-visible) {
     box-shadow: var(--shadow-focus-ring);
     border-color: var(--color-control-border-focus);

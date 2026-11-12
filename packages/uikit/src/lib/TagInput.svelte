@@ -118,12 +118,15 @@ Native attributes and events target the text input; `class` styles the surroundi
   }
 
   // The form sent the word being typed, so a reset, as SvelteKit's enhance runs after a successful action, makes it a
-  // tag before the field empties: the field then shows what the server took. The form fires reset before resetting.
+  // tag before the field empties: the field then shows what the server took. The reset reaches the document after the
+  // form's own listeners and before the controls reset, so the field's form at that moment decides, and a cancelled
+  // reset leaves the word typed.
   const commitOnReset: Attachment<HTMLInputElement> = (input) => {
-    const form = input.form;
-    const commit = () => takeTags(input, true);
-    form?.addEventListener("reset", commit);
-    return () => form?.removeEventListener("reset", commit);
+    const commit = (event: Event) => {
+      if (event.target === input.form && !event.defaultPrevented) takeTags(input, true);
+    };
+    document.addEventListener("reset", commit);
+    return () => document.removeEventListener("reset", commit);
   };
 
   function handleKeydown(event: KeyboardEvent & { currentTarget: EventTarget & HTMLInputElement }) {

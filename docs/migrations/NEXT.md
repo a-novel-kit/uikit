@@ -6,8 +6,9 @@ a tag input, a chip group and a language name.
 ## Do I need to act?
 
 **Required if you pass `align` to `FormActions` or `ActionGroup`, `defaultChecked` to `Checkbox` or `Switch`, or use
-`--color-lamp-violet`.** They are gone, and type checking fails on `align` and `defaultChecked` until they go. Every
-app's screenshots change anyway: actions that sat at the start of their line, with no `align`, now end it.
+`--color-lamp-violet`.** They are gone, and type checking fails on `align` and `defaultChecked` until they go. Code that
+writes a value controller's `state.value` fails it too: pass the new value to `setValue`. Every app's screenshots change
+anyway: actions that sat at the start of their line, with no `align`, now end it.
 
 ## Drop `align` from form and dialog actions
 
