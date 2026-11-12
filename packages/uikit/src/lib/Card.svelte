@@ -143,6 +143,21 @@ ringed as a divider, and lit as a raised card under the pointer or once somethin
       backdrop-filter: blur(var(--blur-md));
       background: var(--color-surface-glass);
     }
+
+    /* A modal dialog blurs the whole page behind it, so a card's own blur there sits unseen and still costs every
+       frame, the dialog's backdrop blurring it again. It drops once that backdrop has faded in, so no card shows
+       unfrosted, and returns at once when the dialog closes. A card inside a dialog keeps it. A ghost card keeps its
+       own fades. */
+    :global(:root:has(dialog.dialog:modal))
+      :is(.surface-raised, .surface-ghost, .surface-overlay):not(:global(dialog *)) {
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+      transition:
+        background-color var(--duration-fast) var(--easing-standard),
+        box-shadow var(--duration-fast) var(--easing-standard),
+        backdrop-filter 0s var(--duration-normal),
+        -webkit-backdrop-filter 0s var(--duration-normal);
+    }
   }
 
   @media (forced-colors: active) {

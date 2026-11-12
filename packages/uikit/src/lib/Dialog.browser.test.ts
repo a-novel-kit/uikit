@@ -1,4 +1,5 @@
 /// <reference types="vite/client" />
+import BlurredPageFixture from "../../test/BlurredPageFixture.svelte";
 import Fixture from "../../test/DialogFixture.svelte";
 import Dialog from "./Dialog.svelte";
 import PanelHeader from "./PanelHeader.svelte";
@@ -222,5 +223,30 @@ describe("Dialog browser lifecycle", () => {
 
     await expect.element(page.getByRole("dialog")).toBeVisible();
     expect(controller.state.open).toBe(true);
+  });
+});
+
+describe("Dialog over a frosted page", () => {
+  it("drops the page's blurs only once its backdrop has faded in, and gives them back as it closes", async () => {
+    const controller = createOpenController();
+    const { getByTestId, container } = render(BlurredPageFixture, { controller });
+    const blur = (element: Element) => getComputedStyle(element).backdropFilter;
+    const frosted = [getByTestId("page-card"), getByTestId("page-bar")];
+    expect(frosted.map(blur)).not.toContain("none");
+
+    const dialog = container.querySelector("dialog")!;
+    controller.open();
+    await expect.poll(() => dialog.matches(":modal")).toBe(true);
+    // While the backdrop fades in, the page keeps its frost, so no card shows unfrosted.
+    expect(frosted.map(blur)).not.toContain("none");
+    expect(Number(getComputedStyle(dialog, "::backdrop").opacity)).toBeLessThan(1);
+
+    await expect.poll(() => frosted.map(blur)).toEqual(["none", "none"]);
+    expect(Number(getComputedStyle(dialog, "::backdrop").opacity)).toBeGreaterThan(0.99);
+    expect(blur(getByTestId("dialog-card"))).not.toBe("none");
+
+    controller.close();
+    await expect.poll(() => dialog.matches(":modal")).toBe(false);
+    expect(frosted.map(blur)).not.toContain("none");
   });
 });
