@@ -115,6 +115,16 @@ supplies the wording and its policy link; the banner supplies the translated ans
       backdrop-filter: blur(var(--blur-md));
       background: var(--color-surface-glass);
     }
+
+    /* Under a modal dialog's blurred backdrop, its own blur sits unseen: it drops once the backdrop has faded in and
+       returns at once, as a card's does. One inside a dialog keeps it. */
+    :global(:root:has(dialog.dialog:modal)) .banner:not(:global(dialog *)) {
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+      transition:
+        backdrop-filter 0s var(--duration-normal),
+        -webkit-backdrop-filter 0s var(--duration-normal);
+    }
   }
 
   @media (forced-colors: active) {

@@ -55,5 +55,15 @@ and the bar stays clear of them.
       backdrop-filter: blur(var(--blur-lg));
       background: color-mix(in oklab, var(--color-surface-canvas) var(--color-mix-12), transparent);
     }
+
+    /* Under a modal dialog's blurred backdrop, its own blur sits unseen: it drops once the backdrop has faded in and
+       returns at once, as a card's does. One inside a dialog keeps it. */
+    :global(:root:has(dialog.dialog:modal)) .sticky-bar:not(:global(dialog *)) {
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+      transition:
+        backdrop-filter 0s var(--duration-normal),
+        -webkit-backdrop-filter 0s var(--duration-normal);
+    }
   }
 </style>
