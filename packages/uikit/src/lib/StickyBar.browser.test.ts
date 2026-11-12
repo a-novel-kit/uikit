@@ -38,11 +38,19 @@ describe("StickyBar", () => {
     expect(bar.getBoundingClientRect().bottom).toBeCloseTo(window.innerHeight - 24);
   });
 
-  it("frosts what scrolls under it", () => {
-    const { getByText } = render(StickyBar, { edge: "start", children });
+  it.each(["start", "end"] as const)(
+    "frosts what scrolls under it at the %s edge through clear glass, with no line",
+    (edge) => {
+      const { getByText } = render(StickyBar, { edge, children });
+      const css = getComputedStyle(getByText("Actions").parentElement!);
 
-    expect(getComputedStyle(getByText("Actions").parentElement!).backdropFilter).toContain("blur");
-  });
+      expect(css.backdropFilter).toContain("blur");
+      const clear = document.body.appendChild(document.createElement("span"));
+      clear.style.backgroundColor = "transparent";
+      expect(css.backgroundColor).toBe(getComputedStyle(clear).backgroundColor);
+      expect([css.borderBlockStartWidth, css.borderBlockEndWidth]).toEqual(["0px", "0px"]);
+    }
+  );
 
   it.each([
     ["spans the page's gutters when it bleeds", true, 0],

@@ -1,4 +1,6 @@
 /// <reference types="vite/client" />
+import RenderedOptionsFixture from "../../test/RenderedOptionsFixture.svelte";
+import { offsetFromMiddle } from "../../test/geometry";
 import Combobox from "./Combobox.svelte";
 import { type ComboboxController, createComboboxController } from "./controllers.svelte";
 
@@ -111,4 +113,13 @@ describe("Combobox browser interactions", () => {
 
     expect(await shown).toBe(input.getBoundingClientRect().width + "px");
   });
+});
+
+it("centers a rendered option in each row of its list", async () => {
+  render(RenderedOptionsFixture, { kind: "combobox" });
+  await expect.poll(() => document.querySelectorAll("[role=option]").length).toBe(2);
+
+  const rows = [...document.querySelectorAll("[role=option]")];
+  for (const row of rows)
+    expect(Math.abs(offsetFromMiddle(row.querySelector(".language-name")!, row))).toBeLessThan(0.5);
 });

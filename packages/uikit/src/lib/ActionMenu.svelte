@@ -298,7 +298,7 @@ For a custom trigger, spread the snippet attributes onto a native button.
           onclick={() => selectAction(item)}
         >
           {#if item.icon}<span class="item-icon" aria-hidden="true">{@render item.icon()}</span>{/if}
-          <span
+          <span class="option"
             >{#if renderItem}{@render renderItem(item)}{:else}{item.label}{/if}</span
           >
           {#if item.shortcut}<kbd aria-hidden="true">{item.shortcut}</kbd>{/if}
@@ -382,6 +382,13 @@ For a custom trigger, spread the snippet attributes onto a native button.
   :global(.a-novel-menu-group) {
     display: grid;
   }
+  /* A rendered option, such as a flag beside a name, centers in its row as a box. Set on the text's
+     baseline instead, an icon leading it lifts it above the row's middle. */
+  .option {
+    display: flex;
+    align-items: center;
+  }
+
   :global(.a-novel-menu-item) {
     display: flex;
     align-items: center;

@@ -1,6 +1,6 @@
 <!--
 @component
-A bar that stays at one edge of the page while content scrolls under it, behind frosted glass of the canvas.
+A bar that stays at one edge of the page while content scrolls under it, behind clear frosted glass.
 A shell whose own bars cover the page's edges sets `--shell-sticky-top` and `--shell-sticky-bottom` to their sizes,
 and the bar stays clear of them.
 -->
@@ -35,12 +35,10 @@ and the bar stays clear of them.
 
   .start {
     inset-block-start: var(--shell-sticky-top, 0);
-    border-block-end: var(--border-width-thin) solid var(--color-border-subtle);
   }
 
   .end {
     inset-block-end: var(--shell-sticky-bottom, 0);
-    border-block-start: var(--border-width-thin) solid var(--color-border-subtle);
   }
 
   .bleed {
@@ -48,12 +46,13 @@ and the bar stays clear of them.
     padding-inline: var(--layout-gutter);
   }
 
-  /* Where the browser blurs a backdrop, the canvas color turns to frosted glass of it. */
+  /* Where the browser blurs a backdrop, the canvas color clears to glass: the lamp shines through it, and only what
+     scrolls under it frosts. Like any layout, it draws no line. */
   @supports (backdrop-filter: blur(0)) or (-webkit-backdrop-filter: blur(0)) {
     .sticky-bar {
       -webkit-backdrop-filter: blur(var(--blur-lg));
       backdrop-filter: blur(var(--blur-lg));
-      background: color-mix(in oklab, var(--color-surface-canvas) var(--color-mix-12), transparent);
+      background: transparent;
     }
 
     /* Under a modal dialog's blurred backdrop, its own blur sits unseen: it drops once the backdrop has faded in and
