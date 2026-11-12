@@ -1,8 +1,8 @@
 <script module lang="ts">
   import Localized from "../Localized.svelte";
-  import { fixedConsent } from "../controllers";
+  import { fixedConsent, fixedOpen } from "../controllers";
 
-  import { ConsentBanner, Container, Link, Stack } from "@a-novel-kit/uikit";
+  import { ConsentBanner, Container, Dialog, Link, Stack } from "@a-novel-kit/uikit";
 
   import { defineMeta } from "@storybook/addon-svelte-csf";
 
@@ -49,6 +49,20 @@
   <div class="page">
     {@render page()}
     <ConsentBanner controller={fixedConsent()} {title} children={message} />
+  </div>
+</Story>
+
+<!-- A modal dialog leaves the page inert, as Account's login does on a page that needs one, so the request shows over
+     it, where it stays answerable. -->
+<Story name="Over a modal dialog" asChild>
+  <div class="page">
+    {@render page()}
+    <ConsentBanner controller={fixedConsent()} {title} children={message} />
+    <Dialog controller={fixedOpen(true)} title="Log in" size="sm">
+      <p style="margin: 0">
+        <Localized en="Log in to reach your library." fr="Connectez-vous pour retrouver votre bibliothèque." />
+      </p>
+    </Dialog>
   </div>
 </Story>
 

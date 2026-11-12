@@ -2,7 +2,8 @@
 @component
 Asks the visitor to accept or decline an optional processing, such as telemetry, without blocking
 the page. Both answers carry the same weight, and either one hides the banner. The application
-supplies the wording and its policy link; the banner supplies the translated answers.
+supplies the wording and its policy link; the banner supplies the translated answers. A modal dialog
+leaves the page inert, so the topmost one open shows the banner too, where it stays answerable.
 
 ```svelte
 <script lang="ts">
@@ -37,18 +38,25 @@ supplies the wording and its policy link; the banner supplies the translated ans
   import Button from "./Button.svelte";
   import ContentView from "./Content.svelte";
   import { useMessages } from "./internal/i18n";
+  import { hold, overModal } from "./internal/overModal.svelte";
+
+  import { untrack } from "svelte";
 
   const { t } = useMessages();
 
   let { controller, title, children, class: className = "", ...rest }: ConsentBannerProps = $props();
 
   const titleId = $props.id();
+
+  $effect(() => {
+    if (controller.state.open) return untrack(() => hold(overModal.requests, overModalBanner));
+  });
 </script>
 
-{#if controller.state.open}
-  <section class="banner {className}" aria-labelledby={titleId} {...rest}>
+{#snippet banner(id: string)}
+  <section class="banner {className}" aria-labelledby={id} {...rest}>
     <div class="text">
-      <strong id={titleId}><ContentView content={title} /></strong>
+      <strong {id}><ContentView content={title} /></strong>
       <p>{@render children()}</p>
     </div>
     <div class="answers">
@@ -60,7 +68,12 @@ supplies the wording and its policy link; the banner supplies the translated ans
       </Button>
     </div>
   </section>
-{/if}
+{/snippet}
+
+<!-- The copy a modal dialog shows takes its own id, so no two titles share one. -->
+{#snippet overModalBanner()}{@render banner(`${titleId}-over-modal`)}{/snippet}
+
+{#if controller.state.open}{@render banner(titleId)}{/if}
 
 <style>
   .banner {

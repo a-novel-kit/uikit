@@ -63,6 +63,7 @@ child with `autofocus` takes focus instead. Opening and closing fade the dialog 
 <script lang="ts">
   import ActionGroup from "./ActionGroup.svelte";
   import PanelHeader from "./PanelHeader.svelte";
+  import { hold, overModal } from "./internal/overModal.svelte";
 
   import { onMount, untrack } from "svelte";
 
@@ -90,6 +91,21 @@ child with `autofocus` takes focus instead. Opening and closing fade the dialog 
   let mounted = $state(false);
   onMount(() => (mounted = true));
 
+  // Open as a modal, it leaves the page inert, so while it is the topmost one it shows the page's requests too.
+  const self = Symbol(dialogId);
+  let leaveTop: (() => void) | undefined;
+  const hosting = $derived(overModal.dialogs.at(-1) === self);
+  // A request it shows stays fixed to the screen, where a moving dialog would carry it along, so while one waits the
+  // dialog fades without rising. Opening focuses it, which settles its first style before it joins the topmost.
+  const steady = $derived(modal && overModal.requests.length > 0);
+
+  function leave() {
+    leaveTop?.();
+    leaveTop = undefined;
+  }
+
+  $effect(() => leave);
+
   $effect(() => {
     if (!dialog) return;
     // Promote the server-rendered non-modal dialog into the browser's modal top layer.
@@ -100,8 +116,10 @@ child with `autofocus` takes focus instead. Opening and closing fade the dialog 
 
   function showDialog() {
     if (!dialog) return;
-    if (modal) dialog.showModal();
-    else dialog.show();
+    if (modal) {
+      dialog.showModal();
+      leaveTop ??= untrack(() => hold(overModal.dialogs, self));
+    } else dialog.show();
     // The browser would focus the first control, usually the close button, and light its ring on
     // every opening. Focus the dialog itself unless content asks for autofocus; Tab reaches the rest.
     if (!dialog.querySelector("[autofocus]")) dialog.focus();
@@ -115,6 +133,10 @@ child with `autofocus` takes focus instead. Opening and closing fade the dialog 
   // Reopens the dialog when the controller refuses a close the browser already performed.
   function handleClose(event: Event) {
     const currentDialog = event.currentTarget as HTMLDialogElement;
+    // It keeps the requests through its fade out, so they cross back to the page's own instead of blinking.
+    void Promise.allSettled(currentDialog.getAnimations().map((animation) => animation.finished)).then(() => {
+      if (!currentDialog.open) leave();
+    });
     if (currentDialog.open || !controller.state.open) return;
 
     controller.close();
@@ -132,6 +154,7 @@ child with `autofocus` takes focus instead. Opening and closing fade the dialog 
   tabindex="-1"
   class="dialog {presentation} {size} {className}"
   class:mounted
+  class:steady
   aria-labelledby={titleId}
   aria-describedby={description ? descriptionId : undefined}
   oncancel={handleCancel}
@@ -144,6 +167,9 @@ child with `autofocus` takes focus instead. Opening and closing fade the dialog 
     {#if children}<div class="content">{@render children()}</div>{/if}
     {#if actions}<footer><ActionGroup children={actions} /></footer>{/if}
   </div>
+  {#if hosting}
+    {#each overModal.requests as request (request)}{@render request()}{/each}
+  {/if}
 </dialog>
 
 <style>
@@ -180,6 +206,9 @@ child with `autofocus` takes focus instead. Opening and closing fade the dialog 
     translate: 0 var(--dialog-rise);
     opacity: 0;
   }
+  .dialog.steady {
+    translate: none;
+  }
   /* A modal dialog holds the page behind it still, as a phone would otherwise scroll it under its menu. */
   :global(:root:has(dialog.dialog:modal)) {
     overflow: hidden;
@@ -205,6 +234,9 @@ child with `autofocus` takes focus instead. Opening and closing fade the dialog 
     }
     .mounted[open]::backdrop {
       opacity: 0;
+    }
+    .mounted.steady[open] {
+      translate: none;
     }
   }
   .panel {
