@@ -271,6 +271,12 @@ over the whole screen.
     --chip-well: var(--color-control-surface);
   }
 
+  /* Under a search, the well ends on its side inset, so a search that leaves a row or none still reads as a field
+     rather than a line. */
+  .searchable .chips:not(.trigger) {
+    padding-block-end: var(--space-3);
+  }
+
   /* The field that opens the chips' screen reads as the well it opens, showing only its choice as badges. */
   .trigger {
     cursor: pointer;
@@ -286,10 +292,11 @@ over the whole screen.
     line-height: var(--line-height-compact);
   }
 
-  /* On the chips' screen, the well fills the screen and its chips scroll under the search. */
+  /* On the chips' screen, the well fills the screen and its chips scroll under the search; a search that leaves few
+     chips, or none and its status, keeps them under it. */
   .chips.sheet {
-    grid-template-rows: auto minmax(0, 1fr) auto;
-    align-content: stretch;
+    display: flex;
+    flex-direction: column;
   }
 
   /* The sections pack at the top of a list taller than them, as on the chips' screen. */
@@ -344,6 +351,7 @@ over the whole screen.
   }
 
   .sheet .options {
+    min-block-size: 0;
     max-block-size: none;
   }
 
