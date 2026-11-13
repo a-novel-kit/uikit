@@ -1,5 +1,7 @@
 /// <reference types="vite/client" />
 import ActionMenuTriggerFixture from "../../test/ActionMenuTriggerFixture.svelte";
+import RenderedOptionsFixture from "../../test/RenderedOptionsFixture.svelte";
+import { offsetFromMiddle } from "../../test/geometry";
 import ActionMenu from "./ActionMenu.svelte";
 import { type OpenController, createOpenController } from "./controllers.svelte";
 
@@ -72,4 +74,13 @@ it.each(openPaths)("shows the menu with its trigger's width when opened by $path
   await open(trigger, controller);
 
   expect(await shown).toBe(trigger.getBoundingClientRect().width + "px");
+});
+
+it("centers rendered content in each item of its menu", async () => {
+  render(RenderedOptionsFixture, { kind: "menu" });
+  await expect.poll(() => document.querySelectorAll("[role=menuitem]").length).toBe(2);
+
+  const rows = [...document.querySelectorAll("[role=menuitem]")];
+  for (const row of rows)
+    expect(Math.abs(offsetFromMiddle(row.querySelector(".language-name")!, row))).toBeLessThan(0.5);
 });

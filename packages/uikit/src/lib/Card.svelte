@@ -3,8 +3,8 @@
 Groups content on a tokenized surface with optional header and footer snippets.
 A raised card is frosted glass the app's lamp shines through. Inside another card, it keeps the
 parent's glass and stands out by its shadow alone, so a group of settings can hold one card per option.
-A ghost card is one item of a collection: the canvas's own color under a raised card's veil and blur,
-ringed as a divider, and lit as a raised card under the pointer or once something in it takes the keyboard's focus.
+A ghost card is one item of a collection: the canvas's own color under a raised card's veil and blur, ringed a
+step over a divider, and lit as a raised card under the pointer or once something in it takes the keyboard's focus.
 -->
 <script lang="ts" module>
   import type { Snippet } from "svelte";
@@ -68,12 +68,12 @@ ringed as a divider, and lit as a raised card under the pointer or once somethin
   }
   /* A ghost card is a raised card dark as the canvas, the same veil in the canvas's color, so a
      collection of them reads as the page itself until the pointer lights one. With no surface of its
-     own to set it apart, its ring takes a divider's strength. */
+     own to set it apart, its ring sits a step over a divider's strength. */
   .surface-ghost {
     transition:
       background-color var(--duration-fast) var(--easing-standard),
       box-shadow var(--duration-fast) var(--easing-standard);
-    box-shadow: 0 0 0 var(--border-width-thin) var(--color-border-divider);
+    box-shadow: 0 0 0 var(--border-width-thin) var(--color-border-item);
     background: color-mix(in oklab, var(--color-surface-canvas) var(--color-mix-2), transparent);
   }
   @media (hover: hover) {

@@ -22,14 +22,14 @@ Labels a category or status compactly. Use InlineMessage when changes need live 
   .badge {
     display: inline-block;
     box-sizing: border-box;
-    box-shadow: 0 0 var(--space-3) color-mix(in oklab, var(--badge-accent) var(--color-mix-2), transparent);
+    box-shadow: 0 0 var(--space-3) color-mix(in oklab, var(--badge-fill) var(--color-mix-2), transparent);
     border-radius: var(--radius-sm);
-    background: var(--badge-accent);
+    background: var(--badge-fill);
     padding-inline: var(--space-1-5);
     padding-block: calc(var(--space-1) / var(--multiplier-2));
     inline-size: fit-content;
     max-inline-size: 100%;
-    color: var(--color-text-inverse);
+    color: var(--color-label-text);
     font-weight: var(--font-weight-regular);
     font-size: var(--font-size-xs);
     line-height: var(--line-height-compact);
@@ -40,31 +40,31 @@ Labels a category or status compactly. Use InlineMessage when changes need live 
   }
 
   .neutral {
-    --badge-accent: var(--color-text-secondary);
+    --badge-fill: var(--color-label-neutral);
   }
 
   .brand {
-    --badge-accent: var(--color-feedback-info-text);
+    --badge-fill: var(--color-label-brand);
   }
 
   .accent {
-    --badge-accent: var(--color-accent-secondary);
+    --badge-fill: var(--color-label-accent);
   }
 
   .highlight {
-    --badge-accent: var(--color-feedback-highlight-text);
+    --badge-fill: var(--color-label-highlight);
   }
 
   .success {
-    --badge-accent: var(--color-feedback-success-text);
+    --badge-fill: var(--color-label-success);
   }
 
   .warning {
-    --badge-accent: var(--color-feedback-warning-text);
+    --badge-fill: var(--color-label-warning);
   }
 
   .danger {
-    --badge-accent: var(--color-feedback-error-text);
+    --badge-fill: var(--color-label-danger);
   }
 
   @media (forced-colors: active) {

@@ -1,4 +1,6 @@
 /// <reference types="vite/client" />
+import RenderedOptionsFixture from "../../test/RenderedOptionsFixture.svelte";
+import { offsetFromMiddle } from "../../test/geometry";
 import Select from "./Select.svelte";
 import { type SelectController, createSelectController } from "./controllers.svelte";
 
@@ -138,4 +140,13 @@ it("stays closed when a tap on its trigger closes the list before the trigger's 
 
   expect(controller.state.open).toBe(false);
   await expect.element(page.getByRole("listbox")).not.toBeInTheDocument();
+});
+
+it("centers a rendered option in its trigger and in each row of its list", async () => {
+  render(RenderedOptionsFixture, { kind: "select" });
+  await expect.poll(() => document.querySelectorAll(".a-novel-select-trigger, [role=option]").length).toBe(3);
+
+  const rows = [...document.querySelectorAll(".a-novel-select-trigger, [role=option]")];
+  for (const row of rows)
+    expect(Math.abs(offsetFromMiddle(row.querySelector(".language-name")!, row))).toBeLessThan(0.5);
 });

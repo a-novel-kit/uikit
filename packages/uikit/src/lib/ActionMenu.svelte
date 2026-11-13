@@ -76,7 +76,10 @@ For a custom trigger, spread the snippet attributes onto a native button.
     triggerIcon?: Snippet;
     /** Replaces the default trigger; spread all supplied attributes onto a native button. */
     trigger?: Snippet<[ActionMenuTriggerAttributes]>;
-    /** Replaces visible action content, which names the item, so it must include the label. */
+    /**
+     * Replaces visible action content, which names the item, so it must include the label. Wrap text mixed with markup
+     * in one element: the content centers as a row of flex items, whose edge spaces collapse.
+     */
     renderItem?: Snippet<[ActionMenuAction]>;
     /** State owner that decides whether visibility requests take effect. */
     controller: ActionMenuController;
@@ -298,7 +301,7 @@ For a custom trigger, spread the snippet attributes onto a native button.
           onclick={() => selectAction(item)}
         >
           {#if item.icon}<span class="item-icon" aria-hidden="true">{@render item.icon()}</span>{/if}
-          <span
+          <span class="option"
             >{#if renderItem}{@render renderItem(item)}{:else}{item.label}{/if}</span
           >
           {#if item.shortcut}<kbd aria-hidden="true">{item.shortcut}</kbd>{/if}
@@ -382,6 +385,13 @@ For a custom trigger, spread the snippet attributes onto a native button.
   :global(.a-novel-menu-group) {
     display: grid;
   }
+  /* A rendered option, such as a flag beside a name, centers in its row as a box. Set on the text's
+     baseline instead, an icon leading it lifts it above the row's middle. */
+  .option {
+    display: flex;
+    align-items: center;
+  }
+
   :global(.a-novel-menu-item) {
     display: flex;
     align-items: center;

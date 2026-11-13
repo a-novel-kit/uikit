@@ -48,7 +48,10 @@ The hidden named input submits the selected value. The caller validates required
     "aria-invalid"?: HTMLInputAttributes["aria-invalid"];
     /** Includes the trigger in sequential keyboard navigation. */
     tabindex?: number;
-    /** Renders an option without changing its accessible text label. */
+    /**
+     * Renders an option without changing its accessible text label. Wrap text mixed with markup in one element: the
+     * content centers as a row of flex items, whose edge spaces collapse.
+     */
     renderOption?: Snippet<[SelectOption<Value>]>;
     /** Adds classes to the trigger. */
     class?: string;
@@ -266,7 +269,7 @@ The hidden named input submits the selected value. The caller validates required
     onclick={handleTriggerClick}
     onkeydown={handleTriggerKeyDown}
   >
-    <span data-select-value lang={selectedOption?.lang}>
+    <span class="option" data-select-value lang={selectedOption?.lang}>
       {#if selectedOption}
         {#if renderOption}{@render renderOption(selectedOption)}{:else}{selectedOption.label}{/if}
       {:else}
@@ -314,7 +317,7 @@ The hidden named input submits the selected value. The caller validates required
           onpointerdown={(event) => event.preventDefault()}
           onclick={() => selectOption(option)}
         >
-          <span
+          <span class="option"
             >{#if renderOption}{@render renderOption(option)}{:else}{option.label}{/if}</span
           >
           {#if controller.state.value === option.value}
@@ -369,6 +372,13 @@ The hidden named input submits the selected value. The caller validates required
     box-shadow: var(--shadow-focus-ring);
     border-color: var(--color-control-border-focus);
     background: var(--color-control-surface-focus);
+  }
+
+  /* A rendered option, such as a flag beside a name, centers in its row as a box. Set on the text's
+     baseline instead, an icon leading it lifts it above the row's middle. */
+  .option {
+    display: flex;
+    align-items: center;
   }
 
   .a-novel-select-trigger[data-placeholder] [data-select-value] {

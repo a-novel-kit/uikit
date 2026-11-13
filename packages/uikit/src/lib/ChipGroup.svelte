@@ -186,17 +186,18 @@ never sends; the controller keeps the order of choice.
   }
 
   .brand {
-    --chip-chosen: var(--color-feedback-info-text);
+    --chip-fill: var(--color-label-brand);
   }
 
   .accent {
-    --chip-chosen: var(--color-accent-secondary);
+    --chip-fill: var(--color-label-accent);
   }
 
+  /* Chosen, a chip reads as the badge that shows the same choice. */
   .chip:has(:checked) {
-    box-shadow: 0 0 var(--space-3) color-mix(in oklab, var(--chip-chosen) var(--color-mix-2), transparent);
-    background: var(--chip-chosen);
-    color: var(--color-text-inverse);
+    box-shadow: 0 0 var(--space-3) color-mix(in oklab, var(--chip-fill) var(--color-mix-2), transparent);
+    background: var(--chip-fill);
+    color: var(--color-label-text);
   }
 
   /* The ring stays clear of the next chip, the chips' gap apart. */

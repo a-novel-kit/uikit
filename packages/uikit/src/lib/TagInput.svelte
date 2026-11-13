@@ -278,10 +278,10 @@ Native attributes and events target the text input; `class` styles the surroundi
     }
   }
 
-  /* The ring sits inside the badge in its text color: the brand ring would vanish on the brand badge, and an outer
-     ring would cover the tag's last letter. */
+  /* The ring sits inside the badge in its text color, whatever token sets it: the brand ring would vanish on the brand
+     badge, and an outer ring would cover the tag's last letter. */
   .remove:focus-visible {
-    outline: var(--border-width-strong) solid var(--color-text-inverse);
+    outline: var(--border-width-strong) solid currentColor;
     outline-offset: 0;
   }
 

@@ -3,7 +3,7 @@ import StickyBar from "./StickyBar.svelte";
 
 import { createRawSnippet } from "svelte";
 
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, onTestFinished } from "vitest";
 
 import "@a-novel-kit/uikit-tokens/tokens.css";
 
@@ -38,10 +38,19 @@ describe("StickyBar", () => {
     expect(bar.getBoundingClientRect().bottom).toBeCloseTo(window.innerHeight - 24);
   });
 
-  it("frosts what scrolls under it", () => {
-    const { getByText } = render(StickyBar, { edge: "start", children });
+  it.each([
+    ["start", "through clear glass", true],
+    ["end", "darkened to the canvas", false],
+  ] as const)("frosts what scrolls under it at the %s edge %s, with no line", (edge, _, clear) => {
+    const { getByText } = render(StickyBar, { edge, children });
+    const css = getComputedStyle(getByText("Actions").parentElement!);
 
-    expect(getComputedStyle(getByText("Actions").parentElement!).backdropFilter).toContain("blur");
+    expect(css.backdropFilter).toContain("blur");
+    const probe = document.body.appendChild(document.createElement("span"));
+    onTestFinished(() => probe.remove());
+    probe.style.backgroundColor = "transparent";
+    expect(css.backgroundColor === getComputedStyle(probe).backgroundColor).toBe(clear);
+    expect([css.borderBlockStartWidth, css.borderBlockEndWidth]).toEqual(["0px", "0px"]);
   });
 
   it.each([

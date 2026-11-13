@@ -1,5 +1,8 @@
 /// <reference types="vite/client" />
+import Badge from "./Badge.svelte";
 import ChipGroup from "./ChipGroup.svelte";
+
+import { createRawSnippet } from "svelte";
 
 import { describe, expect, it } from "vitest";
 
@@ -57,6 +60,19 @@ describe("ChipGroup", () => {
 
     const chip = container.querySelector(".chip")!;
     expect(Number(getComputedStyle(chip).opacity)).toBeLessThan(1);
+  });
+
+  it.each(["brand", "accent"] as const)("fills a chosen %s chip as the badge of the same tone", (tone) => {
+    const options = [{ value: "fantasy", label: "Fantasy" }];
+    const controller = { state: { value: ["fantasy"] }, setValue: () => {} };
+    const { container } = render(ChipGroup, { props: { legend: "Genres", name: "genres", options, controller, tone } });
+    const { getByText } = render(Badge, {
+      tone,
+      children: createRawSnippet(() => ({ render: () => "<span>Badge</span>" })),
+    });
+
+    const chip = getComputedStyle(container.querySelector(".chip")!).backgroundColor;
+    expect(chip).toBe(getComputedStyle(getByText("Badge").parentElement!).backgroundColor);
   });
 
   it("keeps its error surface while disabled", () => {

@@ -48,7 +48,10 @@ The hidden named input submits the selected value. The caller validates required
     "aria-invalid"?: HTMLInputAttributes["aria-invalid"];
     /** Adds classes to the component root. */
     class?: string;
-    /** Replaces visible option copy while label remains available to filtering and accessibility. */
+    /**
+     * Replaces visible option copy while label remains available to filtering and accessibility. Wrap text mixed with
+     * markup in one element: the content centers as a row of flex items, whose edge spaces collapse.
+     */
     renderOption?: Snippet<[ComboboxOption<Value>]>;
   }
 </script>
@@ -296,7 +299,7 @@ The hidden named input submits the selected value. The caller validates required
           onpointerdown={(event) => event.preventDefault()}
           onclick={() => selectOption(option)}
         >
-          <span
+          <span class="option"
             >{#if renderOption}{@render renderOption(option)}{:else}{option.label}{/if}</span
           >
           {#if controller.state.value === option.value}
@@ -445,6 +448,13 @@ The hidden named input submits the selected value. The caller validates required
       opacity: 0;
     }
   }
+  /* A rendered option, such as a flag beside a name, centers in its row as a box. Set on the text's
+     baseline instead, an icon leading it lifts it above the row's middle. */
+  .option {
+    display: flex;
+    align-items: center;
+  }
+
   :global(.a-novel-combobox-item) {
     display: flex;
     align-items: center;

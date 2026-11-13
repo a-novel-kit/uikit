@@ -43,6 +43,15 @@ describe("Card", () => {
     expect(resting).not.toBe(resolveColor("var(--color-surface-island-glass)"));
   });
 
+  it("rings a ghost card a step over a divider", () => {
+    const children = createRawSnippet(() => ({ render: () => "<span>Lantern</span>" }));
+    const { container } = render(Card, { props: { surface: "ghost", children } });
+    const ring = getComputedStyle(container.querySelector(".card")!).boxShadow;
+
+    expect(ring).toContain(resolveColor("var(--color-border-item)"));
+    expect(ring).not.toContain(resolveColor("var(--color-border-divider)"));
+  });
+
   it("keeps a ghost card inside another card on its parent's glass", () => {
     const { container } = render(NestedCardsFixture);
 
