@@ -6,7 +6,8 @@ the form receives every chosen value under `name`, in the options' order, except
 never sends; the controller keeps the order of choice. A `searchLabel` opens the well with a search that shows only
 the chips whose label holds it, whatever their case and accents: a hidden chip keeps its choice, and the form still
 sends it. The chips under a search scroll past the height of an open select's list. Options that name a `section`
-run together under its title, in the order the sections first appear, each run set apart by a divider.
+run together under its title, in the order the sections first appear, each run set apart by a divider. On a narrow
+screen, a searchable group shows its choice in a field that opens the search and the chips over the whole screen.
 
 ```svelte
 <script lang="ts">
@@ -28,6 +29,7 @@ run together under its title, in the order the sections first appear, each run s
   import type { SelectionOption } from "./types";
 
   import type { HTMLFieldsetAttributes } from "svelte/elements";
+  import { MediaQuery } from "svelte/reactivity";
 
   /** One chip, with the section it runs in when the group has sections. */
   export interface ChipOption extends SelectionOption<string> {
@@ -47,6 +49,13 @@ run together under its title, in the order the sections first appear, each run s
       else sections.set(option.section, [option]);
     }
     return [...sections];
+  }
+
+  // One query for every group, made at first use: jsdom has no media queries for a group without a search.
+  let narrowScreen: MediaQuery | undefined;
+  function narrow() {
+    narrowScreen ??= new MediaQuery("(width < 48rem)");
+    return narrowScreen.current;
   }
 
   /** Props for a group of options that each turn on and off. */
@@ -71,7 +80,10 @@ run together under its title, in the order the sections first appear, each run s
 </script>
 
 <script lang="ts">
+  import Badge from "./Badge.svelte";
+  import Button from "./Button.svelte";
   import RenderContent from "./Content.svelte";
+  import Dialog from "./Dialog.svelte";
   import { createChipGroupController } from "./controllers.svelte";
   import { useMessages } from "./internal/i18n";
   import { matchesSearch } from "./selection";
@@ -97,6 +109,8 @@ run together under its title, in the order the sections first appear, each run s
   const { t } = useMessages();
 
   const chosen = $derived(controller.state.value);
+  const sheet = $derived(Boolean(searchLabel) && narrow());
+  const chosenOptions = $derived(chosen.flatMap((value) => options.find((option) => option.value === value) ?? []));
   const sections = $derived(sectionsOf(options));
   const shown = $derived(
     new Set(options.filter((option) => matchesSearch(option.label, controller.state.query)).map(({ value }) => value))
@@ -127,15 +141,8 @@ run together under its title, in the order the sections first appear, each run s
   }
 </script>
 
-<fieldset
-  class="chip-group {tone} {className}"
-  class:invalid={Boolean(error)}
-  class:searchable={Boolean(searchLabel)}
-  {...rest}
-  aria-describedby={[describedBy, hintId, errorId].filter(Boolean).join(" ") || undefined}
->
-  <legend><RenderContent content={legend} /></legend>
-  <div class="chips">
+{#snippet well(inSheet: boolean)}
+  <div class="chips" class:sheet={inSheet}>
     {#if searchLabel}
       <label class="search">
         <SearchIcon class="search-icon" aria-hidden="true" />
@@ -184,6 +191,44 @@ run together under its title, in the order the sections first appear, each run s
       <span class="empty" role="status">{shown.size === 0 ? t("chipGroup.empty") : ""}</span>
     {/if}
   </div>
+{/snippet}
+
+<fieldset
+  class="chip-group {tone} {className}"
+  class:invalid={Boolean(error)}
+  class:searchable={Boolean(searchLabel)}
+  {...rest}
+  aria-describedby={[describedBy, hintId, errorId].filter(Boolean).join(" ") || undefined}
+>
+  <legend><RenderContent content={legend} /></legend>
+  {#if sheet}
+    <!-- A narrow screen keeps only the choice in the form, and opens the search and the chips over the whole screen. -->
+    <button
+      type="button"
+      class="chips trigger"
+      aria-haspopup="dialog"
+      aria-expanded={controller.state.open}
+      onclick={controller.open}
+    >
+      <span class="search">
+        <SearchIcon class="search-icon" aria-hidden="true" />
+        {searchLabel}
+      </span>
+      {#if chosenOptions.length > 0}
+        <span class="section">
+          {#each chosenOptions as option (option.value)}<Badge {tone}>{option.label}</Badge>{/each}
+        </span>
+      {/if}
+    </button>
+    <Dialog {controller} title={legend} presentation="fullscreen">
+      {@render well(true)}
+      {#snippet actions()}
+        <Button onclick={controller.close}>{t("chipGroup.done")}</Button>
+      {/snippet}
+    </Dialog>
+  {:else}
+    {@render well(false)}
+  {/if}
   {#if hint}<div id={hintId} class="hint"><RenderContent content={hint} /></div>{/if}
   {#if error}<div id={errorId} class="error"><RenderContent content={error} /></div>{/if}
 </fieldset>
@@ -218,13 +263,31 @@ run together under its title, in the order the sections first appear, each run s
     box-sizing: border-box;
     border: var(--border-width-thin) solid var(--color-field-border);
     border-radius: var(--radius-md);
-    background: var(--color-control-surface);
+    background: var(--chip-well);
     padding: var(--space-1) var(--space-3);
     min-block-size: var(--control-height-md);
+    --chip-well: var(--color-control-surface);
   }
 
+  /* The field that opens the chips' screen reads as the well it opens, its choice as badges under its search. */
+  .trigger {
+    cursor: pointer;
+    inline-size: 100%;
+    color: inherit;
+    font: inherit;
+    text-align: start;
+  }
+
+  /* On the chips' screen, the well fills the screen and its chips scroll under the search. */
+  .chips.sheet {
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    align-content: stretch;
+  }
+
+  /* The sections pack at the top of a list taller than them, as on the chips' screen. */
   .options {
     display: grid;
+    align-content: start;
     gap: var(--space-2);
   }
 
@@ -244,20 +307,16 @@ run together under its title, in the order the sections first appear, each run s
     font-family: var(--font-family-interface);
   }
 
-  /* Under a search, a section's title stays atop the list while its chips scroll under it. It frosts what passes
-     under it rather than painting the well's color, which is translucent and would darken twice; at rest it frosts
-     the bare well, which shows nothing. Its inset widens the frost without moving the text. A browser without
-     backdrop blur scrolls the titles with their chips. */
-  @supports (backdrop-filter: blur(0)) or (-webkit-backdrop-filter: blur(0)) {
-    .searchable .section-title {
-      position: sticky;
-      z-index: 1;
-      -webkit-backdrop-filter: blur(var(--blur-md));
-      backdrop-filter: blur(var(--blur-md));
-      margin-block: calc(var(--space-1) * -1);
-      inset-block-start: 0;
-      padding-block: var(--space-1);
-    }
+  /* Under a search, a section's title stays flush under the search while its chips scroll under it. It paints the
+     well's color over a dialog's, which the well shows inside a dialog: the well's own color is translucent and
+     would let the chips show through. Its inset widens the band without moving the text. */
+  .searchable .section-title {
+    position: sticky;
+    z-index: 1;
+    margin-block: calc(var(--space-1) * -1);
+    inset-block-start: calc((var(--focus-ring-width) + var(--border-width-strong)) * -1);
+    background: linear-gradient(var(--chip-well), var(--chip-well)), var(--color-surface-island-strong);
+    padding-block: var(--space-1);
   }
 
   /* A divider sets each shown section apart from the one before it. */
@@ -274,6 +333,10 @@ run together under its title, in the order the sections first appear, each run s
     padding: calc(var(--focus-ring-width) + var(--border-width-strong));
     max-block-size: var(--control-menu-max-height);
     overflow-y: auto;
+  }
+
+  .sheet .options {
+    max-block-size: none;
   }
 
   /* A wheel stops at the list's end, as an open select's does. A finger carries on to the page, so a swipe on a
@@ -319,11 +382,13 @@ run together under its title, in the order the sections first appear, each run s
     color: var(--color-control-placeholder);
   }
 
-  /* A focused search lights the well as a focused field. */
-  .chip-group:has(.query:focus-visible) .chips {
+  /* A focused search, or the field that opens it, lights the well as a focused field. */
+  .chip-group:has(.query:focus-visible) .chips,
+  .trigger:focus-visible {
+    outline: none;
     box-shadow: var(--shadow-focus-ring);
     border-color: var(--color-control-border-focus);
-    background: var(--color-control-surface-focus);
+    --chip-well: var(--color-control-surface-focus);
   }
 
   /* An empty status takes no room, yet stays in the page to announce the next empty search. */
@@ -338,7 +403,7 @@ run together under its title, in the order the sections first appear, each run s
 
   .invalid .chips {
     border-color: var(--color-feedback-error-border);
-    background: var(--color-control-surface-invalid);
+    --chip-well: var(--color-control-surface-invalid);
   }
 
   /* A chip takes a badge's size and type, so a chosen one reads as the tag it becomes. A real checkbox
@@ -416,7 +481,8 @@ run together under its title, in the order the sections first appear, each run s
   }
 
   .chip-group:disabled:not(.invalid) .chips {
-    background: var(--color-control-surface-disabled);
+    cursor: not-allowed;
+    --chip-well: var(--color-control-surface-disabled);
   }
 
   .chip:has(:disabled:not(:checked)) {

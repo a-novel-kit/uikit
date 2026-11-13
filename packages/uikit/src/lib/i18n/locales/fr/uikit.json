@@ -6,6 +6,7 @@
     "label": "Fil d’Ariane"
   },
   "chipGroup": {
+    "done": "Terminé",
     "empty": "Aucune option correspondante"
   },
   "combobox": {

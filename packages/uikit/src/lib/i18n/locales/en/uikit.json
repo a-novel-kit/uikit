@@ -6,6 +6,7 @@
     "label": "Breadcrumb"
   },
   "chipGroup": {
+    "done": "Done",
     "empty": "No matching options"
   },
   "combobox": {

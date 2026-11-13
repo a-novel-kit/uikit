@@ -5,6 +5,26 @@ import { describe, expect, it, vi } from "vitest";
 
 import { fireEvent, render } from "@testing-library/svelte";
 
+// jsdom has no media queries, and a searchable group reads one for a narrow screen; these tests keep it wide.
+vi.stubGlobal("matchMedia", (media: string) => ({
+  matches: false,
+  media,
+  addEventListener() {},
+  removeEventListener() {},
+}));
+
+// Renders whatever state it holds and refuses every request.
+function refusing() {
+  return {
+    state: { value: [], query: "", open: false },
+    setValue() {},
+    setQuery() {},
+    open() {},
+    close() {},
+    toggle() {},
+  };
+}
+
 const options = [
   { value: "fantasy", label: "Fantasy" },
   { value: "mystery", label: "Mystery" },
@@ -89,7 +109,7 @@ describe("ChipGroup", () => {
   });
 
   it("takes back a choice its controller refuses", async () => {
-    const controller = { state: { value: [], query: "" }, setValue: () => {}, setQuery: () => {} };
+    const controller = refusing();
     const { getByRole } = render(ChipGroup, { props: { legend: "Genres", name: "genres", options, controller } });
 
     await fireEvent.click(getByRole("checkbox", { name: "Fantasy" }));
@@ -164,7 +184,7 @@ describe("ChipGroup search", () => {
   });
 
   it("shows only the search its controller keeps", async () => {
-    const controller = { state: { value: [], query: "" }, setValue: () => {}, setQuery: () => {} };
+    const controller = refusing();
     const { getByRole } = render(ChipGroup, { props: { ...searchable, options, controller } });
     const search = getByRole("searchbox", { name: "Search genres" }) as HTMLInputElement;
 

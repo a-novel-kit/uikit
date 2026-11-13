@@ -5,7 +5,8 @@ import { createChipGroupController } from "./controllers.svelte";
 
 import { createRawSnippet } from "svelte";
 
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, onTestFinished } from "vitest";
+import { page } from "vitest/browser";
 
 import "@a-novel-kit/uikit-tokens/tokens.css";
 
@@ -86,8 +87,10 @@ describe("ChipGroup", () => {
     expect(getComputedStyle(well).backgroundColor).toBe(resolveColor("var(--color-control-surface-invalid)"));
   });
 
-  it("scrolls a long searchable list under its search, within an open select's height", () => {
-    const options = Array.from({ length: 150 }, (_, index) => ({ value: `genre-${index}`, label: `Genre ${index}` }));
+  it("scrolls a long searchable list under its search, within an open select's height", async () => {
+    await page.viewport(1280, 800);
+    onTestFinished(() => page.viewport(414, 896));
+    const options = Array.from({ length: 400 }, (_, index) => ({ value: `genre-${index}`, label: `Genre ${index}` }));
     const { container } = render(ChipGroup, {
       props: { legend: "Genres", name: "genres", searchLabel: "Search genres", options },
     });
@@ -104,6 +107,53 @@ describe("ChipGroup", () => {
     expect(list.getBoundingClientRect().height).toBeCloseTo(cap, 0);
     expect(list.scrollTop).toBeGreaterThan(0);
     expect(search.getBoundingClientRect().top).toBe(top);
+  });
+
+  it("pins a section's title flush under the search, covering the chips that pass under it", async () => {
+    await page.viewport(1280, 800);
+    onTestFinished(() => page.viewport(414, 896));
+    const options = Array.from({ length: 150 }, (_, index) => ({
+      value: `genre-${index}`,
+      label: `Genre ${index}`,
+      section: index < 100 ? "First" : "Second",
+    }));
+    const { container, getByText } = render(ChipGroup, {
+      props: { legend: "Genres", name: "genres", searchLabel: "Search genres", options },
+    });
+    const list = container.querySelector<HTMLElement>(".options")!;
+
+    list.scrollTop = 200;
+
+    const title = getByText("First");
+    expect(title.getBoundingClientRect().top).toBeCloseTo(list.getBoundingClientRect().top, 0);
+    expect(getComputedStyle(title).backgroundImage).toContain("gradient");
+  });
+
+  it("opens the search and the chips over the whole screen on a narrow screen, and keeps the choice in the form", async () => {
+    await page.viewport(390, 844);
+    const form = document.body.appendChild(document.createElement("form"));
+    onTestFinished(() => form.remove());
+    const options = [
+      { value: "cyberpunk", label: "Cyberpunk", section: "Science fiction" },
+      { value: "farce", label: "Farce", section: "Comedy" },
+    ];
+    const controller = createChipGroupController({ initialValue: ["farce"] });
+    render(ChipGroup, {
+      target: form,
+      props: { legend: "Genres", name: "genres", searchLabel: "Search genres", options, controller },
+    });
+
+    const trigger = page.getByRole("button", { name: /Search genres/ });
+    await expect.element(trigger).toBeVisible();
+    expect(trigger.element().textContent).toContain("Farce");
+    await trigger.click();
+    const sheet = page.getByRole("dialog", { name: "Genres" });
+    await expect.element(sheet.getByRole("searchbox", { name: "Search genres" })).toBeVisible();
+    await sheet.getByRole("checkbox", { name: "Cyberpunk" }).click();
+    await sheet.getByRole("button", { name: "Done" }).click();
+
+    await expect.element(sheet).not.toBeInTheDocument();
+    expect(new FormData(form).getAll("genres")).toEqual(["cyberpunk", "farce"]);
   });
 
   it("draws a divider before each shown section but the first", () => {

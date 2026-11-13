@@ -21,9 +21,19 @@ describe("component controllers", () => {
     chips.setQuery("cyber");
     chips.setQuery("cyber");
 
-    expect(chips.state).toEqual({ value: ["fantasy"], query: "cyber" });
+    expect(chips.state).toEqual({ value: ["fantasy"], query: "cyber", open: false });
     expect(onQueryChange).toHaveBeenCalledOnce();
     expect(onValueChange).not.toHaveBeenCalled();
+  });
+
+  it("clears a chip group's search when its screen closes, and keeps its choice", () => {
+    const chips = createChipGroupController({ initialValue: ["fantasy"] });
+
+    chips.open();
+    chips.setQuery("cyber");
+    chips.close();
+
+    expect(chips.state).toEqual({ value: ["fantasy"], query: "", open: false });
   });
 
   it("applies semantic open transitions without duplicate notifications", () => {

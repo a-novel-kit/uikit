@@ -20,6 +20,7 @@
     TagInput,
     Textarea,
   } from "@a-novel-kit/uikit";
+  import { reviewStoryGlobals } from "@a-novel-kit/uikit-storybook";
 
   import { Lock as LockIcon, Search as SearchIcon, Users as UsersIcon } from "@lucide/svelte";
   import { defineMeta } from "@storybook/addon-svelte-csf";
@@ -127,6 +128,7 @@
   const someGenresController = fixedChips(["fantasy", "mystery"]);
   const searchedGenresController = fixedChips(["fantasy", "scienceFiction"], "fic");
   const missedGenresController = fixedChips(["fantasy"], "cyberpunk");
+  const openGenresController = fixedChips(["fantasy", "farce"], "", true);
   const coverController = fixedValue<readonly string[]>(["cover.png"]);
   const longFileController = fixedValue<readonly string[]>([
     "the-complete-annotated-manuscript-with-every-revision-and-editor-comment-final-v12.pdf",
@@ -344,6 +346,7 @@
 
 <Story
   name="Searchable chips"
+  globals={reviewStoryGlobals.desktop}
   parameters={{
     docs: {
       description: {
@@ -379,6 +382,51 @@
       tone="accent"
       options={genreOptions}
       controller={missedGenresController}
+    />
+  </div>
+</Story>
+
+<Story
+  name="Searchable chips on a phone"
+  exportName="SearchableChipsPhone"
+  globals={reviewStoryGlobals.mobile}
+  parameters={{
+    docs: {
+      description: {
+        story:
+          "On a narrow screen, a searchable group keeps only its choice in the form, as badges under the search's name. Tapping it opens the search and the chips over the whole screen.",
+      },
+    },
+  }}
+  asChild
+>
+  <div class="form">
+    <ChipGroup
+      legend="Genres"
+      hint="Up to 10."
+      name="phone"
+      searchLabel="Search genres"
+      tone="accent"
+      options={sectionedGenreOptions}
+      controller={someGenresController}
+    />
+  </div>
+</Story>
+
+<Story
+  name="Searchable chips on a phone, open"
+  exportName="SearchableChipsPhoneOpen"
+  globals={reviewStoryGlobals.mobile}
+  asChild
+>
+  <div class="form">
+    <ChipGroup
+      legend="Genres"
+      name="phone-open"
+      searchLabel="Search genres"
+      tone="accent"
+      options={sectionedGenreOptions}
+      controller={openGenresController}
     />
   </div>
 </Story>

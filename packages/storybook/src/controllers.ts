@@ -51,9 +51,9 @@ export function fixedCombobox<Value extends string>(
   return { ...fixedSelect(value, open), state: { open, value, query }, setQuery: ignore };
 }
 
-/** Pins a chip group's choice and search. */
-export function fixedChips(value: readonly string[], query = ""): ChipGroupController {
-  return { state: { value, query }, setValue: ignore, setQuery: ignore };
+/** Pins a chip group's choice, search, and whether its narrow-screen view is open. */
+export function fixedChips(value: readonly string[], query = "", open = false): ChipGroupController {
+  return { ...fixedOpen(open), state: { value, query, open }, setValue: ignore, setQuery: ignore };
 }
 
 /** Pins a tag input's tags: it refuses every tag, so what is typed stays in the field. */
