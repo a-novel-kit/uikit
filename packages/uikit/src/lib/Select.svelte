@@ -452,7 +452,8 @@ The hidden named input submits the selected value. The caller validates required
     outline: none;
     box-shadow: var(--shadow-lg);
     border: var(--border-width-thin) solid var(--color-border-subtle);
-    border-radius: var(--radius-lg);
+    /* The items' radius plus the padding around them, so their corners share centers. */
+    border-radius: calc(var(--radius-md) + var(--space-1));
     /* The list takes the field's own well, frosted where the browser blurs a backdrop and the canvas's
        color where it cannot; a subtle border keeps it visible past the island it opens from. */
     background: var(--color-surface-canvas);

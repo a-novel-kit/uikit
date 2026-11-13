@@ -5,6 +5,9 @@ A raised card is frosted glass the app's lamp shines through. Inside another car
 parent's glass and stands out by its shadow alone, so a group of settings can hold one card per option.
 A ghost card is one item of a collection: the canvas's own color under a raised card's veil and blur, ringed a
 step over a divider, and lit as a raised card under the pointer or once something in it takes the keyboard's focus.
+
+A card's padding is half its radius. A card inside another takes the next radius step down, so their corners
+stay concentric at any depth.
 -->
 <script lang="ts" module>
   import type { Snippet } from "svelte";
@@ -14,8 +17,8 @@ step over a divider, and lit as a raised card under the pointer or once somethin
   export interface CardProps extends HTMLAttributes<HTMLDivElement> {
     /** Semantic surface depth. */
     surface?: "plain" | "subtle" | "raised" | "ghost" | "overlay";
-    /** Internal spacing applied around all card regions. */
-    padding?: "none" | "sm" | "md" | "lg";
+    /** Internal spacing around all card regions: half the card's radius, or none for content that reaches the edges. */
+    padding?: "none" | "md";
     /** Region rendered before the content. */
     header?: Snippet;
     /** Region rendered after the content. */
@@ -42,9 +45,12 @@ step over a divider, and lit as a raised card under the pointer or once somethin
 </div>
 
 <style>
+  /* A card sits on its own radius, or on the one its parent card leaves to its regions. */
   .card {
+    --card-radius: var(--card-nested-radius, var(--radius-xl));
+    --card-padding: calc(var(--card-radius) / 2);
     box-sizing: border-box;
-    border-radius: var(--radius-lg);
+    border-radius: var(--card-radius);
     min-inline-size: 0;
     color: var(--color-text-primary);
   }
@@ -112,19 +118,13 @@ step over a divider, and lit as a raised card under the pointer or once somethin
     --card-padding: var(--space-0);
     overflow: clip;
   }
-  .padding-sm {
-    --card-padding: var(--space-3);
-  }
-  .padding-md {
-    --card-padding: var(--space-4);
-  }
-  .padding-lg {
-    --card-padding: var(--space-6);
-  }
 
+  /* A card nested in a region sits the padding away from this card's edge, so its radius is this card's
+     less the padding: the next radius step down, or this card's own radius without padding. */
   .header,
   .content,
   .footer {
+    --card-nested-radius: calc(var(--card-radius) - var(--card-padding));
     padding: var(--card-padding);
   }
 

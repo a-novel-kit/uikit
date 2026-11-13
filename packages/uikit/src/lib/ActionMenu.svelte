@@ -361,7 +361,8 @@ For a custom trigger, spread the snippet attributes onto a native button.
     outline: none;
     box-shadow: var(--shadow-lg);
     border: 0;
-    border-radius: var(--radius-lg);
+    /* The items' radius plus the padding around them, so their corners share centers. */
+    border-radius: calc(var(--radius-md) + var(--space-1));
     background: var(--color-surface-island-strong);
     padding: var(--space-1);
     min-inline-size: max(var(--a-novel-menu-anchor-width), calc(var(--space-base) * var(--multiplier-48)));

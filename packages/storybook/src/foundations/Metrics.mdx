@@ -15,7 +15,7 @@ export const spacingTokens = [
   "--space-8",
 ];
 
-export const radiusTokens = ["--radius-none", "--radius-sm", "--radius-md", "--radius-lg"];
+export const radiusTokens = ["--radius-none", "--radius-sm", "--radius-md", "--radius-lg", "--radius-xl"];
 
 export const ratios = [
   { token: "--ratio-density", label: "Density", use: "Type and compact details" },
@@ -127,7 +127,12 @@ island and need no border; only focus and errors outline them.
 
 ## Border radius
 
-Choose a named radius token for each component shape.
+Choose a named radius token for each component shape. Each step doubles the one below: 4, 8, 16 and 32
+pixels. A surface that holds another shape keeps their corners concentric: its radius is the inner
+shape's radius plus the padding between them.
+
+- A card's padding is half its radius. A card nested in it takes the next step down, at any depth.
+- A list or a toolbar adds its `--space-1` padding to its items' `--radius-md`.
 
 <div className="radius-grid">
   {radiusTokens.map((token) => (
