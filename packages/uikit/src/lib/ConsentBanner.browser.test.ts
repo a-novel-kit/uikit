@@ -3,7 +3,7 @@ import ConsentOverDialogFixture from "../../test/ConsentOverDialogFixture.svelte
 import ConsentBanner from "./ConsentBanner.svelte";
 import { createConsentController, createOpenController } from "./controllers.svelte";
 
-import { createRawSnippet } from "svelte";
+import { createRawSnippet, tick } from "svelte";
 
 import { describe, expect, it, vi } from "vitest";
 import { page, userEvent } from "vitest/browser";
@@ -65,10 +65,16 @@ describe("ConsentBanner over a modal dialog", () => {
     await expect.poll(() => document.querySelectorAll("section").length).toBe(0);
   });
 
-  it("goes back to the page alone once the dialog has faded out", async () => {
+  it("keeps both copies while the dialog fades out, then goes back to the page alone", async () => {
     const { dialog } = await openOver();
+    const element = document.querySelector("dialog")!;
+    const closed = new Promise((resolve) => element.addEventListener("close", resolve, { once: true }));
 
     dialog.close();
+    await closed;
+    await tick();
+
+    expect(document.querySelectorAll("section").length).toBe(2);
 
     await expect.poll(() => document.querySelectorAll("section").length).toBe(1);
     expect(document.querySelector("section")!.closest("dialog")).toBeNull();

@@ -96,7 +96,7 @@ child with `autofocus` takes focus instead. Opening and closing fade the dialog 
   let leaveTop: (() => void) | undefined;
   const hosting = $derived(overModal.dialogs.at(-1) === self);
   // A request it shows stays fixed to the screen, where a moving dialog would carry it along, so while one waits the
-  // dialog fades without rising. Opening focuses it, which settles its first style before it joins the topmost.
+  // dialog fades without rising. It keys on waiting requests, not on hosting: showDialog's focus starts the rise first.
   const steady = $derived(modal && overModal.requests.length > 0);
 
   function leave() {
