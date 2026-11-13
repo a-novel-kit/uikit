@@ -55,6 +55,12 @@ and the bar stays clear of them.
       background: transparent;
     }
 
+    /* A bar at the page's foot holds actions under the thumb, over whatever scrolls by: it darkens to the canvas
+       under its frost, as the navigation does, so its controls stand clear of the content. */
+    .end {
+      background: color-mix(in oklab, var(--color-surface-canvas) var(--color-mix-12), transparent);
+    }
+
     /* Under a modal dialog's blurred backdrop, its own blur sits unseen: it drops once the backdrop has faded in and
        returns at once, as a card's does. One inside a dialog keeps it. */
     :global(:root:has(dialog.dialog:modal)) .sticky-bar:not(:global(dialog *)) {

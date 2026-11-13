@@ -38,19 +38,19 @@ describe("StickyBar", () => {
     expect(bar.getBoundingClientRect().bottom).toBeCloseTo(window.innerHeight - 24);
   });
 
-  it.each(["start", "end"] as const)(
-    "frosts what scrolls under it at the %s edge through clear glass, with no line",
-    (edge) => {
-      const { getByText } = render(StickyBar, { edge, children });
-      const css = getComputedStyle(getByText("Actions").parentElement!);
+  it.each([
+    ["start", "through clear glass", true],
+    ["end", "darkened to the canvas", false],
+  ] as const)("frosts what scrolls under it at the %s edge %s, with no line", (edge, _, clear) => {
+    const { getByText } = render(StickyBar, { edge, children });
+    const css = getComputedStyle(getByText("Actions").parentElement!);
 
-      expect(css.backdropFilter).toContain("blur");
-      const clear = document.body.appendChild(document.createElement("span"));
-      clear.style.backgroundColor = "transparent";
-      expect(css.backgroundColor).toBe(getComputedStyle(clear).backgroundColor);
-      expect([css.borderBlockStartWidth, css.borderBlockEndWidth]).toEqual(["0px", "0px"]);
-    }
-  );
+    expect(css.backdropFilter).toContain("blur");
+    const probe = document.body.appendChild(document.createElement("span"));
+    probe.style.backgroundColor = "transparent";
+    expect(css.backgroundColor === getComputedStyle(probe).backgroundColor).toBe(clear);
+    expect([css.borderBlockStartWidth, css.borderBlockEndWidth]).toEqual(["0px", "0px"]);
+  });
 
   it.each([
     ["spans the page's gutters when it bleeds", true, 0],
