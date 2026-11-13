@@ -283,6 +283,97 @@ export function createValueController<Value>({
   };
 }
 
+/** State managed for a chip group. */
+export interface ChipGroupState extends ValueState<readonly string[]>, OpenState {
+  /** The search that picks which chips show; it never changes the choice. */
+  readonly query: string;
+}
+
+/** Pure state transitions for a chip group. */
+export interface ChipGroupController {
+  /** State rendered by the component. */
+  readonly state: ChipGroupState;
+  /** Applies the requested chosen values, in the order of choice. */
+  setValue(value: readonly string[]): void;
+  /** Applies a requested search. */
+  setQuery(query: string): void;
+  /** Opens the chips over the whole screen, where a narrow screen shows them. */
+  open(): void;
+  /** Closes the chips' screen and clears its search. */
+  close(): void;
+  /** Reverses whether the chips' screen is open. */
+  toggle(): void;
+}
+
+/** Configuration for the default chip group controller. */
+export interface ChipGroupControllerOptions {
+  /** Chosen values when created; defaults to none. */
+  initialValue?: readonly string[];
+  /** Search when created; defaults to an empty string. */
+  initialQuery?: string;
+  /** Whether the chips' screen starts open; defaults to false. */
+  initialOpen?: boolean;
+  /** Runs after the default controller changes the chosen values. */
+  onValueChange?: (value: readonly string[]) => void;
+  /** Runs after the default controller changes the search. */
+  onQueryChange?: (query: string) => void;
+  /** Runs after the default controller opens or closes the chips' screen. */
+  onOpenChange?: (open: boolean) => void;
+}
+
+/**
+ * Creates local reactive choice, search and screen state for a ChipGroup. Closing the screen clears the search.
+ * Unchanged requests do not notify. The component owns matching the search against the chips' labels.
+ *
+ * @example
+ * ```ts
+ * import { createChipGroupController } from "@a-novel-kit/uikit";
+ * const genres = createChipGroupController({ initialValue: ["fantasy"] });
+ * genres.setQuery("cyber");
+ * ```
+ */
+export function createChipGroupController({
+  initialValue = [],
+  initialQuery = "",
+  initialOpen = false,
+  onValueChange,
+  onQueryChange,
+  onOpenChange,
+}: ChipGroupControllerOptions = {}): ChipGroupController {
+  // Replaced whole on each change, so the choice stays a plain array that clones.
+  let state = $state.raw<ChipGroupState>({ value: initialValue, query: initialQuery, open: initialOpen });
+
+  function setOpen(open: boolean) {
+    const query = open ? state.query : "";
+    const openChanged = state.open !== open;
+    const queryChanged = state.query !== query;
+    if (!openChanged && !queryChanged) return;
+
+    state = { ...state, open, query };
+    if (openChanged) onOpenChange?.(open);
+    if (queryChanged) onQueryChange?.(query);
+  }
+
+  return {
+    get state() {
+      return state;
+    },
+    setValue: (value) => {
+      if (Object.is(state.value, value)) return;
+      state = { ...state, value };
+      onValueChange?.(value);
+    },
+    setQuery: (query) => {
+      if (state.query === query) return;
+      state = { ...state, query };
+      onQueryChange?.(query);
+    },
+    open: () => setOpen(true),
+    close: () => setOpen(false),
+    toggle: () => setOpen(!state.open),
+  };
+}
+
 /** State managed for a single-value popup control. */
 export interface SelectState<Value> {
   /** Whether the popup is visible. */

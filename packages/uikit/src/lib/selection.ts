@@ -35,6 +35,16 @@ export function findNextEnabledIndex<Value extends string>(
   return currentIndex;
 }
 
+/** Folds case and accents away, so a search for "epopee" finds "Épopée". */
+function fold(text: string): string {
+  return text.normalize("NFD").replace(/\p{M}/gu, "").toLocaleLowerCase();
+}
+
+/** Tells whether a label holds the searched text, whatever their case and accents and the search's outer spaces. */
+export function matchesSearch(label: string, search: string): boolean {
+  return fold(label).includes(fold(search.trim()));
+}
+
 /** Resolves explicit and ARIA validation state to one component state. */
 export function resolveInvalidState(invalid: boolean, ariaInvalid: HTMLInputAttributes["aria-invalid"]): boolean {
   return invalid || ariaInvalid === true || ariaInvalid === "true";

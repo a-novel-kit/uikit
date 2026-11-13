@@ -1,5 +1,6 @@
 import {
   createCheckedController,
+  createChipGroupController,
   createComboboxController,
   createOpenController,
   createPictureFrameController,
@@ -12,6 +13,29 @@ import {
 import { describe, expect, it, vi } from "vitest";
 
 describe("component controllers", () => {
+  it("keeps a chip group's search apart from its choice", () => {
+    const onValueChange = vi.fn();
+    const onQueryChange = vi.fn();
+    const chips = createChipGroupController({ initialValue: ["fantasy"], onValueChange, onQueryChange });
+
+    chips.setQuery("cyber");
+    chips.setQuery("cyber");
+
+    expect(chips.state).toEqual({ value: ["fantasy"], query: "cyber", open: false });
+    expect(onQueryChange).toHaveBeenCalledOnce();
+    expect(onValueChange).not.toHaveBeenCalled();
+  });
+
+  it("clears a chip group's search when its screen closes, and keeps its choice", () => {
+    const chips = createChipGroupController({ initialValue: ["fantasy"] });
+
+    chips.open();
+    chips.setQuery("cyber");
+    chips.close();
+
+    expect(chips.state).toEqual({ value: ["fantasy"], query: "", open: false });
+  });
+
   it("applies semantic open transitions without duplicate notifications", () => {
     const onOpenChange = vi.fn();
     const controller = createOpenController({ onOpenChange });
