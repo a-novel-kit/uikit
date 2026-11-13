@@ -66,6 +66,15 @@
     { value: "western", label: "Western", disabled: true },
   ];
 
+  const sectionedGenreOptions = [
+    { value: "cyberpunk", label: "Cyberpunk", section: "Science fiction" },
+    { value: "spaceOpera", label: "Space opera", section: "Science fiction" },
+    { value: "fantasy", label: "Fantasy", section: "Fantasy" },
+    { value: "urbanFantasy", label: "Urban fantasy", section: "Fantasy" },
+    { value: "farce", label: "Farce", section: "Comedy" },
+    { value: "satire", label: "Satire", section: "Comedy" },
+  ];
+
   const { Story } = defineMeta({
     title: "Forms/Controls",
     tags: ["autodocs"],
@@ -81,7 +90,15 @@
 </script>
 
 <script lang="ts">
-  import { fixedChecked, fixedCombobox, fixedPressed, fixedSelect, fixedTags, fixedValue } from "../controllers";
+  import {
+    fixedChecked,
+    fixedChips,
+    fixedCombobox,
+    fixedPressed,
+    fixedSelect,
+    fixedTags,
+    fixedValue,
+  } from "../controllers";
 
   type Visibility = (typeof visibilityOptions)[number]["value"];
   type Language = (typeof languageOptions)[number]["value"];
@@ -105,9 +122,11 @@
   const severalFilesController = fixedValue<readonly string[]>(["chapter-one.pdf", "chapter-two.pdf", "notes.txt"]);
   const tagsController = fixedTags(["slow-burn", "années-50", "maps"]);
   const longTagController = fixedTags(["a-tag-that-runs-far-longer-than-its-field-holds-on-one-line", "maps"]);
-  const chosenGenresController = fixedValue<readonly string[]>(["fantasy", "mystery", "western"]);
+  const chosenGenresController = fixedChips(["fantasy", "mystery", "western"]);
   // Leaves the disabled Western unchosen, so the enabled group shows a disabled option as well.
-  const someGenresController = fixedValue<readonly string[]>(["fantasy", "mystery"]);
+  const someGenresController = fixedChips(["fantasy", "mystery"]);
+  const searchedGenresController = fixedChips(["fantasy", "scienceFiction"], "fic");
+  const missedGenresController = fixedChips(["fantasy"], "cyberpunk");
   const coverController = fixedValue<readonly string[]>(["cover.png"]);
   const longFileController = fixedValue<readonly string[]>([
     "the-complete-annotated-manuscript-with-every-revision-and-editor-comment-final-v12.pdf",
@@ -320,6 +339,47 @@
       <ChipGroup legend="A long label wraps" name="long" options={longGenreOptions} />
     </div>
     <ChipGroup legend="Disabled" name="disabled" options={genreOptions} controller={chosenGenresController} disabled />
+  </div>
+</Story>
+
+<Story
+  name="Searchable chips"
+  parameters={{
+    docs: {
+      description: {
+        story:
+          "A `searchLabel` opens the well with a search line. It shows only the chips whose label holds the search, whatever their case and accents, and never changes the choice: a chosen chip the search hides stays chosen, and the form still sends it. Enter never submits the form from the search, and Escape empties it before it closes a dialog. Options that name a section run under its title, a divider apart, and a long list scrolls under the search past an open select's height.",
+      },
+    },
+  }}
+  asChild
+>
+  <div class="form">
+    <ChipGroup
+      legend="Genres"
+      hint="Up to 10."
+      name="searchable"
+      searchLabel="Search genres"
+      tone="accent"
+      options={sectionedGenreOptions}
+      controller={someGenresController}
+    />
+    <ChipGroup
+      legend="Searched"
+      name="searched"
+      searchLabel="Search genres"
+      tone="accent"
+      options={genreOptions}
+      controller={searchedGenresController}
+    />
+    <ChipGroup
+      legend="Nothing matches"
+      name="missed"
+      searchLabel="Search genres"
+      tone="accent"
+      options={genreOptions}
+      controller={missedGenresController}
+    />
   </div>
 </Story>
 

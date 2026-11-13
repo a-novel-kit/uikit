@@ -1,4 +1,4 @@
-import { findEnabledBoundary, findNextEnabledIndex, resolveInvalidState } from "./selection";
+import { findEnabledBoundary, findNextEnabledIndex, matchesSearch, resolveInvalidState } from "./selection";
 
 import { describe, expect, it } from "vitest";
 
@@ -27,6 +27,12 @@ describe("selection helpers", () => {
 
   it.each([true, "true"] as const)("accepts %s as an ARIA invalid state", (ariaInvalid) => {
     expect(resolveInvalidState(false, ariaInvalid)).toBe(true);
+  });
+
+  it("matches a search whatever its case, accents and outer spaces", () => {
+    expect(matchesSearch("Épopée", " EPOP ")).toBe(true);
+    expect(matchesSearch("Science-fiction", "fiction")).toBe(true);
+    expect(matchesSearch("Fantasy", "cyber")).toBe(false);
   });
 
   it("preserves an explicit invalid state", () => {

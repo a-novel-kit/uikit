@@ -1,6 +1,7 @@
 /// <reference types="vite/client" />
 import Badge from "./Badge.svelte";
 import ChipGroup from "./ChipGroup.svelte";
+import { createChipGroupController } from "./controllers.svelte";
 
 import { createRawSnippet } from "svelte";
 
@@ -55,7 +56,7 @@ describe("ChipGroup", () => {
 
   it("dims a chosen option that is disabled", () => {
     const options = [{ value: "western", label: "Western", disabled: true }];
-    const controller = { state: { value: ["western"] }, setValue: () => {} };
+    const controller = createChipGroupController({ initialValue: ["western"] });
     const { container } = render(ChipGroup, { props: { legend: "Genres", name: "genres", options, controller } });
 
     const chip = container.querySelector(".chip")!;
@@ -64,7 +65,7 @@ describe("ChipGroup", () => {
 
   it.each(["brand", "accent"] as const)("fills a chosen %s chip as the badge of the same tone", (tone) => {
     const options = [{ value: "fantasy", label: "Fantasy" }];
-    const controller = { state: { value: ["fantasy"] }, setValue: () => {} };
+    const controller = createChipGroupController({ initialValue: ["fantasy"] });
     const { container } = render(ChipGroup, { props: { legend: "Genres", name: "genres", options, controller, tone } });
     const { getByText } = render(Badge, {
       tone,
@@ -83,6 +84,40 @@ describe("ChipGroup", () => {
 
     const well = container.querySelector(".chips")!;
     expect(getComputedStyle(well).backgroundColor).toBe(resolveColor("var(--color-control-surface-invalid)"));
+  });
+
+  it("scrolls a long searchable list under its search, within an open select's height", () => {
+    const options = Array.from({ length: 150 }, (_, index) => ({ value: `genre-${index}`, label: `Genre ${index}` }));
+    const { container } = render(ChipGroup, {
+      props: { legend: "Genres", name: "genres", searchLabel: "Search genres", options },
+    });
+    const probe = document.body.appendChild(document.createElement("div"));
+    probe.style.blockSize = "var(--control-menu-max-height)";
+    const cap = probe.getBoundingClientRect().height;
+    probe.remove();
+    const list = container.querySelector<HTMLElement>(".options")!;
+    const search = container.querySelector(".search")!;
+    const top = search.getBoundingClientRect().top;
+
+    list.scrollTop = list.scrollHeight;
+
+    expect(list.getBoundingClientRect().height).toBeCloseTo(cap, 0);
+    expect(list.scrollTop).toBeGreaterThan(0);
+    expect(search.getBoundingClientRect().top).toBe(top);
+  });
+
+  it("draws a divider before each shown section but the first", () => {
+    const options = [
+      { value: "cyberpunk", label: "Cyberpunk", section: "Science fiction" },
+      { value: "farce", label: "Farce", section: "Comedy" },
+    ];
+    const { container } = render(ChipGroup, { props: { legend: "Genres", name: "genres", options } });
+
+    const [first, second] = Array.from(container.querySelectorAll(".section"), (section) =>
+      parseFloat(getComputedStyle(section).borderBlockStartWidth)
+    );
+    expect(first).toBe(0);
+    expect(second).toBeGreaterThan(0);
   });
 
   it("dims its well while disabled", () => {

@@ -5,6 +5,9 @@
   "breadcrumbs": {
     "label": "Fil d’Ariane"
   },
+  "chipGroup": {
+    "empty": "Aucune option correspondante"
+  },
   "combobox": {
     "empty": "Aucune option correspondante",
     "placeholder": "Rechercher une option",

@@ -5,6 +5,9 @@
   "breadcrumbs": {
     "label": "Breadcrumb"
   },
+  "chipGroup": {
+    "empty": "No matching options"
+  },
   "combobox": {
     "empty": "No matching options",
     "placeholder": "Search options",

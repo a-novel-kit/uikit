@@ -14,6 +14,7 @@ export { default as AuthorizationProvider } from "./AuthorizationProvider.svelte
 export type { AuthorizationProviderProps } from "./AuthorizationProvider.svelte";
 export {
   createCheckedController,
+  createChipGroupController,
   createComboboxController,
   createConsentController,
   createOpenController,
@@ -27,6 +28,8 @@ export type {
   CheckedController,
   CheckedControllerOptions,
   CheckedState,
+  ChipGroupControllerOptions,
+  ChipGroupState,
   ComboboxControllerOptions,
   ComboboxState,
   ConsentChoice,
@@ -111,7 +114,7 @@ export type { FieldControlProps, FieldProps } from "./Field.svelte";
 export { default as Fieldset } from "./Fieldset.svelte";
 export type { FieldsetProps } from "./Fieldset.svelte";
 export { default as ChipGroup } from "./ChipGroup.svelte";
-export type { ChipGroupController, ChipGroupProps } from "./ChipGroup.svelte";
+export type { ChipGroupController, ChipGroupProps, ChipOption } from "./ChipGroup.svelte";
 export { default as FileInput } from "./FileInput.svelte";
 export type { FileInputController, FileInputProps } from "./FileInput.svelte";
 export { default as Flag } from "./Flag.svelte";

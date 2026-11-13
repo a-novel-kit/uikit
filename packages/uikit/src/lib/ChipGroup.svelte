@@ -3,25 +3,51 @@
 Picks any number of short options under a label, as a field does: each option is a chip in the field's well, lit
 when chosen. Each chip is a native checkbox, so the keyboard, assistive technology and the form need nothing else:
 the form receives every chosen value under `name`, in the options' order, except a disabled option's, which a form
-never sends; the controller keeps the order of choice.
+never sends; the controller keeps the order of choice. A `searchLabel` opens the well with a search that shows only
+the chips whose label holds it, whatever their case and accents: a hidden chip keeps its choice, and the form still
+sends it. The chips under a search scroll past the height of an open select's list. Options that name a `section`
+run together under its title, in the order the sections first appear, each run set apart by a divider.
 
 ```svelte
 <script lang="ts">
   import { ChipGroup } from "@a-novel-kit/uikit";
 </script>
 
-<ChipGroup legend="Genres" hint="Up to 10." name="genres" options={[{ value: "fantasy", label: "Fantasy" }]} />
+<ChipGroup
+  legend="Genres"
+  hint="Up to 10."
+  name="genres"
+  searchLabel="Search genres"
+  options={[{ value: "fantasy", label: "Fantasy" }]}
+/>
 ```
 -->
 <script lang="ts" module>
   import type { Content } from "./content";
-  import type { ValueController } from "./controllers.svelte";
+  import type { ChipGroupController as ChoiceController } from "./controllers.svelte";
   import type { SelectionOption } from "./types";
 
   import type { HTMLFieldsetAttributes } from "svelte/elements";
 
-  /** External state contract for a chip group; the value holds the chosen option values. */
-  export type ChipGroupController = ValueController<readonly string[]>;
+  /** One chip, with the section it runs in when the group has sections. */
+  export interface ChipOption extends SelectionOption<string> {
+    /** Visible title of the section the chip runs in. */
+    section?: string;
+  }
+
+  /** External state contract for a chip group: the chosen option values and the search over them. */
+  export type ChipGroupController = ChoiceController;
+
+  // Gathers the options by section, in the order each section first appears.
+  function sectionsOf(options: readonly ChipOption[]): [string | undefined, ChipOption[]][] {
+    const sections = new Map<string | undefined, ChipOption[]>();
+    for (const option of options) {
+      const members = sections.get(option.section);
+      if (members) members.push(option);
+      else sections.set(option.section, [option]);
+    }
+    return [...sections];
+  }
 
   /** Props for a group of options that each turn on and off. */
   export interface ChipGroupProps extends Omit<HTMLFieldsetAttributes, "children"> {
@@ -33,8 +59,10 @@ never sends; the controller keeps the order of choice.
     error?: Content;
     /** Form name of every chip. */
     name: string;
-    /** The options, in the order they show. */
-    options: readonly SelectionOption<string>[];
+    /** The options, in the order they show, gathered by section. */
+    options: readonly ChipOption[];
+    /** Names the search atop the chips and shows as its placeholder; without it, the group has no search. */
+    searchLabel?: string;
     /** The color a chosen chip lights in: the brand blue by default, or the rarer accent magenta. */
     tone?: "brand" | "accent";
     /** State owner of the chosen values; each group has its own by default. */
@@ -44,7 +72,11 @@ never sends; the controller keeps the order of choice.
 
 <script lang="ts">
   import RenderContent from "./Content.svelte";
-  import { createValueController } from "./controllers.svelte";
+  import { createChipGroupController } from "./controllers.svelte";
+  import { useMessages } from "./internal/i18n";
+  import { matchesSearch } from "./selection";
+
+  import { Search as SearchIcon } from "@lucide/svelte";
 
   const id = $props.id();
 
@@ -54,14 +86,21 @@ never sends; the controller keeps the order of choice.
     error,
     name,
     options,
+    searchLabel,
     tone = "brand",
-    controller = createValueController<readonly string[]>({ initialValue: [] }),
+    controller = createChipGroupController(),
     class: className = "",
     "aria-describedby": describedBy,
     ...rest
   }: ChipGroupProps = $props();
 
+  const { t } = useMessages();
+
   const chosen = $derived(controller.state.value);
+  const sections = $derived(sectionsOf(options));
+  const shown = $derived(
+    new Set(options.filter((option) => matchesSearch(option.label, controller.state.query)).map(({ value }) => value))
+  );
   const hintId = $derived(hint ? `${id}-hint` : undefined);
   const errorId = $derived(error ? `${id}-error` : undefined);
 
@@ -71,32 +110,79 @@ never sends; the controller keeps the order of choice.
     controller.setValue(input.checked ? [...others, input.value] : others);
     input.checked = controller.state.value.includes(input.value);
   }
+
+  // The field shows whatever search the controller keeps.
+  function search(input: HTMLInputElement) {
+    controller.setQuery(input.value);
+    input.value = controller.state.query;
+  }
+
+  // The search only filters: Enter never submits the form, and Escape empties the search before it closes a dialog.
+  function keepSearching(event: KeyboardEvent) {
+    if (event.key === "Enter") event.preventDefault();
+    if (event.key !== "Escape" || controller.state.query === "") return;
+    event.preventDefault();
+    event.stopPropagation();
+    controller.setQuery("");
+  }
 </script>
 
 <fieldset
   class="chip-group {tone} {className}"
   class:invalid={Boolean(error)}
+  class:searchable={Boolean(searchLabel)}
   {...rest}
   aria-describedby={[describedBy, hintId, errorId].filter(Boolean).join(" ") || undefined}
 >
   <legend><RenderContent content={legend} /></legend>
   <div class="chips">
-    {#each options as option (option.value)}
-      <label class="chip" lang={option.lang}>
+    {#if searchLabel}
+      <label class="search">
+        <SearchIcon class="search-icon" aria-hidden="true" />
         <input
-          type="checkbox"
-          {name}
-          value={option.value}
-          checked={chosen.includes(option.value)}
-          defaultChecked={chosen.includes(option.value)}
-          disabled={option.disabled}
-          aria-invalid={error ? true : undefined}
-          form={rest.form}
-          onchange={(event) => choose(event.currentTarget)}
+          type="search"
+          class="query"
+          aria-label={searchLabel}
+          placeholder={searchLabel}
+          autocomplete="off"
+          spellcheck="false"
+          value={controller.state.query}
+          oninput={(event) => search(event.currentTarget)}
+          onkeydown={keepSearching}
         />
-        {option.label}
       </label>
-    {/each}
+    {/if}
+    <div class="options">
+      {#each sections as [section, members], index (section)}
+        <div
+          class="section"
+          role={section ? "group" : undefined}
+          aria-labelledby={section ? `${id}-section-${index}` : undefined}
+          hidden={!members.some((option) => shown.has(option.value))}
+        >
+          {#if section}<span id="{id}-section-{index}" class="section-title">{section}</span>{/if}
+          {#each members as option (option.value)}
+            <label class="chip" lang={option.lang} hidden={!shown.has(option.value)}>
+              <input
+                type="checkbox"
+                {name}
+                value={option.value}
+                checked={chosen.includes(option.value)}
+                defaultChecked={chosen.includes(option.value)}
+                disabled={option.disabled}
+                aria-invalid={error ? true : undefined}
+                form={rest.form}
+                onchange={(event) => choose(event.currentTarget)}
+              />
+              {option.label}
+            </label>
+          {/each}
+        </div>
+      {/each}
+    </div>
+    {#if searchLabel}
+      <span class="empty" role="status">{shown.size === 0 ? t("chipGroup.empty") : ""}</span>
+    {/if}
   </div>
   {#if hint}<div id={hintId} class="hint"><RenderContent content={hint} /></div>{/if}
   {#if error}<div id={errorId} class="error"><RenderContent content={error} /></div>{/if}
@@ -126,9 +212,8 @@ never sends; the controller keeps the order of choice.
   /* The chips sit in a field's well, which outlines only an error. */
   /* As a medium field: a button's height and the same inset, growing with its rows. */
   .chips {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
+    display: grid;
+    align-content: center;
     gap: var(--space-1-5);
     box-sizing: border-box;
     border: var(--border-width-thin) solid var(--color-field-border);
@@ -136,6 +221,119 @@ never sends; the controller keeps the order of choice.
     background: var(--color-control-surface);
     padding: var(--space-1) var(--space-3);
     min-block-size: var(--control-height-md);
+  }
+
+  .options {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .section {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-1-5);
+  }
+
+  /* A section's title takes its own line over its chips, quieter than the group's legend. */
+  .section-title {
+    flex-basis: 100%;
+    color: var(--color-text-hint);
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-compact);
+    font-family: var(--font-family-interface);
+  }
+
+  /* Under a search, a section's title stays atop the list while its chips scroll under it. It frosts what passes
+     under it rather than painting the well's color, which is translucent and would darken twice; at rest it frosts
+     the bare well, which shows nothing. Its inset widens the frost without moving the text. A browser without
+     backdrop blur scrolls the titles with their chips. */
+  @supports (backdrop-filter: blur(0)) or (-webkit-backdrop-filter: blur(0)) {
+    .searchable .section-title {
+      position: sticky;
+      z-index: 1;
+      -webkit-backdrop-filter: blur(var(--blur-md));
+      backdrop-filter: blur(var(--blur-md));
+      margin-block: calc(var(--space-1) * -1);
+      inset-block-start: 0;
+      padding-block: var(--space-1);
+    }
+  }
+
+  /* A divider sets each shown section apart from the one before it. */
+  .section:not([hidden]) ~ .section:not([hidden]) {
+    border-block-start: var(--border-width-thin) solid var(--color-border-divider);
+    padding-block-start: var(--space-2);
+  }
+
+  /* Under a search, the chips scroll past an open select's height, while the search stays in place. Their inset
+     keeps a chip's focus ring clear of the scrolling edge, and an equal margin keeps the chips where they sat. */
+  .searchable .options {
+    box-sizing: border-box;
+    margin: calc((var(--focus-ring-width) + var(--border-width-strong)) * -1);
+    padding: calc(var(--focus-ring-width) + var(--border-width-strong));
+    max-block-size: var(--control-menu-max-height);
+    overflow-y: auto;
+  }
+
+  /* A wheel stops at the list's end, as an open select's does. A finger carries on to the page, so a swipe on a
+     phone never sticks in the list. */
+  @media (pointer: fine) {
+    .searchable .options {
+      overscroll-behavior-block: contain;
+    }
+  }
+
+  /* The search takes the well's first line, set as the field's text over the chips it filters. */
+  .search {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    cursor: text;
+    min-block-size: var(--icon-size-lg);
+    color: var(--color-control-placeholder);
+  }
+
+  .search :global(.search-icon) {
+    flex: none;
+    inline-size: var(--icon-size-sm);
+    block-size: var(--icon-size-sm);
+  }
+
+  .query {
+    flex: 1;
+    appearance: none;
+    outline: none;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    min-inline-size: 0;
+    color: var(--color-control-text);
+    font: inherit;
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-compact);
+    font-family: var(--font-family-interface);
+  }
+
+  .query::placeholder {
+    color: var(--color-control-placeholder);
+  }
+
+  /* A focused search lights the well as a focused field. */
+  .chip-group:has(.query:focus-visible) .chips {
+    box-shadow: var(--shadow-focus-ring);
+    border-color: var(--color-control-border-focus);
+    background: var(--color-control-surface-focus);
+  }
+
+  /* An empty status takes no room, yet stays in the page to announce the next empty search. */
+  .empty {
+    color: var(--color-text-hint);
+    font-size: var(--font-size-xs);
+  }
+
+  .empty:empty {
+    position: absolute;
   }
 
   .invalid .chips {
@@ -166,6 +364,12 @@ never sends; the controller keeps the order of choice.
     font-family: var(--font-family-interface);
     user-select: none;
     overflow-wrap: anywhere;
+  }
+
+  /* A chip the search misses leaves the well, its checkbox still in the form, and so does a section it empties. */
+  .chip[hidden],
+  .section[hidden] {
+    display: none;
   }
 
   /* The unseen checkbox covers the chip, and reaches past its block edges to the 24px minimum target. A chip is at

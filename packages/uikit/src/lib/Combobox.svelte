@@ -60,7 +60,7 @@ The hidden named input submits the selected value. The caller validates required
   import FieldButton from "./internal/FieldButton.svelte";
   import FloatingSurface from "./internal/FloatingSurface.svelte";
   import { useMessages } from "./internal/i18n";
-  import { findEnabledBoundary, findNextEnabledIndex, resolveInvalidState } from "./selection";
+  import { findEnabledBoundary, findNextEnabledIndex, matchesSearch, resolveInvalidState } from "./selection";
 
   import { tick } from "svelte";
 
@@ -99,10 +99,7 @@ The hidden named input submits the selected value. The caller validates required
   const selectedOption = $derived(options.find((option) => option.value === controller.state.value));
   const inputValue = $derived(controller.state.open ? controller.state.query : (selectedOption?.label ?? ""));
   const isInvalid = $derived(resolveInvalidState(invalid, ariaInvalid));
-  const filteredOptions = $derived.by(() => {
-    const query = controller.state.query.toLocaleLowerCase();
-    return query === "" ? options : options.filter((option) => option.label.toLocaleLowerCase().includes(query));
-  });
+  const filteredOptions = $derived(options.filter((option) => matchesSearch(option.label, controller.state.query)));
 
   // Runs before the DOM update, so the surface renders at the anchor's width in the flush that opens it.
   $effect.pre(() => {
