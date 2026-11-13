@@ -22,7 +22,7 @@ it.each(["page", "status"])("keeps wrapped %s headings legible and supporting te
   const lineHeight = parseFloat(style.lineHeight);
   expect(lineHeight / parseFloat(style.fontSize)).toBeCloseTo(1.25);
   expect(heading.getBoundingClientRect().height / lineHeight).toBeGreaterThan(1.9);
-  expect(getByText(description).getBoundingClientRect().top - heading.getBoundingClientRect().bottom).toBe(8);
+  expect(getByText(description).getBoundingClientRect().top - heading.getBoundingClientRect().bottom).toBe(6);
   expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(320);
 
   await rerender({ description: undefined });

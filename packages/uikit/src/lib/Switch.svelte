@@ -94,19 +94,19 @@ Provide a visible label or an accessible name.
     border: var(--border-width-thin) solid var(--color-control-border);
     border-radius: var(--radius-xl);
     background: var(--color-action-neutral);
-    inline-size: var(--space-10);
-    block-size: var(--space-6);
+    inline-size: var(--size-10);
+    block-size: var(--size-6);
   }
 
   input::before {
-    transform: translateX(calc(var(--space-2) * -1));
+    transform: translateX(calc(var(--size-2) * -1));
     transition:
       background-color var(--duration-fast) var(--easing-standard),
       transform var(--duration-fast) var(--easing-standard);
     border-radius: var(--radius-round);
     background: var(--color-text-secondary);
-    inline-size: var(--space-4);
-    block-size: var(--space-4);
+    inline-size: var(--size-4);
+    block-size: var(--size-4);
     content: "";
   }
 
@@ -124,7 +124,7 @@ Provide a visible label or an accessible name.
   }
 
   input:checked::before {
-    transform: translateX(var(--space-2));
+    transform: translateX(var(--size-2));
     background: var(--color-action-primary-text);
   }
 

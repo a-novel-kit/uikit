@@ -272,7 +272,7 @@ swaps for the field once the page hydrates.
     gap: var(--space-1-5);
     box-sizing: border-box;
     border: var(--border-width-thin) solid var(--color-field-border);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
     background: var(--chip-well);
     padding: var(--space-1) var(--space-3);
     min-block-size: var(--control-height-md);
@@ -444,7 +444,7 @@ swaps for the field once the page hydrates.
     cursor: pointer;
     border-radius: var(--radius-sm);
     background: var(--color-action-neutral);
-    padding-inline: var(--space-1-5);
+    padding-inline: var(--size-1-5);
     padding-block: calc(var(--space-1) / var(--multiplier-2));
     min-inline-size: var(--icon-size-lg);
     color: var(--color-text-secondary);
@@ -488,7 +488,7 @@ swaps for the field once the page hydrates.
 
   /* Chosen, a chip reads as the badge that shows the same choice. */
   .chip:has(:checked) {
-    box-shadow: 0 0 var(--space-3) color-mix(in oklab, var(--chip-fill) var(--color-mix-2), transparent);
+    box-shadow: 0 0 var(--size-3) color-mix(in oklab, var(--chip-fill) var(--color-mix-2), transparent);
     background: var(--chip-fill);
     color: var(--color-label-text);
   }

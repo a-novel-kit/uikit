@@ -37,15 +37,15 @@
   }
   .sm {
     --feedback-icon-size: var(--icon-size-sm);
-    --feedback-mark-size: var(--space-6);
+    --feedback-mark-size: var(--size-6);
   }
   .md {
     --feedback-icon-size: var(--icon-size-md);
-    --feedback-mark-size: var(--space-8);
+    --feedback-mark-size: var(--size-8);
   }
   .lg {
     --feedback-icon-size: var(--icon-size-lg);
-    --feedback-mark-size: var(--space-12);
+    --feedback-mark-size: var(--size-12);
   }
   .info,
   .loading {

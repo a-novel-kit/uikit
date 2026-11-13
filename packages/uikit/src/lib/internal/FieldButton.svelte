@@ -32,7 +32,8 @@ the control, so the button shows only its icon, a background and a color.
     cursor: pointer;
     box-sizing: border-box;
     border: 0;
-    border-radius: var(--radius-md);
+    /* The field's radius less its inset, so both corners share centers. */
+    border-radius: calc(var(--radius-lg) - var(--space-1));
     background: transparent;
     padding: 0;
     inline-size: var(--control-height-nested);

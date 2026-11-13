@@ -44,7 +44,7 @@ Use Progress for task completion.
     border-radius: var(--radius-xl);
     background: var(--color-surface-overlay);
     inline-size: 100%;
-    block-size: var(--space-2);
+    block-size: var(--size-2);
     accent-color: var(--color-action-primary);
   }
 </style>

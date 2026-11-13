@@ -103,8 +103,8 @@ Provide `label` or an accessible name; native input attributes are forwarded to 
     box-sizing: border-box;
     border: solid currentColor;
     border-width: 0 var(--border-width-strong) var(--border-width-strong) 0;
-    inline-size: var(--space-1-5);
-    block-size: var(--space-2);
+    inline-size: var(--size-1-5);
+    block-size: var(--size-2);
     content: "";
   }
 
@@ -130,7 +130,7 @@ Provide `label` or an accessible name; native input attributes are forwarded to 
     transform: scale(1);
     border: 0;
     background: currentColor;
-    inline-size: var(--space-2);
+    inline-size: var(--size-2);
     block-size: var(--border-width-strong);
   }
 

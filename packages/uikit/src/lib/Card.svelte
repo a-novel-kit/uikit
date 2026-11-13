@@ -6,8 +6,8 @@ parent's glass and stands out by its shadow alone, so a group of settings can ho
 A ghost card is one item of a collection: the canvas's own color under a raised card's veil and blur, ringed a
 step over a divider, and lit as a raised card under the pointer or once something in it takes the keyboard's focus.
 
-A card's padding is half its radius. A card inside another takes the next radius step down, so their corners
-stay concentric at any depth.
+A card inside another sits half the parent's radius from its edge and takes the next radius step down, so their
+corners stay concentric at any depth. Other content sits a spacing step further in.
 -->
 <script lang="ts" module>
   import type { Snippet } from "svelte";
@@ -17,7 +17,7 @@ stay concentric at any depth.
   export interface CardProps extends HTMLAttributes<HTMLDivElement> {
     /** Semantic surface depth. */
     surface?: "plain" | "subtle" | "raised" | "ghost" | "overlay";
-    /** Internal spacing around all card regions: half the card's radius, or none for content that reaches the edges. */
+    /** Internal spacing around all card regions, or none for content that reaches the edges. */
     padding?: "none" | "md";
     /** Region rendered before the content. */
     header?: Snippet;
@@ -45,10 +45,12 @@ stay concentric at any depth.
 </div>
 
 <style>
-  /* A card sits on its own radius, or on the one its parent card leaves to its regions. */
+  /* A card sits on its own radius, or on the one its parent card leaves to its regions. A nested card sits the
+     parent's inset from its edge, past the parent's padding, which is a spacing step wider. */
   .card {
     --card-radius: var(--card-nested-radius, var(--radius-xl));
-    --card-padding: calc(var(--card-radius) / 2);
+    --card-inset: calc(var(--card-radius) / 2);
+    --card-padding: calc(var(--card-inset) * 1.5);
     box-sizing: border-box;
     border-radius: var(--card-radius);
     min-inline-size: 0;
@@ -115,17 +117,29 @@ stay concentric at any depth.
   /* Content that reaches the edges keeps to the rounded corners. A padded card clips nothing, so the
      glow of an action inside spills past its edge. */
   .padding-none {
+    --card-inset: var(--space-0);
     --card-padding: var(--space-0);
     overflow: clip;
   }
 
-  /* A card nested in a region sits the padding away from this card's edge, so its radius is this card's
-     less the padding: the next radius step down, or this card's own radius without padding. */
+  /* A card nested in a region sits the inset away from this card's edge, so its radius is this card's less the
+     inset: the next radius step down, or this card's own radius without padding. A nested card first or last in
+     its parent also reaches the inset on that side. */
   .header,
   .content,
   .footer {
-    --card-nested-radius: calc(var(--card-radius) - var(--card-padding));
+    --card-nested-radius: calc(var(--card-radius) - var(--card-inset));
+    --card-nested-offset: calc(var(--card-inset) - var(--card-padding));
     padding: var(--card-padding);
+  }
+  .card :global(.card) {
+    margin-inline: var(--card-nested-offset);
+  }
+  .card :global(.card:first-child) {
+    margin-block-start: var(--card-nested-offset);
+  }
+  .card :global(.card:last-child) {
+    margin-block-end: var(--card-nested-offset);
   }
 
   @supports (backdrop-filter: blur(0)) or (-webkit-backdrop-filter: blur(0)) {

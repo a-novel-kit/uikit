@@ -159,8 +159,8 @@ Use `createValueController` with a selected option value or `undefined`.
     transition: transform var(--duration-fast) var(--easing-emphasized);
     border-radius: var(--radius-round);
     background: currentColor;
-    inline-size: var(--space-2);
-    block-size: var(--space-2);
+    inline-size: var(--size-2);
+    block-size: var(--size-2);
     content: "";
   }
 

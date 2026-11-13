@@ -113,7 +113,7 @@ Renders numbered page controls. The caller updates `currentPage` or supplies URL
     cursor: pointer;
     box-sizing: border-box;
     border: var(--border-width-thin) solid transparent;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
     background: transparent;
     padding-inline: var(--space-2);
     min-inline-size: var(--control-height-sm);

@@ -317,7 +317,7 @@ The hidden named input submits the selected value. The caller validates required
   }
   .input-wrap {
     position: relative;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
   }
   .input-wrap:focus-within {
     box-shadow: var(--shadow-focus-ring);
@@ -333,7 +333,7 @@ The hidden named input submits the selected value. The caller validates required
       box-shadow var(--duration-fast) var(--easing-standard);
     box-sizing: border-box;
     border: var(--border-width-thin) solid var(--color-field-border);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
     background: var(--color-control-surface);
     padding: var(--space-1) var(--control-height-md) var(--space-1) var(--space-3);
     inline-size: 100%;

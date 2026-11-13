@@ -22,11 +22,11 @@ Labels a category or status compactly. Use InlineMessage when changes need live 
   .badge {
     display: inline-block;
     box-sizing: border-box;
-    box-shadow: 0 0 var(--space-3) color-mix(in oklab, var(--badge-fill) var(--color-mix-2), transparent);
+    box-shadow: 0 0 var(--size-3) color-mix(in oklab, var(--badge-fill) var(--color-mix-2), transparent);
     border-radius: var(--radius-sm);
     background: var(--badge-fill);
-    padding-inline: var(--space-1-5);
-    padding-block: calc(var(--space-1) / var(--multiplier-2));
+    padding-inline: var(--size-1-5);
+    padding-block: calc(var(--size-1) / var(--multiplier-2));
     inline-size: fit-content;
     max-inline-size: 100%;
     color: var(--color-label-text);
