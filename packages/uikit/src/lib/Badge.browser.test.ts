@@ -3,7 +3,7 @@ import Badge from "./Badge.svelte";
 
 import { createRawSnippet } from "svelte";
 
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, onTestFinished } from "vitest";
 import { page } from "vitest/browser";
 
 import "@a-novel-kit/uikit-tokens/tokens.css";
@@ -132,6 +132,7 @@ describe("Badge fill", () => {
     });
     const fill = painted(getComputedStyle(getByText("Label").parentElement!).backgroundColor);
     const probe = document.body.appendChild(document.createElement("span"));
+    onTestFinished(() => probe.remove());
     probe.style.backgroundColor = `var(${accent})`;
     const full = painted(getComputedStyle(probe).backgroundColor);
 

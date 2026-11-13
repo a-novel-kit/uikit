@@ -298,7 +298,7 @@
   );
   --color-feedback-info-text: var(--base-brand);
   /* The second accent: the magenta for a distinction that reports nothing, such as a project's genres,
-     rarer than the brand blue and never a failure. Dark text keeps 5.2:1 on it. */
+     rarer than the brand blue and never a failure. */
   --color-accent-secondary: var(--base-pressure);
   /* A label filled with a tone, as a badge or a chosen chip, takes a deep step of its tone's own ramp under light
      text: the full accent glared behind its few words. Amber brightens faster along its ramp, so it stops half a

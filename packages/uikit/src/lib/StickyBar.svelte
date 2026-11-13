@@ -1,6 +1,7 @@
 <!--
 @component
-A bar that stays at one edge of the page while content scrolls under it, behind clear frosted glass.
+A bar that stays at one edge of the page while content scrolls under it, behind frosted glass: clear at the top,
+darkened to the canvas at the foot.
 A shell whose own bars cover the page's edges sets `--shell-sticky-top` and `--shell-sticky-bottom` to their sizes,
 and the bar stays clear of them.
 -->

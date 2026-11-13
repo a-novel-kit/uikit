@@ -48,7 +48,10 @@ The hidden named input submits the selected value. The caller validates required
     "aria-invalid"?: HTMLInputAttributes["aria-invalid"];
     /** Adds classes to the component root. */
     class?: string;
-    /** Replaces visible option copy while label remains available to filtering and accessibility. */
+    /**
+     * Replaces visible option copy while label remains available to filtering and accessibility. Wrap text mixed with
+     * markup in one element: the content centers as a row of flex items, whose edge spaces collapse.
+     */
     renderOption?: Snippet<[ComboboxOption<Value>]>;
   }
 </script>

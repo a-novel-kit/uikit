@@ -48,7 +48,10 @@ The hidden named input submits the selected value. The caller validates required
     "aria-invalid"?: HTMLInputAttributes["aria-invalid"];
     /** Includes the trigger in sequential keyboard navigation. */
     tabindex?: number;
-    /** Renders an option without changing its accessible text label. */
+    /**
+     * Renders an option without changing its accessible text label. Wrap text mixed with markup in one element: the
+     * content centers as a row of flex items, whose edge spaces collapse.
+     */
     renderOption?: Snippet<[SelectOption<Value>]>;
     /** Adds classes to the trigger. */
     class?: string;

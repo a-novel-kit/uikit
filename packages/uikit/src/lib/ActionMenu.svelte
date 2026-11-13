@@ -76,7 +76,10 @@ For a custom trigger, spread the snippet attributes onto a native button.
     triggerIcon?: Snippet;
     /** Replaces the default trigger; spread all supplied attributes onto a native button. */
     trigger?: Snippet<[ActionMenuTriggerAttributes]>;
-    /** Replaces visible action content, which names the item, so it must include the label. */
+    /**
+     * Replaces visible action content, which names the item, so it must include the label. Wrap text mixed with markup
+     * in one element: the content centers as a row of flex items, whose edge spaces collapse.
+     */
     renderItem?: Snippet<[ActionMenuAction]>;
     /** State owner that decides whether visibility requests take effect. */
     controller: ActionMenuController;

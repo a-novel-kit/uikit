@@ -43,6 +43,16 @@ describe("TagInput", () => {
     expect(getComputedStyle(container.querySelector(".remove")!).display).toBe("none");
   });
 
+  it("rings a focused tag's cross in the tag's own text color", () => {
+    const controller = createTagInputController({ initialTags: ["noir"] });
+    const { getByRole } = render(TagInput, { props: { "aria-label": "Tags", controller } });
+    const remove = getByRole("button", { name: "Remove the noir tag" });
+
+    remove.focus({ focusVisible: true });
+
+    expect(getComputedStyle(remove).outlineColor).toBe(getComputedStyle(remove.closest(".tag")!).color);
+  });
+
   it("keeps its error look while focused", async () => {
     const { getByRole, container } = render(TagInput, { props: { "aria-label": "Tags", invalid: true } });
 

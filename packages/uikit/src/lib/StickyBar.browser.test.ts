@@ -3,7 +3,7 @@ import StickyBar from "./StickyBar.svelte";
 
 import { createRawSnippet } from "svelte";
 
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, onTestFinished } from "vitest";
 
 import "@a-novel-kit/uikit-tokens/tokens.css";
 
@@ -47,6 +47,7 @@ describe("StickyBar", () => {
 
     expect(css.backdropFilter).toContain("blur");
     const probe = document.body.appendChild(document.createElement("span"));
+    onTestFinished(() => probe.remove());
     probe.style.backgroundColor = "transparent";
     expect(css.backgroundColor === getComputedStyle(probe).backgroundColor).toBe(clear);
     expect([css.borderBlockStartWidth, css.borderBlockEndWidth]).toEqual(["0px", "0px"]);
