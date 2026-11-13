@@ -93,14 +93,14 @@ Provide a meaningful `label` for either representation.
   }
   /* A profile picture shrinks on a phone-width screen to leave room for the details beside it. */
   .xl {
-    inline-size: var(--space-16);
-    block-size: var(--space-16);
+    inline-size: var(--size-16);
+    block-size: var(--size-16);
     font-size: var(--font-size-xl);
   }
   @media (min-width: 35rem) {
     .xl {
-      inline-size: var(--space-24);
-      block-size: var(--space-24);
+      inline-size: var(--size-24);
+      block-size: var(--size-24);
       font-size: var(--font-size-2xl);
     }
   }

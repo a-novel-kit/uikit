@@ -28,7 +28,7 @@ use only inside Toolbar.
     gap: var(--space-2);
     box-sizing: border-box;
     border: var(--border-width-thin) solid transparent;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
     padding-inline: var(--space-3);
     padding-block: var(--space-1);
     min-block-size: var(--control-height-sm);

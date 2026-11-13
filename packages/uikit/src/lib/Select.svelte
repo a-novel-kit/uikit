@@ -347,7 +347,7 @@ The hidden named input submits the selected value. The caller validates required
     cursor: pointer;
     box-sizing: border-box;
     border: var(--border-width-thin) solid var(--color-field-border);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
     background: var(--color-control-surface);
     inline-size: 100%;
     min-inline-size: 0;
@@ -509,7 +509,7 @@ The hidden named input submits the selected value. The caller validates required
     background: transparent;
     padding: var(--space-1) var(--space-3);
     inline-size: 100%;
-    min-block-size: calc(var(--control-height-sm) - var(--space-1));
+    min-block-size: calc(var(--control-height-sm) - var(--size-1));
     color: var(--color-text-secondary);
     font-size: var(--font-size-sm);
     font-family: var(--font-family-interface);

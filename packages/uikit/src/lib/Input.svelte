@@ -54,7 +54,7 @@ Native attributes and events target the input; `class` styles the surrounding su
       box-shadow var(--duration-fast) var(--easing-standard);
     box-sizing: border-box;
     border: var(--border-width-thin) solid var(--color-field-border);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
     background: var(--color-control-surface);
     inline-size: 100%;
     min-inline-size: 0;

@@ -88,10 +88,7 @@ leaves the page inert, so the topmost one open shows the banner too, where it st
     border-radius: var(--radius-md);
     background: var(--color-surface-island-strong);
     padding: var(--space-4);
-    inline-size: min(
-      calc(100vi - var(--space-8)),
-      calc(var(--space-base) * var(--multiplier-64) * var(--multiplier-2))
-    );
+    inline-size: min(calc(100vi - var(--space-8)), calc(var(--size-base) * var(--multiplier-64) * var(--multiplier-2)));
     color: var(--color-text-primary);
   }
 

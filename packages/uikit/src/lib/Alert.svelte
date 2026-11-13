@@ -48,7 +48,7 @@ Errors use an alert live region; other tones use status. Override `role` for sta
     display: flex;
     align-items: center;
     gap: var(--space-3);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
     background-image: linear-gradient(
       var(--alert-direction),
       var(--alert-accent) var(--alert-accent-width),

@@ -30,30 +30,32 @@ Use public spacing, radius, control, border, focus, and motion tokens in compone
 
 ## Spacing
 
-The spacing scale starts at `--space-base` and exposes named steps. Space inside and between elements
-repeats a few of them: 4, 8, 12, 16, 24 and 32 pixels (`--space-{1,2,3,4,6,8}`), with 48 and 64
-(`--space-{12,16}`) for page layout. The in-between steps only size dense details, such as a badge.
+The spacing scale starts at `--space-base`, 3 pixels, and exposes named steps. Space inside and between
+elements repeats a few of them: 3, 6, 9, 12, 18 and 24 pixels (`--space-{1,2,3,4,6,8}`), with 36 and 48
+(`--space-{12,16}`) for page layout. The in-between `--space-1-5` only separates chips and tags. Sizes keep
+a 4-pixel grid on the `--size-{N}` steps: control heights, icons, badges, marks, surface widths, and the
+reach of shadows and glows.
 
 Pick a gap by its role. A component that owns the role, such as `Stack` or `FormActions`, already
 applies it.
 
-| Role                                              | Token                                           | Size        |
-| ------------------------------------------------- | ----------------------------------------------- | ----------- |
-| Links of one navigation group                     | none, as `NavList` sets                         | 0 px        |
-| Lines of one item, such as a name and its details | `--space-1`                                     | 4 px        |
-| Icon and its label, compact inline items          | `--space-2`                                     | 8 px        |
-| Navigation groups, either side of a `Separator`   | `--space-2`                                     | 8 px        |
-| Buttons in a group                                | `--space-3`, as `ActionGroup` sets              | 12 px       |
-| A heading and the content it names                | `--space-3`                                     | 12 px       |
-| Islands side by side                              | `--layout-island-gap`                           | 12 px       |
-| Fields, list rows and stacked items               | `--space-4`, as `Stack` sets by default         | 16 px       |
-| Inside an island                                  | `--space-4`, as `Card` sets by default          | 16 px       |
-| Sections of a page or a dialog                    | `--space-6`                                     | 24 px       |
-| A form's actions, below its last field            | `--space-8`, as `FormActions` sets in a `Stack` | 32 px       |
-| A navigation rail's top and bottom groups         | `--space-8`, so they never run together         | 32 px       |
-| A page's top and bottom                           | `--space-6` and `--space-12`                    | 24, 48 px   |
-| A page's sides                                    | `--layout-gutter`                               | 16 to 32 px |
-| Dense details, such as a badge or a check mark    | `--space-1-5`, `--space-5`                      | 6, 20 px    |
+| Role                                              | Token                                           | Size               |
+| ------------------------------------------------- | ----------------------------------------------- | ------------------ |
+| Links of one navigation group                     | none, as `NavList` sets                         | 0 px               |
+| Lines of one item, such as a name and its details | `--space-1`                                     | 3 px               |
+| Icon and its label, compact inline items          | `--space-2`                                     | 6 px               |
+| Navigation groups, either side of a `Separator`   | `--space-2`                                     | 6 px               |
+| Buttons in a group                                | `--space-3`, as `ActionGroup` sets              | 9 px               |
+| A heading and the content it names                | `--space-3`                                     | 9 px               |
+| Islands side by side                              | `--layout-island-gap`                           | 9 px               |
+| Fields, list rows and stacked items               | `--space-4`, as `Stack` sets by default         | 12 px              |
+| Inside an island                                  | three quarters of the radius, as `Card` sets    | 18 px, 9 px nested |
+| Sections of a page or a dialog                    | `--space-6`                                     | 18 px              |
+| A form's actions, below its last field            | `--space-8`, as `FormActions` sets in a `Stack` | 24 px              |
+| A navigation rail's top and bottom groups         | `--space-8`, so they never run together         | 24 px              |
+| A page's top and bottom                           | `--space-6` and `--space-12`                    | 18, 36 px          |
+| A page's sides                                    | `--layout-gutter`                               | 12 to 24 px        |
+| Chips and tags side by side                       | `--space-1-5`                                   | 4.5 px             |
 
 A value outside this table is an exception: it sits beside a comment naming its reason.
 
@@ -127,12 +129,15 @@ island and need no border; only focus and errors outline them.
 
 ## Border radius
 
-Choose a named radius token for each component shape. Each step doubles the one below: 4, 8, 16 and 32
+Choose a named radius token for each component shape. Each step doubles the one below: 3, 6, 12 and 24
 pixels. A surface that holds another shape keeps their corners concentric: its radius is the inner
-shape's radius plus the padding between them.
+shape's radius plus the space between them.
 
-- A card's padding is half its radius. A card nested in it takes the next step down, at any depth.
-- A list or a toolbar adds its `--space-1` padding to its items' `--radius-md`.
+- A card nested in another sits half the parent's radius from its edge and takes the next step down, at any
+  depth. The card's other content sits a spacing step further in.
+- Labeled buttons, fields, message boxes and navigation links take `--radius-lg`. An icon-only button or
+  navigation item keeps `--radius-md`, so its small square still reads as square.
+- A list, a toolbar or a toggle group adds its `--space-1` padding to its items' radius.
 
 <div className="radius-grid">
   {radiusTokens.map((token) => (

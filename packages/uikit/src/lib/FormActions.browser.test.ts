@@ -17,14 +17,14 @@ describe("FormActions", () => {
     const submit = getByRole("button", { name: "Save changes" });
     const form = input.closest("form")!;
 
-    expect(submit.getBoundingClientRect().top - inputSurface.getBoundingClientRect().bottom).toBe(32);
+    expect(submit.getBoundingClientRect().top - inputSurface.getBoundingClientRect().bottom).toBe(24);
     if (width < 560) expect(submit.getBoundingClientRect().width).toBe(form.getBoundingClientRect().width);
     else expect(submit.getBoundingClientRect().width).toBeLessThan(form.getBoundingClientRect().width / 2);
 
     await rerender({ error: true });
     const alert = getByRole("alert");
-    expect(alert.getBoundingClientRect().top - inputSurface.getBoundingClientRect().bottom).toBe(32);
-    expect(submit.getBoundingClientRect().top - alert.getBoundingClientRect().bottom).toBe(16);
+    expect(alert.getBoundingClientRect().top - inputSurface.getBoundingClientRect().bottom).toBe(24);
+    expect(submit.getBoundingClientRect().top - alert.getBoundingClientRect().bottom).toBe(12);
     expect(form.scrollWidth).toBeLessThanOrEqual(form.clientWidth);
   });
 

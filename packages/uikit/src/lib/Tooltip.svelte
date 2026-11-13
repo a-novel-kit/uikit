@@ -154,7 +154,7 @@ Spread all trigger attributes onto that element; an open controller owns visibil
     border-radius: var(--radius-md);
     background: var(--color-surface-island-strong);
     padding: var(--space-2) var(--space-3);
-    max-inline-size: calc(var(--space-base) * var(--multiplier-64));
+    max-inline-size: calc(var(--size-base) * var(--multiplier-64));
     pointer-events: none;
     color: var(--color-text-primary);
     font-size: var(--font-size-xs);
@@ -185,25 +185,25 @@ Spread all trigger attributes onto that element; an open controller owns visibil
     position: absolute;
     transform: rotate(45deg);
     background: inherit;
-    inline-size: var(--space-2);
-    block-size: var(--space-2);
+    inline-size: var(--size-2);
+    block-size: var(--size-2);
     content: "";
   }
   :global(.a-novel-tooltip.top::before) {
-    inset-block-end: calc(var(--space-1) * -1);
-    inset-inline-start: calc(50% - var(--space-1));
+    inset-block-end: calc(var(--size-1) * -1);
+    inset-inline-start: calc(50% - var(--size-1));
   }
   :global(.a-novel-tooltip.right::before) {
-    inset-block-start: calc(50% - var(--space-1));
-    inset-inline-start: calc(var(--space-1) * -1);
+    inset-block-start: calc(50% - var(--size-1));
+    inset-inline-start: calc(var(--size-1) * -1);
   }
   :global(.a-novel-tooltip.bottom::before) {
-    inset-block-start: calc(var(--space-1) * -1);
-    inset-inline-start: calc(50% - var(--space-1));
+    inset-block-start: calc(var(--size-1) * -1);
+    inset-inline-start: calc(50% - var(--size-1));
   }
   :global(.a-novel-tooltip.left::before) {
-    inset-block-start: calc(50% - var(--space-1));
-    inset-inline-end: calc(var(--space-1) * -1);
+    inset-block-start: calc(50% - var(--size-1));
+    inset-inline-end: calc(var(--size-1) * -1);
   }
 
   @supports (backdrop-filter: blur(0)) or (-webkit-backdrop-filter: blur(0)) {

@@ -94,7 +94,7 @@ item.
     box-sizing: border-box;
     box-shadow: none;
     border: var(--border-width-thin) solid transparent;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
     font-weight: var(--font-weight-bold);
     line-height: var(--line-height-tight);
     font-family: var(--font-family-interface);
@@ -169,7 +169,9 @@ item.
     font-size: var(--font-size-md);
   }
 
+  /* A square holds only an icon, and the radius of a labeled button would round it. */
   .square {
+    border-radius: var(--radius-md);
     padding: 0;
     aspect-ratio: 1;
   }

@@ -117,7 +117,7 @@ The default range is 0–100; the caller owns persistence and value validation.
       var(--slider-fill) 0 var(--slider-progress),
       var(--slider-track) var(--slider-progress) 100%
     );
-    block-size: var(--space-1);
+    block-size: var(--size-1);
   }
 
   input::-webkit-slider-thumb {
@@ -126,7 +126,7 @@ The default range is 0–100; the caller owns persistence and value validation.
       background-color var(--duration-fast) var(--easing-standard),
       border-color var(--duration-fast) var(--easing-standard),
       box-shadow var(--duration-fast) var(--easing-standard);
-    margin-block-start: calc(var(--space-2) * -1);
+    margin-block-start: calc(var(--size-2) * -1);
     border: var(--border-width-thin) solid var(--color-control-border-focus);
     border-radius: var(--radius-round);
     background: var(--slider-fill);
@@ -137,13 +137,13 @@ The default range is 0–100; the caller owns persistence and value validation.
   input::-moz-range-track {
     border-radius: var(--radius-round);
     background: var(--slider-track);
-    block-size: var(--space-1);
+    block-size: var(--size-1);
   }
 
   input::-moz-range-progress {
     border-radius: var(--radius-round);
     background: var(--slider-fill);
-    block-size: var(--space-1);
+    block-size: var(--size-1);
   }
 
   input::-moz-range-thumb {

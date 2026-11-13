@@ -31,7 +31,9 @@
   --ratio-emphasis: 1.5;
   --ratio-major: 1.618;
 
-  --space-base: 0.25rem;
+  /* Space between and inside elements steps by 3px. Sizes, such as controls, icons, marks and surface widths,
+     and the reach of shadows and glows keep a 4px grid. */
+  --space-base: 0.1875rem;
   --space-0: 0;
   --space-1: calc(var(--space-base) * var(--multiplier-1));
   --space-1-5: calc(var(--space-base) * var(--multiplier-1-5));
@@ -47,7 +49,22 @@
   --space-20: calc(var(--space-base) * var(--multiplier-20));
   --space-24: calc(var(--space-base) * var(--multiplier-24));
 
-  --blur-base: var(--space-base);
+  --size-base: 0.25rem;
+  --size-1: calc(var(--size-base) * var(--multiplier-1));
+  --size-1-5: calc(var(--size-base) * var(--multiplier-1-5));
+  --size-2: calc(var(--size-base) * var(--multiplier-2));
+  --size-3: calc(var(--size-base) * var(--multiplier-3));
+  --size-4: calc(var(--size-base) * var(--multiplier-4));
+  --size-5: calc(var(--size-base) * var(--multiplier-5));
+  --size-6: calc(var(--size-base) * var(--multiplier-6));
+  --size-8: calc(var(--size-base) * var(--multiplier-8));
+  --size-10: calc(var(--size-base) * var(--multiplier-10));
+  --size-12: calc(var(--size-base) * var(--multiplier-12));
+  --size-16: calc(var(--size-base) * var(--multiplier-16));
+  --size-20: calc(var(--size-base) * var(--multiplier-20));
+  --size-24: calc(var(--size-base) * var(--multiplier-24));
+
+  --blur-base: var(--size-base);
   --blur-sm: calc(var(--blur-base) * var(--multiplier-2));
   --blur-md: calc(var(--blur-base) * var(--multiplier-4));
   --blur-lg: calc(var(--blur-base) * var(--multiplier-8));
@@ -55,19 +72,19 @@
      of the page's. */
   --filter-dim: saturate(50%) brightness(75%);
 
-  --control-height-sm: calc(var(--space-base) * var(--multiplier-7));
-  --control-height-md: calc(var(--space-base) * var(--multiplier-8));
-  --control-height-lg: calc(var(--space-base) * var(--multiplier-10));
+  --control-height-sm: calc(var(--size-base) * var(--multiplier-7));
+  --control-height-md: calc(var(--size-base) * var(--multiplier-8));
+  --control-height-lg: calc(var(--size-base) * var(--multiplier-10));
   /* A control nested inside a medium field, such as a password toggle, keeps a space-1 inset. */
   --control-height-nested: calc(var(--control-height-md) - var(--space-2));
-  --control-menu-max-height: calc(var(--space-base) * var(--multiplier-64));
-  --icon-size-sm: var(--space-4);
-  --icon-size-md: var(--space-5);
-  --icon-size-lg: var(--space-6);
+  --control-menu-max-height: calc(var(--size-base) * var(--multiplier-64));
+  --icon-size-sm: var(--size-4);
+  --icon-size-md: var(--size-5);
+  --icon-size-lg: var(--size-6);
 
   /* Each radius step doubles the one below. A surface padded by half its radius then holds the next
      step down on the same corner centers, as a card holds a nested card. */
-  --radius-base: 0.25rem;
+  --radius-base: 0.1875rem;
   --radius-none: 0;
   --radius-sm: calc(var(--radius-base) * var(--multiplier-1));
   --radius-md: calc(var(--radius-base) * var(--multiplier-2));
@@ -391,28 +408,28 @@
     color-mix(in oklab, var(--color-neutral-12) var(--color-mix-1), transparent);
   --shadow-sm:
     var(--shadow-ring),
-    0 var(--border-width-thin) var(--space-1)
+    0 var(--border-width-thin) var(--size-1)
       color-mix(in oklab, var(--color-neutral-1) var(--color-mix-8), transparent),
-    0 var(--space-1) var(--space-3)
+    0 var(--size-1) var(--size-3)
       color-mix(in oklab, var(--color-neutral-1) var(--color-mix-8), transparent);
   --shadow-md:
     var(--shadow-ring),
-    0 var(--border-width-thin) var(--space-1)
+    0 var(--border-width-thin) var(--size-1)
       color-mix(in oklab, var(--color-neutral-1) var(--color-mix-10), transparent),
-    0 var(--space-2) var(--space-6)
+    0 var(--size-2) var(--size-6)
       color-mix(in oklab, var(--color-neutral-1) var(--color-mix-10), transparent);
   --shadow-lg:
     var(--shadow-ring),
-    0 var(--border-width-thin) var(--space-1)
+    0 var(--border-width-thin) var(--size-1)
       color-mix(in oklab, var(--color-neutral-1) var(--color-mix-12), transparent),
-    0 var(--space-4) var(--space-10) calc(-1 * var(--space-2))
+    0 var(--size-4) var(--size-10) calc(-1 * var(--size-2))
       color-mix(in oklab, var(--color-neutral-1) var(--color-mix-10), transparent);
   /* A surface floating over others, often at the screen's edge. Its shadow reaches every side, so
      the surface parts from a card of the same color under it. */
   --shadow-floating:
     0 0 0 var(--border-width-thin)
       color-mix(in oklab, var(--color-neutral-12) var(--color-mix-3), transparent),
-    0 0 var(--space-8) var(--space-2)
+    0 0 var(--size-8) var(--size-2)
       color-mix(in oklab, var(--color-neutral-1) var(--color-mix-12), transparent);
   /* The primary action glows: a slight gradient that lightens toward the top, and a soft underglow
      in its own color. The gradient only lightens, so its darkest stop is the measured text pair. */
@@ -426,58 +443,58 @@
     var(--color-action-primary-hover),
     var(--color-brand-10)
   );
-  --shadow-action-primary: 0 var(--space-1) var(--space-4) calc(-1 * var(--space-1))
+  --shadow-action-primary: 0 var(--size-1) var(--size-4) calc(-1 * var(--size-1))
     color-mix(in oklab, var(--base-brand) var(--color-mix-6), transparent);
-  --shadow-action-primary-hover: 0 var(--space-1) var(--space-6) calc(-1 * var(--space-1))
+  --shadow-action-primary-hover: 0 var(--size-1) var(--size-6) calc(-1 * var(--size-1))
     color-mix(in oklab, var(--base-brand) var(--color-mix-10), transparent);
   --shadow-island: var(--shadow-md);
   --shadow-glow-brand:
-    0 0 var(--space-4)
+    0 0 var(--size-4)
       color-mix(in oklab, var(--color-glow-brand) var(--color-mix-4), transparent),
-    0 0 var(--space-10) calc(-1 * var(--space-1))
+    0 0 var(--size-10) calc(-1 * var(--size-1))
       color-mix(in oklab, var(--color-glow-brand) var(--color-mix-4), transparent),
-    0 0 var(--space-20) calc(-1 * var(--space-2))
+    0 0 var(--size-20) calc(-1 * var(--size-2))
       color-mix(in oklab, var(--color-glow-brand) var(--color-mix-3), transparent);
   --shadow-glow-pressure:
-    0 0 var(--space-4)
+    0 0 var(--size-4)
       color-mix(in oklab, var(--color-glow-pressure) var(--color-mix-4), transparent),
-    0 0 var(--space-10) calc(-1 * var(--space-1))
+    0 0 var(--size-10) calc(-1 * var(--size-1))
       color-mix(in oklab, var(--color-glow-pressure) var(--color-mix-4), transparent),
-    0 0 var(--space-20) calc(-1 * var(--space-2))
+    0 0 var(--size-20) calc(-1 * var(--size-2))
       color-mix(in oklab, var(--color-glow-pressure) var(--color-mix-3), transparent);
   --shadow-glow-neutral:
-    0 0 var(--space-2)
+    0 0 var(--size-2)
       color-mix(in oklab, var(--color-neutral-12) var(--color-mix-4), transparent),
-    0 0 var(--space-4)
+    0 0 var(--size-4)
       color-mix(in oklab, var(--color-neutral-12) var(--color-mix-1), transparent);
   --shadow-glow-brand-strong:
-    0 0 var(--space-4)
+    0 0 var(--size-4)
       color-mix(in oklab, var(--color-glow-brand) var(--color-mix-5), transparent),
-    0 0 var(--space-10) calc(-1 * var(--space-1))
+    0 0 var(--size-10) calc(-1 * var(--size-1))
       color-mix(in oklab, var(--color-glow-brand) var(--color-mix-5), transparent),
-    0 0 var(--space-20) calc(-1 * var(--space-2))
+    0 0 var(--size-20) calc(-1 * var(--size-2))
       color-mix(in oklab, var(--color-glow-brand) var(--color-mix-4), transparent);
   --shadow-glow-pressure-strong:
-    0 0 var(--space-4)
+    0 0 var(--size-4)
       color-mix(in oklab, var(--color-glow-pressure) var(--color-mix-5), transparent),
-    0 0 var(--space-10) calc(-1 * var(--space-1))
+    0 0 var(--size-10) calc(-1 * var(--size-1))
       color-mix(in oklab, var(--color-glow-pressure) var(--color-mix-5), transparent),
-    0 0 var(--space-20) calc(-1 * var(--space-2))
+    0 0 var(--size-20) calc(-1 * var(--size-2))
       color-mix(in oklab, var(--color-glow-pressure) var(--color-mix-4), transparent);
   --shadow-glow-signal:
-    0 0 var(--space-4)
+    0 0 var(--size-4)
       color-mix(in oklab, var(--color-glow-signal) var(--color-mix-4), transparent),
-    0 0 var(--space-10) calc(-1 * var(--space-1))
+    0 0 var(--size-10) calc(-1 * var(--size-1))
       color-mix(in oklab, var(--color-glow-signal) var(--color-mix-4), transparent),
-    0 0 var(--space-20) calc(-1 * var(--space-2))
+    0 0 var(--size-20) calc(-1 * var(--size-2))
       color-mix(in oklab, var(--color-glow-signal) var(--color-mix-3), transparent);
   --shadow-indicator-brand:
-    0 0 var(--space-2) color-mix(in oklab, var(--base-brand) var(--color-mix-8), transparent),
-    0 0 var(--space-4) color-mix(in oklab, var(--base-brand) var(--color-mix-3), transparent);
+    0 0 var(--size-2) color-mix(in oklab, var(--base-brand) var(--color-mix-8), transparent),
+    0 0 var(--size-4) color-mix(in oklab, var(--base-brand) var(--color-mix-3), transparent);
   --shadow-focus-ring:
     0 0 0 var(--border-width-strong)
       color-mix(in oklab, var(--color-focus-ring) var(--color-mix-5), transparent),
-    0 0 var(--space-4)
+    0 0 var(--size-4)
       color-mix(in oklab, var(--color-focus-ring) var(--color-mix-3), transparent);
   --shadow-invalid-focus-ring:
     0 0 0 var(--border-width-strong)
@@ -486,7 +503,7 @@
         var(--color-feedback-error-border) var(--color-mix-5),
         transparent
       ),
-    0 0 var(--space-4)
+    0 0 var(--size-4)
       color-mix(in oklab, var(--base-pressure) var(--color-mix-3), transparent);
   --shadow-action-selected: var(--shadow-glow-brand);
   /* One lamp in the top-start corner, its strength falling with the square of the distance and its
@@ -569,12 +586,12 @@
   color: var(--color-selection-text);
 }
 
-/* Touch needs larger targets: coarse pointers add space-1 to every control height. */
+/* Touch needs larger targets: coarse pointers add one size step to every control height. */
 @media (pointer: coarse) {
   :root {
-    --control-height-sm: calc(var(--space-base) * var(--multiplier-8));
-    --control-height-md: calc(var(--space-base) * var(--multiplier-9));
-    --control-height-lg: calc(var(--space-base) * var(--multiplier-11));
+    --control-height-sm: calc(var(--size-base) * var(--multiplier-8));
+    --control-height-md: calc(var(--size-base) * var(--multiplier-9));
+    --control-height-lg: calc(var(--size-base) * var(--multiplier-11));
   }
 }
 

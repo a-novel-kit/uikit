@@ -81,7 +81,7 @@ The caller manages their lifetime and removes dismissed entries; no automatic ti
     z-index: var(--layer-toast);
     inset-block-end: var(--space-4);
     inset-inline-end: var(--space-4);
-    inline-size: min(calc(100vi - var(--space-8)), calc(var(--space-base) * var(--multiplier-80)));
+    inline-size: min(calc(100vi - var(--space-8)), calc(var(--size-base) * var(--multiplier-80)));
     pointer-events: none;
   }
   .toast {
@@ -89,7 +89,7 @@ The caller manages their lifetime and removes dismissed entries; no automatic ti
     align-items: flex-start;
     gap: var(--space-3);
     box-shadow: var(--shadow-lg);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
     background: var(--color-surface-island-strong);
     padding-inline: var(--space-4);
     padding-block: var(--space-2);

@@ -33,7 +33,7 @@ announce loading once in the surrounding region.
       var(--color-surface-overlay);
     background-size: 200% 100%;
     inline-size: 100%;
-    min-block-size: var(--space-4);
+    min-block-size: var(--size-4);
     overflow: hidden;
   }
 
@@ -43,7 +43,7 @@ announce loading once in the surrounding region.
   }
   .rectangle {
     border-radius: var(--radius-md);
-    min-block-size: var(--space-16);
+    min-block-size: var(--size-16);
   }
   .circle {
     border-radius: var(--radius-round);

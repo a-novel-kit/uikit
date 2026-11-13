@@ -45,7 +45,7 @@ Shows labeled task progress against `max` (100 by default). Omit `value` for ind
     border-radius: var(--radius-xl);
     background: var(--color-surface-overlay);
     inline-size: 100%;
-    block-size: var(--space-2);
+    block-size: var(--size-2);
     overflow: hidden;
     accent-color: var(--color-action-primary);
   }

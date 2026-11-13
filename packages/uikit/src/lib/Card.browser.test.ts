@@ -52,16 +52,15 @@ describe("Card", () => {
     expect(ring).not.toContain(resolveColor("var(--color-border-divider)"));
   });
 
-  it("pads a card by half its radius and gives a nested card the parent's radius less the padding", () => {
+  it("sits a nested card half the parent's radius from its edge, on the parent's radius less that inset", () => {
     const { container } = render(NestedCardsFixture);
     const outer = container.querySelector(".card")!;
     const nested = outer.querySelector(".card")!;
     const radius = (card: Element) => parseFloat(getComputedStyle(card).borderStartStartRadius);
-    const padding = (card: Element) => parseFloat(getComputedStyle(card.querySelector(".content")!).paddingInlineStart);
+    const inset = nested.getBoundingClientRect().left - outer.getBoundingClientRect().left;
 
-    expect(padding(outer)).toBe(radius(outer) / 2);
-    expect(radius(nested)).toBe(radius(outer) - padding(outer));
-    expect(padding(nested)).toBe(radius(nested) / 2);
+    expect(inset).toBe(radius(outer) / 2);
+    expect(radius(nested)).toBe(radius(outer) - inset);
   });
 
   it("keeps a ghost card inside another card on its parent's glass", () => {

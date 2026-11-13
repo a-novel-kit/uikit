@@ -117,7 +117,7 @@ URLs and the current destination are supplied by the caller.
       color var(--duration-fast) var(--easing-standard);
     box-sizing: border-box;
     border: 0;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
     padding: var(--space-2) var(--space-3);
     min-block-size: var(--control-height-sm);
     overflow: hidden;
@@ -170,8 +170,10 @@ URLs and the current destination are supplied by the caller.
     align-items: center;
     inline-size: var(--control-height-sm);
   }
+  /* A compact item holds only its icon, so it keeps the radius of a square button. */
   .compact {
     justify-content: center;
+    border-radius: var(--radius-md);
     padding: 0;
     min-inline-size: var(--control-height-sm);
   }
@@ -185,11 +187,11 @@ URLs and the current destination are supplied by the caller.
     margin-inline-start: auto;
     border-radius: var(--radius-round);
     background: var(--color-surface-island-strong);
-    padding-inline: var(--space-1-5);
-    min-inline-size: var(--space-5);
+    padding-inline: var(--size-1-5);
+    min-inline-size: var(--size-5);
     color: var(--color-text-secondary);
     font-size: var(--font-size-xs);
-    line-height: var(--space-5);
+    line-height: var(--size-5);
     text-align: center;
   }
 
