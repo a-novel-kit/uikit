@@ -1,9 +1,10 @@
 /// <reference types="vite/client" />
 import BlurredPageFixture from "../../test/BlurredPageFixture.svelte";
+import ConsentOverDialogFixture from "../../test/ConsentOverDialogFixture.svelte";
 import Fixture from "../../test/DialogFixture.svelte";
 import Dialog from "./Dialog.svelte";
 import PanelHeader from "./PanelHeader.svelte";
-import { createOpenController } from "./controllers.svelte";
+import { createConsentController, createOpenController } from "./controllers.svelte";
 
 import { tick } from "svelte";
 
@@ -248,5 +249,22 @@ describe("Dialog over a frosted page", () => {
     controller.close();
     await expect.poll(() => dialog.matches(":modal")).toBe(false);
     expect(frosted.map(blur)).not.toContain("none");
+  });
+
+  // A fixed request inside a moving dialog would travel with it.
+  it.each([
+    ["fades without rising while it shows a page's request", true, "none"],
+    ["rises as it fades in otherwise", false, undefined],
+  ])("%s", async (_, asking, translate) => {
+    const dialog = createOpenController();
+    const consent = createConsentController({ initialOpen: asking });
+    const { container } = render(ConsentOverDialogFixture, { consent, dialog });
+    const element = container.querySelector("dialog")!;
+
+    dialog.open();
+    await new Promise(requestAnimationFrame);
+
+    if (translate) expect(getComputedStyle(element).translate).toBe(translate);
+    else expect(getComputedStyle(element).translate).not.toBe("none");
   });
 });

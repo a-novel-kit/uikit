@@ -37,7 +37,12 @@ their answer as easily as they gave it.
 ## Accessibility
 
 The banner is a region named by its title, placed where the application renders it in the reading
-order. It never takes focus or blocks the page, so the visitor can answer whenever they choose.
+order. It never takes focus or blocks the page, so the visitor can answer whenever they choose. A modal
+dialog leaves the rest of the page inert, so over a modal uikit `Dialog` the banner also shows inside the
+topmost one, at the end of its reading order, and stays answerable there. A modal opened any other way
+still leaves the banner inert.
+
+<ResponsiveStoryPair desktop={Stories.OverAModalDialog} mobile={Stories.OverAModalDialog} meta={Stories} />
 
 ## API
 
