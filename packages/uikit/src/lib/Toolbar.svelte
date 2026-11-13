@@ -107,7 +107,8 @@ Compose ToolbarButton, ToolbarToggleButton, and ToolbarLink inside it.
     display: inline-flex;
     align-items: center;
     gap: var(--space-1);
-    border-radius: var(--radius-lg);
+    /* The items' radius plus the padding around them, so their corners share centers. */
+    border-radius: calc(var(--radius-md) + var(--space-1));
     background: var(--color-surface-island);
     padding: var(--space-1);
     max-inline-size: 100%;

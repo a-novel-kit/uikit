@@ -65,12 +65,14 @@
   --icon-size-md: var(--space-5);
   --icon-size-lg: var(--space-6);
 
+  /* Each radius step doubles the one below. A surface padded by half its radius then holds the next
+     step down on the same corner centers, as a card holds a nested card. */
   --radius-base: 0.25rem;
   --radius-none: 0;
   --radius-sm: calc(var(--radius-base) * var(--multiplier-1));
   --radius-md: calc(var(--radius-base) * var(--multiplier-2));
-  --radius-lg: calc(var(--radius-base) * var(--multiplier-3));
-  --radius-xl: calc(var(--radius-base) * var(--multiplier-4));
+  --radius-lg: calc(var(--radius-base) * var(--multiplier-4));
+  --radius-xl: calc(var(--radius-base) * var(--multiplier-8));
   --radius-round: 50%;
 
   --border-width-base: 0.0625rem;
