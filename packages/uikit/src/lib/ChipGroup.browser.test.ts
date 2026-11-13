@@ -130,7 +130,6 @@ describe("ChipGroup", () => {
   });
 
   it("opens the search and the chips over the whole screen on a narrow screen, and keeps the choice in the form", async () => {
-    await page.viewport(390, 844);
     const form = document.body.appendChild(document.createElement("form"));
     onTestFinished(() => form.remove());
     const options = [
@@ -156,8 +155,23 @@ describe("ChipGroup", () => {
     expect(new FormData(form).getAll("genres")).toEqual(["cyberpunk", "farce"]);
   });
 
+  it("closes the chips' screen when the screen widens past it", async () => {
+    const options = [{ value: "farce", label: "Farce" }];
+    const controller = createChipGroupController();
+    render(ChipGroup, {
+      props: { legend: "Genres", name: "genres", searchLabel: "Search genres", options, controller },
+    });
+    await page.getByRole("button", { name: "Choose" }).click();
+    controller.setQuery("far");
+
+    await page.viewport(844, 390);
+    onTestFinished(() => page.viewport(414, 896));
+
+    await expect.poll(() => controller.state.open).toBe(false);
+    expect(controller.state.query).toBe("");
+  });
+
   it("names an empty choice with its placeholder on a narrow screen", async () => {
-    await page.viewport(390, 844);
     const options = [{ value: "farce", label: "Farce" }];
     render(ChipGroup, {
       props: { legend: "Genres", name: "genres", searchLabel: "Search genres", placeholder: "Choose genres", options },

@@ -128,6 +128,8 @@
   const someGenresController = fixedChips(["fantasy", "mystery"]);
   const searchedGenresController = fixedChips(["fantasy", "scienceFiction"], "fic");
   const missedGenresController = fixedChips(["fantasy"], "cyberpunk");
+  const sectionedGenresController = fixedChips(["fantasy", "farce"]);
+  const noGenresController = fixedChips([]);
   const openGenresController = fixedChips(["fantasy", "farce"], "", true);
   const coverController = fixedValue<readonly string[]>(["cover.png"]);
   const longFileController = fixedValue<readonly string[]>([
@@ -365,7 +367,7 @@
       searchLabel="Search genres"
       tone="accent"
       options={sectionedGenreOptions}
-      controller={someGenresController}
+      controller={sectionedGenresController}
     />
     <ChipGroup
       legend="Searched"
@@ -408,7 +410,15 @@
       searchLabel="Search genres"
       tone="accent"
       options={sectionedGenreOptions}
-      controller={someGenresController}
+      controller={sectionedGenresController}
+    />
+    <ChipGroup
+      legend="Nothing chosen"
+      name="phone-empty"
+      searchLabel="Search genres"
+      tone="accent"
+      options={sectionedGenreOptions}
+      controller={noGenresController}
     />
   </div>
 </Story>

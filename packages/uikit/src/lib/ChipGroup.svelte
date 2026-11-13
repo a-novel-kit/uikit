@@ -8,7 +8,8 @@ the chips whose label holds it, whatever their case and accents: a hidden chip k
 sends it. The chips under a search scroll past the height of an open select's list. Options that name a `section`
 run together under its title, in the order the sections first appear, each run set apart by a divider. On a narrow
 screen, a searchable group shows only its choice, or a `placeholder`, in a field that opens the search and the chips
-over the whole screen.
+over the whole screen. A server render has no screen to measure, so it paints the wide well, which a narrow screen
+swaps for the field once the page hydrates.
 
 ```svelte
 <script lang="ts">
@@ -91,6 +92,8 @@ over the whole screen.
   import { useMessages } from "./internal/i18n";
   import { matchesSearch } from "./selection";
 
+  import { untrack } from "svelte";
+
   import { Search as SearchIcon } from "@lucide/svelte";
 
   const id = $props.id();
@@ -114,6 +117,11 @@ over the whole screen.
 
   const chosen = $derived(controller.state.value);
   const sheet = $derived(Boolean(searchLabel) && narrow());
+
+  // A screen that widens past the sheet, as a phone turning to landscape, closes it rather than leaving it open unseen.
+  $effect(() => {
+    if (!sheet && untrack(() => controller.state.open)) controller.close();
+  });
   const chosenOptions = $derived(chosen.flatMap((value) => options.find((option) => option.value === value) ?? []));
   const sections = $derived(sectionsOf(options));
   const shown = $derived(
