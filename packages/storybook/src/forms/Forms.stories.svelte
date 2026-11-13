@@ -394,7 +394,7 @@
     docs: {
       description: {
         story:
-          "On a narrow screen, a searchable group keeps only its choice in the form, as badges under the search's name. Tapping it opens the search and the chips over the whole screen.",
+          "On a narrow screen, a searchable group keeps only its choice in the form, as badges, or its placeholder while nothing is chosen. Tapping it opens the search and the chips over the whole screen.",
       },
     },
   }}

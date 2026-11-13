@@ -7,7 +7,8 @@
   },
   "chipGroup": {
     "done": "Done",
-    "empty": "No matching options"
+    "empty": "No matching options",
+    "placeholder": "Choose"
   },
   "combobox": {
     "empty": "No matching options",

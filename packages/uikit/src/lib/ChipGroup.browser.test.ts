@@ -143,9 +143,9 @@ describe("ChipGroup", () => {
       props: { legend: "Genres", name: "genres", searchLabel: "Search genres", options, controller },
     });
 
-    const trigger = page.getByRole("button", { name: /Search genres/ });
+    const trigger = page.getByRole("button", { name: "Farce" });
     await expect.element(trigger).toBeVisible();
-    expect(trigger.element().textContent).toContain("Farce");
+    expect(trigger.element().textContent).not.toContain("Search genres");
     await trigger.click();
     const sheet = page.getByRole("dialog", { name: "Genres" });
     await expect.element(sheet.getByRole("searchbox", { name: "Search genres" })).toBeVisible();
@@ -154,6 +154,16 @@ describe("ChipGroup", () => {
 
     await expect.element(sheet).not.toBeInTheDocument();
     expect(new FormData(form).getAll("genres")).toEqual(["cyberpunk", "farce"]);
+  });
+
+  it("names an empty choice with its placeholder on a narrow screen", async () => {
+    await page.viewport(390, 844);
+    const options = [{ value: "farce", label: "Farce" }];
+    render(ChipGroup, {
+      props: { legend: "Genres", name: "genres", searchLabel: "Search genres", placeholder: "Choose genres", options },
+    });
+
+    await expect.element(page.getByRole("button", { name: "Choose genres" })).toBeVisible();
   });
 
   it("draws a divider before each shown section but the first", () => {

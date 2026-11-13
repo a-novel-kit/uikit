@@ -7,7 +7,8 @@ never sends; the controller keeps the order of choice. A `searchLabel` opens the
 the chips whose label holds it, whatever their case and accents: a hidden chip keeps its choice, and the form still
 sends it. The chips under a search scroll past the height of an open select's list. Options that name a `section`
 run together under its title, in the order the sections first appear, each run set apart by a divider. On a narrow
-screen, a searchable group shows its choice in a field that opens the search and the chips over the whole screen.
+screen, a searchable group shows only its choice, or a `placeholder`, in a field that opens the search and the chips
+over the whole screen.
 
 ```svelte
 <script lang="ts">
@@ -72,6 +73,8 @@ screen, a searchable group shows its choice in a field that opens the search and
     options: readonly ChipOption[];
     /** Names the search atop the chips and shows as its placeholder; without it, the group has no search. */
     searchLabel?: string;
+    /** Shown in a narrow screen's field while nothing is chosen. */
+    placeholder?: string;
     /** The color a chosen chip lights in: the brand blue by default, or the rarer accent magenta. */
     tone?: "brand" | "accent";
     /** State owner of the chosen values; each group has its own by default. */
@@ -99,6 +102,7 @@ screen, a searchable group shows its choice in a field that opens the search and
     name,
     options,
     searchLabel,
+    placeholder,
     tone = "brand",
     controller = createChipGroupController(),
     class: className = "",
@@ -210,14 +214,12 @@ screen, a searchable group shows its choice in a field that opens the search and
       aria-expanded={controller.state.open}
       onclick={controller.open}
     >
-      <span class="search">
-        <SearchIcon class="search-icon" aria-hidden="true" />
-        {searchLabel}
-      </span>
       {#if chosenOptions.length > 0}
         <span class="section">
           {#each chosenOptions as option (option.value)}<Badge {tone}>{option.label}</Badge>{/each}
         </span>
+      {:else}
+        <span class="placeholder">{placeholder ?? t("chipGroup.placeholder")}</span>
       {/if}
     </button>
     <Dialog {controller} title={legend} presentation="fullscreen">
@@ -269,13 +271,19 @@ screen, a searchable group shows its choice in a field that opens the search and
     --chip-well: var(--color-control-surface);
   }
 
-  /* The field that opens the chips' screen reads as the well it opens, its choice as badges under its search. */
+  /* The field that opens the chips' screen reads as the well it opens, showing only its choice as badges. */
   .trigger {
     cursor: pointer;
     inline-size: 100%;
     color: inherit;
     font: inherit;
     text-align: start;
+  }
+
+  .placeholder {
+    color: var(--color-control-placeholder);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-compact);
   }
 
   /* On the chips' screen, the well fills the screen and its chips scroll under the search. */
