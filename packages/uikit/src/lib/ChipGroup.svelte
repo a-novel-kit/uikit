@@ -264,7 +264,7 @@ swaps for the field once the page hydrates.
     font-family: var(--font-family-interface);
   }
 
-  /* The chips sit in a field's well, which outlines only an error. */
+  /* The chips sit in a field's well, bordered as any field is. */
   /* As a medium field: a button's height and the same inset, growing with its rows. */
   .chips {
     display: grid;

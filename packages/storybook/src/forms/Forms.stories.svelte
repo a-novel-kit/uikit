@@ -1,9 +1,11 @@
 <script module lang="ts">
   import {
     Button,
+    Card,
     Checkbox,
     ChipGroup,
     Combobox,
+    Dialog,
     ErrorSummary,
     Field,
     Fieldset,
@@ -16,6 +18,7 @@
     Select,
     Slider,
     Stack,
+    StickyBar,
     Switch,
     TagInput,
     Textarea,
@@ -95,6 +98,7 @@
     fixedChecked,
     fixedChips,
     fixedCombobox,
+    fixedOpen,
     fixedPressed,
     fixedSelect,
     fixedTags,
@@ -132,6 +136,7 @@
   const noGenresController = fixedChips([]);
   const openGenresController = fixedChips(["fantasy", "farce"], "", true);
   const coverController = fixedValue<readonly string[]>(["cover.png"]);
+  const surfaceDialogController = fixedOpen(true);
   const longFileController = fixedValue<readonly string[]>([
     "the-complete-annotated-manuscript-with-every-revision-and-editor-comment-final-v12.pdf",
   ]);
@@ -524,6 +529,53 @@
   </div>
 </Story>
 
+{#snippet searchField()}
+  <Input type="search" aria-label="Search projects" placeholder="Search">
+    {#snippet startAdornment()}<SearchIcon size="var(--icon-size-sm)" aria-hidden="true" />{/snippet}
+  </Input>
+{/snippet}
+
+{#snippet surfaces()}
+  <div class="surfaces">
+    <figure>
+      <figcaption>On the canvas</figcaption>
+      {@render searchField()}
+    </figure>
+    <figure>
+      <figcaption>On a sticky bar</figcaption>
+      <StickyBar edge="start">{@render searchField()}</StickyBar>
+    </figure>
+    <figure>
+      <figcaption>In a card</figcaption>
+      <Card>{@render searchField()}</Card>
+    </figure>
+    <figure>
+      <figcaption>In a dialog</figcaption>
+      <Dialog controller={surfaceDialogController} title="Find a project" modal={false}>{@render searchField()}</Dialog>
+    </figure>
+  </div>
+{/snippet}
+
+<Story
+  name="Surfaces"
+  globals={reviewStoryGlobals.desktop}
+  parameters={{
+    docs: {
+      description: {
+        story:
+          "A field outside an island, on the canvas or a sticky bar, takes a ghost card's ring, so it stays in view. In a card, a dialog or another island, the island's tone carries the well, and only focus and errors outline it.",
+      },
+    },
+  }}
+  asChild
+>
+  {@render surfaces()}
+</Story>
+
+<Story name="Surfaces on a phone" exportName="SurfacesPhone" globals={reviewStoryGlobals.mobile} asChild>
+  {@render surfaces()}
+</Story>
+
 <Story name="Adornments" asChild>
   <div class="adornment-grid">
     <Field label="Search">
@@ -703,6 +755,28 @@
     background: var(--color-surface-raised);
     padding: var(--space-5);
     inline-size: min(100%, var(--layout-container-sm));
+  }
+  .surfaces {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, calc(var(--space-base) * var(--multiplier-64))), 1fr));
+    align-items: start;
+    gap: var(--space-6);
+    inline-size: 100%;
+  }
+  .surfaces figure {
+    display: grid;
+    gap: var(--space-2);
+    margin: 0;
+  }
+  .surfaces figcaption {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+  }
+  /* The dialog opens in place, non-modal, so it sits beside the other surfaces. */
+  .surfaces :global(dialog) {
+    position: static;
+    margin: 0;
+    inline-size: auto;
   }
   .narrow {
     inline-size: min(100%, calc(var(--space-base) * var(--multiplier-80)));

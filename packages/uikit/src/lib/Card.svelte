@@ -60,6 +60,11 @@ corners stay concentric at any depth. Other content sits a spacing step further 
   .surface-plain {
     background: transparent;
   }
+  /* A card's surface carries the wells in it, so its fields drop the ring a field takes outside an island. A plain
+     card has no surface, and its fields keep whatever holds the card. */
+  .card:not(.surface-plain) {
+    --color-field-border: transparent;
+  }
   .surface-subtle {
     background: var(--color-surface-island-subtle);
   }

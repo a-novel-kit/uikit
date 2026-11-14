@@ -16,7 +16,7 @@ Composes a page heading, supporting copy, and actions. Defaults to a header cont
     description?: Content;
     /** Short context rendered before the heading. */
     eyebrow?: Content;
-    /** Page-level controls rendered beside the heading. */
+    /** Page-level controls rendered beside the heading, at the row's end. One that sets `flex: 1` fills the free width. */
     actions?: Snippet;
     /** Root element used by the header. */
     as?: "header" | "div";
@@ -95,9 +95,12 @@ Composes a page heading, supporting copy, and actions. Defaults to a header cont
     line-height: var(--line-height-normal);
   }
 
+  /* The actions take the row's free space and sit at its end, so an action that grows, such as a search, fills it. */
   .actions {
     display: flex;
+    flex: 1 1 auto;
     flex-wrap: wrap;
+    justify-content: flex-end;
     gap: var(--space-2);
   }
 </style>

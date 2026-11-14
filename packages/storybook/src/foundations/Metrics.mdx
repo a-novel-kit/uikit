@@ -109,8 +109,10 @@ Use smaller ratios for dense interface details and reserve the major ratio for p
 Group related content with spacing first. Use a borderless island when a region needs its own visual
 plane. `--shadow-{sm,md,lg}` give an island a hairline ring and a soft shadow; its face stays flat.
 `--shadow-floating` reaches every side, for a surface that floats over other islands. A
-well, such as a field, darkens the surface it sits on, so it keeps that surface's tone. Fields sit inside an
-island and need no border; only focus and errors outline them.
+well, such as a field, darkens the surface it sits on, so it keeps that surface's tone. A field inside an
+island, such as a card, a dialog or a popover, needs no border: only focus and errors outline it. A field
+outside one, on the canvas or a sticky bar, takes a ghost card's ring (`--color-field-border`), so it stays in
+view. The [field surfaces](?path=/story/forms-controls--surfaces) story compares them.
 
 <div className="surface-demo">
   <section className="surface-group">
