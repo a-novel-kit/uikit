@@ -1,6 +1,7 @@
 <script module lang="ts">
-  import { Button, Card, Container, Grid, Inline, PageHeader, SplitPane, Stack } from "@a-novel-kit/uikit";
+  import { Button, Card, Container, Grid, Inline, Input, PageHeader, SplitPane, Stack } from "@a-novel-kit/uikit";
 
+  import { Search as SearchIcon, ArrowDownUp as SortIcon } from "@lucide/svelte";
   import { defineMeta } from "@storybook/addon-svelte-csf";
   import { expect, within } from "storybook/test";
 
@@ -61,6 +62,33 @@
         <Button size="sm" variant="ghost" tone="neutral">Quiet action</Button>
       </Inline>
     </Stack>
+  </Container>
+</Story>
+
+<Story
+  name="Header with a search"
+  parameters={{
+    docs: {
+      description: {
+        story:
+          "A header's actions sit at the end of its row. An action that sets `flex: 1`, such as a search, fills the width the title leaves.",
+      },
+    },
+  }}
+  asChild
+>
+  <Container size="lg">
+    <PageHeader title="Your projects" description="12 projects">
+      {#snippet actions()}
+        <div class="header-search">
+          <Input type="search" aria-label="Search projects" placeholder="Search">
+            {#snippet startAdornment()}<SearchIcon size="var(--icon-size-sm)" aria-hidden="true" />{/snippet}
+          </Input>
+        </div>
+        <Button variant="outline" tone="neutral"><SortIcon size="var(--icon-size-sm)" />Last edited</Button>
+        <Button>New project</Button>
+      {/snippet}
+    </PageHeader>
   </Container>
 </Story>
 
@@ -204,6 +232,9 @@
     color: var(--color-text-primary);
     font-weight: var(--font-weight-bold);
     font-family: var(--font-family-interface);
+  }
+  .header-search {
+    flex: 1;
   }
   strong {
     color: var(--color-text-primary);
