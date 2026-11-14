@@ -221,9 +221,10 @@
     transparent
   );
   --color-control-border: var(--color-border-default);
-  /* A field is a well inside an island, so its tone carries it: no border until focus or an error.
-     The border stays transparent rather than absent, so forced-colors mode still outlines it. */
-  --color-field-border: transparent;
+  /* A field outside an island, on the canvas or a sticky bar, takes a ghost card's ring, so it stays in view. An
+     island resets this border to transparent for its fields: a well's tone carries a field there, and only focus and
+     errors outline it. A transparent border still outlines a field in forced-colors mode. */
+  --color-field-border: var(--color-border-item);
   --color-control-border-hover: var(--color-border-strong);
   --color-control-border-focus: var(--base-brand);
   --color-control-text: var(--color-text-primary);

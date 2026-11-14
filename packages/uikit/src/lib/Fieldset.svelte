@@ -29,7 +29,9 @@ Groups related native form controls with an optional legend and supporting descr
 </fieldset>
 
 <style>
+  /* A fieldset is an island, so its fields drop the ring a field takes outside one. */
   .fieldset {
+    --color-field-border: transparent;
     display: grid;
     gap: var(--space-3);
     margin: 0;

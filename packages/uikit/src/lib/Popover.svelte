@@ -101,6 +101,8 @@ Spread the trigger snippet attributes onto a native button to connect it to the 
 
 <style>
   .popover {
+    /* The popover is an island, so its fields drop the ring a field takes outside one. */
+    --color-field-border: transparent;
     position: fixed;
     transform: translate(-50%, -50%);
     z-index: var(--layer-dropdown);
