@@ -71,7 +71,9 @@ Controller methods may reject a toggle; the rendered disclosure follows the acce
     color: var(--color-text-secondary);
   }
 
+  /* Open, the disclosure is an island, so its fields drop the ring a field takes outside one. */
   .disclosure[open] {
+    --color-field-border: transparent;
     background: var(--color-surface-island-subtle);
   }
 

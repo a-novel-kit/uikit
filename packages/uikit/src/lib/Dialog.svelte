@@ -180,6 +180,8 @@ child with `autofocus` takes focus instead. Opening and closing fade the dialog 
     --dialog-margin: var(--space-2);
     --dialog-width: var(--layout-container-sm);
     --dialog-rise: var(--space-2);
+    /* The dialog is an island, centered or fullscreen, so its fields drop the ring a field takes outside one. */
+    --color-field-border: transparent;
     position: fixed;
     z-index: var(--layer-modal);
     transition:
