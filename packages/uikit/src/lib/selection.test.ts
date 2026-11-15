@@ -29,10 +29,13 @@ describe("selection helpers", () => {
     expect(resolveInvalidState(false, ariaInvalid)).toBe(true);
   });
 
-  it("matches a search whatever its case, accents and outer spaces", () => {
+  it("matches a search whatever its case, accents, ligatures and outer spaces", () => {
     expect(matchesSearch("Épopée", " EPOP ")).toBe(true);
     expect(matchesSearch("Science-fiction", "fiction")).toBe(true);
     expect(matchesSearch("Fantasy", "cyber")).toBe(false);
+    expect(matchesSearch("Œuvre au noir", "oeuvre")).toBe(true);
+    expect(matchesSearch("Cœur", "COEUR")).toBe(true);
+    expect(matchesSearch("Ex aequo", "æquo")).toBe(true);
   });
 
   it("preserves an explicit invalid state", () => {

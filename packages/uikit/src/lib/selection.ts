@@ -35,9 +35,12 @@ export function findNextEnabledIndex<Value extends string>(
   return currentIndex;
 }
 
-/** Folds case and accents away, so a search for "epopee" finds "Épopée". */
+/**
+ * Folds case and accents away, so a search for "epopee" finds "Épopée". Unicode decomposes no ligature, so `œ` and `æ`
+ * become the two letters a keyboard without them types.
+ */
 function fold(text: string): string {
-  return text.normalize("NFD").replace(/\p{M}/gu, "").toLocaleLowerCase();
+  return text.normalize("NFD").replace(/\p{M}/gu, "").toLocaleLowerCase().replace(/œ/g, "oe").replace(/æ/g, "ae");
 }
 
 /** Tells whether a label holds the searched text, whatever their case and accents and the search's outer spaces. */
