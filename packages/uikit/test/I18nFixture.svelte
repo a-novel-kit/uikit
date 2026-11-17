@@ -7,16 +7,20 @@
   // Stands in for an app's i18n provider: its own namespace, and optionally its own uikit messages.
   let {
     locale,
-    component: Rendered,
+    component,
     props,
     overrides,
   }: {
     locale: string;
-    // The fixture renders whichever component a test passes, with that test's props.
-    component: Component<any>;
+    // Any component is a Component<never>, since a component accepts what its props allow; the test pairs it with
+    // its props.
+    component: Component<never>;
     props: Record<string, unknown>;
     overrides?: Record<string, unknown>;
   } = $props();
+
+  // The fixture renders whichever component a test passes, with that test's props.
+  const Rendered = $derived(component as Component<Record<string, unknown>>);
 
   untrack(() =>
     setI18nContext(
