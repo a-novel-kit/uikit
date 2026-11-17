@@ -1,22 +1,20 @@
 <!--
 @component
-Renders a native anchor with inline or quiet styling. The caller owns the destination URL.
+Renders a native anchor, underlined as in prose. The caller owns the destination URL. A link styled as a
+control is a `Button` with `href`.
 -->
 <script lang="ts" module>
   import type { HTMLAnchorAttributes } from "svelte/elements";
 
   /** Props for a styled native anchor. */
-  export interface LinkProps extends HTMLAnchorAttributes {
-    /** Inline is underlined in prose; quiet is intended for navigation chrome. */
-    variant?: "inline" | "quiet";
-  }
+  export type LinkProps = HTMLAnchorAttributes;
 </script>
 
 <script lang="ts">
-  let { variant = "inline", class: className = "", children, ...rest }: LinkProps = $props();
+  let { class: className = "", children, ...rest }: LinkProps = $props();
 </script>
 
-<a class="link {variant} {className}" {...rest}>
+<a class="link {className}" {...rest}>
   {@render children?.()}
 </a>
 
@@ -28,16 +26,8 @@ Renders a native anchor with inline or quiet styling. The caller owns the destin
     border-radius: var(--radius-sm);
     color: var(--color-text-link);
     font-family: inherit;
-    text-underline-offset: var(--space-1);
-  }
-
-  .inline {
     text-decoration-thickness: var(--border-width-thin);
-  }
-  .quiet {
-    padding: var(--space-1) var(--space-2);
-    color: var(--color-action-primary-foreground);
-    text-decoration: none;
+    text-underline-offset: var(--space-1);
   }
 
   @media (hover: hover) {
@@ -45,16 +35,6 @@ Renders a native anchor with inline or quiet styling. The caller owns the destin
       color: var(--color-text-link-hover);
       text-decoration-thickness: var(--border-width-strong);
     }
-
-    .quiet:hover {
-      background: var(--color-action-subtle-hover);
-      color: var(--color-action-primary-foreground-hover);
-    }
-  }
-
-  .quiet:active {
-    background: var(--color-action-subtle-active);
-    color: var(--color-action-primary-foreground-hover);
   }
 
   .link:focus-visible {

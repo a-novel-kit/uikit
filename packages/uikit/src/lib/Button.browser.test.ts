@@ -119,19 +119,14 @@ describe("low-emphasis action feedback", () => {
     expect(css.color).toBe(resolveColor("var(--color-action-primary-foreground)"));
   });
 
-  it("tints quiet-link hover with its text color without filling inline links", async () => {
-    const { getByRole, rerender } = render(Link, {
+  it("leaves a link unfilled under the pointer", async () => {
+    const { getByRole } = render(Link, {
       href: "#help",
-      variant: "inline",
       children: createRawSnippet(() => ({ render: () => "<span>Help</span>" })),
     });
     const link = getByRole("link");
-    const inlineBackground = getComputedStyle(link).backgroundColor;
-    await rerender({ variant: "quiet" });
     await userEvent.hover(link);
-    await expectFeedback(link, "--color-mix-2");
-    await rerender({ variant: "inline" });
-    await expect.poll(() => getComputedStyle(link).backgroundColor).toBe(inlineBackground);
+    expect((await settledStyle(link)).backgroundColor).toBe(resolveColor("transparent"));
   });
 });
 

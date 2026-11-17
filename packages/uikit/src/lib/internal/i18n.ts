@@ -9,17 +9,21 @@ import type { i18n } from "i18next";
 /** The namespace holding uikit's messages in an app's i18next instance. */
 const namespace = "uikit";
 
-/** A message key of uikit's catalogs, such as `pagination.next`. */
+/** A message key of uikit's catalogs, such as `pagination.next`. A plural message is one key, such as
+ * `tagInput.count`, whose catalog holds its `_zero`, `_one` and `_other` forms. */
 export type MessageKey = Leaves<typeof en>;
 
 type Leaves<T, Prefix extends string = ""> = {
-  [Key in keyof T & string]: T[Key] extends string ? `${Prefix}${Key}` : Leaves<T[Key], `${Prefix}${Key}.`>;
+  [Key in keyof T & string]: T[Key] extends string ? `${Prefix}${Singular<Key>}` : Leaves<T[Key], `${Prefix}${Key}.`>;
 }[keyof T & string];
+
+type Singular<Key extends string> = Key extends `${infer Base}_${"zero" | "one" | "other"}` ? Base : Key;
 
 /** Translates uikit's built-in text, and names the language that dates should follow. */
 export interface Messages {
-  /** Returns the message for `key`, filling `{{name}}` placeholders from `values`. */
-  t: (key: MessageKey, values?: Record<string, string>) => string;
+  /** Returns the message for `key`, filling `{{name}}` placeholders from `values`; a numeric `count` picks the
+   * plural form. */
+  t: (key: MessageKey, values?: Record<string, string | number>) => string;
   /** The language of the messages. */
   language: string;
 }

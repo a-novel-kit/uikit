@@ -179,7 +179,7 @@ keys, the mouse wheel or a pinch zoom it. Encode the framed picture with `browse
     border-radius: var(--radius-md);
     background: var(--color-surface-sunken);
     aspect-ratio: var(--frame-ratio);
-    inline-size: min(100%, calc(var(--font-size-base) * var(--multiplier-20) * var(--frame-ratio)));
+    inline-size: min(100%, calc(var(--font-size-base) * 20 * var(--frame-ratio)));
     overflow: hidden;
     touch-action: none;
     user-select: none;

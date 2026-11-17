@@ -1,6 +1,6 @@
 import * as OverlayStories from "./Overlays.stories.svelte";
 
-import { ActionGroup, Disclosure, PanelHeader, Popover } from "@a-novel-kit/uikit";
+import { ActionGroup, Disclosure, PanelHeader } from "@a-novel-kit/uikit";
 import { Canvas, Meta, ResponsiveStoryPair } from "@a-novel-kit/uikit-storybook";
 
 import { ArgTypes } from "@storybook/addon-docs/blocks";
@@ -9,24 +9,18 @@ import { ArgTypes } from "@storybook/addon-docs/blocks";
 
 # Disclosure and dialog
 
-Accordion and Disclosure reveal content in the current flow. Popover, Dialog, and Tooltip render
-above that flow.
+Disclosure reveals content in the current flow. Dialog and Tooltip render above that flow.
 
 ## Disclosure
 
 <Canvas of={OverlayStories.Disclosure} />
 
 The summary accepts text or an inline snippet, including an icon or badge. Keep interactive controls
-in the revealed content so the summary remains one clear toggle target.
+in the revealed content so the summary remains one clear toggle target. Give several disclosures the
+same `name` to keep one open at a time, as native `details` elements do, where the browser supports it; elsewhere
+each opens on its own. Each keeps its own controller, which follows the browser's grouping.
 
 <ArgTypes of={Disclosure} />
-
-## Accordion
-
-<Canvas of={OverlayStories.Accordion} />
-
-`AccordionItem` uses the disclosure props and presentation above. `Accordion` supplies single-open
-grouping; set `multiple` to allow independent panels. Each item receives its own controller.
 
 ## Dialog
 
@@ -101,20 +95,12 @@ where the header's controls were.
 
 <ArgTypes of={OverlayStories} />
 
-## Popover
-
-<ResponsiveStoryPair
-  desktop={OverlayStories.PopoverDesktop}
-  mobile={OverlayStories.PopoverMobile}
-  meta={OverlayStories}
-/>
-
-### Shared panel composition
+## Shared panel composition
 
 `PanelHeader` supplies a compact heading, optional description and trailing controls. `ActionGroup`
 owns responsive action spacing; `FormActions` adds form feedback and separation from inputs.
 Compose the body with ordinary markup, `Stack`, and existing controls. These layout components own
-no state or surface. A popover remains non-modal; use `Dialog` when background interaction must stop.
+no state or surface.
 
 ```svelte
 <Stack gap="4">
@@ -132,7 +118,6 @@ put structured content in the body.
 
 <ArgTypes of={PanelHeader} />
 <ArgTypes of={ActionGroup} />
-<ArgTypes of={Popover} />
 
 ## Tooltip
 

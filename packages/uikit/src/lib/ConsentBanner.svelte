@@ -54,7 +54,7 @@ leaves the page inert, so the topmost one open shows the banner too, where it st
 </script>
 
 {#snippet banner(id: string)}
-  <section class="banner {className}" aria-labelledby={id} {...rest}>
+  <section class="banner {className}" aria-labelledby={id} data-frost {...rest}>
     <div class="text">
       <strong {id}><RenderContent content={title} /></strong>
       <p>{@render children()}</p>
@@ -81,14 +81,16 @@ leaves the page inert, so the topmost one open shows the banner too, where it st
     position: fixed;
     gap: var(--space-3);
     z-index: var(--layer-toast);
+    -webkit-backdrop-filter: blur(var(--blur-md));
+    backdrop-filter: blur(var(--blur-md));
     box-sizing: border-box;
     inset-block-end: var(--space-4);
     inset-inline-end: var(--space-4);
     box-shadow: var(--shadow-floating);
     border-radius: var(--radius-md);
-    background: var(--color-surface-island-strong);
+    background: var(--color-surface-glass);
     padding: var(--space-4);
-    inline-size: min(calc(100vi - var(--space-8)), calc(var(--size-base) * var(--multiplier-64) * var(--multiplier-2)));
+    inline-size: min(calc(100vi - var(--space-8)), calc(var(--size-base) * 64 * 2));
     color: var(--color-text-primary);
   }
 
@@ -117,24 +119,6 @@ leaves the page inert, so the topmost one open shows the banner too, where it st
     flex-wrap: wrap;
     justify-content: flex-end;
     gap: var(--space-2);
-  }
-
-  @supports (backdrop-filter: blur(0)) or (-webkit-backdrop-filter: blur(0)) {
-    .banner {
-      -webkit-backdrop-filter: blur(var(--blur-md));
-      backdrop-filter: blur(var(--blur-md));
-      background: var(--color-surface-glass);
-    }
-
-    /* Under a modal dialog's blurred backdrop, its own blur sits unseen: it drops once the backdrop has faded in and
-       returns at once, as a card's does. One inside a dialog keeps it. */
-    :global(:root:has(dialog.dialog:modal)) .banner:not(:global(dialog *)) {
-      -webkit-backdrop-filter: none;
-      backdrop-filter: none;
-      transition:
-        backdrop-filter 0s var(--duration-normal),
-        -webkit-backdrop-filter 0s var(--duration-normal);
-    }
   }
 
   @media (forced-colors: active) {

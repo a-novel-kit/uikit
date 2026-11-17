@@ -9,7 +9,7 @@ Use titleId and descriptionId to label a containing dialog or region.
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
 
-  /** Heading and supporting content for dialogs, popovers, and compact panels. */
+  /** Heading and supporting content for dialogs and compact panels. */
   export interface PanelHeaderProps extends Omit<HTMLAttributes<HTMLDivElement>, "title" | "children"> {
     /** Visible heading, as text or composed inline content. */
     title: Content;

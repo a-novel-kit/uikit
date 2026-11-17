@@ -670,7 +670,7 @@
           placeholder="Search languages"
           controller={languageController}
           options={languageOptions}
-          maxMenuHeight="calc(var(--control-height-sm) * var(--multiplier-5))"
+          maxMenuHeight="calc(var(--control-height-sm) * 5)"
         />
       {/snippet}
     </Field>
@@ -758,7 +758,7 @@
   }
   .surfaces {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, calc(var(--space-base) * var(--multiplier-64))), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, calc(var(--space-base) * 64)), 1fr));
     align-items: start;
     gap: var(--space-6);
     inline-size: 100%;
@@ -779,11 +779,11 @@
     inline-size: auto;
   }
   .narrow {
-    inline-size: min(100%, calc(var(--space-base) * var(--multiplier-80)));
+    inline-size: min(100%, calc(var(--space-base) * 80));
   }
   .adornment-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, calc(var(--space-base) * var(--multiplier-64))), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, calc(var(--space-base) * 64)), 1fr));
     align-items: start;
     gap: var(--space-6);
     inline-size: 100%;

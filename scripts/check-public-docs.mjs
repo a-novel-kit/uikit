@@ -8,7 +8,6 @@ import ts from "typescript";
 const repositoryRoot = resolve(import.meta.dirname, "..");
 const publicRoots = [
   resolve(repositoryRoot, "packages/uikit/src/lib"),
-  resolve(repositoryRoot, "packages/icons/src/lib"),
   resolve(repositoryRoot, "packages/storybook-config/src"),
 ];
 const explicitSources = [resolve(repositoryRoot, "packages/tokens/palette.d.ts")];

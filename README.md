@@ -61,15 +61,21 @@ Then import components from the package root:
 
 ## Packages
 
-| Package                                                       | What it is for                                                                 |
-| ------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| [`@a-novel-kit/uikit`](./packages/uikit)                      | The Svelte components, their default controllers, and their public types.      |
-| [`@a-novel-kit/uikit-tokens`](./packages/tokens)              | The design tokens that components and applications style with.                 |
-| [`@a-novel-kit/uikit-fonts`](./packages/fonts)                | The self-hosted font faces that the typography tokens name.                    |
-| [`@a-novel-kit/uikit-icons`](./packages/icons)                | The shared canvas for custom icons. Standard icons come from `@lucide/svelte`. |
-| [`@a-novel-kit/uikit-storybook`](./packages/storybook-config) | The Storybook preset and theme for A-Novel Svelte projects.                    |
+| Package                                                       | What it is for                                                            |
+| ------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| [`@a-novel-kit/uikit`](./packages/uikit)                      | The Svelte components, their default controllers, and their public types. |
+| [`@a-novel-kit/uikit-tokens`](./packages/tokens)              | The design tokens that components and applications style with.            |
+| [`@a-novel-kit/uikit-fonts`](./packages/fonts)                | The self-hosted font faces that the typography tokens name.               |
+| [`@a-novel-kit/uikit-storybook`](./packages/storybook-config) | The Storybook preset and theme for A-Novel Svelte projects.               |
 
 The brand logos ship from [A-Novel UI assets](https://github.com/a-novel-kit/ui-assets).
+
+## Browser support
+
+A-Novel UI targets [Baseline widely available](https://web.dev/baseline): every web platform feature it
+relies on has worked in all major browsers for at least 30 months. A newer feature, such as anchor
+positioning, is a progressive enhancement behind `@supports`, and a prefixed property, such as
+`-webkit-backdrop-filter`, stays until its standard form is widely available.
 
 ## Contributing
 

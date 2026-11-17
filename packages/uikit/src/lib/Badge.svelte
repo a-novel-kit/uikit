@@ -26,7 +26,7 @@ Labels a category or status compactly. Use InlineMessage when changes need live 
     border-radius: var(--radius-sm);
     background: var(--badge-fill);
     padding-inline: var(--size-1-5);
-    padding-block: calc(var(--size-1) / var(--multiplier-2));
+    padding-block: calc(var(--size-1) / 2);
     inline-size: fit-content;
     max-inline-size: 100%;
     color: var(--color-label-text);

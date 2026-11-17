@@ -42,17 +42,6 @@ swaps for the field once the page hydrates.
   /** External state contract for a chip group: the chosen option values and the search over them. */
   export type ChipGroupController = ChoiceController;
 
-  // Gathers the options by section, in the order each section first appears.
-  function sectionsOf(options: readonly ChipOption[]): [string | undefined, ChipOption[]][] {
-    const sections = new Map<string | undefined, ChipOption[]>();
-    for (const option of options) {
-      const members = sections.get(option.section);
-      if (members) members.push(option);
-      else sections.set(option.section, [option]);
-    }
-    return [...sections];
-  }
-
   // One query for every group, made at first use: jsdom has no media queries for a group without a search.
   let narrowScreen: MediaQuery | undefined;
   function narrow() {
@@ -122,8 +111,11 @@ swaps for the field once the page hydrates.
   $effect(() => {
     if (!sheet && untrack(() => controller.state.open)) controller.close();
   });
-  const chosenOptions = $derived(chosen.flatMap((value) => options.find((option) => option.value === value) ?? []));
-  const sections = $derived(sectionsOf(options));
+  const chosenValues = $derived(new Set(chosen));
+  const optionsByValue = $derived(new Map(options.map((option) => [option.value, option])));
+  const chosenOptions = $derived(chosen.flatMap((value) => optionsByValue.get(value) ?? []));
+  // The options by section, in the order each section first appears.
+  const sections = $derived([...Map.groupBy(options, (option) => option.section)]);
   const shown = $derived(
     new Set(options.filter((option) => matchesSearch(option.label, controller.state.query)).map(({ value }) => value))
   );
@@ -186,8 +178,8 @@ swaps for the field once the page hydrates.
                 type="checkbox"
                 {name}
                 value={option.value}
-                checked={chosen.includes(option.value)}
-                defaultChecked={chosen.includes(option.value)}
+                checked={chosenValues.has(option.value)}
+                defaultChecked={chosenValues.has(option.value)}
                 disabled={option.disabled}
                 aria-invalid={error ? true : undefined}
                 form={rest.form}
@@ -445,7 +437,7 @@ swaps for the field once the page hydrates.
     border-radius: var(--radius-sm);
     background: var(--color-action-neutral);
     padding-inline: var(--size-1-5);
-    padding-block: calc(var(--space-1) / var(--multiplier-2));
+    padding-block: calc(var(--space-1) / 2);
     min-inline-size: var(--icon-size-lg);
     color: var(--color-text-secondary);
     font-size: var(--font-size-xs);

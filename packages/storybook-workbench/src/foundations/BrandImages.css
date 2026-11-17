@@ -11,7 +11,7 @@
   border-radius: var(--radius-lg);
   background: var(--color-surface-island-subtle);
   padding: var(--space-6);
-  min-block-size: calc(var(--space-16) * var(--multiplier-2));
+  min-block-size: calc(var(--space-16) * 2);
   overflow: auto;
 }
 
@@ -35,7 +35,7 @@
 }
 
 .brand-image-stage--icon {
-  block-size: calc(var(--space-16) * var(--multiplier-5));
+  block-size: calc(var(--space-16) * 5);
 }
 
 .brand-image-stage--icon img {

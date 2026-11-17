@@ -230,9 +230,11 @@ describe("Dialog browser lifecycle", () => {
 describe("Dialog over a frosted page", () => {
   it("drops the page's blurs only once its backdrop has faded in, and gives them back as it closes", async () => {
     const controller = createOpenController();
-    const { getByTestId, container } = render(BlurredPageFixture, { controller });
+    const { getAllByRole, getByRole, getByTestId, container } = render(BlurredPageFixture, { controller });
     const blur = (element: Element) => getComputedStyle(element).backdropFilter;
-    const frosted = [getByTestId("page-card"), getByTestId("page-bar")];
+    // The consent banner also shows inside a modal dialog, where it keeps its blur; the page's own copy drops it.
+    const pageBanner = getAllByRole("region", { name: "Error reports" }).find((banner) => !banner.closest("dialog"))!;
+    const frosted = [getByTestId("page-card"), getByTestId("page-bar"), getByRole("status"), pageBanner];
     expect(frosted.map(blur)).not.toContain("none");
 
     const dialog = container.querySelector("dialog")!;
@@ -242,7 +244,7 @@ describe("Dialog over a frosted page", () => {
     expect(frosted.map(blur)).not.toContain("none");
     expect(Number(getComputedStyle(dialog, "::backdrop").opacity)).toBeLessThan(1);
 
-    await expect.poll(() => frosted.map(blur)).toEqual(["none", "none"]);
+    await expect.poll(() => frosted.map(blur)).toEqual(["none", "none", "none", "none"]);
     expect(Number(getComputedStyle(dialog, "::backdrop").opacity)).toBeGreaterThan(0.99);
     expect(blur(getByTestId("dialog-card"))).not.toBe("none");
 

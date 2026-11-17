@@ -36,9 +36,12 @@ corners stay concentric at any depth. Other content sits a spacing step further 
     children,
     ...rest
   }: CardProps = $props();
+
+  // A subtle or plain card has no blur, so a modal dialog has none to drop.
+  const frosted = $derived(surface === "raised" || surface === "ghost" || surface === "overlay");
 </script>
 
-<div class="card surface-{surface} padding-{padding} {className}" {...rest}>
+<div class="card surface-{surface} padding-{padding} {className}" data-frost={frosted || undefined} {...rest}>
   {#if header}<div class="header">{@render header()}</div>{/if}
   <div class="content">{@render children?.()}</div>
   {#if footer}<div class="footer">{@render footer()}</div>{/if}
@@ -70,12 +73,16 @@ corners stay concentric at any depth. Other content sits a spacing step further 
   }
   /* Frosted glass: the lamp shines through a raised card as through the navigation. */
   .surface-raised {
+    -webkit-backdrop-filter: blur(var(--blur-md));
+    backdrop-filter: blur(var(--blur-md));
     box-shadow: var(--shadow-ring);
     background: var(--color-surface-island-glass);
   }
   /* A raised card inside another is the parent's own glass, so the lamp tints both alike and text
      keeps the parent's contrast; only its shadow sets it apart. */
   .card :global(.card.surface-raised) {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
     box-shadow: var(--shadow-md);
     background: transparent;
   }
@@ -83,6 +90,8 @@ corners stay concentric at any depth. Other content sits a spacing step further 
      collection of them reads as the page itself until the pointer lights one. With no surface of its
      own to set it apart, its ring sits a step over a divider's strength. */
   .surface-ghost {
+    -webkit-backdrop-filter: blur(var(--blur-md));
+    backdrop-filter: blur(var(--blur-md));
     transition:
       background-color var(--duration-fast) var(--easing-standard),
       box-shadow var(--duration-fast) var(--easing-standard);
@@ -116,8 +125,10 @@ corners stay concentric at any depth. Other content sits a spacing step further 
     background: transparent;
   }
   .surface-overlay {
+    -webkit-backdrop-filter: blur(var(--blur-md));
+    backdrop-filter: blur(var(--blur-md));
     box-shadow: var(--shadow-island);
-    background: var(--color-surface-island-strong);
+    background: var(--color-surface-glass);
   }
   /* Content that reaches the edges keeps to the rounded corners. A padded card clips nothing, so the
      glow of an action inside spills past its edge. */
@@ -145,38 +156,6 @@ corners stay concentric at any depth. Other content sits a spacing step further 
   }
   .card :global(.card:last-child) {
     margin-block-end: var(--card-nested-offset);
-  }
-
-  @supports (backdrop-filter: blur(0)) or (-webkit-backdrop-filter: blur(0)) {
-    .surface-raised,
-    .surface-ghost {
-      -webkit-backdrop-filter: blur(var(--blur-md));
-      backdrop-filter: blur(var(--blur-md));
-    }
-    .card :global(.card.surface-raised) {
-      -webkit-backdrop-filter: none;
-      backdrop-filter: none;
-    }
-    .surface-overlay {
-      -webkit-backdrop-filter: blur(var(--blur-md));
-      backdrop-filter: blur(var(--blur-md));
-      background: var(--color-surface-glass);
-    }
-
-    /* A modal dialog blurs the whole page behind it, so a card's own blur there sits unseen and still costs every
-       frame, the dialog's backdrop blurring it again. It drops once that backdrop has faded in, so no card shows
-       unfrosted, and returns at once when the dialog closes. A card inside a dialog keeps it. A ghost card keeps its
-       own fades. */
-    :global(:root:has(dialog.dialog:modal))
-      :is(.surface-raised, .surface-ghost, .surface-overlay):not(:global(dialog *)) {
-      -webkit-backdrop-filter: none;
-      backdrop-filter: none;
-      transition:
-        background-color var(--duration-fast) var(--easing-standard),
-        box-shadow var(--duration-fast) var(--easing-standard),
-        backdrop-filter 0s var(--duration-normal),
-        -webkit-backdrop-filter 0s var(--duration-normal);
-    }
   }
 
   @media (forced-colors: active) {

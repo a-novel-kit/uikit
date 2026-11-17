@@ -1,27 +1,8 @@
 <script module lang="ts">
-  import {
-    Button,
-    ButtonGroup,
-    IconButton,
-    Link,
-    ToggleButton,
-    ToggleGroup,
-    Toolbar,
-    ToolbarButton,
-    ToolbarGroup,
-    ToolbarLink,
-    ToolbarToggleButton,
-    VisuallyHidden,
-  } from "@a-novel-kit/uikit";
+  import { Button, ButtonGroup, IconButton, Link } from "@a-novel-kit/uikit";
 
-  import {
-    Copy as CopyIcon,
-    ExternalLink as ExternalLinkIcon,
-    RefreshCw as RefreshIcon,
-    Save as SaveIcon,
-  } from "@lucide/svelte";
+  import { ExternalLink as ExternalLinkIcon, RefreshCw as RefreshIcon, Save as SaveIcon } from "@lucide/svelte";
   import { defineMeta } from "@storybook/addon-svelte-csf";
-  import { expect, userEvent, within } from "storybook/test";
 
   const { Story } = defineMeta({
     title: "Components/Action controls",
@@ -30,39 +11,11 @@
       docs: {
         description: {
           component:
-            "Group related actions with ButtonGroup, expose persistent choices with ToggleButton, and use Toolbar for roving keyboard focus.",
+            "Group related actions with ButtonGroup, and expose a persistent choice with a Button's `aria-pressed`.",
         },
       },
     },
   });
-
-  async function verifyToggle({ canvasElement }: { canvasElement: HTMLElement }) {
-    const canvas = within(canvasElement);
-    const grid = canvas.getByRole("button", { name: "Grid" });
-    await expect(grid).toHaveAttribute("aria-pressed", "false");
-    await userEvent.click(grid);
-    await expect(grid).toHaveAttribute("aria-pressed", "false");
-  }
-
-  async function verifyToolbar({ canvasElement }: { canvasElement: HTMLElement }) {
-    const canvas = within(canvasElement);
-    const copy = canvas.getByRole("button", { name: "Copy" });
-    const refresh = canvas.getByRole("button", { name: "Refresh" });
-    const preview = canvas.getByRole("button", { name: "Preview" });
-    const help = canvas.getByRole("link", { name: "Help" });
-    copy.focus();
-    await userEvent.keyboard("{ArrowRight}");
-    await expect(refresh).toHaveFocus();
-    await expect(help.getBoundingClientRect().height).toBe(preview.getBoundingClientRect().height);
-    await expect(getComputedStyle(help).borderRadius).toBe(getComputedStyle(preview).borderRadius);
-  }
-</script>
-
-<script lang="ts">
-  import { fixedPressed } from "../controllers";
-
-  const unpressed = fixedPressed();
-  const pressed = fixedPressed(true);
 </script>
 
 <Story name="Groups and links" asChild>
@@ -76,21 +29,12 @@
     </ButtonGroup>
     <div class="link-row">
       <Link href="#inline-example">Inline link</Link>
-      <Link href="#quiet-example" variant="quiet">Quiet link</Link>
-      <Link href="#external-example" variant="quiet">
+      <Button href="#text-example" variant="text">Text link</Button>
+      <IconButton href="#external-example" label="Open component reference" variant="ghost">
         <ExternalLinkIcon size="var(--icon-size-sm)" aria-hidden="true" />
-        <VisuallyHidden>Open component reference</VisuallyHidden>
-      </Link>
+      </IconButton>
     </div>
   </div>
-</Story>
-
-<Story name="Toggle group" asChild play={verifyToggle}>
-  <ToggleGroup label="Canvas options">
-    <ToggleButton controller={unpressed} variant="ghost">Grid</ToggleButton>
-    <ToggleButton controller={pressed} variant="ghost">Snap</ToggleButton>
-    <ToggleButton controller={unpressed} variant="ghost" tone="neutral" disabled>Guides</ToggleButton>
-  </ToggleGroup>
 </Story>
 
 <Story name="Toggle states" asChild>
@@ -106,35 +50,19 @@
       <tbody>
         <tr>
           <th scope="row">Brand</th>
-          <td><ToggleButton controller={unpressed}>Grid</ToggleButton></td>
-          <td><ToggleButton controller={pressed}>Grid</ToggleButton></td>
-          <td><ToggleButton controller={unpressed} disabled>Grid</ToggleButton></td>
+          <td><Button aria-pressed="false">Grid</Button></td>
+          <td><Button aria-pressed="true">Grid</Button></td>
+          <td><Button aria-pressed="false" disabled>Grid</Button></td>
         </tr>
         <tr>
           <th scope="row">Neutral</th>
-          <td><ToggleButton controller={unpressed} tone="neutral">Grid</ToggleButton></td>
-          <td><ToggleButton controller={pressed} tone="neutral">Grid</ToggleButton></td>
-          <td><ToggleButton controller={unpressed} tone="neutral" disabled>Grid</ToggleButton></td>
+          <td><Button aria-pressed="false" tone="neutral">Grid</Button></td>
+          <td><Button aria-pressed="true" tone="neutral">Grid</Button></td>
+          <td><Button aria-pressed="false" tone="neutral" disabled>Grid</Button></td>
         </tr>
       </tbody>
     </table>
   </div>
-</Story>
-
-<Story name="Toolbar" asChild play={verifyToolbar}>
-  <Toolbar label="Editor tools">
-    <ToolbarGroup label="Document">
-      <ToolbarButton variant="ghost" tone="neutral" size="sm">
-        <CopyIcon size="var(--icon-size-sm)" aria-hidden="true" />Copy
-      </ToolbarButton>
-      <ToolbarButton variant="ghost" tone="neutral" size="sm">
-        <RefreshIcon size="var(--icon-size-sm)" aria-hidden="true" />Refresh
-      </ToolbarButton>
-    </ToolbarGroup>
-    <span class="toolbar-separator" aria-hidden="true"></span>
-    <ToolbarToggleButton controller={unpressed} variant="ghost" size="sm">Preview</ToolbarToggleButton>
-    <ToolbarLink href="#toolbar-help" variant="quiet">Help</ToolbarLink>
-  </Toolbar>
 </Story>
 
 <Story
@@ -144,7 +72,7 @@
     docs: {
       description: {
         story:
-          "Outline buttons, ghost buttons, and quiet links tint hover and active backgrounds with their own text color. A pressed outline keeps its tone, and a pressed ghost or text control reads as the navigation's current item, on every surface.",
+          "Outline, ghost and text buttons tint hover and active backgrounds with their own text color. A pressed outline keeps its tone, and a pressed ghost or text control reads as the navigation's current item, on every surface.",
       },
     },
   }}
@@ -161,10 +89,10 @@
           <IconButton label="Refresh preview" variant="ghost" tone="neutral">
             <RefreshIcon size="var(--icon-size-sm)" aria-hidden="true" />
           </IconButton>
-          <ToggleButton controller={pressed} variant="outline">Preview</ToggleButton>
-          <ToggleButton controller={pressed} variant="ghost" tone="neutral">Guides</ToggleButton>
+          <Button aria-pressed="true" variant="outline">Preview</Button>
+          <Button aria-pressed="true" variant="ghost" tone="neutral">Guides</Button>
         </ButtonGroup>
-        <Link href="#surface-help" variant="quiet">Help</Link>
+        <Button href="#surface-help" variant="text">Help</Button>
       </section>
     {/each}
   </div>
@@ -238,15 +166,10 @@
   }
   .matrix td {
     padding: 0;
-    min-inline-size: calc(var(--control-height-lg) * var(--multiplier-3));
+    min-inline-size: calc(var(--control-height-lg) * 3);
     text-align: center;
   }
   .matrix :global(.button) {
     inline-size: 100%;
-  }
-  .toolbar-separator {
-    background: var(--color-border-default);
-    inline-size: var(--border-width-thin);
-    block-size: var(--control-height-sm);
   }
 </style>

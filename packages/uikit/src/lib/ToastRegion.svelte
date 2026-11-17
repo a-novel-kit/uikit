@@ -55,7 +55,7 @@ The caller manages their lifetime and removes dismissed entries; no automatic ti
 
 <section class="region {className}" aria-label={label} {...rest}>
   {#each toasts as toast (toast.id)}
-    <div class="toast" role={toast.tone === "error" ? "alert" : "status"}>
+    <div class="toast" role={toast.tone === "error" ? "alert" : "status"} data-frost>
       <FeedbackIcon tone={toast.tone ?? "info"} size="sm" />
       <div class="message">
         {#if toast.title}<strong><RenderContent content={toast.title} /></strong>{/if}
@@ -81,16 +81,18 @@ The caller manages their lifetime and removes dismissed entries; no automatic ti
     z-index: var(--layer-toast);
     inset-block-end: var(--space-4);
     inset-inline-end: var(--space-4);
-    inline-size: min(calc(100vi - var(--space-8)), calc(var(--size-base) * var(--multiplier-80)));
+    inline-size: min(calc(100vi - var(--space-8)), calc(var(--size-base) * 80));
     pointer-events: none;
   }
   .toast {
     display: flex;
     align-items: flex-start;
     gap: var(--space-3);
+    -webkit-backdrop-filter: blur(var(--blur-md));
+    backdrop-filter: blur(var(--blur-md));
     box-shadow: var(--shadow-lg);
     border-radius: var(--radius-lg);
-    background: var(--color-surface-island-strong);
+    background: var(--color-surface-glass);
     padding-inline: var(--space-4);
     padding-block: var(--space-2);
     pointer-events: auto;
@@ -138,24 +140,6 @@ The caller manages their lifetime and removes dismissed entries; no automatic ti
   button:focus-visible {
     outline: var(--focus-ring-width) solid var(--color-focus-ring);
     outline-offset: var(--focus-ring-offset);
-  }
-
-  @supports (backdrop-filter: blur(0)) or (-webkit-backdrop-filter: blur(0)) {
-    .toast {
-      -webkit-backdrop-filter: blur(var(--blur-md));
-      backdrop-filter: blur(var(--blur-md));
-      background: var(--color-surface-glass);
-    }
-
-    /* Under a modal dialog's blurred backdrop, its own blur sits unseen: it drops once the backdrop has faded in and
-       returns at once, as a card's does. One inside a dialog keeps it. */
-    :global(:root:has(dialog.dialog:modal)) .toast:not(:global(dialog *)) {
-      -webkit-backdrop-filter: none;
-      backdrop-filter: none;
-      transition:
-        backdrop-filter 0s var(--duration-normal),
-        -webkit-backdrop-filter 0s var(--duration-normal);
-    }
   }
 
   @media (forced-colors: active) {

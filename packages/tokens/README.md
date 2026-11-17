@@ -8,47 +8,35 @@ import "@a-novel-kit/uikit-tokens/tokens.css";
 
 ## Scale model
 
-A small set of base values controls each foundation. Public tokens derive from those bases through
-shared numeric multipliers, so a global density or shape adjustment stays local to one declaration.
+A small set of base values controls each foundation. Public tokens multiply those bases, so a global
+density or shape adjustment stays local to one declaration.
 
 ```css
---space-base: 0.25rem;
---space-4: calc(var(--space-base) * var(--multiplier-4));
+--space-base: 0.1875rem;
+--space-4: calc(var(--space-base) * 4);
 
---radius-base: 0.25rem;
---radius-md: calc(var(--radius-base) * var(--multiplier-2));
+--radius-base: 0.1875rem;
+--radius-md: calc(var(--radius-base) * 2);
 ```
 
-Components consume public tokens such as `--space-4` and `--radius-md`. Base and multiplier tokens
-define the scale itself.
+Components consume public tokens such as `--space-4` and `--radius-md`. Base tokens define the scale
+itself.
 
 ## Color
 
-Colors are authored from one OKLCH anchor. The generated stylesheet keeps primitives in `oklch()`,
-relative color syntax, and CSS math. Semantic transparency and blending use `color-mix()`. The browser
-maps each device-independent color to the display gamut at paint time under CSS Color 4.
+Colors are authored from one OKLCH anchor in `scripts/generate-colors.mjs`, which writes every
+primitive to `colors.css` as a literal `oklch()` color. Semantic transparency and blending use
+`color-mix()`. The browser maps each device-independent color to the display gamut at paint time under
+CSS Color 4.
 
 Electric blue at `232deg` anchors the palette. Its `52deg` complement is biased by `-10deg` to an
-opposition center at `42deg`, then split by `±26deg`. CSS `calc()` derives pressure at `16deg` and signal
-at `68deg`. Going around the hue circle, brand to pressure spans `144deg`, pressure to signal `52deg`,
+opposition center at `42deg`, then split by `±26deg`. The generator derives pressure at `16deg` and
+signal at `68deg`. Going around the hue circle, brand to pressure spans `144deg`, pressure to signal `52deg`,
 and signal back to brand `164deg`.
 
-The generator samples the Display P3 gamut to calculate peak and per-step chroma coefficients for each
-derived hue. The CSS output stores the brand peak once. Relative OKLCH derives pressure and signal from
-it through generated lightness and chroma factors. Both keep the approved vividness with no authored
-RGB value.
-
-```css
---color-hue-pressure: calc(
-  var(--color-hue-brand) + var(--color-harmony-half-turn) + var(--color-harmony-opposition-bias) -
-    var(--color-harmony-opposition-spread) / var(--multiplier-2)
-);
-
---base-pressure: oklch(
-  from var(--base-brand) calc(l * var(--color-peak-lightness-pressure-factor))
-    calc(c * var(--color-peak-chroma-pressure-factor)) var(--color-hue-pressure)
-);
-```
+The generator samples the Display P3 gamut to find each hue's peak and per-step chroma, so every step
+keeps the approved vividness with no authored RGB value. A runtime override of a hue would leave those
+gamut-relative steps behind, so the palette changes only through the generator.
 
 The chromatic ramps end at each hue's Display P3 gamut cusp: brand `L 0.718 / C 0.193`, pressure
 `L 0.656 / C 0.296`, and signal `L 0.797 / C 0.201`. Chromatic lightness and relative chroma follow a
@@ -57,8 +45,8 @@ brand hue. The canvas shares that subtle grey-blue tint with independent lightne
 early steps near black, then accelerate into the vivid and readable half of each scale.
 
 Semantic surfaces and borders mix the cusp-derived peaks into the neutral field. Their strengths derive
-from `--color-mix-base: 6.25%`: surfaces use two units and borders use eight, nine, or ten units.
-Graphic grid, trace, glow, and gradient tokens use the same palette and mix scale. Effects carry no
+from `--color-mix-base: 6.25%`: surfaces use two units and the error border ten.
+Graphic, glow, and gradient tokens use the same palette and mix scale. Effects carry no
 component meaning and play no part in foreground contrast.
 
 Components use semantic aliases such as `--color-action-primary` and `--color-feedback-error-text`.
@@ -70,7 +58,7 @@ color with a label or icon. Primitive palette steps remain available for design-
 
 `scripts/generate-colors.mjs` is the authoring source. Run
 `pnpm --filter @a-novel-kit/uikit-tokens generate:colors` after changing its compact bases. It writes
-the formula-based `colors.css` and an OKLCH `palette` export for tooling. Color.js samples gamut only
+the literal `colors.css` and an OKLCH `palette` export for tooling. Color.js samples gamut only
 during development. The private Storybook manager converts colors to the sRGB strings its theme parser
 requires. That conversion stays outside the token and component APIs.
 

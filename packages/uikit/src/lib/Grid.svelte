@@ -32,13 +32,13 @@ Lays out equal-width items in an intrinsic grid that wraps when its minimum item
   }
 
   .min-sm {
-    --grid-min: calc(var(--font-size-base) * var(--multiplier-12));
+    --grid-min: calc(var(--font-size-base) * 12);
   }
   .min-md {
     --grid-min: var(--layout-sidebar);
   }
   .min-lg {
-    --grid-min: calc(var(--font-size-base) * var(--multiplier-20));
+    --grid-min: calc(var(--font-size-base) * 20);
   }
   .gap-0 {
     gap: var(--space-0);

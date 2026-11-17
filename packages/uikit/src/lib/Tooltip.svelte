@@ -149,12 +149,14 @@ Spread all trigger attributes onto that element; an open controller owns visibil
 <style>
   :global(.a-novel-tooltip) {
     z-index: var(--layer-dropdown);
+    -webkit-backdrop-filter: blur(var(--blur-md));
+    backdrop-filter: blur(var(--blur-md));
     box-shadow: var(--shadow-md);
     border: 0;
     border-radius: var(--radius-md);
-    background: var(--color-surface-island-strong);
+    background: var(--color-surface-glass);
     padding: var(--space-2) var(--space-3);
-    max-inline-size: calc(var(--size-base) * var(--multiplier-64));
+    max-inline-size: calc(var(--size-base) * 64);
     pointer-events: none;
     color: var(--color-text-primary);
     font-size: var(--font-size-xs);
@@ -204,14 +206,6 @@ Spread all trigger attributes onto that element; an open controller owns visibil
   :global(.a-novel-tooltip.left::before) {
     inset-block-start: calc(50% - var(--size-1));
     inset-inline-end: calc(var(--size-1) * -1);
-  }
-
-  @supports (backdrop-filter: blur(0)) or (-webkit-backdrop-filter: blur(0)) {
-    :global(.a-novel-tooltip) {
-      -webkit-backdrop-filter: blur(var(--blur-md));
-      backdrop-filter: blur(var(--blur-md));
-      background: var(--color-surface-glass);
-    }
   }
 
   @media (forced-colors: active) {

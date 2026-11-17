@@ -221,7 +221,7 @@
 
   .state-matrix td {
     padding: 0;
-    min-inline-size: calc(var(--control-height-lg) * var(--multiplier-3));
+    min-inline-size: calc(var(--control-height-lg) * 3);
   }
 
   .state-matrix :global(.button) {
@@ -240,7 +240,7 @@
     }
 
     .state-matrix td {
-      min-inline-size: calc(var(--control-height-md) * var(--multiplier-2));
+      min-inline-size: calc(var(--control-height-md) * 2);
     }
   }
 </style>

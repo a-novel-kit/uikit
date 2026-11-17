@@ -43,7 +43,7 @@ Errors use an alert live region; other tones use status. Override `role` for sta
   .alert {
     --alert-direction: to right;
     /* Slimmer than a spacing step, in proportion with the compact box. */
-    --alert-accent-width: calc(var(--border-width-base) * var(--multiplier-3));
+    --alert-accent-width: calc(var(--border-width-base) * 3);
 
     display: flex;
     align-items: center;
