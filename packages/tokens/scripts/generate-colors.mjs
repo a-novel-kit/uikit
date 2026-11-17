@@ -142,7 +142,7 @@ assertContrast("Action", actionContrast);
 
 // ---- Outputs ----
 
-/** Expresses a family's cusp relative to the brand cusp, which the CSS stores once. */
+/** Expresses a family's cusp relative to the brand cusp, for the tooling that reads `palette.js`. */
 function peakRatio(family) {
   return {
     chroma: round(familyCusps[family].chroma / familyCusps.brand.chroma, 8),

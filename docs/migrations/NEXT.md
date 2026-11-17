@@ -11,13 +11,13 @@ on a removed import or prop, and a removed token resolves to nothing.
 
 ## Replace the removed components
 
-| Removed                                                                          | Use instead                                                                                                                        |
-| -------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `Toolbar`, `ToolbarGroup`, `ToolbarButton`, `ToolbarToggleButton`, `ToolbarLink` | `ButtonGroup` with `Button` and `IconButton`                                                                                       |
-| `ToggleButton`, `ToggleGroup`                                                    | `Button` or `IconButton` with `aria-pressed`, inside a `ButtonGroup`, its state in a `createPressedController` you read and toggle |
-| `Popover`                                                                        | `Dialog`, or a `Disclosure` for supporting content in the page's flow                                                              |
-| `Accordion`, `AccordionItem`                                                     | `Disclosure`s sharing one `name`, which keeps one open at a time as native `details` do                                            |
-| `Link variant="quiet"`                                                           | `Button variant="text" href`                                                                                                       |
+| Removed                                                                          | Use instead                                                                                                                                                     |
+| -------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Toolbar`, `ToolbarGroup`, `ToolbarButton`, `ToolbarToggleButton`, `ToolbarLink` | `ButtonGroup` with `Button` and `IconButton`; every control keeps its own tab stop, with no arrow keys, and `label` names the group                             |
+| `ToggleButton`, `ToggleGroup`                                                    | `Button` or `IconButton` with `aria-pressed`, inside a `ButtonGroup` named with `label`, its state in a `createPressedController` you read and toggle           |
+| `Popover`                                                                        | `Dialog modal={false}`, which leaves the page usable as the popover did, or a `Disclosure` for supporting content in the page's flow                            |
+| `Accordion`, `AccordionItem`                                                     | `Disclosure`s sharing one `name`: where the browser supports a `details` `name`, one stays open at a time; elsewhere each opens on its own, as with `Accordion` |
+| `Link variant="quiet"`                                                           | `Button variant="text" href`                                                                                                                                    |
 
 ```diff
 -<ToggleButton controller={snap} variant="ghost">Snap</ToggleButton>
@@ -70,7 +70,6 @@ pnpm remove @a-novel-kit/uikit-icons
 
 - uikit targets [Baseline widely available](https://web.dev/baseline). Its frosted surfaces no longer keep an opaque
   fallback for a browser without `backdrop-filter`, which no browser in that baseline is.
-- A frosted page surface marks itself with `data-frost`, and `Dialog` drops every such blur under a modal dialog. An
-  app's own frosted surface takes the same attribute instead of copying the rule.
 - `TagInput` words its tag count through i18next plural forms (`tagInput.count_zero`, `_one`, `_other`). An app that
-  overrode `tagInput.none` or `tagInput.one` overrides those keys instead.
+  overrode `tagInput.none`, `tagInput.one` or `tagInput.count` overrides those three keys instead: with a numeric count,
+  i18next reads the plural forms before the plain key.

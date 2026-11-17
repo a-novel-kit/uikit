@@ -232,6 +232,7 @@ child with `autofocus` takes focus instead. Opening and closing fade the dialog 
     outline: none;
   }
   .dialog::backdrop {
+    -webkit-backdrop-filter: blur(var(--blur-sm));
     backdrop-filter: blur(var(--blur-sm));
     transition:
       opacity var(--duration-normal) var(--easing-standard),

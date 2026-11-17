@@ -17,8 +17,8 @@ Disclosure reveals content in the current flow. Dialog and Tooltip render above 
 
 The summary accepts text or an inline snippet, including an icon or badge. Keep interactive controls
 in the revealed content so the summary remains one clear toggle target. Give several disclosures the
-same `name` to keep one open at a time, as native `details` elements do; each keeps its own
-controller, which follows the browser's grouping.
+same `name` to keep one open at a time, as native `details` elements do, where the browser supports it; elsewhere
+each opens on its own. Each keeps its own controller, which follows the browser's grouping.
 
 <ArgTypes of={Disclosure} />
 
