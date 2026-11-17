@@ -32,7 +32,10 @@ edges, so a `StickyBar` stays clear of them.
     header: Snippet;
     /** A notice that stays in view while the page scrolls, such as a `DowntimeBanner`. */
     banner?: Snippet;
-    /** The page, inside the app's `main` landmark. */
+    /**
+     * The page, as the app's `main` landmark. It fills the height the header and banner leave, so on a short page the
+     * banner still sits at the screen's foot.
+     */
     children: Snippet;
   }
 </script>
@@ -54,7 +57,7 @@ edges, so a `StickyBar` stays clear of them.
       {#if banner}
         <div class="banner" bind:offsetHeight={bannerBlockSize}>{@render banner()}</div>
       {/if}
-      {@render children()}
+      <div class="page">{@render children()}</div>
     </div>
   </div>
 </div>
@@ -112,6 +115,13 @@ edges, so a `StickyBar` stays clear of them.
 
   .header {
     display: none;
+  }
+
+  /* The page takes the height the header and banner leave, and its landmark fills it. */
+  .page {
+    display: grid;
+    flex: 1;
+    min-inline-size: 0;
   }
 
   .banner {

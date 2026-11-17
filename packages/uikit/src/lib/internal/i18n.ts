@@ -1,3 +1,5 @@
+// uikit's translator for its built-in text. Most of this module is private, but `useMessages`, `Messages` and
+// `MessageKey` are public: the package root exports them so an app reads uikit's copy, such as its access states' titles.
 import en from "../i18n/locales/en/uikit.json";
 import fr from "../i18n/locales/fr/uikit.json";
 

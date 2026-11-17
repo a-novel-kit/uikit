@@ -91,10 +91,16 @@ stacked below 35rem, side by side at their natural width and aligned to the end 
   ```
 
 - **Error screen.** Render `AccessForbiddenState`, `AccessUnavailableState`, `PageNotFoundState` or `PageErrorState` by
-  status, each with `headingLevel={1}`, and delete the `access:` messages from both catalogs: uikit ships them in English
-  and French. Override a text with `title`, `description` or `actions`, or app-wide in the app's own `uikit` messages.
-  `useMessages()` reads uikit's copy where a page title needs it.
-- **Shell.** Wrap the shell in `ShellLayout` with `collapsed`, and snippets `rail`, `header`, `banner` and `children`; it
+  status, each with `headingLevel={1}`. uikit ships their copy in English and French, so delete from both catalogs only
+  the keys it ships: `access.pending`, `access.forbidden`, `access.unavailable`, `access.notFound`, `access.error`,
+  `access.home` and `access.retry`. Keep `access.downtime.title`, which each platform's `errorPageTitle` reads, and
+  Account's `access.authorizationRequest`. Override a text with `title`, `description` or `actions`, or app-wide in the
+  app's own `uikit` messages.
+- **Page titles.** `useMessages()` reads uikit's copy where a page title needs it. Bind its translator under a name the
+  i18next extractor does not match, such as `const uikitText = useMessages().t`: nodelib's preset extracts every `t(…)`
+  and `*.t(…)` call into the app's catalog, so a call named `t` would add uikit's keys back and fail `pnpm lint`.
+- **Shell.** Wrap the shell in `ShellLayout` with `collapsed`, and snippets `rail`, `header`, `banner` and `children` (the
+  `main` landmark, which no longer needs `flex: 1`: the layout fills the page area's height); it
   owns the rail grid and collapse, the one-control mobile header, the measured banner, `--shell-sticky-top` and
   `--shell-sticky-bottom`. The app keeps its landmarks, links, labels, account widget and drawer, and deletes the
   geometry rules of `screen.svelte`.

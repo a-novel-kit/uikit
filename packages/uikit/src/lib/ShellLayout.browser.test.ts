@@ -9,7 +9,7 @@ import "@a-novel-kit/uikit-tokens/tokens.css";
 import { render } from "@testing-library/svelte";
 
 /** Renders the shell at a viewport width, scrolled so the page's bars have left their place in the flow. */
-async function renderScrolled(width: number, props: { collapsed?: boolean; banner?: boolean } = {}) {
+async function renderScrolled(width: number, props: { collapsed?: boolean; banner?: boolean; short?: boolean } = {}) {
   await page.viewport(width, 800);
   const view = render(Fixture, props);
   window.scrollTo({ top: window.innerHeight, behavior: "instant" });
@@ -57,5 +57,12 @@ describe("ShellLayout", () => {
     expect(top.top).toBeCloseTo(header.bottom);
     expect(notice!.bottom).toBeCloseTo(window.innerHeight);
     expect(bottom.bottom).toBeCloseTo(notice!.top);
+  });
+
+  it("keeps the banner at the screen's foot under a short page on a narrow screen", async () => {
+    const { notice, main } = await renderScrolled(390, { banner: true, short: true });
+
+    expect(notice!.bottom).toBeCloseTo(window.innerHeight);
+    expect(main.bottom).toBeCloseTo(notice!.top);
   });
 });
