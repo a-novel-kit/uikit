@@ -27,7 +27,7 @@ Controller methods may reject a toggle; the rendered disclosure follows the acce
 </script>
 
 <script lang="ts">
-  import RenderContent from "./Content.svelte";
+  import RenderContent from "./internal/RenderContent.svelte";
 
   import { ChevronDown as ChevronDownIcon } from "@lucide/svelte";
 

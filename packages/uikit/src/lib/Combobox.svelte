@@ -60,7 +60,7 @@ The hidden named input submits the selected value. The caller validates required
   import FieldButton from "./internal/FieldButton.svelte";
   import FloatingSurface from "./internal/FloatingSurface.svelte";
   import { useMessages } from "./internal/i18n";
-  import { findEnabledBoundary, findNextEnabledIndex, matchesSearch, resolveInvalidState } from "./selection";
+  import { findEnabledBoundary, findNextEnabledIndex, matchesSearch, resolveInvalidState } from "./internal/selection";
 
   import { tick } from "svelte";
 

@@ -28,7 +28,7 @@ Compose ToolbarButton, ToolbarToggleButton, and ToolbarLink inside it.
 </script>
 
 <script lang="ts">
-  import { closestCompositeItem, findCompositeTarget, getEnabledCompositeItems } from "./focus";
+  import { closestCompositeItem, findCompositeTarget, getEnabledCompositeItems } from "./internal/focus";
 
   import { onMount } from "svelte";
 

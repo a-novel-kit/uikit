@@ -1,6 +1,7 @@
 /// <reference types="vite/client" />
 import RenderedOptionsFixture from "../../test/RenderedOptionsFixture.svelte";
 import { offsetFromMiddle } from "../../test/geometry";
+import { anchorWidthOnShow } from "../../test/style";
 import Select from "./Select.svelte";
 import { type SelectController, createSelectController } from "./controllers.svelte";
 
@@ -29,14 +30,6 @@ const openPaths = [
   },
   { path: "its controller", open: (_: HTMLElement, controller: SelectController<string>) => controller.open() },
 ];
-
-/** Resolves with the anchor width the listbox carries as it shows, before its first paint. */
-const anchorWidthOnShow = () =>
-  new Promise<string>((resolve) => {
-    const read = (event: Event) =>
-      resolve((event.target as HTMLElement).style.getPropertyValue("--a-novel-select-anchor-width"));
-    document.addEventListener("beforetoggle", read, { capture: true, once: true });
-  });
 
 it("sizes an initially open selection and respects rejected selection and dismissal", async () => {
   const controller: SelectController<string> = {
@@ -105,7 +98,7 @@ it.each(openPaths)("shows the listbox at its trigger's width when opened by $pat
   const controller = createSelectController<string>();
   render(Select, { controller, "aria-label": "Visibility", options });
   const trigger = page.getByRole("combobox").element() as HTMLElement;
-  const shown = anchorWidthOnShow();
+  const shown = anchorWidthOnShow("--a-novel-select-anchor-width");
 
   await open(trigger, controller);
 

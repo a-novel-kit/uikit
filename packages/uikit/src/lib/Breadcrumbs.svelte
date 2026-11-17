@@ -30,7 +30,7 @@ Renders an ordered navigation trail; the final item is always the current, unlin
 </script>
 
 <script lang="ts">
-  import RenderContent from "./Content.svelte";
+  import RenderContent from "./internal/RenderContent.svelte";
   import { useMessages } from "./internal/i18n";
 
   const { t } = useMessages();

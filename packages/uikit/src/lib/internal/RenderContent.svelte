@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Content } from "./content";
+  import type { Content } from "../content";
 
   let { content }: { content: Content } = $props();
 </script>

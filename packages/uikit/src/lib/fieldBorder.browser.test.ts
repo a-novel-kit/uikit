@@ -1,4 +1,5 @@
 /// <reference types="vite/client" />
+import { resolveColor, settledStyle } from "../../test/style";
 import Card from "./Card.svelte";
 import ChipGroup from "./ChipGroup.svelte";
 import Combobox from "./Combobox.svelte";
@@ -166,25 +167,11 @@ function inputOn({ mount }: Surface) {
   return outline(render(Input, { target: mount(), props: { "aria-label": "Field" } }).getByLabelText("Field"));
 }
 
-function resolveColor(value: string) {
-  const sample = document.body.appendChild(document.createElement("span"));
-  sample.style.backgroundColor = value;
-  const color = getComputedStyle(sample).backgroundColor;
-  sample.remove();
-  return color;
-}
-
 /** Returns the box that outlines a field: its control, or the nearest of the control's ancestors with a border. */
 function outline(control: HTMLElement) {
   let box: HTMLElement | null = control;
   while (box && getComputedStyle(box).borderTopStyle === "none") box = box.parentElement;
   return box!;
-}
-
-/** Waits for the box's transitions, then reads the color of its top border. */
-async function settledBorder(box: HTMLElement) {
-  await Promise.all(box.getAnimations().map((animation) => animation.finished));
-  return getComputedStyle(box).borderTopColor;
 }
 
 // A wide screen keeps a searchable ChipGroup's well in the page.
@@ -195,14 +182,14 @@ describe("a field's border", () => {
   it.each(fields)("rings a %s outside an island as a ghost card", async (_, renderField) => {
     const control = renderField(document.body, {});
 
-    expect(await settledBorder(outline(control))).toBe(resolveColor("var(--color-border-item)"));
+    expect((await settledStyle(outline(control))).borderTopColor).toBe(resolveColor("var(--color-border-item)"));
   });
 
   it.each(fields)("drops the ring of a %s in a card", async (_, renderField) => {
     const card = render(Card, { props: { "data-testid": "card" } }).getByTestId("card");
     const control = renderField(card, {});
 
-    expect(await settledBorder(outline(control))).toBe(resolveColor("transparent"));
+    expect((await settledStyle(outline(control))).borderTopColor).toBe(resolveColor("transparent"));
   });
 
   it.each(fields)("outlines a %s the keyboard focuses in the focus color", async (_, renderField) => {
@@ -211,26 +198,30 @@ describe("a field's border", () => {
     await userEvent.tab();
 
     expect(document.activeElement).toBe(control);
-    expect(await settledBorder(outline(control))).toBe(resolveColor("var(--color-control-border-focus)"));
+    expect((await settledStyle(outline(control))).borderTopColor).toBe(
+      resolveColor("var(--color-control-border-focus)")
+    );
   });
 
   it.each(fields)("outlines an invalid %s in the error color", async (_, renderField) => {
     const control = renderField(document.body, { invalid: true });
 
-    expect(await settledBorder(outline(control))).toBe(resolveColor("var(--color-feedback-error-border)"));
+    expect((await settledStyle(outline(control))).borderTopColor).toBe(
+      resolveColor("var(--color-feedback-error-border)")
+    );
   });
 
   it.each(fields)("keeps the ring of a disabled %s, so it still reads as a field", async (_, renderField) => {
     const control = renderField(document.body, { disabled: true });
 
-    expect(await settledBorder(outline(control))).toBe(resolveColor("var(--color-border-item)"));
+    expect((await settledStyle(outline(control))).borderTopColor).toBe(resolveColor("var(--color-border-item)"));
   });
 
   it.each(outsideIslands)("rings a field on $name", async (surface) => {
-    expect(await settledBorder(inputOn(surface))).toBe(resolveColor("var(--color-border-item)"));
+    expect((await settledStyle(inputOn(surface))).borderTopColor).toBe(resolveColor("var(--color-border-item)"));
   });
 
   it.each(islands)("drops the ring of a field in $name", async (surface) => {
-    expect(await settledBorder(inputOn(surface))).toBe(resolveColor("transparent"));
+    expect((await settledStyle(inputOn(surface))).borderTopColor).toBe(resolveColor("transparent"));
   });
 });

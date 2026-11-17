@@ -48,8 +48,8 @@ Spread all trigger attributes onto that element; an open controller owns visibil
 </script>
 
 <script lang="ts">
-  import RenderContent from "./Content.svelte";
   import FloatingSurface from "./internal/FloatingSurface.svelte";
+  import RenderContent from "./internal/RenderContent.svelte";
 
   import { onDestroy, untrack } from "svelte";
 

@@ -33,7 +33,7 @@
     "generate:colors": "node scripts/generate-colors.mjs"
   },
   "devDependencies": {
-    "colorjs.io": "^0.7.1"
+    "colorjs.io": "catalog:"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"

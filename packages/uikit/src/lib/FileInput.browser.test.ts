@@ -1,4 +1,5 @@
 /// <reference types="vite/client" />
+import { resolveColor, settledStyle } from "../../test/style";
 import FileInput from "./FileInput.svelte";
 
 import { describe, expect, it, onTestFinished } from "vitest";
@@ -85,12 +86,7 @@ describe("FileInput", () => {
     form.requestSubmit();
 
     const surface = input.element().parentElement!;
-    await Promise.all(surface.getAnimations().map((animation) => animation.finished));
-    const probe = document.body.appendChild(document.createElement("span"));
-    probe.style.backgroundColor = "var(--color-feedback-error-border)";
-    const error = getComputedStyle(probe).backgroundColor;
-    probe.remove();
-    expect(getComputedStyle(surface).borderTopColor).toBe(error);
+    expect((await settledStyle(surface)).borderTopColor).toBe(resolveColor("var(--color-feedback-error-border)"));
   });
 
   it("shows the name of the chosen file", async () => {

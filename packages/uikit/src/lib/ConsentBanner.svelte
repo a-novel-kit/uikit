@@ -36,7 +36,7 @@ leaves the page inert, so the topmost one open shows the banner too, where it st
 
 <script lang="ts">
   import Button from "./Button.svelte";
-  import ContentView from "./Content.svelte";
+  import RenderContent from "./internal/RenderContent.svelte";
   import { useMessages } from "./internal/i18n";
   import { hold, overModal } from "./internal/overModal.svelte";
 
@@ -56,7 +56,7 @@ leaves the page inert, so the topmost one open shows the banner too, where it st
 {#snippet banner(id: string)}
   <section class="banner {className}" aria-labelledby={id} {...rest}>
     <div class="text">
-      <strong {id}><ContentView content={title} /></strong>
+      <strong {id}><RenderContent content={title} /></strong>
       <p>{@render children()}</p>
     </div>
     <div class="answers">

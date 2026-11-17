@@ -26,7 +26,7 @@ Provide `label` or an accessible name; native input attributes are forwarded to 
 </script>
 
 <script lang="ts">
-  import RenderContent from "./Content.svelte";
+  import RenderContent from "./internal/RenderContent.svelte";
 
   let {
     label,

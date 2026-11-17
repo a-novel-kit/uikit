@@ -17,23 +17,23 @@
     "@a-novel-kit/uikit-icons": "workspace:*",
     "@a-novel-kit/uikit-storybook": "workspace:*",
     "@a-novel-kit/uikit-tokens": "workspace:*",
-    "@lucide/svelte": "^1.31.0"
+    "@lucide/svelte": "catalog:"
   },
   "devDependencies": {
-    "@a-novel-kit/nodelib-i18n": "^2.0.0",
+    "@a-novel-kit/nodelib-i18n": "catalog:",
     "@storybook/addon-a11y": "catalog:",
     "@storybook/addon-docs": "catalog:",
     "@storybook/addon-svelte-csf": "catalog:",
     "@storybook/addon-vitest": "catalog:",
     "@storybook/svelte-vite": "catalog:",
-    "@sveltejs/vite-plugin-svelte": "^7.0.0",
-    "@types/node": "^26.0.0",
-    "i18next": "^27.0.0",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8",
+    "@sveltejs/vite-plugin-svelte": "catalog:",
+    "@types/node": "catalog:",
+    "i18next": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
     "storybook": "catalog:",
-    "svelte": "^5.55.8",
+    "svelte": "catalog:",
     "svelte-check": "catalog:",
-    "vite": "^8.0.0"
+    "vite": "catalog:"
   }
 }

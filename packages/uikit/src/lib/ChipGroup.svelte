@@ -86,11 +86,11 @@ swaps for the field once the page hydrates.
 <script lang="ts">
   import Badge from "./Badge.svelte";
   import Button from "./Button.svelte";
-  import RenderContent from "./Content.svelte";
   import Dialog from "./Dialog.svelte";
   import { createChipGroupController } from "./controllers.svelte";
+  import RenderContent from "./internal/RenderContent.svelte";
   import { useMessages } from "./internal/i18n";
-  import { matchesSearch } from "./selection";
+  import { matchesSearch } from "./internal/selection";
 
   import { untrack } from "svelte";
 

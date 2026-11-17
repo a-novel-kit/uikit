@@ -34,7 +34,7 @@ Native attributes and events target the input; `class` styles the surrounding su
   import { createValueController } from "./controllers.svelte";
   import FieldButton from "./internal/FieldButton.svelte";
   import { useMessages } from "./internal/i18n";
-  import { resolveInvalidState } from "./selection";
+  import { resolveInvalidState } from "./internal/selection";
 
   import { untrack } from "svelte";
   import type { Attachment } from "svelte/attachments";

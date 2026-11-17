@@ -1,6 +1,7 @@
 /// <reference types="vite/client" />
 import RenderedOptionsFixture from "../../test/RenderedOptionsFixture.svelte";
 import { offsetFromMiddle } from "../../test/geometry";
+import { anchorWidthOnShow } from "../../test/style";
 import Combobox from "./Combobox.svelte";
 import { type ComboboxController, createComboboxController } from "./controllers.svelte";
 
@@ -29,14 +30,6 @@ const openPaths = [
   { path: "typing", prepare: focusClosed, open: () => userEvent.keyboard("f") },
   { path: "its controller", open: (_: HTMLElement, controller: ComboboxController<string>) => controller.open() },
 ];
-
-/** Resolves with the anchor width the listbox carries as it shows, before its first paint. */
-const anchorWidthOnShow = () =>
-  new Promise<string>((resolve) => {
-    const read = (event: Event) =>
-      resolve((event.target as HTMLElement).style.getPropertyValue("--a-novel-combobox-anchor-width"));
-    document.addEventListener("beforetoggle", read, { capture: true, once: true });
-  });
 
 describe("Combobox browser interactions", () => {
   it("keeps its error look while disabled, as Input does", () => {
@@ -107,7 +100,7 @@ describe("Combobox browser interactions", () => {
     await prepare?.(input);
     // Resizes the input after any earlier opening, so only a fresh measurement passes.
     container.style.inlineSize = "20rem";
-    const shown = anchorWidthOnShow();
+    const shown = anchorWidthOnShow("--a-novel-combobox-anchor-width");
 
     await open(input, controller);
 

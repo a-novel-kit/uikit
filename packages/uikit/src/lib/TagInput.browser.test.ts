@@ -1,4 +1,5 @@
 /// <reference types="vite/client" />
+import { resolveColor } from "../../test/style";
 import TagInput from "./TagInput.svelte";
 import { createTagInputController } from "./controllers.svelte";
 
@@ -8,14 +9,6 @@ import "@a-novel-kit/uikit-fonts/fonts.css";
 import "@a-novel-kit/uikit-tokens/tokens.css";
 
 import { render } from "@testing-library/svelte";
-
-function resolveColor(value: string) {
-  const sample = document.body.appendChild(document.createElement("span"));
-  sample.style.backgroundColor = value;
-  const color = getComputedStyle(sample).backgroundColor;
-  sample.remove();
-  return color;
-}
 
 function resolveLength(value: string) {
   const sample = document.body.appendChild(document.createElement("div"));

@@ -1,4 +1,5 @@
 /// <reference types="vite/client" />
+import { resolveColor, settledStyle } from "../../test/style";
 import Button from "./Button.svelte";
 import Link from "./Link.svelte";
 
@@ -12,18 +13,8 @@ import "@a-novel-kit/uikit-tokens/tokens.css";
 
 import { render } from "@testing-library/svelte";
 
-function resolveColor(value: string, parent: HTMLElement = document.body) {
-  const sample = document.createElement("span");
-  sample.style.backgroundColor = value;
-  parent.append(sample);
-  const color = getComputedStyle(sample).backgroundColor;
-  sample.remove();
-  return color;
-}
-
 async function expectFeedback(element: HTMLElement, opacity: string) {
-  await Promise.all(element.getAnimations().map((animation) => animation.finished));
-  expect(getComputedStyle(element).backgroundColor).toBe(
+  expect((await settledStyle(element)).backgroundColor).toBe(
     resolveColor(`color-mix(in oklab, currentColor var(${opacity}), transparent)`, element)
   );
 }
