@@ -66,8 +66,9 @@ palette step or a `--base-*` color instead. Every color renders as before.
 Pagination, the ActionMenu trigger and a toast's dismiss button are now `Button`s, so they follow its rules
 everywhere. Pagination's controls are small neutral ghost buttons: the page numbers turn bold, and the current page
 reads as the navigation's current item, with no border or glow. The ActionMenu trigger is a neutral outline button
-with a labeled button's radius and type size, and no longer glows while its menu is open. A toast's dismiss is a small
-text button. Their props are unchanged; expect the screenshots that show them to change.
+with a labeled button's radius and type size; while its menu is open it keeps the outline button's hover look instead
+of a glow. A toast's dismiss is a small text button. Their props are unchanged; expect the screenshots that show them
+to change.
 
 ## Expect description lists to follow their own width
 
