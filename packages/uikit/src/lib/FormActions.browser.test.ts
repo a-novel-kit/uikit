@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
 import Fixture from "../../test/FormActionsFixture.svelte";
 
-import { describe, expect, it, onTestFinished, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { page } from "vitest/browser";
 
 import "@a-novel-kit/uikit-tokens/tokens.css";
@@ -26,28 +26,6 @@ describe("FormActions", () => {
     expect(alert.getBoundingClientRect().top - inputSurface.getBoundingClientRect().bottom).toBe(24);
     expect(submit.getBoundingClientRect().top - alert.getBoundingClientRect().bottom).toBe(12);
     expect(form.scrollWidth).toBeLessThanOrEqual(form.clientWidth);
-  });
-
-  it("stacks its actions where the form has less than 35rem, even on a wide screen", async () => {
-    await page.viewport(1280, 800);
-    const target = document.body.appendChild(document.createElement("div"));
-    target.style.inlineSize = "26rem";
-    onTestFinished(() => target.remove());
-    const { getByRole } = render(Fixture, { target });
-    const submit = getByRole("button", { name: "Save changes" });
-
-    expect(submit.getBoundingClientRect().width).toBe(submit.closest("form")!.getBoundingClientRect().width);
-  });
-
-  it("keeps its feedback at its own height in a taller column", async () => {
-    await page.viewport(1280, 800);
-    const natural = render(Fixture, { error: true });
-    const height = natural.getByRole("alert").getBoundingClientRect().height;
-    natural.unmount();
-
-    const { getByRole } = render(Fixture, { error: true, blockSize: "600px" });
-
-    expect(getByRole("alert").getBoundingClientRect().height).toBe(height);
   });
 
   it("preserves native submission and adds no leading space to an action-only form", async () => {

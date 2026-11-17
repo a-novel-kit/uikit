@@ -7,10 +7,8 @@ package, and states its browser baseline: Baseline widely available.
 
 **Required only if you import a removed component, pass `variant` to `Link`, read a removed token, or install
 `@a-novel-kit/uikit-icons`.** None of the A-Novel platforms does, so they take this release as is: type checking fails
-on a removed import or prop, and a removed token resolves to nothing. Layout now follows the width a component gets,
-not the screen's: form and dialog actions stack full width in any container under 35rem, and description lists fall to
-one column under 48rem, so a small dialog's actions stack on a desktop, and so may the actions of a form capped
-narrower, such as Account's short-code form (68ch). Screenshots that show those, or `Pagination` (Account's devices
+on a removed import or prop, and a removed token resolves to nothing. A description list now falls to one column
+where it has less than 48rem, whatever the screen's width. Screenshots that show one, or `Pagination` (Account's devices
 page), change.
 
 ## Replace the removed components
@@ -71,13 +69,12 @@ reads as the navigation's current item, with no border or glow. The ActionMenu t
 with a labeled button's radius and type size, and no longer glows while its menu is open. A toast's dismiss is a small
 text button. Their props are unchanged; expect the screenshots that show them to change.
 
-## Expect actions and description lists to follow their own width
+## Expect description lists to follow their own width
 
-`ActionGroup`, behind `FormActions` and every dialog's `actions`, stacks its actions where it has less than 35rem, and
-`DescriptionList` falls to one column where it has less than 48rem, whatever the screen's width. A small dialog's
-actions now stack on a desktop too. Each renders a wrapper `div` that measures its width; `class` and the other
-attributes of `ActionGroup` go on that wrapper, and those of `DescriptionList` stay on the `dl`. Each takes its
-parent's full width.
+`DescriptionList` falls to one column where it has less than 48rem, whatever the screen's width, so a list in a narrow
+card stacks on a desktop too. It renders a wrapper `div` that measures its width and takes its parent's full width;
+`class` and the other attributes stay on the `dl`. Form and dialog actions keep the screen's rule: full width and
+stacked below 35rem, side by side at their natural width and aligned to the end above it.
 
 ## Uninstall `@a-novel-kit/uikit-icons`
 
