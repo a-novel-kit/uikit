@@ -46,6 +46,7 @@ parent's full width. Form submission stays with the caller.
   .form-actions {
     display: grid;
     flex-grow: 1;
+    align-content: start;
     align-self: stretch;
     gap: var(--space-4);
     min-inline-size: 0;

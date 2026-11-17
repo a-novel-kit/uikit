@@ -1,8 +1,7 @@
 <!--
 @component
 Renders a description list in up to `columns` columns, one where it has less than 48rem. It takes its parent's full
-width. Wrap each related `dt`
-and `dd` pair in a `div`.
+width. Wrap each related `dt` and `dd` pair in a `div`.
 -->
 <script lang="ts" module>
   import type { Snippet } from "svelte";

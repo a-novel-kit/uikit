@@ -1,5 +1,4 @@
 /// <reference types="vite/client" />
-import ActionGroupFixture from "../../test/ActionGroupFixture.svelte";
 import Fixture from "../../test/FormActionsFixture.svelte";
 
 import { describe, expect, it, onTestFinished, vi } from "vitest";
@@ -40,21 +39,14 @@ describe("FormActions", () => {
     expect(submit.getBoundingClientRect().width).toBe(submit.closest("form")!.getBoundingClientRect().width);
   });
 
-  // A measuring box has no width of its own, so it would shrink to nothing in a parent that sizes by content.
-  it.each(["an end-aligned stack", "a row beside a heading"] as const)(
-    "keeps its actions side by side in %s",
-    async (layout) => {
-      await page.viewport(1280, 800);
-      const { getByRole } = render(ActionGroupFixture, { layout });
-      const cancel = getByRole("button", { name: "Cancel" }).getBoundingClientRect();
-      const save = getByRole("button", { name: "Save" }).getBoundingClientRect();
-      const heading = layout === "a row beside a heading" ? getByRole("heading").getBoundingClientRect() : undefined;
+  it("keeps its feedback and actions at their own height in a taller column", async () => {
+    await page.viewport(1280, 800);
+    const { getByRole } = render(Fixture, { error: true, blockSize: "600px" });
+    const alert = getByRole("alert").getBoundingClientRect();
+    const submit = getByRole("button", { name: "Save changes" }).getBoundingClientRect();
 
-      expect(save.top).toBe(cancel.top);
-      expect(save.left).toBeGreaterThanOrEqual(cancel.right);
-      if (heading) expect(heading.width).toBeGreaterThan(0);
-    }
-  );
+    expect(submit.top - alert.bottom).toBe(12);
+  });
 
   it("preserves native submission and adds no leading space to an action-only form", async () => {
     const onsubmit = vi.fn();

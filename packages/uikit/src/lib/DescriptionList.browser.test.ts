@@ -23,3 +23,10 @@ it.each([
   const status = getByText("Status").getBoundingClientRect();
   expect(owner.top === status.top).toBe(sideBySide);
 });
+
+it("keeps its two columns in an end-aligned stack", async () => {
+  await page.viewport(1280, 800);
+  const { getByText } = render(Fixture, { endAligned: true });
+
+  expect(getByText("Owner").getBoundingClientRect().top).toBe(getByText("Status").getBoundingClientRect().top);
+});
