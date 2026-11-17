@@ -67,7 +67,7 @@ without scripting.
   {@attach hideOnSubmit}
 >
   {#snippet endAdornment()}
-    <span class="toggle">
+    <span class="toggle" data-well-end>
       <FieldButton
         aria-label={t("passwordInput.show")}
         aria-pressed={controller.state.pressed}
@@ -85,14 +85,6 @@ without scripting.
 </Input>
 
 <style>
-  /* A zero-height margin box keeps the input at its own height: the button overlaps its padding,
-     as far from the inline end as from the block edges of a medium input. */
-  .toggle {
-    display: inline-flex;
-    margin-inline-end: calc(-1 * (var(--space-2) + var(--border-width-thin)));
-    margin-block: calc(var(--control-height-nested) / -2);
-  }
-
   @media (scripting: none) {
     .toggle {
       display: none;

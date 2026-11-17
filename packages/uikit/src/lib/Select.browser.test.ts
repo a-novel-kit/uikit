@@ -1,7 +1,4 @@
 /// <reference types="vite/client" />
-import RenderedOptionsFixture from "../../test/RenderedOptionsFixture.svelte";
-import { offsetFromMiddle } from "../../test/geometry";
-import { anchorWidthOnShow } from "../../test/style";
 import Select from "./Select.svelte";
 import { type SelectController, createSelectController } from "./controllers.svelte";
 
@@ -17,18 +14,6 @@ import { render } from "@testing-library/svelte";
 const options = [
   { value: "private", label: "Private" },
   { value: "public", label: "Public" },
-];
-
-const openPaths = [
-  { path: "a click", open: (trigger: HTMLElement) => userEvent.click(trigger) },
-  {
-    path: "the keyboard",
-    open: (trigger: HTMLElement) => {
-      trigger.focus();
-      return userEvent.keyboard("{ArrowDown}");
-    },
-  },
-  { path: "its controller", open: (_: HTMLElement, controller: SelectController<string>) => controller.open() },
 ];
 
 it("sizes an initially open selection and respects rejected selection and dismissal", async () => {
@@ -71,7 +56,7 @@ it("is there at once when open from its first render, then plays its list out an
 
 it("sets its list against its trigger where the browser leaves it away, and keeps it there on scroll", async () => {
   const unanchored = document.createElement("style");
-  unanchored.textContent = ".a-novel-select-content { position-area: none !important; }";
+  unanchored.textContent = "[role=listbox] { position-area: none !important; }";
   document.head.append(unanchored);
   document.body.style.paddingBlock = "320px 2000px";
 
@@ -92,17 +77,6 @@ it("sets its list against its trigger where the browser leaves it away, and keep
     document.body.style.removeProperty("padding-block");
     scrollTo(0, 0);
   }
-});
-
-it.each(openPaths)("shows the listbox at its trigger's width when opened by $path", async ({ open }) => {
-  const controller = createSelectController<string>();
-  render(Select, { controller, "aria-label": "Visibility", options });
-  const trigger = page.getByRole("combobox").element() as HTMLElement;
-  const shown = anchorWidthOnShow("--a-novel-select-anchor-width");
-
-  await open(trigger, controller);
-
-  expect(await shown).toBe(trigger.getBoundingClientRect().width + "px");
 });
 
 it("closes the listbox when Tab moves focus away", async () => {
@@ -133,13 +107,4 @@ it("stays closed when a tap on its trigger closes the list before the trigger's 
 
   expect(controller.state.open).toBe(false);
   await expect.element(page.getByRole("listbox")).not.toBeInTheDocument();
-});
-
-it("centers a rendered option in its trigger and in each row of its list", async () => {
-  render(RenderedOptionsFixture, { kind: "select" });
-  await expect.poll(() => document.querySelectorAll(".a-novel-select-trigger, [role=option]").length).toBe(3);
-
-  const rows = [...document.querySelectorAll(".a-novel-select-trigger, [role=option]")];
-  for (const row of rows)
-    expect(Math.abs(offsetFromMiddle(row.querySelector(".language-name")!, row))).toBeLessThan(0.5);
 });

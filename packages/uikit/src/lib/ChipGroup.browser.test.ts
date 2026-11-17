@@ -22,7 +22,7 @@ describe("ChipGroup", () => {
     const height = probe.getBoundingClientRect().height;
     probe.remove();
 
-    expect(container.querySelector(".chips")!.getBoundingClientRect().height).toBeCloseTo(height, 0);
+    expect(container.querySelector(".well")!.getBoundingClientRect().height).toBeCloseTo(height, 0);
   });
 
   it("reaches past a short chip's edges to the 24px minimum target", () => {
@@ -76,7 +76,7 @@ describe("ChipGroup", () => {
       props: { legend: "Genres", name: "genres", options, disabled: true, error: "Too many." },
     });
 
-    const well = container.querySelector(".chips")!;
+    const well = container.querySelector(".well")!;
     expect(getComputedStyle(well).backgroundColor).toBe(resolveColor("var(--color-control-surface-invalid)"));
   });
 
@@ -191,7 +191,7 @@ describe("ChipGroup", () => {
     const options = [{ value: "fantasy", label: "Fantasy" }];
     const { container } = render(ChipGroup, { props: { legend: "Genres", name: "genres", options, disabled: true } });
 
-    const well = container.querySelector(".chips")!;
+    const well = container.querySelector(".well")!;
     expect(getComputedStyle(well).backgroundColor).toBe(resolveColor("var(--color-control-surface-disabled)"));
   });
 });

@@ -25,6 +25,9 @@ Styles a native multiline input. Native attributes and events target the textare
 </script>
 
 <script lang="ts">
+  import Well from "./internal/Well.svelte";
+  import { resolveInvalidState } from "./internal/selection";
+
   let {
     controlSize = "md",
     invalid = false,
@@ -32,36 +35,39 @@ Styles a native multiline input. Native attributes and events target the textare
     startAdornment,
     endAdornment,
     class: className = "",
+    "aria-invalid": ariaInvalid,
     ...rest
   }: TextareaProps = $props();
+
+  const isInvalid = $derived(resolveInvalidState(invalid, ariaInvalid));
 </script>
 
-<div class="textarea {controlSize} {invalid ? 'invalid' : ''} {className}">
-  <textarea class="control {autoSize ? 'auto-size' : ''}" aria-invalid={invalid || undefined} {...rest}></textarea>
-  {#if startAdornment || endAdornment}
-    <div class="adornments">
-      {#if startAdornment}
-        <div class="adornment" data-position="start">{@render startAdornment()}</div>
-      {/if}
-      {#if endAdornment}
-        <div class="adornment" data-position="end">{@render endAdornment()}</div>
-      {/if}
-    </div>
-  {/if}
-</div>
+<Well as="div" size={controlSize} invalid={isInvalid} flush class={className}>
+  <div class="body {controlSize}">
+    <textarea
+      class="control {autoSize ? 'auto-size' : ''}"
+      data-well-control
+      {...rest}
+      aria-invalid={isInvalid || undefined}></textarea>
+    {#if startAdornment || endAdornment}
+      <div class="adornments">
+        {#if startAdornment}
+          <div class="adornment" data-position="start">{@render startAdornment()}</div>
+        {/if}
+        {#if endAdornment}
+          <div class="adornment" data-position="end">{@render endAdornment()}</div>
+        {/if}
+      </div>
+    {/if}
+  </div>
+</Well>
 
 <style>
-  .textarea {
+  /* The textarea fills its well, so it pads itself and its scrollbar reaches the well's edge. */
+  .body {
     display: grid;
-    transition:
-      background-color var(--duration-fast) var(--easing-standard),
-      border-color var(--duration-fast) var(--easing-standard),
-      box-shadow var(--duration-fast) var(--easing-standard);
-    box-sizing: border-box;
-    border: var(--border-width-thin) solid var(--color-field-border);
-    border-radius: var(--radius-lg);
-    background: var(--color-control-surface);
-    inline-size: 100%;
+    flex: 1;
+    align-self: stretch;
     min-inline-size: 0;
   }
 
@@ -77,7 +83,6 @@ Styles a native multiline input. Native attributes and events target the textare
     color: var(--color-control-text);
     font: inherit;
     line-height: var(--line-height-normal);
-    font-family: var(--font-family-interface);
   }
 
   .auto-size {
@@ -89,62 +94,15 @@ Styles a native multiline input. Native attributes and events target the textare
     color: var(--color-control-placeholder);
   }
 
-  @media (hover: hover) {
-    .textarea:hover:not(
-        :has(
-          .control:disabled,
-          .control:read-only,
-          .control:focus-visible,
-          .control[aria-invalid="true"],
-          .control:user-invalid
-        )
-      ) {
-      border-color: var(--color-field-border);
-      background: var(--color-control-surface-hover);
-    }
-  }
-
-  .textarea:has(.control:focus-visible) {
-    box-shadow: var(--shadow-focus-ring);
-    border-color: var(--color-control-border-focus);
-    background: var(--color-control-surface-focus);
-  }
-
-  @media (forced-colors: active) {
-    .textarea:has(.control:focus-visible) {
-      outline: var(--border-width-strong) solid Highlight;
-      outline-offset: var(--focus-ring-offset);
-    }
-  }
-
-  .textarea:has(.control:disabled) {
-    cursor: not-allowed;
-    border-color: var(--color-field-border);
-    background: var(--color-control-surface-disabled);
-  }
-
   .control:disabled {
     color: var(--color-control-disabled-text);
-  }
-
-  .textarea.invalid,
-  .textarea:has(.control[aria-invalid="true"], .control:user-invalid) {
-    border-color: var(--color-feedback-error-border);
-    background: var(--color-control-surface-invalid);
-  }
-
-  .textarea.invalid:has(.control:focus-visible),
-  .textarea:has(.control[aria-invalid="true"]:focus-visible, .control:user-invalid:focus-visible) {
-    box-shadow: var(--shadow-invalid-focus-ring);
-    border-color: var(--color-feedback-error-border);
-    background: var(--color-control-surface-invalid);
   }
 
   .adornments {
     display: grid;
     gap: var(--space-2);
     border-block-start: var(--border-width-thin) solid var(--color-border-subtle);
-    color: var(--color-text-muted);
+    color: var(--well-muted-text);
     font-size: var(--font-size-sm);
     line-height: var(--line-height-compact);
   }
@@ -155,28 +113,15 @@ Styles a native multiline input. Native attributes and events target the textare
     min-inline-size: 0;
   }
 
-  .textarea:has(.control:disabled) .adornments {
-    color: var(--color-control-disabled-text);
-  }
-
-  .sm .control {
-    padding: var(--space-2) var(--space-3);
-    font-size: var(--font-size-sm);
-  }
+  .sm .control,
   .sm .adornments {
     padding: var(--space-2) var(--space-3);
   }
-  .md .control {
-    padding: var(--space-3);
-    font-size: var(--font-size-md);
-  }
+  .md .control,
   .md .adornments {
     padding: var(--space-3);
   }
-  .lg .control {
-    padding: var(--space-4);
-    font-size: var(--font-size-lg);
-  }
+  .lg .control,
   .lg .adornments {
     padding: var(--space-4);
   }

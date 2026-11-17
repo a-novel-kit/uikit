@@ -147,65 +147,68 @@ Spread all trigger attributes onto that element; an open controller owns visibil
 </FloatingSurface>
 
 <style>
-  :global(.a-novel-tooltip) {
-    z-index: var(--layer-dropdown);
-    -webkit-backdrop-filter: blur(var(--blur-md));
-    backdrop-filter: blur(var(--blur-md));
-    box-shadow: var(--shadow-md);
-    border: 0;
-    border-radius: var(--radius-md);
-    background: var(--color-surface-glass);
-    padding: var(--space-2) var(--space-3);
-    max-inline-size: calc(var(--size-base) * 64);
-    pointer-events: none;
-    color: var(--color-text-primary);
-    font-size: var(--font-size-xs);
-    line-height: var(--line-height-compact);
-    font-family: var(--font-family-interface);
-  }
-  :global(.a-novel-tooltip.top) {
-    position-area: block-start span-inline-end;
-    justify-self: start;
-    inset-block-end: var(--space-2);
-  }
-  :global(.a-novel-tooltip.right) {
-    position-area: inline-end span-block-end;
-    align-self: start;
-    inset-inline-start: var(--space-2);
-  }
-  :global(.a-novel-tooltip.bottom) {
-    position-area: block-end span-inline-end;
-    justify-self: start;
-    inset-block-start: var(--space-2);
-  }
-  :global(.a-novel-tooltip.left) {
-    position-area: inline-start span-block-end;
-    align-self: start;
-    inset-inline-end: var(--space-2);
-  }
-  :global(.a-novel-tooltip::before) {
-    position: absolute;
-    transform: rotate(45deg);
-    background: inherit;
-    inline-size: var(--size-2);
-    block-size: var(--size-2);
-    content: "";
-  }
-  :global(.a-novel-tooltip.top::before) {
-    inset-block-end: calc(var(--size-1) * -1);
-    inset-inline-start: calc(50% - var(--size-1));
-  }
-  :global(.a-novel-tooltip.right::before) {
-    inset-block-start: calc(50% - var(--size-1));
-    inset-inline-start: calc(var(--size-1) * -1);
-  }
-  :global(.a-novel-tooltip.bottom::before) {
-    inset-block-start: calc(var(--size-1) * -1);
-    inset-inline-start: calc(50% - var(--size-1));
-  }
-  :global(.a-novel-tooltip.left::before) {
-    inset-block-start: calc(50% - var(--size-1));
-    inset-inline-end: calc(var(--size-1) * -1);
+  /* FloatingSurface renders the tooltip, so its rules reach it by class. */
+  :global {
+    .a-novel-tooltip {
+      z-index: var(--layer-dropdown);
+      -webkit-backdrop-filter: blur(var(--blur-md));
+      backdrop-filter: blur(var(--blur-md));
+      box-shadow: var(--shadow-md);
+      border: 0;
+      border-radius: var(--radius-md);
+      background: var(--color-surface-glass);
+      padding: var(--space-2) var(--space-3);
+      max-inline-size: calc(var(--size-base) * 64);
+      pointer-events: none;
+      color: var(--color-text-primary);
+      font-size: var(--font-size-xs);
+      line-height: var(--line-height-compact);
+      font-family: var(--font-family-interface);
+    }
+    .a-novel-tooltip.top {
+      position-area: block-start span-inline-end;
+      justify-self: start;
+      inset-block-end: var(--space-2);
+    }
+    .a-novel-tooltip.right {
+      position-area: inline-end span-block-end;
+      align-self: start;
+      inset-inline-start: var(--space-2);
+    }
+    .a-novel-tooltip.bottom {
+      position-area: block-end span-inline-end;
+      justify-self: start;
+      inset-block-start: var(--space-2);
+    }
+    .a-novel-tooltip.left {
+      position-area: inline-start span-block-end;
+      align-self: start;
+      inset-inline-end: var(--space-2);
+    }
+    .a-novel-tooltip::before {
+      position: absolute;
+      transform: rotate(45deg);
+      background: inherit;
+      inline-size: var(--size-2);
+      block-size: var(--size-2);
+      content: "";
+    }
+    .a-novel-tooltip.top::before {
+      inset-block-end: calc(var(--size-1) * -1);
+      inset-inline-start: calc(50% - var(--size-1));
+    }
+    .a-novel-tooltip.right::before {
+      inset-block-start: calc(50% - var(--size-1));
+      inset-inline-start: calc(var(--size-1) * -1);
+    }
+    .a-novel-tooltip.bottom::before {
+      inset-block-start: calc(var(--size-1) * -1);
+      inset-inline-start: calc(50% - var(--size-1));
+    }
+    .a-novel-tooltip.left::before {
+      inset-block-start: calc(50% - var(--size-1));
+      inset-inline-end: calc(var(--size-1) * -1);
+    }
   }
 
   @media (forced-colors: active) {

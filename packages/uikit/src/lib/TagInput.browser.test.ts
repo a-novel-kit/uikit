@@ -51,7 +51,7 @@ describe("TagInput", () => {
 
     getByRole("textbox", { name: "Tags" }).focus();
 
-    const well = container.querySelector(".tag-input")!;
+    const well = container.querySelector(".well")!;
     expect(await settled(well, "borderTopColor")).toBe(resolveColor("var(--color-feedback-error-border)"));
   });
 
@@ -62,7 +62,7 @@ describe("TagInput", () => {
 
     form.requestSubmit();
 
-    const well = container.querySelector(".tag-input")!;
+    const well = container.querySelector(".well")!;
     expect(await settled(well, "borderTopColor")).toBe(resolveColor("var(--color-feedback-error-border)"));
   });
 
@@ -70,7 +70,7 @@ describe("TagInput", () => {
     const controller = createTagInputController({ initialTags: ["maps"] });
     const { container } = render(TagInput, { props: { "aria-label": "Tags", controller, controlSize: "sm" } });
 
-    const height = container.querySelector(".tag-input")!.getBoundingClientRect().height;
+    const height = container.querySelector(".well")!.getBoundingClientRect().height;
     expect(height).toBeCloseTo(resolveLength("var(--control-height-sm)"), 0);
   });
 });

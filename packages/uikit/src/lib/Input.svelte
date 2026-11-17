@@ -23,43 +23,33 @@ Native attributes and events target the input; `class` styles the surrounding su
 </script>
 
 <script lang="ts">
+  import Well from "./internal/Well.svelte";
+  import { resolveInvalidState } from "./internal/selection";
+
   let {
     controlSize = "md",
     invalid = false,
     startAdornment,
     endAdornment,
     class: className = "",
+    "aria-invalid": ariaInvalid,
     ...rest
   }: InputProps = $props();
+
+  const isInvalid = $derived(resolveInvalidState(invalid, ariaInvalid));
 </script>
 
-<span class="input {controlSize} {invalid ? 'invalid' : ''} {className}">
+<Well size={controlSize} invalid={isInvalid} class={className}>
   {#if startAdornment}
     <span class="adornment" data-position="start">{@render startAdornment()}</span>
   {/if}
-  <input class="control" aria-invalid={invalid || undefined} {...rest} />
+  <input class="control" data-well-control {...rest} aria-invalid={isInvalid || undefined} />
   {#if endAdornment}
     <span class="adornment" data-position="end">{@render endAdornment()}</span>
   {/if}
-</span>
+</Well>
 
 <style>
-  .input {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    transition:
-      background-color var(--duration-fast) var(--easing-standard),
-      border-color var(--duration-fast) var(--easing-standard),
-      box-shadow var(--duration-fast) var(--easing-standard);
-    box-sizing: border-box;
-    border: var(--border-width-thin) solid var(--color-field-border);
-    border-radius: var(--radius-lg);
-    background: var(--color-control-surface);
-    inline-size: 100%;
-    min-inline-size: 0;
-  }
-
   .control {
     appearance: none;
     box-sizing: border-box;
@@ -72,96 +62,22 @@ Native attributes and events target the input; `class` styles the surrounding su
     color: var(--color-control-text);
     font: inherit;
     line-height: var(--line-height-compact);
-    font-family: var(--font-family-interface);
   }
 
   .control::placeholder {
     color: var(--color-control-placeholder);
   }
 
-  @media (hover: hover) {
-    .input:hover:not(
-        :has(
-          .control:disabled,
-          .control:read-only,
-          .control:focus-visible,
-          .control[aria-invalid="true"],
-          .control:user-invalid
-        )
-      ) {
-      border-color: var(--color-field-border);
-      background: var(--color-control-surface-hover);
-    }
-  }
-
-  .input:has(.control:focus-visible) {
-    box-shadow: var(--shadow-focus-ring);
-    border-color: var(--color-control-border-focus);
-    background: var(--color-control-surface-focus);
-  }
-
-  @media (forced-colors: active) {
-    .input:has(.control:focus-visible) {
-      outline: var(--border-width-strong) solid Highlight;
-      outline-offset: var(--focus-ring-offset);
-    }
-  }
-
-  .input:has(.control:disabled) {
-    cursor: not-allowed;
-    border-color: var(--color-field-border);
-    background: var(--color-control-surface-disabled);
-  }
-
   .control:disabled {
     color: var(--color-control-disabled-text);
-  }
-
-  .input.invalid,
-  .input:has(.control[aria-invalid="true"], .control:user-invalid) {
-    border-color: var(--color-feedback-error-border);
-    background: var(--color-control-surface-invalid);
-  }
-
-  .input.invalid:has(.control:focus-visible),
-  .input:has(.control[aria-invalid="true"]:focus-visible, .control:user-invalid:focus-visible) {
-    box-shadow: var(--shadow-invalid-focus-ring);
-    border-color: var(--color-feedback-error-border);
-    background: var(--color-control-surface-invalid);
   }
 
   .adornment {
     display: inline-flex;
     flex: none;
     align-items: center;
-    color: var(--color-text-muted);
+    color: var(--well-muted-text);
     font-size: var(--font-size-sm);
     line-height: var(--line-height-compact);
-  }
-
-  .input:has(.control:disabled) .adornment {
-    color: var(--color-control-disabled-text);
-  }
-
-  .sm {
-    padding: var(--space-1) var(--space-3);
-    min-block-size: var(--control-height-sm);
-  }
-  .sm .control {
-    font-size: var(--font-size-sm);
-  }
-  .md {
-    padding: var(--space-1) var(--space-3);
-    min-block-size: var(--control-height-md);
-  }
-  .md .control {
-    font-size: var(--font-size-md);
-  }
-  .lg {
-    padding: var(--space-2) var(--space-4);
-    min-block-size: var(--control-height-lg);
-  }
-  .lg .control {
-    font-size: var(--font-size-lg);
   }
 </style>

@@ -125,7 +125,6 @@ For a custom trigger, spread the snippet attributes onto a native button.
   let triggerElement = $state<HTMLElement | null>(null);
   let menuElement = $state<HTMLDivElement | null>(null);
   let activeItemIndex = $state(-1);
-  let anchorWidth = $state("0px");
 
   const triggerAttributes = $derived<ActionMenuTriggerAttributes>({
     id: triggerId,
@@ -137,11 +136,6 @@ For a custom trigger, spread the snippet attributes onto a native button.
     "data-state": controller.state.open ? "open" : "closed",
     onclick: handleTriggerClick,
     onkeydown: handleTriggerKeyDown,
-  });
-
-  // Runs before the DOM update, so the surface renders at the anchor's width in the flush that opens it.
-  $effect.pre(() => {
-    if (controller.state.open && triggerElement) anchorWidth = triggerElement.getBoundingClientRect().width + "px";
   });
 
   $effect(() => {
@@ -283,7 +277,6 @@ For a custom trigger, spread the snippet attributes onto a native button.
   class="a-novel-menu-content {align}"
   role="menu"
   aria-label={label}
-  style="--a-novel-menu-anchor-width: {anchorWidth}"
   onkeydown={handleMenuKeyDown}
   onfocusin={handleMenuFocusIn}
   onOpenChange={handleSurfaceOpenChange}
@@ -321,38 +314,41 @@ For a custom trigger, spread the snippet attributes onto a native button.
 </FloatingSurface>
 
 <style>
-  /* The menu's radius is its items' radius plus the padding around them, so their corners share centers. */
-  :global(.a-novel-menu-content) {
-    position-area: block-end span-inline-end;
-    z-index: var(--layer-dropdown);
-    -webkit-backdrop-filter: blur(var(--blur-md));
-    backdrop-filter: blur(var(--blur-md));
-    inset-block-start: var(--space-2);
-    outline: none;
-    box-shadow: var(--shadow-lg);
-    border: 0;
-    border-radius: calc(var(--radius-md) + var(--space-1));
-    background: var(--color-surface-glass);
-    padding: var(--space-1);
-    min-inline-size: max(var(--a-novel-menu-anchor-width), calc(var(--size-base) * 48));
-    max-block-size: min(calc(100dvb - var(--space-8)), var(--control-menu-max-height));
-    overflow-x: hidden;
-    overflow-y: auto;
-    overscroll-behavior-block: contain;
-    color: var(--color-text-primary);
-  }
-  :global(.a-novel-menu-content.start) {
-    justify-self: start;
-  }
-  :global(.a-novel-menu-content.center) {
-    justify-self: center;
-  }
-  :global(.a-novel-menu-content.end) {
-    position-area: block-end span-inline-start;
-    justify-self: end;
+  /* FloatingSurface renders the menu's surface, so its rules reach it by class. The menu's radius is its items'
+     radius plus the padding around them, so their corners share centers. */
+  :global {
+    .a-novel-menu-content {
+      position-area: block-end span-inline-end;
+      z-index: var(--layer-dropdown);
+      -webkit-backdrop-filter: blur(var(--blur-md));
+      backdrop-filter: blur(var(--blur-md));
+      inset-block-start: var(--space-2);
+      outline: none;
+      box-shadow: var(--shadow-lg);
+      border: 0;
+      border-radius: calc(var(--radius-md) + var(--space-1));
+      background: var(--color-surface-glass);
+      padding: var(--space-1);
+      min-inline-size: max(var(--floating-anchor-width, 0px), calc(var(--size-base) * 48));
+      max-block-size: min(calc(100dvb - var(--space-8)), var(--control-menu-max-height));
+      overflow-x: hidden;
+      overflow-y: auto;
+      overscroll-behavior-block: contain;
+      color: var(--color-text-primary);
+    }
+    .a-novel-menu-content.start {
+      justify-self: start;
+    }
+    .a-novel-menu-content.center {
+      justify-self: center;
+    }
+    .a-novel-menu-content.end {
+      position-area: block-end span-inline-start;
+      justify-self: end;
+    }
   }
   /* Items touch, as links of one group do; a separator sets groups apart, inset like the items. */
-  :global(.a-novel-menu-group) {
+  .a-novel-menu-group {
     display: grid;
   }
   /* A rendered option, such as a flag beside a name, centers in its row as a box. Set on the text's
@@ -362,7 +358,7 @@ For a custom trigger, spread the snippet attributes onto a native button.
     align-items: center;
   }
 
-  :global(.a-novel-menu-item) {
+  .a-novel-menu-item {
     display: flex;
     align-items: center;
     gap: var(--space-3);
@@ -381,23 +377,23 @@ For a custom trigger, spread the snippet attributes onto a native button.
     user-select: none;
     text-align: start;
   }
-  :global(.a-novel-menu-item[data-highlighted]) {
+  .a-novel-menu-item[data-highlighted] {
     -webkit-backdrop-filter: blur(var(--blur-sm));
     backdrop-filter: blur(var(--blur-sm));
     background: var(--color-surface-glass-hover);
     color: var(--color-navigation-hover-text);
   }
-  :global(.a-novel-menu-item.danger) {
+  .a-novel-menu-item.danger {
     color: var(--color-feedback-error-text);
   }
-  :global(.a-novel-menu-item.danger[data-highlighted]) {
+  .a-novel-menu-item.danger[data-highlighted] {
     background: var(--color-feedback-error-surface);
   }
-  :global(.a-novel-menu-item[data-disabled]) {
+  .a-novel-menu-item[data-disabled] {
     cursor: not-allowed;
     color: var(--color-text-disabled);
   }
-  :global(.a-novel-menu-separator) {
+  .a-novel-menu-separator {
     margin-block: var(--space-2);
     background: var(--color-border-divider);
     block-size: var(--border-width-thin);

@@ -38,6 +38,7 @@ Use `createValueController` with a selected option value or `undefined`.
 </script>
 
 <script lang="ts" generics="Value extends string">
+  import ChoiceLabel from "./internal/ChoiceLabel.svelte";
   import RenderContent from "./internal/RenderContent.svelte";
 
   const generatedName = $props.id();
@@ -82,16 +83,11 @@ Use `createValueController` with a selected option value or `undefined`.
           lang={option.lang}
           form={rest.form}
         />
-        <span class="copy">
-          {#if renderOption}
-            {@render renderOption(option)}
-          {:else}
-            <span class="label" lang={option.lang}>{option.label}</span>
-            {#if option.description}
-              <span class="description"><RenderContent content={option.description} /></span>
-            {/if}
-          {/if}
-        </span>
+        {#if renderOption}
+          <ChoiceLabel>{@render renderOption(option)}</ChoiceLabel>
+        {:else}
+          <ChoiceLabel label={option.label} description={option.description} lang={option.lang} />
+        {/if}
       </label>
     {/each}
   </div>
@@ -130,7 +126,6 @@ Use `createValueController` with a selected option value or `undefined`.
     align-items: flex-start;
     gap: var(--space-3);
     cursor: pointer;
-    color: var(--color-text-primary);
   }
 
   input {
@@ -206,24 +201,7 @@ Use `createValueController` with a selected option value or `undefined`.
     color: var(--color-action-disabled-text);
   }
 
-  .copy {
-    display: grid;
-    gap: var(--space-1);
-  }
-  .label {
-    font-weight: var(--font-weight-bold);
-    font-size: var(--font-size-sm);
-  }
-  .description {
-    color: var(--color-text-muted);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-compact);
-  }
   label:has(input:disabled) {
     cursor: not-allowed;
-    color: var(--color-text-disabled);
-  }
-  label:has(input:disabled) .description {
-    color: var(--color-text-disabled);
   }
 </style>

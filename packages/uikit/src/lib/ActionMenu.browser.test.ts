@@ -69,7 +69,7 @@ it.each(openPaths)("shows the menu with its trigger's width when opened by $path
   if (composed) render(ActionMenuTriggerFixture, { controller });
   else render(ActionMenu, { controller, label: "Item actions", items: [{ id: "rename", label: "Rename" }] });
   const trigger = page.getByRole("button", { name: "Item actions" }).element() as HTMLElement;
-  const shown = anchorWidthOnShow("--a-novel-menu-anchor-width");
+  const shown = anchorWidthOnShow();
 
   await open(trigger, controller);
 
