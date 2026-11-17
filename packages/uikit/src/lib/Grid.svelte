@@ -20,7 +20,7 @@ Lays out equal-width items in an intrinsic grid that wraps when its minimum item
   let { minItemWidth = "md", gap = "4", class: className = "", children, ...rest }: GridProps = $props();
 </script>
 
-<div class="grid min-{minItemWidth} gap-{gap} {className}" {...rest}>
+<div class="grid min-{minItemWidth} {className}" style:--grid-gap="var(--space-{gap})" {...rest}>
   {@render children?.()}
 </div>
 
@@ -28,6 +28,7 @@ Lays out equal-width items in an intrinsic grid that wraps when its minimum item
   .grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--grid-min)), 1fr));
+    gap: var(--grid-gap);
     min-inline-size: 0;
   }
 
@@ -39,32 +40,5 @@ Lays out equal-width items in an intrinsic grid that wraps when its minimum item
   }
   .min-lg {
     --grid-min: calc(var(--font-size-base) * 20);
-  }
-  .gap-0 {
-    gap: var(--space-0);
-  }
-  .gap-1 {
-    gap: var(--space-1);
-  }
-  .gap-2 {
-    gap: var(--space-2);
-  }
-  .gap-3 {
-    gap: var(--space-3);
-  }
-  .gap-4 {
-    gap: var(--space-4);
-  }
-  .gap-6 {
-    gap: var(--space-6);
-  }
-  .gap-8 {
-    gap: var(--space-8);
-  }
-  .gap-12 {
-    gap: var(--space-12);
-  }
-  .gap-16 {
-    gap: var(--space-16);
   }
 </style>

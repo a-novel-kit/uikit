@@ -6,7 +6,7 @@ import { anchorWidthOnShow } from "../../test/style";
 import ActionMenu from "./ActionMenu.svelte";
 import { type OpenController, createOpenController } from "./controllers.svelte";
 
-import { expect, it } from "vitest";
+import { expect, it, onTestFinished } from "vitest";
 import { page, userEvent } from "vitest/browser";
 
 import "@a-novel-kit/uikit-tokens/tokens.css";
@@ -31,11 +31,18 @@ const openPaths = [
 it("anchors a fixed open menu to its trigger and preserves it after selection or Escape", async () => {
   await page.viewport(1280, 800);
   const controller: OpenController = { state: { open: true }, open() {}, close() {}, toggle() {} };
+  // The trigger sits away from the screen's edge, so a menu wider than it can still end where it ends.
+  const target = document.body.appendChild(document.createElement("div"));
+  target.style.paddingInlineStart = "20rem";
+  onTestFinished(() => target.remove());
   render(ActionMenu, {
-    controller,
-    label: "Workspace item actions",
-    triggerText: "Workspace item actions",
-    items: [{ id: "rename", label: "Rename" }],
+    target,
+    props: {
+      controller,
+      label: "Workspace item actions",
+      triggerText: "Workspace item actions",
+      items: [{ id: "rename", label: "Rename" }],
+    },
   });
   const menu = page.getByRole("menu");
   await expect.element(menu).toBeVisible();

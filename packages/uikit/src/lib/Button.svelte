@@ -259,6 +259,14 @@ item.
     color: var(--button-foreground-hover);
   }
 
+  /* An outline button whose popup shows, such as ActionMenu's trigger, keeps the hover look while open: expanded is
+     a persistent state, as a select keeps its focused look while its list shows. */
+  .outline[aria-expanded="true"] {
+    border-color: var(--button-border-hover);
+    background-color: var(--color-action-subtle-hover);
+    color: var(--button-foreground-hover);
+  }
+
   .outline[aria-pressed="true"] {
     box-shadow: var(--button-glow);
     border-color: var(--button-selected-border);

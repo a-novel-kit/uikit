@@ -1,6 +1,6 @@
 <!--
 @component
-Renders numbered page controls. The caller updates `currentPage` or supplies URLs through `getHref`.
+Renders numbered page controls as ghost buttons. The caller updates `currentPage` or supplies URLs through `getHref`.
 -->
 <script lang="ts" module>
   import type { HTMLAttributes } from "svelte/elements";
@@ -21,6 +21,7 @@ Renders numbered page controls. The caller updates `currentPage` or supplies URL
 </script>
 
 <script lang="ts">
+  import Button from "./Button.svelte";
   import { useMessages } from "./internal/i18n";
 
   const { t } = useMessages();
@@ -58,41 +59,46 @@ Renders numbered page controls. The caller updates `currentPage` or supplies URL
   }
 </script>
 
-{#snippet stepControl(page: number, disabled: boolean, text: string)}
-  {#if !getHref}
-    <button class="control text" type="button" {disabled} onclick={() => change(page)}>{text}</button>
-  {:else if disabled}
-    <span class="control text" aria-disabled="true">{text}</span>
+<!-- Every control is a small ghost button, and the current page reads as the navigation's current item. -->
+{#snippet control(page: number, text: string | number, disabled = false)}
+  {@const current = page === currentPage ? "page" : undefined}
+  {@const kind = typeof text === "number" ? "page" : ""}
+  {#if getHref && !disabled}
+    <Button
+      variant="ghost"
+      tone="neutral"
+      size="sm"
+      class={kind}
+      aria-current={current}
+      href={getHref(page)}
+      onclick={() => change(page)}>{text}</Button
+    >
   {:else}
-    <a class="control text" href={getHref(page)} onclick={() => change(page)}>{text}</a>
+    <Button
+      variant="ghost"
+      tone="neutral"
+      size="sm"
+      class={kind}
+      aria-current={current}
+      {disabled}
+      onclick={() => change(page)}>{text}</Button
+    >
   {/if}
 {/snippet}
 
 <nav class="pagination {className}" aria-label={label} {...rest}>
   <ul>
-    <li>{@render stepControl(currentPage - 1, currentPage <= 1, t("pagination.previous"))}</li>
+    <li>{@render control(currentPage - 1, t("pagination.previous"), currentPage <= 1)}</li>
     {#each pages as page (page)}
       <li>
         {#if typeof page === "string"}
           <span class="ellipsis" aria-hidden="true">…</span>
-        {:else if getHref}
-          <a
-            class="control"
-            href={getHref(page)}
-            aria-current={page === currentPage ? "page" : undefined}
-            onclick={() => change(page)}>{page}</a
-          >
         {:else}
-          <button
-            class="control"
-            type="button"
-            aria-current={page === currentPage ? "page" : undefined}
-            onclick={() => change(page)}>{page}</button
-          >
+          {@render control(page, page)}
         {/if}
       </li>
     {/each}
-    <li>{@render stepControl(currentPage + 1, currentPage >= totalPages, t("pagination.next"))}</li>
+    <li>{@render control(currentPage + 1, t("pagination.next"), currentPage >= totalPages)}</li>
   </ul>
 </nav>
 
@@ -106,49 +112,9 @@ Renders numbered page controls. The caller updates `currentPage` or supplies URL
     padding: 0;
     list-style: none;
   }
-  .control {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    box-sizing: border-box;
-    border: var(--border-width-thin) solid transparent;
-    border-radius: var(--radius-lg);
-    background: transparent;
-    padding-inline: var(--space-2);
+  /* A page number keeps a square's width at least, so one digit still makes a full target. */
+  ul :global(.page) {
     min-inline-size: var(--control-height-sm);
-    min-block-size: var(--control-height-sm);
-    color: var(--color-text-secondary);
-    font: inherit;
-    font-size: var(--font-size-sm);
-    font-family: var(--font-family-interface);
-    user-select: none;
-    text-decoration: none;
-  }
-  .text {
-    padding-inline: var(--space-3);
-  }
-  @media (hover: hover) {
-    .control:hover:not([aria-disabled="true"]):not(:disabled):not([aria-current="page"]) {
-      background: var(--color-action-ghost-hover);
-      color: var(--color-text-primary);
-    }
-  }
-  .control:focus-visible {
-    outline: var(--focus-ring-width) solid var(--color-focus-ring);
-    outline-offset: var(--focus-ring-offset);
-  }
-  .control[aria-current="page"] {
-    box-shadow: var(--shadow-glow-brand);
-    border-color: var(--color-navigation-selected-indicator);
-    background: var(--color-navigation-selected-surface);
-    color: var(--color-navigation-selected-text);
-  }
-  .control[aria-disabled="true"],
-  .control:disabled {
-    cursor: not-allowed;
-    pointer-events: none;
-    color: var(--color-text-disabled);
   }
   .ellipsis {
     display: inline-grid;

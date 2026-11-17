@@ -34,7 +34,7 @@ Places primary and secondary content side by side when space permits, stacking i
   <div class="secondary">{@render secondary()}</div>
 {/snippet}
 
-<div class="split gap-{gap} {className}" {...rest}>
+<div class="split {className}" style:--split-gap="var(--space-{gap})" {...rest}>
   {#if secondaryPosition === "start"}{@render secondaryPane()}{/if}
   <div class="primary">{@render children?.()}</div>
   {#if secondaryPosition === "end"}{@render secondaryPane()}{/if}
@@ -45,6 +45,7 @@ Places primary and secondary content side by side when space permits, stacking i
     display: flex;
     flex-wrap: wrap;
     align-items: stretch;
+    gap: var(--split-gap);
     min-inline-size: 0;
   }
 
@@ -56,33 +57,5 @@ Places primary and secondary content side by side when space permits, stacking i
   .secondary {
     flex: 1 1 var(--layout-sidebar);
     min-inline-size: min(100%, var(--layout-sidebar));
-  }
-
-  .gap-0 {
-    gap: var(--space-0);
-  }
-  .gap-1 {
-    gap: var(--space-1);
-  }
-  .gap-2 {
-    gap: var(--space-2);
-  }
-  .gap-3 {
-    gap: var(--space-3);
-  }
-  .gap-4 {
-    gap: var(--space-4);
-  }
-  .gap-6 {
-    gap: var(--space-6);
-  }
-  .gap-8 {
-    gap: var(--space-8);
-  }
-  .gap-12 {
-    gap: var(--space-12);
-  }
-  .gap-16 {
-    gap: var(--space-16);
   }
 </style>

@@ -139,6 +139,15 @@
   </DescriptionList>
 </Story>
 
+<Story name="Compact description list" asChild>
+  <DescriptionList columns={2} density="compact">
+    <div><dt>Owner</dt><dd>Ada Lovelace</dd></div>
+    <div><dt>Visibility</dt><dd>Organization</dd></div>
+    <div><dt>Words</dt><dd>84,210</dd></div>
+    <div><dt>Status</dt><dd><Badge tone="success">Ready</Badge></dd></div>
+  </DescriptionList>
+</Story>
+
 <Story name="Long status labels" asChild>
   <div style="max-inline-size: calc(var(--layout-container-sm) / 2)">
     <Inline gap="2" wrap>

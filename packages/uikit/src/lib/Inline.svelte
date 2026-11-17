@@ -32,7 +32,14 @@ Arranges content horizontally with tokenized spacing. Enable `wrap` for narrow c
   }: InlineProps = $props();
 </script>
 
-<div class="inline gap-{gap} align-{align} justify-{justify} {wrap ? 'wrap' : ''} {className}" {...rest}>
+<div
+  class="inline {className}"
+  class:wrap
+  style:--inline-gap="var(--space-{gap})"
+  style:--inline-align={align}
+  style:--inline-justify={justify === "between" ? "space-between" : justify}
+  {...rest}
+>
   {@render children?.()}
 </div>
 
@@ -40,62 +47,13 @@ Arranges content horizontally with tokenized spacing. Enable `wrap` for narrow c
   .inline {
     display: flex;
     flex-direction: row;
+    justify-content: var(--inline-justify);
+    align-items: var(--inline-align);
+    gap: var(--inline-gap);
     min-inline-size: 0;
   }
 
   .wrap {
     flex-wrap: wrap;
-  }
-  .gap-0 {
-    gap: var(--space-0);
-  }
-  .gap-1 {
-    gap: var(--space-1);
-  }
-  .gap-2 {
-    gap: var(--space-2);
-  }
-  .gap-3 {
-    gap: var(--space-3);
-  }
-  .gap-4 {
-    gap: var(--space-4);
-  }
-  .gap-6 {
-    gap: var(--space-6);
-  }
-  .gap-8 {
-    gap: var(--space-8);
-  }
-  .gap-12 {
-    gap: var(--space-12);
-  }
-  .gap-16 {
-    gap: var(--space-16);
-  }
-
-  .align-start {
-    align-items: flex-start;
-  }
-  .align-center {
-    align-items: center;
-  }
-  .align-end {
-    align-items: flex-end;
-  }
-  .align-stretch {
-    align-items: stretch;
-  }
-  .justify-start {
-    justify-content: flex-start;
-  }
-  .justify-center {
-    justify-content: center;
-  }
-  .justify-end {
-    justify-content: flex-end;
-  }
-  .justify-between {
-    justify-content: space-between;
   }
 </style>

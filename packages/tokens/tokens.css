@@ -247,7 +247,6 @@
     currentColor var(--color-mix-3),
     transparent
   );
-  --color-action-ghost-hover: var(--color-action-subtle-hover);
   --color-action-disabled-surface: var(--color-neutral-3);
   --color-action-disabled-border: var(--color-border-subtle);
   --color-action-disabled-text: var(--color-text-disabled);

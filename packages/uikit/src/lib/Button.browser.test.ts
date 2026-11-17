@@ -130,6 +130,14 @@ describe("low-emphasis action feedback", () => {
   });
 });
 
+describe("an outline button whose popup shows", () => {
+  it("keeps its hover look without the pointer, as an open menu's trigger", async () => {
+    const { getByRole } = render(Button, { variant: "outline", tone: "neutral", "aria-expanded": true });
+
+    await expectFeedback(getByRole("button"), "--color-mix-2");
+  });
+});
+
 describe("chosen toggles", () => {
   it.each(["ghost", "text"] as const)(
     "marks a chosen %s toggle with an indicator no hover draws, and keeps a disabled choice visible",

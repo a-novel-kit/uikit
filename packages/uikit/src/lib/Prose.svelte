@@ -25,30 +25,30 @@ Applies readable editorial typography to semantic article content supplied by th
     text-wrap: pretty;
   }
 
-  :global(.prose > :first-child) {
+  .prose > :global(:first-child) {
     margin-block-start: 0;
   }
-  :global(.prose > :last-child) {
+  .prose > :global(:last-child) {
     margin-block-end: 0;
   }
-  :global(.prose h1),
-  :global(.prose h2),
-  :global(.prose h3) {
+  .prose :global(h1),
+  .prose :global(h2),
+  .prose :global(h3) {
     color: var(--color-text-primary);
     line-height: var(--line-height-compact);
     font-family: var(--font-family-display);
     text-wrap: balance;
   }
 
-  :global(.prose a) {
+  .prose :global(a) {
     color: var(--color-text-link);
     text-underline-offset: var(--space-1);
   }
-  :global(.prose code) {
+  .prose :global(code) {
     font-size: var(--font-size-sm);
     font-family: var(--font-family-mono);
   }
-  :global(.prose blockquote) {
+  .prose :global(blockquote) {
     margin-inline: 0;
     border-inline-start: var(--border-width-strong) solid var(--color-border-selected);
     padding-inline-start: var(--space-4);

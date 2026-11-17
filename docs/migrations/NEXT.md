@@ -7,7 +7,9 @@ package, and states its browser baseline: Baseline widely available.
 
 **Required only if you import a removed component, pass `variant` to `Link`, read a removed token, or install
 `@a-novel-kit/uikit-icons`.** None of the A-Novel platforms does, so they take this release as is: type checking fails
-on a removed import or prop, and a removed token resolves to nothing.
+on a removed import or prop, and a removed token resolves to nothing. A description list now falls to one column
+where it has less than 48rem, whatever the screen's width. Screenshots that show one, or `Pagination` (Account's devices
+page), change.
 
 ## Replace the removed components
 
@@ -41,8 +43,9 @@ their components: `ToolbarProps`, `ToolbarGroupProps`, `ToolbarButtonProps`, `To
 
 These tokens had no reader in any A-Novel repository and are gone:
 
-- `--color-action-ghost-text`, `--color-action-ghost-hover-text`, `--color-action-ghost-selected`,
-  `--color-action-ghost-selected-border`
+- `--color-action-ghost-text`, `--color-action-ghost-hover`, `--color-action-ghost-hover-text`,
+  `--color-action-ghost-selected`, `--color-action-ghost-selected-border` (`--color-action-ghost-hover` equaled
+  `--color-action-subtle-hover`)
 - `--color-feedback-info-border`, `--color-feedback-success-border`, `--color-feedback-warning-border`,
   `--color-feedback-highlight-border`
 - `--color-graphic-axis`, `--color-graphic-grid`, `--color-graphic-pressure`, `--color-graphic-signal`,
@@ -57,6 +60,22 @@ The `--multiplier-N` tokens are gone too: each one equaled its own number, so wr
 its bases. The formula variables it held (`--color-hue-*`, `--color-harmony-*`, `--color-peak-*`, `--color-scale-*`,
 `--color-gamut-chroma-*`, `--color-accent-lightness-floor` and `--color-neutral-{chroma,lightness-*}`) are gone; read a
 palette step or a `--base-*` color instead. Every color renders as before.
+
+## Expect controls drawn by Button
+
+Pagination, the ActionMenu trigger and a toast's dismiss button are now `Button`s, so they follow its rules
+everywhere. Pagination's controls are small neutral ghost buttons: the page numbers turn bold, and the current page
+reads as the navigation's current item, with no border or glow. The ActionMenu trigger is a neutral outline button
+with a labeled button's radius and type size; while its menu is open it keeps the outline button's hover look instead
+of a glow. A toast's dismiss is a small text button. Their props are unchanged; expect the screenshots that show them
+to change.
+
+## Expect description lists to follow their own width
+
+`DescriptionList` falls to one column where it has less than 48rem, whatever the screen's width, so a list in a narrow
+card stacks on a desktop too. It renders a wrapper `div` that measures its width and takes its parent's full width;
+`class` and the other attributes stay on the `dl`. Form and dialog actions keep the screen's rule: full width and
+stacked below 35rem, side by side at their natural width and aligned to the end above it.
 
 ## Uninstall `@a-novel-kit/uikit-icons`
 
