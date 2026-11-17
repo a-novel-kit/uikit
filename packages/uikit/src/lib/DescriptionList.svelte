@@ -1,6 +1,7 @@
 <!--
 @component
-Renders a description list in up to `columns` columns, one where it has less than 48rem. Wrap each related `dt`
+Renders a description list in up to `columns` columns, one where it has less than 48rem. It takes its parent's full
+width. Wrap each related `dt`
 and `dd` pair in a `div`.
 -->
 <script lang="ts" module>
@@ -37,7 +38,11 @@ and `dd` pair in a `div`.
     margin: 0;
   }
 
+  /* The box measures the width it is given, so it takes its parent's full width, even in a parent that sizes by
+     content. */
   .container {
+    flex-grow: 1;
+    align-self: stretch;
     container-type: inline-size;
   }
 

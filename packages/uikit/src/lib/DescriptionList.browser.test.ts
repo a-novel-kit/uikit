@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
 import Fixture from "../../test/DescriptionListFixture.svelte";
 
-import { expect, it } from "vitest";
+import { expect, it, onTestFinished } from "vitest";
 import { page } from "vitest/browser";
 
 import "@a-novel-kit/uikit-tokens/tokens.css";
@@ -16,10 +16,10 @@ it.each([
   await page.viewport(1280, 800);
   const target = document.body.appendChild(document.createElement("div"));
   target.style.inlineSize = width;
+  onTestFinished(() => target.remove());
   const { getByText } = render(Fixture, { target });
 
   const owner = getByText("Owner").getBoundingClientRect();
   const status = getByText("Status").getBoundingClientRect();
   expect(owner.top === status.top).toBe(sideBySide);
-  target.remove();
 });

@@ -11,7 +11,7 @@ describe("DescriptionList", () => {
     const children = createRawSnippet(() => ({
       render: () => "<div><dt>Owner</dt><dd>Ada Lovelace</dd></div><div><dt>Status</dt><dd>Ready</dd></div>",
     }));
-    const { getByText } = render(DescriptionList, { props: { columns: 2, density: "compact", children } });
+    const { getByText } = render(DescriptionList, { props: { children } });
 
     expect(getByText("Owner").tagName).toBe("DT");
     expect(getByText("Ada Lovelace").tagName).toBe("DD");

@@ -3,7 +3,7 @@
 Lays out actions at their natural width, side by side at the end of the line, and stacked full width where it has
 less than 35rem, as on a phone or in a small dialog. Put the primary action last: source order is kept, so it ends
 the line when there is room and sits under the thumb on a phone. Use ButtonGroup when the controls also need a
-named group.
+named group. It takes its parent's full width.
 -->
 <script lang="ts" module>
   import type { HTMLAttributes } from "svelte/elements";
@@ -24,7 +24,11 @@ named group.
 </div>
 
 <style>
+  /* The box measures the width it is given, so it takes its parent's full width: in a parent that sizes by content,
+     such as an end-aligned Stack or an Inline beside a heading, a measuring box would otherwise shrink to nothing. */
   .group {
+    flex-grow: 1;
+    align-self: stretch;
     container-type: inline-size;
     min-inline-size: 0;
   }

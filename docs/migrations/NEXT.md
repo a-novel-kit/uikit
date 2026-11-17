@@ -7,8 +7,11 @@ package, and states its browser baseline: Baseline widely available.
 
 **Required only if you import a removed component, pass `variant` to `Link`, read a removed token, or install
 `@a-novel-kit/uikit-icons`.** None of the A-Novel platforms does, so they take this release as is: type checking fails
-on a removed import or prop, and a removed token resolves to nothing. Screenshots that show `Pagination` (Account's
-devices page) or a small dialog's actions change.
+on a removed import or prop, and a removed token resolves to nothing. Layout now follows the width a component gets,
+not the screen's: form and dialog actions stack full width in any container under 35rem, and description lists fall to
+one column under 48rem, so a small dialog's actions stack on a desktop, and so may the actions of a form capped
+narrower, such as Account's short-code form (68ch). Screenshots that show those, or `Pagination` (Account's devices
+page), change.
 
 ## Replace the removed components
 
@@ -42,8 +45,9 @@ their components: `ToolbarProps`, `ToolbarGroupProps`, `ToolbarButtonProps`, `To
 
 These tokens had no reader in any A-Novel repository and are gone:
 
-- `--color-action-ghost-text`, `--color-action-ghost-hover-text`, `--color-action-ghost-selected`,
-  `--color-action-ghost-selected-border`
+- `--color-action-ghost-text`, `--color-action-ghost-hover`, `--color-action-ghost-hover-text`,
+  `--color-action-ghost-selected`, `--color-action-ghost-selected-border` (`--color-action-ghost-hover` equaled
+  `--color-action-subtle-hover`)
 - `--color-feedback-info-border`, `--color-feedback-success-border`, `--color-feedback-warning-border`,
   `--color-feedback-highlight-border`
 - `--color-graphic-axis`, `--color-graphic-grid`, `--color-graphic-pressure`, `--color-graphic-signal`,
@@ -72,9 +76,8 @@ text button. Their props are unchanged; expect the screenshots that show them to
 `ActionGroup`, behind `FormActions` and every dialog's `actions`, stacks its actions where it has less than 35rem, and
 `DescriptionList` falls to one column where it has less than 48rem, whatever the screen's width. A small dialog's
 actions now stack on a desktop too. Each renders a wrapper `div` that measures its width; `class` and the other
-attributes of `ActionGroup` go on that wrapper, and those of `DescriptionList` stay on the `dl`.
-
-`--color-action-ghost-hover`, which nothing reads any more, is gone: read `--color-action-subtle-hover`, its value.
+attributes of `ActionGroup` go on that wrapper, and those of `DescriptionList` stay on the `dl`. Each takes its
+parent's full width.
 
 ## Uninstall `@a-novel-kit/uikit-icons`
 
