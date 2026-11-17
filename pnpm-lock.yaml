@@ -462,8 +462,8 @@ importers:
   packages/storybook-workbench:
     dependencies:
       '@a-novel-kit/ui-images':
-        specifier: 0.2.0
-        version: 0.2.0
+        specifier: 0.3.0
+        version: 0.3.0
       '@a-novel-kit/uikit':
         specifier: workspace:*
         version: link:../uikit
@@ -619,8 +619,8 @@ packages:
       i18next: ^27.1.1
       svelte: ^5.57.3
 
-  '@a-novel-kit/ui-images@0.2.0':
-    resolution: {integrity: sha512-8WgqUiYmnOFIZkulE8LSlc3wqz6vY3hBSbue+diiG+HW6nRg7RTueFxPAhKW7ybxc4/QLKhBI6gHbq1Mlh7UQg==, tarball: https://npm.pkg.github.com/download/@a-novel-kit/ui-images/0.2.0/0449ebd1efdd219d3040b0f42cf91ac35a444cd4}
+  '@a-novel-kit/ui-images@0.3.0':
+    resolution: {integrity: sha512-XISdfMiwMWfaFNfxdwrJN83oBjcnz90TO2FhjEgIkkcayTEIWXJSDJ1CRcNpVgZRcp4dswAhzvB1Jpridvw42Q==, tarball: https://npm.pkg.github.com/download/@a-novel-kit/ui-images/0.3.0/39d74d81f8a64bd4574424c738c14f0d9053cc57}
 
   '@adobe/css-tools@4.5.0':
     resolution: {integrity: sha512-6OzddxPio9UiWTCemp4N8cYLV2ZN1ncRnV1cVGtve7dhPOtRkleRyx32GQCYSwDYgaHU3USMm84tNsvKzRCa1Q==}
@@ -3496,7 +3496,7 @@ snapshots:
       i18next: 27.1.2(typescript@6.0.3)
       svelte: 5.57.3(@typescript-eslint/types@8.72.2)
 
-  '@a-novel-kit/ui-images@0.2.0': {}
+  '@a-novel-kit/ui-images@0.3.0': {}
 
   '@adobe/css-tools@4.5.0': {}
 
