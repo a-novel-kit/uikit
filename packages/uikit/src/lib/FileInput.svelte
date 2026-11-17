@@ -150,10 +150,10 @@ Native attributes and events target the input; `class` styles the surrounding su
     cursor: inherit;
   }
 
-  /* The folder lights with the field under the pointer and in focus. */
+  /* The folder lights with the field under the pointer and in focus. The well is the field's root, which Well styles,
+     so its hover reaches the folder as a global class. */
   @media (hover: hover) {
-    .control:enabled:hover ~ .end .browse,
-    .end:hover .browse {
+    :global(.well:hover:not(:has(:disabled))) .browse {
       color: var(--color-text-primary);
     }
   }
