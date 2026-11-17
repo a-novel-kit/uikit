@@ -1,12 +1,10 @@
 /// <reference types="vite/client" />
-import RenderedOptionsFixture from "../../test/RenderedOptionsFixture.svelte";
-import { offsetFromMiddle } from "../../test/geometry";
-import { anchorWidthOnShow } from "../../test/style";
+import { resolveColor } from "../../test/style";
 import Combobox from "./Combobox.svelte";
 import { type ComboboxController, createComboboxController } from "./controllers.svelte";
 
 import { describe, expect, it } from "vitest";
-import { page, userEvent } from "vitest/browser";
+import { page } from "vitest/browser";
 
 import "@a-novel-kit/uikit-tokens/tokens.css";
 
@@ -16,20 +14,6 @@ const options = [
   { value: "en", label: "English" },
   { value: "fr", label: "French" },
 ] as const;
-
-/** Leaves the input focused with its options closed. */
-async function focusClosed(input: HTMLElement) {
-  await userEvent.click(input);
-  await userEvent.keyboard("{Escape}");
-}
-
-const openPaths = [
-  { path: "a click on the input", open: (input: HTMLElement) => userEvent.click(input) },
-  { path: "its dropdown icon", open: () => userEvent.click(page.getByRole("button", { name: "Show options" })) },
-  { path: "ArrowDown", prepare: focusClosed, open: () => userEvent.keyboard("{ArrowDown}") },
-  { path: "typing", prepare: focusClosed, open: () => userEvent.keyboard("f") },
-  { path: "its controller", open: (_: HTMLElement, controller: ComboboxController<string>) => controller.open() },
-];
 
 describe("Combobox browser interactions", () => {
   it("keeps its error look while disabled, as Input does", () => {
@@ -42,12 +26,9 @@ describe("Combobox browser interactions", () => {
         options,
       },
     });
-    const probe = document.body.appendChild(document.createElement("span"));
-    probe.style.backgroundColor = "var(--color-feedback-error-border)";
-    const error = getComputedStyle(probe).backgroundColor;
-    probe.remove();
+    const field = page.getByRole("combobox", { name: "Language" }).element().parentElement!;
 
-    expect(getComputedStyle(page.getByRole("combobox", { name: "Language" }).element()).borderTopColor).toBe(error);
+    expect(getComputedStyle(field).borderTopColor).toBe(resolveColor("var(--color-feedback-error-border)"));
   });
 
   it.each([false, true])("renders the controller's fixed query and visibility (open: %s)", async (open) => {
@@ -66,7 +47,7 @@ describe("Combobox browser interactions", () => {
     await expect.element(input).toHaveAttribute("aria-expanded", String(open));
     if (open) {
       expect(page.getByRole("listbox").element().getBoundingClientRect().width).toBeCloseTo(
-        input.element().getBoundingClientRect().width
+        input.element().parentElement!.getBoundingClientRect().width
       );
       await page.getByRole("option", { name: "French" }).click();
       await expect.element(page.getByRole("option", { name: "English" })).toHaveAttribute("aria-selected", "true");
@@ -92,27 +73,4 @@ describe("Combobox browser interactions", () => {
     await expect.element(input).toHaveAttribute("aria-expanded", "true");
     await expect.element(page.getByRole("listbox")).toBeVisible();
   });
-
-  it.each(openPaths)("shows the listbox at the input's width when opened by $path", async ({ prepare, open }) => {
-    const controller = createComboboxController<string>();
-    const { container } = render(Combobox, { props: { "aria-label": "Language", controller, options } });
-    const input = page.getByRole("combobox", { name: "Language" }).element() as HTMLElement;
-    await prepare?.(input);
-    // Resizes the input after any earlier opening, so only a fresh measurement passes.
-    container.style.inlineSize = "20rem";
-    const shown = anchorWidthOnShow("--a-novel-combobox-anchor-width");
-
-    await open(input, controller);
-
-    expect(await shown).toBe(input.getBoundingClientRect().width + "px");
-  });
-});
-
-it("centers a rendered option in each row of its list", async () => {
-  render(RenderedOptionsFixture, { kind: "combobox" });
-  await expect.poll(() => document.querySelectorAll("[role=option]").length).toBe(2);
-
-  const rows = [...document.querySelectorAll("[role=option]")];
-  for (const row of rows)
-    expect(Math.abs(offsetFromMiddle(row.querySelector(".language-name")!, row))).toBeLessThan(0.5);
 });

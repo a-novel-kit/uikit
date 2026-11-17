@@ -53,6 +53,7 @@ so its accessible name, description, required state, and invalid state stay conn
 </script>
 
 <script lang="ts">
+  import FieldMessages, { describedBy } from "./internal/FieldMessages.svelte";
   import RenderContent from "./internal/RenderContent.svelte";
 
   const generatedId = $props.id();
@@ -69,11 +70,9 @@ so its accessible name, description, required state, and invalid state stay conn
     ...rest
   }: FieldProps = $props();
 
-  const hintId = $derived(hint ? `${controlId}-hint` : undefined);
-  const errorId = $derived(error ? `${controlId}-error` : undefined);
   const controlProps = $derived<FieldControlProps>({
     id: controlId,
-    "aria-describedby": [hintId, errorId].filter(Boolean).join(" ") || undefined,
+    "aria-describedby": describedBy({ id: controlId, hint, error }),
     "aria-invalid": error ? true : undefined,
     required: required ? true : undefined,
   });
@@ -92,8 +91,7 @@ so its accessible name, description, required state, and invalid state stay conn
     </div>
   {/if}
   {@render children(controlProps)}
-  {#if hint}<div id={hintId} class="hint"><RenderContent content={hint} /></div>{/if}
-  {#if error}<div id={errorId} class="error"><RenderContent content={error} /></div>{/if}
+  <FieldMessages id={controlId} {hint} {error} />
 </div>
 
 <style>
@@ -134,23 +132,6 @@ so its accessible name, description, required state, and invalid state stay conn
 
   .required {
     margin-inline-start: var(--space-1);
-    color: var(--color-feedback-error-text);
-  }
-
-  .hint,
-  .error {
-    margin: 0;
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-compact);
-  }
-
-  /* A hint is quieter than the label and sits slightly inset, so it reads as the field's note. */
-  .hint {
-    padding-inline: var(--space-1);
-    color: var(--color-text-hint);
-    font-size: var(--font-size-xs);
-  }
-  .error {
     color: var(--color-feedback-error-text);
   }
 </style>

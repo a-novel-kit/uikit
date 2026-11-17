@@ -14,10 +14,11 @@ export async function settledStyle(element: Element): Promise<CSSStyleDeclaratio
   return getComputedStyle(element);
 }
 
-/** Resolves with the anchor width, in `property`, that the next floating surface carries as it shows, before its first paint. */
-export function anchorWidthOnShow(property: string): Promise<string> {
+/** Resolves with the anchor width that the next floating surface carries as it shows, before its first paint. */
+export function anchorWidthOnShow(): Promise<string> {
   return new Promise((resolve) => {
-    const read = (event: Event) => resolve((event.target as HTMLElement).style.getPropertyValue(property));
+    const read = (event: Event) =>
+      resolve((event.target as HTMLElement).style.getPropertyValue("--floating-anchor-width"));
     document.addEventListener("beforetoggle", read, { capture: true, once: true });
   });
 }

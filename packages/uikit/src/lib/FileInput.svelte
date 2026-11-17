@@ -33,6 +33,7 @@ Native attributes and events target the input; `class` styles the surrounding su
 <script lang="ts">
   import { createValueController } from "./controllers.svelte";
   import FieldButton from "./internal/FieldButton.svelte";
+  import Well from "./internal/Well.svelte";
   import { useMessages } from "./internal/i18n";
   import { resolveInvalidState } from "./internal/selection";
 
@@ -98,11 +99,12 @@ Native attributes and events target the input; `class` styles the surrounding su
   };
 </script>
 
-<span class="file-input {controlSize} {className}">
+<Well size={controlSize} invalid={isInvalid} class={className}>
   <input
     bind:this={field}
     type="file"
     class="control"
+    data-well-control
     {...rest}
     aria-invalid={isInvalid || undefined}
     onchange={handleChange}
@@ -114,7 +116,7 @@ Native attributes and events target the input; `class` styles the surrounding su
   <span class="status" class:empty={chosen.length === 0} aria-hidden="true" aria-disabled={rest.disabled || undefined}>
     {status}
   </span>
-  <span class="end">
+  <span class="end" data-well-end>
     {#if onClear && chosen.length > 0}
       <!-- Above the transparent input, so a click removes the choice instead of opening the picker. -->
       <span class="clear">
@@ -126,109 +128,51 @@ Native attributes and events target the input; `class` styles the surrounding su
     <!-- Under the transparent input, so a click on it opens the picker as the rest of the field does. -->
     <span class="browse" aria-hidden="true"><FolderIcon size="var(--icon-size-sm)" /></span>
   </span>
-</span>
+</Well>
 
 <style>
-  .file-input {
-    display: flex;
-    position: relative;
-    align-items: center;
-    gap: var(--space-2);
-    transition:
-      background-color var(--duration-fast) var(--easing-standard),
-      border-color var(--duration-fast) var(--easing-standard),
-      box-shadow var(--duration-fast) var(--easing-standard);
-    cursor: pointer;
-    box-sizing: border-box;
-    border: var(--border-width-thin) solid var(--color-field-border);
-    border-radius: var(--radius-lg);
-    background: var(--color-control-surface);
-    inline-size: 100%;
-    min-inline-size: 0;
-    color: var(--color-control-text);
-    line-height: var(--line-height-compact);
-    font-family: var(--font-family-interface);
-  }
-
+  /* The input covers the whole well, so a click anywhere in it opens the picker. */
   .control {
     position: absolute;
     opacity: 0;
-    cursor: inherit;
+    cursor: pointer;
     margin: 0;
     inset: 0;
     inline-size: 100%;
     block-size: 100%;
   }
 
+  .control:disabled {
+    cursor: not-allowed;
+  }
+
   .control::file-selector-button {
     cursor: inherit;
   }
 
+  /* The folder lights with the field under the pointer and in focus. */
   @media (hover: hover) {
-    .file-input:hover:not(
-        :has(.control:disabled, .control:focus-visible, .control[aria-invalid="true"], .control:user-invalid)
-      ) {
-      border-color: var(--color-field-border);
-      background: var(--color-control-surface-hover);
-    }
-
-    .file-input:hover:not(:has(.control:disabled)) .browse {
+    .control:enabled:hover ~ .end .browse,
+    .end:hover .browse {
       color: var(--color-text-primary);
     }
   }
 
-  .file-input:has(.control:focus-visible) .browse {
+  .control:focus-visible ~ .end .browse {
     color: var(--color-text-primary);
-  }
-
-  .file-input:has(.control:focus-visible) {
-    box-shadow: var(--shadow-focus-ring);
-    border-color: var(--color-control-border-focus);
-    background: var(--color-control-surface-focus);
-  }
-
-  /* Before the error rules, as in Input, so a disabled field keeps its error look. */
-  .file-input:has(.control:disabled) {
-    cursor: not-allowed;
-    border-color: var(--color-field-border);
-    background: var(--color-control-surface-disabled);
-    color: var(--color-control-disabled-text);
-  }
-
-  /* As Input's: an error, or a required field the form found empty, keeps its look while focused. */
-  .file-input:has(.control[aria-invalid="true"], .control:user-invalid) {
-    border-color: var(--color-feedback-error-border);
-    background: var(--color-control-surface-invalid);
-  }
-
-  .file-input:has(.control[aria-invalid="true"]:focus-visible, .control:user-invalid:focus-visible) {
-    box-shadow: var(--shadow-invalid-focus-ring);
   }
 
   .status {
     flex: 1 1 0;
     min-inline-size: 0;
     overflow: hidden;
+    line-height: var(--line-height-compact);
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  .status.empty {
+  .control:enabled ~ .status.empty {
     color: var(--color-control-placeholder);
-  }
-
-  .file-input:has(.control:disabled) :is(.status, .browse) {
-    color: var(--color-control-disabled-text);
-  }
-
-  /* A zero-height margin box keeps the field at its own height: the icons overlap its padding, as far
-     from the inline end as from the block edges of a medium field, as a password's toggle does. */
-  .end {
-    display: inline-flex;
-    flex: none;
-    gap: var(--space-1);
-    margin-inline-end: calc(-1 * (var(--space-2) + var(--border-width-thin)));
-    margin-block: calc(var(--control-height-nested) / -2);
   }
 
   .clear {
@@ -242,45 +186,18 @@ Native attributes and events target the input; `class` styles the surrounding su
     display: none;
   }
 
-  /* The folder sits where a field's button would, the size of one, and lights with the field. */
+  /* The folder sits where a field's button would, the size of one. */
   .browse {
     display: grid;
     place-items: center;
     transition: color var(--duration-fast) var(--easing-standard);
     inline-size: var(--control-height-nested);
     block-size: var(--control-height-nested);
-    color: var(--color-text-muted);
-  }
-
-  .sm {
-    padding: var(--space-1) var(--space-3);
-    min-block-size: var(--control-height-sm);
-    font-size: var(--font-size-sm);
-  }
-
-  .md {
-    padding: var(--space-1) var(--space-3);
-    min-block-size: var(--control-height-md);
-    font-size: var(--font-size-md);
-  }
-
-  .lg {
-    padding: var(--space-2) var(--space-4);
-    min-block-size: var(--control-height-lg);
-    font-size: var(--font-size-lg);
+    color: var(--well-muted-text);
   }
 
   @media (forced-colors: active) {
-    .file-input:has(.control:focus-visible) {
-      outline: var(--border-width-strong) solid Highlight;
-      outline-offset: var(--focus-ring-offset);
-    }
-
-    .file-input:has(.control:disabled) :is(.status, .browse) {
-      color: GrayText;
-    }
-
-    .status.empty {
+    .control:enabled ~ .status.empty {
       color: GrayText;
     }
   }
@@ -297,11 +214,6 @@ Native attributes and events target the input; `class` styles the surrounding su
     .status,
     .end {
       display: none;
-    }
-
-    /* The native control brings its own height, so the field drops the padding it keeps for the icons. */
-    .file-input {
-      padding-block: 0;
     }
   }
 </style>

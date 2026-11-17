@@ -77,7 +77,9 @@ swaps for the field once the page hydrates.
   import Button from "./Button.svelte";
   import Dialog from "./Dialog.svelte";
   import { createChipGroupController } from "./controllers.svelte";
+  import FieldMessages, { describedBy as describedByMessages } from "./internal/FieldMessages.svelte";
   import RenderContent from "./internal/RenderContent.svelte";
+  import Well from "./internal/Well.svelte";
   import { useMessages } from "./internal/i18n";
   import { matchesSearch } from "./internal/selection";
 
@@ -119,8 +121,6 @@ swaps for the field once the page hydrates.
   const shown = $derived(
     new Set(options.filter((option) => matchesSearch(option.label, controller.state.query)).map(({ value }) => value))
   );
-  const hintId = $derived(hint ? `${id}-hint` : undefined);
-  const errorId = $derived(error ? `${id}-error` : undefined);
 
   // The checkbox flips before its change event, so it takes back whatever the controller refuses.
   function choose(input: HTMLInputElement) {
@@ -146,70 +146,74 @@ swaps for the field once the page hydrates.
 </script>
 
 {#snippet well(inSheet: boolean)}
-  <div class="chips" class:sheet={inSheet}>
-    {#if searchLabel}
-      <label class="search">
-        <SearchIcon class="search-icon" aria-hidden="true" />
-        <input
-          type="search"
-          class="query"
-          aria-label={searchLabel}
-          placeholder={searchLabel}
-          autocomplete="off"
-          spellcheck="false"
-          value={controller.state.query}
-          oninput={(event) => search(event.currentTarget)}
-          onkeydown={keepSearching}
-        />
-      </label>
-    {/if}
-    <div class="options">
-      {#each sections as [section, members], index (section)}
-        <div
-          class="section"
-          role={section ? "group" : undefined}
-          aria-labelledby={section ? `${id}-section-${index}` : undefined}
-          hidden={!members.some((option) => shown.has(option.value))}
-        >
-          {#if section}<span id="{id}-section-{index}" class="section-title">{section}</span>{/if}
-          {#each members as option (option.value)}
-            <label class="chip" lang={option.lang} hidden={!shown.has(option.value)}>
-              <input
-                type="checkbox"
-                {name}
-                value={option.value}
-                checked={chosenValues.has(option.value)}
-                defaultChecked={chosenValues.has(option.value)}
-                disabled={option.disabled}
-                aria-invalid={error ? true : undefined}
-                form={rest.form}
-                onchange={(event) => choose(event.currentTarget)}
-              />
-              {option.label}
-            </label>
-          {/each}
-        </div>
-      {/each}
+  <Well invalid={Boolean(error)} hover={false}>
+    <div class="chips" class:sheet={inSheet}>
+      {#if searchLabel}
+        <label class="search">
+          <SearchIcon class="search-icon" aria-hidden="true" />
+          <input
+            type="search"
+            class="query"
+            data-well-control
+            aria-label={searchLabel}
+            placeholder={searchLabel}
+            autocomplete="off"
+            spellcheck="false"
+            value={controller.state.query}
+            oninput={(event) => search(event.currentTarget)}
+            onkeydown={keepSearching}
+          />
+        </label>
+      {/if}
+      <div class="options">
+        {#each sections as [section, members], index (section)}
+          <div
+            class="section"
+            role={section ? "group" : undefined}
+            aria-labelledby={section ? `${id}-section-${index}` : undefined}
+            hidden={!members.some((option) => shown.has(option.value))}
+          >
+            {#if section}<span id="{id}-section-{index}" class="section-title">{section}</span>{/if}
+            {#each members as option (option.value)}
+              <label class="chip" lang={option.lang} hidden={!shown.has(option.value)}>
+                <input
+                  type="checkbox"
+                  {name}
+                  value={option.value}
+                  checked={chosenValues.has(option.value)}
+                  defaultChecked={chosenValues.has(option.value)}
+                  disabled={option.disabled}
+                  aria-invalid={error ? true : undefined}
+                  form={rest.form}
+                  onchange={(event) => choose(event.currentTarget)}
+                />
+                {option.label}
+              </label>
+            {/each}
+          </div>
+        {/each}
+      </div>
+      {#if searchLabel}
+        <span class="empty" role="status">{shown.size === 0 ? t("chipGroup.empty") : ""}</span>
+      {/if}
     </div>
-    {#if searchLabel}
-      <span class="empty" role="status">{shown.size === 0 ? t("chipGroup.empty") : ""}</span>
-    {/if}
-  </div>
+  </Well>
 {/snippet}
 
 <fieldset
   class="chip-group {tone} {className}"
-  class:invalid={Boolean(error)}
   class:searchable={Boolean(searchLabel)}
   {...rest}
-  aria-describedby={[describedBy, hintId, errorId].filter(Boolean).join(" ") || undefined}
+  aria-describedby={describedByMessages({ id, hint, error }, describedBy)}
 >
   <legend><RenderContent content={legend} /></legend>
   {#if sheet}
     <!-- A narrow screen keeps only the choice in the form, and opens the search and the chips over the whole screen. -->
-    <button
+    <Well
+      as="button"
+      invalid={Boolean(error)}
+      hover={false}
       type="button"
-      class="chips trigger"
       aria-haspopup="dialog"
       aria-expanded={controller.state.open}
       onclick={controller.open}
@@ -221,7 +225,7 @@ swaps for the field once the page hydrates.
       {:else}
         <span class="placeholder">{placeholder ?? t("chipGroup.placeholder")}</span>
       {/if}
-    </button>
+    </Well>
     <Dialog {controller} title={legend} presentation="fullscreen">
       {@render well(true)}
       {#snippet actions()}
@@ -231,8 +235,7 @@ swaps for the field once the page hydrates.
   {:else}
     {@render well(false)}
   {/if}
-  {#if hint}<div id={hintId} class="hint"><RenderContent content={hint} /></div>{/if}
-  {#if error}<div id={errorId} class="error"><RenderContent content={error} /></div>{/if}
+  <FieldMessages {id} {hint} {error} />
 </fieldset>
 
 <style>
@@ -256,34 +259,19 @@ swaps for the field once the page hydrates.
     font-family: var(--font-family-interface);
   }
 
-  /* The chips sit in a field's well, bordered as any field is. */
-  /* As a medium field: a button's height and the same inset, growing with its rows. */
+  /* The chips sit in a medium field's well, growing with their rows. */
   .chips {
     display: grid;
+    flex: 1;
     align-content: center;
     gap: var(--space-1-5);
-    box-sizing: border-box;
-    border: var(--border-width-thin) solid var(--color-field-border);
-    border-radius: var(--radius-lg);
-    background: var(--chip-well);
-    padding: var(--space-1) var(--space-3);
-    min-block-size: var(--control-height-md);
-    --chip-well: var(--color-control-surface);
+    min-inline-size: 0;
   }
 
   /* Under a search, the well ends on its side inset, so a search that leaves a row or none still reads as a field
      rather than a line. */
-  .searchable .chips:not(.trigger) {
-    padding-block-end: var(--space-3);
-  }
-
-  /* The field that opens the chips' screen reads as the well it opens, showing only its choice as badges. */
-  .trigger {
-    cursor: pointer;
-    inline-size: 100%;
-    color: inherit;
-    font: inherit;
-    text-align: start;
+  .searchable .chips {
+    padding-block-end: calc(var(--space-3) - var(--space-1));
   }
 
   .placeholder {
@@ -297,6 +285,7 @@ swaps for the field once the page hydrates.
   .chips.sheet {
     display: flex;
     flex-direction: column;
+    align-self: stretch;
   }
 
   /* The sections pack at the top of a list taller than them, as on the chips' screen. */
@@ -330,7 +319,7 @@ swaps for the field once the page hydrates.
     z-index: 1;
     margin-block: calc(var(--space-1) * -1);
     inset-block-start: calc((var(--focus-ring-width) + var(--border-width-strong)) * -1);
-    background: linear-gradient(var(--chip-well), var(--chip-well)), var(--color-surface-island-strong);
+    background: linear-gradient(var(--well-surface), var(--well-surface)), var(--color-surface-island-strong);
     padding-block: var(--space-1);
   }
 
@@ -398,15 +387,6 @@ swaps for the field once the page hydrates.
     color: var(--color-control-placeholder);
   }
 
-  /* A focused search, or the field that opens it, lights the well as a focused field. */
-  .chip-group:has(.query:focus-visible) .chips,
-  .trigger:focus-visible {
-    outline: none;
-    box-shadow: var(--shadow-focus-ring);
-    border-color: var(--color-control-border-focus);
-    --chip-well: var(--color-control-surface-focus);
-  }
-
   /* An empty status takes no room, yet stays in the page to announce the next empty search. */
   .empty {
     color: var(--color-text-hint);
@@ -415,11 +395,6 @@ swaps for the field once the page hydrates.
 
   .empty:empty {
     position: absolute;
-  }
-
-  .invalid .chips {
-    border-color: var(--color-feedback-error-border);
-    --chip-well: var(--color-control-surface-invalid);
   }
 
   /* A chip takes a badge's size and type, so a chosen one reads as the tag it becomes. A real checkbox
@@ -496,11 +471,6 @@ swaps for the field once the page hydrates.
     cursor: not-allowed;
   }
 
-  .chip-group:disabled:not(.invalid) .chips {
-    cursor: not-allowed;
-    --chip-well: var(--color-control-surface-disabled);
-  }
-
   .chip:has(:disabled:not(:checked)) {
     background: var(--color-control-surface-disabled);
     color: var(--color-control-disabled-text);
@@ -510,24 +480,6 @@ swaps for the field once the page hydrates.
   .chip:has(:checked:disabled) {
     opacity: var(--opacity-disabled);
     box-shadow: none;
-  }
-
-  .hint,
-  .error {
-    margin: 0;
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-compact);
-  }
-
-  /* As a field's hint: quieter than the label and slightly inset. */
-  .hint {
-    padding-inline: var(--space-1);
-    color: var(--color-text-hint);
-    font-size: var(--font-size-xs);
-  }
-
-  .error {
-    color: var(--color-feedback-error-text);
   }
 
   /* Forced colors drop the chip's fill, so a border keeps its shape, as Badge does. */

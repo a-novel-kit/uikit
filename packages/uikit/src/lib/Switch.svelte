@@ -27,7 +27,7 @@ Provide a visible label or an accessible name.
 </script>
 
 <script lang="ts">
-  import RenderContent from "./internal/RenderContent.svelte";
+  import ChoiceLabel from "./internal/ChoiceLabel.svelte";
 
   let { label, description, controller, class: className = "", ...rest }: SwitchProps = $props();
 
@@ -39,12 +39,7 @@ Provide a visible label or an accessible name.
 </script>
 
 <label class="switch {className}">
-  {#if label || description}
-    <span class="copy">
-      {#if label}<span class="label"><RenderContent content={label} /></span>{/if}
-      {#if description}<span class="description"><RenderContent content={description} /></span>{/if}
-    </span>
-  {/if}
+  <ChoiceLabel {label} {description} />
   <input
     checked={controller.state.checked}
     defaultChecked={controller.state.checked}
@@ -62,21 +57,6 @@ Provide a visible label or an accessible name.
     align-items: center;
     gap: var(--space-4);
     cursor: pointer;
-    color: var(--color-text-primary);
-  }
-
-  .copy {
-    display: grid;
-    gap: var(--space-1);
-  }
-  .label {
-    font-weight: var(--font-weight-bold);
-    font-size: var(--font-size-sm);
-  }
-  .description {
-    color: var(--color-text-muted);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-compact);
   }
 
   input {
@@ -148,7 +128,6 @@ Provide a visible label or an accessible name.
 
   .switch:has(input:disabled) {
     cursor: not-allowed;
-    color: var(--color-text-disabled);
   }
   input:disabled {
     box-shadow: none;

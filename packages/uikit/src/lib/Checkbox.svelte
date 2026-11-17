@@ -26,7 +26,7 @@ Provide `label` or an accessible name; native input attributes are forwarded to 
 </script>
 
 <script lang="ts">
-  import RenderContent from "./internal/RenderContent.svelte";
+  import ChoiceLabel from "./internal/ChoiceLabel.svelte";
 
   let {
     label,
@@ -59,12 +59,7 @@ Provide `label` or an accessible name; native input attributes are forwarded to 
     onchange={handleChange}
     {...rest}
   />
-  {#if label || description}
-    <span class="copy">
-      {#if label}<span class="label"><RenderContent content={label} /></span>{/if}
-      {#if description}<span class="description"><RenderContent content={description} /></span>{/if}
-    </span>
-  {/if}
+  <ChoiceLabel {label} {description} />
 </label>
 
 <style>
@@ -73,7 +68,6 @@ Provide `label` or an accessible name; native input attributes are forwarded to 
     align-items: flex-start;
     gap: var(--space-3);
     cursor: pointer;
-    color: var(--color-text-primary);
   }
 
   input {
@@ -159,24 +153,7 @@ Provide `label` or an accessible name; native input attributes are forwarded to 
     color: var(--color-action-disabled-text);
   }
 
-  .copy {
-    display: grid;
-    gap: var(--space-1);
-  }
-  .label {
-    font-weight: var(--font-weight-bold);
-    font-size: var(--font-size-sm);
-  }
-  .description {
-    color: var(--color-text-muted);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-compact);
-  }
   .choice:has(input:disabled) {
     cursor: not-allowed;
-    color: var(--color-text-disabled);
-  }
-  .choice:has(input:disabled) .description {
-    color: var(--color-text-disabled);
   }
 </style>

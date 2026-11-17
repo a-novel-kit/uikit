@@ -8,8 +8,8 @@ package, and states its browser baseline: Baseline widely available.
 **Required only if you import a removed component, pass `variant` to `Link`, read a removed token, or install
 `@a-novel-kit/uikit-icons`.** None of the A-Novel platforms does, so they take this release as is: type checking fails
 on a removed import or prop, and a removed token resolves to nothing. A description list now falls to one column
-where it has less than 48rem, whatever the screen's width. Screenshots that show one, or `Pagination` (Account's devices
-page), change.
+where it has less than 48rem, whatever the screen's width. Screenshots that show one, `Pagination` (Account's devices
+page), or a `Switch`, `Checkbox` or `RadioGroup` label (now regular weight) change.
 
 ## Replace the removed components
 

@@ -48,6 +48,7 @@ Native attributes and events target the text input; `class` styles the surroundi
   import Badge from "./Badge.svelte";
   import VisuallyHidden from "./VisuallyHidden.svelte";
   import { createTagInputController } from "./controllers.svelte";
+  import Well from "./internal/Well.svelte";
   import { useMessages } from "./internal/i18n";
   import { resolveInvalidState } from "./internal/selection";
   import { splitTags } from "./tags";
@@ -151,71 +152,67 @@ Native attributes and events target the text input; `class` styles the surroundi
   }
 </script>
 
-<div class="tag-input {controlSize} {className}" class:invalid={isInvalid}>
-  {#if tags.length > 0}
-    <ul class="tags">
-      {#each tags as tag, index (tag)}
-        <li>
-          <!-- A disabled field's tags dim, and aria-disabled tells the accessibility check they are exempt from
+<Well size={controlSize} invalid={isInvalid} class={className}>
+  <div class="entries">
+    {#if tags.length > 0}
+      <ul class="tags">
+        {#each tags as tag, index (tag)}
+          <li>
+            <!-- A disabled field's tags dim, and aria-disabled tells the accessibility check they are exempt from
                contrast, as a disabled control is. -->
-          <Badge tone="brand" class="tag" aria-disabled={disabled || undefined}>
-            {tag}
-            {#if editable}
-              <button
-                type="button"
-                class="remove"
-                aria-label={t("tagInput.remove", { tag })}
-                onclick={() => removeTag(index)}
-              >
-                <!-- The cross follows the tag's text size, under the smallest icon. -->
-                <XIcon size="1em" aria-hidden="true" />
-              </button>
-            {/if}
-          </Badge>
-          <input type="hidden" {name} value={tag} {disabled} form={rest.form} />
-        </li>
-      {/each}
-    </ul>
-  {/if}
-  <input
-    bind:this={field}
-    type="text"
-    class="control"
-    autocomplete="off"
-    autocapitalize="none"
-    autocorrect="off"
-    spellcheck="false"
-    {name}
-    {disabled}
-    {readonly}
-    required={required && tags.length === 0}
-    aria-required={required || undefined}
-    {...rest}
-    aria-describedby={[describedBy, statusId].filter(Boolean).join(" ")}
-    aria-invalid={isInvalid || undefined}
-    oninput={handleInput}
-    onkeydown={handleKeydown}
-    oncompositionend={handleCompositionEnd}
-    {@attach commitOnReset}
-  />
+            <Badge tone="brand" class="tag" aria-disabled={disabled || undefined}>
+              {tag}
+              {#if editable}
+                <button
+                  type="button"
+                  class="remove"
+                  aria-label={t("tagInput.remove", { tag })}
+                  onclick={() => removeTag(index)}
+                >
+                  <!-- The cross follows the tag's text size, under the smallest icon. -->
+                  <XIcon size="1em" aria-hidden="true" />
+                </button>
+              {/if}
+            </Badge>
+            <input type="hidden" {name} value={tag} {disabled} form={rest.form} />
+          </li>
+        {/each}
+      </ul>
+    {/if}
+    <input
+      bind:this={field}
+      type="text"
+      class="control"
+      data-well-control
+      autocomplete="off"
+      autocapitalize="none"
+      autocorrect="off"
+      spellcheck="false"
+      {name}
+      {disabled}
+      {readonly}
+      required={required && tags.length === 0}
+      aria-required={required || undefined}
+      {...rest}
+      aria-describedby={[describedBy, statusId].filter(Boolean).join(" ")}
+      aria-invalid={isInvalid || undefined}
+      oninput={handleInput}
+      onkeydown={handleKeydown}
+      oncompositionend={handleCompositionEnd}
+      {@attach commitOnReset}
+    />
+  </div>
   <VisuallyHidden id={statusId} role="status">{status}</VisuallyHidden>
-</div>
+</Well>
 
 <style>
-  .tag-input {
+  /* Tags and the text input share the well's lines, wrapping as the tags grow. */
+  .entries {
     display: flex;
+    flex: 1;
     flex-wrap: wrap;
     align-items: center;
     gap: var(--space-1-5);
-    transition:
-      background-color var(--duration-fast) var(--easing-standard),
-      border-color var(--duration-fast) var(--easing-standard),
-      box-shadow var(--duration-fast) var(--easing-standard);
-    box-sizing: border-box;
-    border: var(--border-width-thin) solid var(--color-field-border);
-    border-radius: var(--radius-lg);
-    background: var(--color-control-surface);
-    inline-size: 100%;
     min-inline-size: 0;
   }
 
@@ -229,7 +226,7 @@ Native attributes and events target the text input; `class` styles the surroundi
   }
 
   /* A tag keeps its badge's look, its cross set in its text. */
-  .tag-input :global(.tag) {
+  .entries :global(.tag) {
     display: inline-flex;
     align-items: center;
     gap: var(--space-1);
@@ -298,29 +295,9 @@ Native attributes and events target the text input; `class` styles the surroundi
     color: var(--color-control-placeholder);
   }
 
-  @media (hover: hover) {
-    .tag-input:hover:not(
-        .invalid,
-        :has(.control:disabled, .control:read-only, .control:focus-visible, .control:user-invalid)
-      ) {
-      background: var(--color-control-surface-hover);
-    }
-  }
-
-  .tag-input:has(.control:focus-visible) {
-    box-shadow: var(--shadow-focus-ring);
-    border-color: var(--color-control-border-focus);
-    background: var(--color-control-surface-focus);
-  }
-
-  .tag-input:has(.control:disabled) {
-    cursor: not-allowed;
-    background: var(--color-control-surface-disabled);
-  }
-
   /* A disabled field dims its tags, as a disabled chip or button dims its choice. A disabled fieldset disables the
      crosses without this component knowing, so they hide on their own state. */
-  .tag-input:has(.control:disabled) :global(.tag) {
+  .entries:has(.control:disabled) :global(.tag) {
     opacity: var(--opacity-disabled);
     box-shadow: none;
   }
@@ -335,44 +312,10 @@ Native attributes and events target the text input; `class` styles the surroundi
 
   /* After the dimming, which would halve the user's own disabled color. */
   @media (forced-colors: active) {
-    .tag-input:has(.control:focus-visible) {
-      outline: var(--border-width-strong) solid Highlight;
-      outline-offset: var(--focus-ring-offset);
-    }
-
-    .tag-input:has(.control:disabled) :global(.tag) {
+    .entries:has(.control:disabled) :global(.tag) {
       opacity: 1;
       border-color: GrayText;
       color: GrayText;
     }
-  }
-
-  /* As Input's: an error, or a required field the form found empty, keeps its look while focused. */
-  .tag-input:is(.invalid, :has(.control:user-invalid)) {
-    border-color: var(--color-feedback-error-border);
-    background: var(--color-control-surface-invalid);
-  }
-
-  .tag-input:is(.invalid, :has(.control:user-invalid)):has(.control:focus-visible) {
-    box-shadow: var(--shadow-invalid-focus-ring);
-    border-color: var(--color-feedback-error-border);
-    background: var(--color-control-surface-invalid);
-  }
-
-  /* A small field keeps a small button's height once it holds a tag. */
-  .sm {
-    padding: calc(var(--space-1) / 2) var(--space-3);
-    min-block-size: var(--control-height-sm);
-    font-size: var(--font-size-sm);
-  }
-  .md {
-    padding: var(--space-1) var(--space-3);
-    min-block-size: var(--control-height-md);
-    font-size: var(--font-size-md);
-  }
-  .lg {
-    padding: var(--space-2) var(--space-4);
-    min-block-size: var(--control-height-lg);
-    font-size: var(--font-size-lg);
   }
 </style>

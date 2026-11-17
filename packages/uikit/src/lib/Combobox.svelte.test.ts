@@ -73,9 +73,7 @@ describe("Combobox", () => {
 
     await fireEvent.focus(getByRole("combobox", { name: "Language" }));
 
-    const listbox = getByRole("listbox");
-    const content = listbox.closest<HTMLElement>(".a-novel-combobox-content");
-    expect(content?.style.getPropertyValue("--a-novel-combobox-menu-max-height")).toBe("8rem");
+    expect(getByRole("listbox").style.getPropertyValue("--listbox-max-block-size")).toBe("8rem");
   });
 
   it("keeps its shown label through a form reset", () => {
@@ -93,17 +91,6 @@ describe("Combobox", () => {
 
     expect((getByRole("combobox", { name: "Language" }) as HTMLInputElement).value).toBe("French");
     form.remove();
-  });
-
-  it("names an option in the language it gives", async () => {
-    const languages = [{ value: "fr", label: "Français", lang: "fr" }];
-    const { getByRole } = render(Combobox, {
-      props: { "aria-label": "Language", controller: createComboboxController<string>(), options: languages },
-    });
-
-    await fireEvent.focus(getByRole("combobox", { name: "Language" }));
-
-    expect(getByRole("option", { name: "Français" }).getAttribute("lang")).toBe("fr");
   });
 
   it("keeps option labels when custom visuals replace their content", async () => {

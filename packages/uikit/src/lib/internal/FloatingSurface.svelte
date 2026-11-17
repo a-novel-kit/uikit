@@ -85,6 +85,14 @@
     else still = false;
   });
 
+  // The surface carries its source's width as `--floating-anchor-width` from the flush that shows it, so an owner can
+  // size it to the field it opens from.
+  let anchorWidth = $state<string>();
+
+  $effect.pre(() => {
+    if (open && source) anchorWidth = source.getBoundingClientRect().width + "px";
+  });
+
   $effect(() => {
     if (open || !element) return;
 
@@ -156,6 +164,7 @@
     popover={supportsPopover ? mode : undefined}
     ontoggle={handleToggle}
     {...rest}
+    style:--floating-anchor-width={anchorWidth}
   >
     {@render children?.()}
   </div>
