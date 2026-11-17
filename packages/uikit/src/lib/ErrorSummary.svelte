@@ -34,8 +34,8 @@ Mount after validation and enable `focusOnMount` when focus should move to the s
 </script>
 
 <script lang="ts">
-  import RenderContent from "./Content.svelte";
   import FeedbackIcon from "./internal/FeedbackIcon.svelte";
+  import RenderContent from "./internal/RenderContent.svelte";
   import { useMessages } from "./internal/i18n";
 
   import { tick } from "svelte";

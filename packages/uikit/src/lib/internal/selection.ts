@@ -1,4 +1,4 @@
-import type { SelectionOption } from "./types";
+import type { SelectionOption } from "../types";
 
 import type { HTMLInputAttributes } from "svelte/elements";
 

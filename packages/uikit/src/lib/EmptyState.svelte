@@ -22,7 +22,7 @@ Presents an empty result with an h2 heading and optional guidance or recovery ac
 </script>
 
 <script lang="ts">
-  import RenderContent from "./Content.svelte";
+  import RenderContent from "./internal/RenderContent.svelte";
 
   let { title, description, illustration, actions, class: className = "", ...rest }: EmptyStateProps = $props();
 </script>

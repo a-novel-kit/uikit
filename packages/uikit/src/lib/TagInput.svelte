@@ -49,7 +49,7 @@ Native attributes and events target the text input; `class` styles the surroundi
   import VisuallyHidden from "./VisuallyHidden.svelte";
   import { createTagInputController } from "./controllers.svelte";
   import { useMessages } from "./internal/i18n";
-  import { resolveInvalidState } from "./selection";
+  import { resolveInvalidState } from "./internal/selection";
   import { splitTags } from "./tags";
 
   import type { Attachment } from "svelte/attachments";

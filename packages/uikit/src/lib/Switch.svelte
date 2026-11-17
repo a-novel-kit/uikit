@@ -27,7 +27,7 @@ Provide a visible label or an accessible name.
 </script>
 
 <script lang="ts">
-  import RenderContent from "./Content.svelte";
+  import RenderContent from "./internal/RenderContent.svelte";
 
   let { label, description, controller, class: className = "", ...rest }: SwitchProps = $props();
 

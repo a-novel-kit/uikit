@@ -61,8 +61,8 @@ The hidden named input submits the selected value. The caller validates required
 <script lang="ts" generics="Value extends string">
   import FloatingSurface from "./internal/FloatingSurface.svelte";
   import { useMessages } from "./internal/i18n";
+  import { findEnabledBoundary, findNextEnabledIndex, resolveInvalidState } from "./internal/selection";
   import { createTypeahead, findTypeaheadMatch, isTypeaheadKey } from "./internal/typeahead";
-  import { findEnabledBoundary, findNextEnabledIndex, resolveInvalidState } from "./selection";
 
   import { onDestroy, tick } from "svelte";
 

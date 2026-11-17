@@ -1,4 +1,5 @@
 /// <reference types="vite/client" />
+import { resolveColor } from "../../test/style";
 import Badge from "./Badge.svelte";
 import ChipGroup from "./ChipGroup.svelte";
 import { createChipGroupController } from "./controllers.svelte";
@@ -11,14 +12,6 @@ import { page } from "vitest/browser";
 import "@a-novel-kit/uikit-tokens/tokens.css";
 
 import { render } from "@testing-library/svelte";
-
-function resolveColor(value: string) {
-  const sample = document.body.appendChild(document.createElement("span"));
-  sample.style.backgroundColor = value;
-  const color = getComputedStyle(sample).backgroundColor;
-  sample.remove();
-  return color;
-}
 
 describe("ChipGroup", () => {
   it("keeps a medium field's height while its chips fit one row", () => {

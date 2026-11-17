@@ -24,8 +24,8 @@ Errors use an alert live region; other tones use status. Override `role` for sta
 </script>
 
 <script lang="ts">
-  import RenderContent from "./Content.svelte";
   import FeedbackIcon from "./internal/FeedbackIcon.svelte";
+  import RenderContent from "./internal/RenderContent.svelte";
 
   let { tone = "info", title, icon, actions, class: className = "", children, ...rest }: AlertProps = $props();
 </script>

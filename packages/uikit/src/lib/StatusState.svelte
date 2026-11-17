@@ -27,8 +27,8 @@ other tones use status. Override `role` for static content.
 </script>
 
 <script lang="ts">
-  import RenderContent from "./Content.svelte";
   import FeedbackIcon from "./internal/FeedbackIcon.svelte";
+  import RenderContent from "./internal/RenderContent.svelte";
 
   let {
     tone = "info",

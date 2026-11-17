@@ -1,16 +1,4 @@
-import { resolve } from "node:path";
-import { fileURLToPath } from "node:url";
-
-import { defineConfig, defineProject } from "vitest/config";
-
-import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
-import { svelte } from "@sveltejs/vite-plugin-svelte";
-import { playwright } from "@vitest/browser-playwright";
-
-const storybookConfigRoot = fileURLToPath(new URL("./packages/storybook-config", import.meta.url));
-const storybookConfigDirectory = fileURLToPath(new URL("./packages/storybook/.storybook", import.meta.url));
-const storybookRoot = fileURLToPath(new URL("./packages/storybook", import.meta.url));
-const storybookSvelteConfig = fileURLToPath(new URL("./packages/storybook/svelte.config.js", import.meta.url));
+import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
@@ -25,58 +13,11 @@ export default defineConfig({
     },
     projects: [
       "packages/storybook-config",
+      "packages/storybook-config/vitest.browser.config.ts",
+      "packages/storybook-workbench",
       "packages/uikit",
       "packages/uikit/vitest.browser.config.ts",
       "packages/uikit/vitest.ssr.config.ts",
-      defineProject({
-        // The pre-bundled dependencies resolve from the package that declares them.
-        root: storybookConfigRoot,
-        optimizeDeps: { include: ["@storybook/addon-docs/blocks", "react", "react/jsx-dev-runtime"] },
-        test: {
-          name: "storybook-config-browser",
-          include: ["test/**/*.browser.test.ts"],
-          browser: {
-            enabled: true,
-            provider: playwright({}),
-            headless: true,
-            instances: [{ browser: "chromium" }],
-          },
-          coverage: { enabled: false },
-        },
-      }),
-      defineProject({
-        extends: true,
-        root: storybookRoot,
-        plugins: [
-          svelte({ configFile: storybookSvelteConfig }),
-          storybookTest({
-            configDir: storybookConfigDirectory,
-            storybookScript: "pnpm storybook",
-            storybookUrl: process.env.SB_URL,
-          }),
-        ],
-        test: {
-          name: "storybook",
-          exclude: ["**/*.mdx"],
-          // Only the Drive runner in CI provides the screenshot directory, so other runs take no screenshots.
-          setupFiles: process.env.PLAYWRIGHT_SNAPSHOT_DIR ? [`${storybookConfigDirectory}/vitest.screenshot.ts`] : [],
-          browser: {
-            enabled: true,
-            provider: playwright({}),
-            headless: true,
-            instances: [{ browser: "chromium" }],
-            expect: {
-              toMatchScreenshot: {
-                resolveScreenshotPath: ({ arg, ext }) =>
-                  resolve(process.env.PLAYWRIGHT_SNAPSHOT_DIR ?? "", `${arg}${ext}`),
-              },
-            },
-          },
-          coverage: {
-            enabled: false,
-          },
-        },
-      }),
     ],
   },
 });

@@ -38,7 +38,7 @@ Use `createValueController` with a selected option value or `undefined`.
 </script>
 
 <script lang="ts" generics="Value extends string">
-  import RenderContent from "./Content.svelte";
+  import RenderContent from "./internal/RenderContent.svelte";
 
   const generatedName = $props.id();
 

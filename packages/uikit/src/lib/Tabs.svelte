@@ -47,7 +47,7 @@ Every panel stays mounted; inactive panels are hidden. Initialize the controller
 </script>
 
 <script lang="ts">
-  import { findCompositeTarget, getEnabledCompositeItems } from "./focus";
+  import { findCompositeTarget, getEnabledCompositeItems } from "./internal/focus";
 
   let {
     tabs,

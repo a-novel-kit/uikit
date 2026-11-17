@@ -1,16 +1,13 @@
 import { fileURLToPath } from "node:url";
 
-import { defineConfig } from "vitest/config";
+import { defineProject } from "vitest/config";
 
-export default defineConfig({
+export default defineProject({
   root: fileURLToPath(new URL(".", import.meta.url)),
   test: {
     name: "storybook-config",
     environment: "jsdom",
     include: ["test/**/*.test.ts"],
     exclude: ["test/**/*.browser.test.ts"],
-    coverage: {
-      enabled: false,
-    },
   },
 });

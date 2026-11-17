@@ -1,4 +1,5 @@
 import I18nFixture from "../../test/I18nFixture.svelte";
+import { text } from "../../test/text";
 import DowntimeState from "./DowntimeState.svelte";
 
 import { createRawSnippet } from "svelte";
@@ -8,11 +9,6 @@ import { describe, expect, it } from "vitest";
 import { render } from "@testing-library/svelte";
 
 const end = new Date("2026-10-12T07:00:00Z");
-
-// Collapses template whitespace and the narrow spaces Intl puts in times.
-function text(element: HTMLElement): string {
-  return element.textContent?.replace(/\s+/g, " ").trim() ?? "";
-}
 
 describe("DowntimeState", () => {
   it("explains that the page is unavailable until its expected end", () => {

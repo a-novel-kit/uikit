@@ -53,7 +53,7 @@ so its accessible name, description, required state, and invalid state stay conn
 </script>
 
 <script lang="ts">
-  import RenderContent from "./Content.svelte";
+  import RenderContent from "./internal/RenderContent.svelte";
 
   const generatedId = $props.id();
 

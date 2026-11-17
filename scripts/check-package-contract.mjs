@@ -135,9 +135,7 @@ for (const statement of indexSource.statements) {
   barrelExports.set(statement.moduleSpecifier.text, entries);
 }
 
-const componentFiles = (await readdir(uikitSourceRoot))
-  .filter((name) => name.endsWith(".svelte") && name !== "Content.svelte")
-  .sort();
+const componentFiles = (await readdir(uikitSourceRoot)).filter((name) => name.endsWith(".svelte")).sort();
 
 for (const filename of [...componentFiles, "content.ts", "types.ts"]) {
   const path = resolve(uikitSourceRoot, filename);

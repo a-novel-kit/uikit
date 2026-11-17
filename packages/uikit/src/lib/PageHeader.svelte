@@ -26,7 +26,7 @@ Composes a page heading, supporting copy, and actions. Defaults to a header cont
 </script>
 
 <script lang="ts">
-  import RenderContent from "./Content.svelte";
+  import RenderContent from "./internal/RenderContent.svelte";
 
   let {
     title,

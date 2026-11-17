@@ -2,6 +2,7 @@
 import ActionMenuTriggerFixture from "../../test/ActionMenuTriggerFixture.svelte";
 import RenderedOptionsFixture from "../../test/RenderedOptionsFixture.svelte";
 import { offsetFromMiddle } from "../../test/geometry";
+import { anchorWidthOnShow } from "../../test/style";
 import ActionMenu from "./ActionMenu.svelte";
 import { type OpenController, createOpenController } from "./controllers.svelte";
 
@@ -26,14 +27,6 @@ const openPaths = [
   { path: "a click on a composed trigger", composed: true, open: click },
   { path: "the keyboard on a composed trigger", composed: true, open: pressArrowUp },
 ];
-
-/** Resolves with the anchor width the menu carries as it shows, before its first paint. */
-const anchorWidthOnShow = () =>
-  new Promise<string>((resolve) => {
-    const read = (event: Event) =>
-      resolve((event.target as HTMLElement).style.getPropertyValue("--a-novel-menu-anchor-width"));
-    document.addEventListener("beforetoggle", read, { capture: true, once: true });
-  });
 
 it("anchors a fixed open menu to its trigger and preserves it after selection or Escape", async () => {
   await page.viewport(1280, 800);
@@ -69,7 +62,7 @@ it.each(openPaths)("shows the menu with its trigger's width when opened by $path
   if (composed) render(ActionMenuTriggerFixture, { controller });
   else render(ActionMenu, { controller, label: "Item actions", items: [{ id: "rename", label: "Rename" }] });
   const trigger = page.getByRole("button", { name: "Item actions" }).element() as HTMLElement;
-  const shown = anchorWidthOnShow();
+  const shown = anchorWidthOnShow("--a-novel-menu-anchor-width");
 
   await open(trigger, controller);
 

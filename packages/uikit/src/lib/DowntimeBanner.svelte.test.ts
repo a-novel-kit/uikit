@@ -1,4 +1,5 @@
 import I18nFixture from "../../test/I18nFixture.svelte";
+import { text } from "../../test/text";
 import DowntimeBanner from "./DowntimeBanner.svelte";
 
 import { describe, expect, it } from "vitest";
@@ -7,11 +8,6 @@ import { render } from "@testing-library/svelte";
 
 const start = new Date("2026-10-12T06:00:00Z");
 const end = new Date("2026-10-12T07:00:00Z");
-
-// Collapses template whitespace and the narrow spaces Intl puts in times.
-function text(element: HTMLElement): string {
-  return element.textContent?.replace(/\s+/g, " ").trim() ?? "";
-}
 
 const phaseCases = [
   {

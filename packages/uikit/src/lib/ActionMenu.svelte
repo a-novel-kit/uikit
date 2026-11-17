@@ -93,8 +93,8 @@ For a custom trigger, spread the snippet attributes onto a native button.
 </script>
 
 <script lang="ts">
-  import { closestCompositeItem, findCompositeTarget, getEnabledCompositeItems } from "./focus";
   import FloatingSurface from "./internal/FloatingSurface.svelte";
+  import { closestCompositeItem, findCompositeTarget, getEnabledCompositeItems } from "./internal/focus";
   import { useMessages } from "./internal/i18n";
   import { createTypeahead, findTypeaheadMatch, isTypeaheadKey } from "./internal/typeahead";
 

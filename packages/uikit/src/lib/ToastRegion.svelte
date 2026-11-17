@@ -38,8 +38,8 @@ The caller manages their lifetime and removes dismissed entries; no automatic ti
 </script>
 
 <script lang="ts">
-  import RenderContent from "./Content.svelte";
   import FeedbackIcon from "./internal/FeedbackIcon.svelte";
+  import RenderContent from "./internal/RenderContent.svelte";
   import { useMessages } from "./internal/i18n";
 
   const { t } = useMessages();
