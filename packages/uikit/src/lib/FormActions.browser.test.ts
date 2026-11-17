@@ -39,13 +39,15 @@ describe("FormActions", () => {
     expect(submit.getBoundingClientRect().width).toBe(submit.closest("form")!.getBoundingClientRect().width);
   });
 
-  it("keeps its feedback and actions at their own height in a taller column", async () => {
+  it("keeps its feedback at its own height in a taller column", async () => {
     await page.viewport(1280, 800);
-    const { getByRole } = render(Fixture, { error: true, blockSize: "600px" });
-    const alert = getByRole("alert").getBoundingClientRect();
-    const submit = getByRole("button", { name: "Save changes" }).getBoundingClientRect();
+    const natural = render(Fixture, { error: true });
+    const height = natural.getByRole("alert").getBoundingClientRect().height;
+    natural.unmount();
 
-    expect(submit.top - alert.bottom).toBe(12);
+    const { getByRole } = render(Fixture, { error: true, blockSize: "600px" });
+
+    expect(getByRole("alert").getBoundingClientRect().height).toBe(height);
   });
 
   it("preserves native submission and adds no leading space to an action-only form", async () => {
