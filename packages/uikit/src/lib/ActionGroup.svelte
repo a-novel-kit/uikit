@@ -1,8 +1,9 @@
 <!--
 @component
-Lays out actions at their natural width, side by side at the end of the line, and stacked full width below
-35rem. Put the primary action last: source order is kept, so it ends the line on a wide screen and sits under the
-thumb on a phone. Use ButtonGroup when the controls also need a named group.
+Lays out actions at their natural width, side by side at the end of the line, and stacked full width where it has
+less than 35rem, as on a phone or in a small dialog. Put the primary action last: source order is kept, so it ends
+the line when there is room and sits under the thumb on a phone. Use ButtonGroup when the controls also need a
+named group.
 -->
 <script lang="ts" module>
   import type { HTMLAttributes } from "svelte/elements";
@@ -15,17 +16,23 @@ thumb on a phone. Use ButtonGroup when the controls also need a named group.
   let { class: className = "", children, ...rest }: ActionGroupProps = $props();
 </script>
 
-<div class="actions {className}" {...rest}>
-  {@render children?.()}
+<!-- The outer box measures the space the actions get, so they stack by that width, not the screen's. -->
+<div class="group {className}" {...rest}>
+  <div class="actions">
+    {@render children?.()}
+  </div>
 </div>
 
 <style>
+  .group {
+    container-type: inline-size;
+    min-inline-size: 0;
+  }
   .actions {
     display: grid;
     gap: var(--space-3);
-    min-inline-size: 0;
   }
-  @media (min-width: 35rem) {
+  @container (width >= 35rem) {
     .actions {
       display: flex;
       flex-wrap: wrap;

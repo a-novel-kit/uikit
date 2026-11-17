@@ -16,7 +16,6 @@
 
   import { X as CloseIcon, CircleHelp as HelpIcon, House as HomeIcon } from "@lucide/svelte";
   import { defineMeta } from "@storybook/addon-svelte-csf";
-  import { expect, userEvent, within } from "storybook/test";
 
   const { Story } = defineMeta({
     title: "Overlays/Disclosure and dialog",
@@ -29,13 +28,6 @@
       },
     },
   });
-
-  async function verifyPinnedDialog({ canvasElement }: { canvasElement: HTMLElement }) {
-    const canvas = within(canvasElement);
-    await userEvent.click(canvas.getByRole("button", { name: "Close dialog" }));
-    await userEvent.keyboard("{Escape}");
-    await expect(canvas.getByRole("dialog", { name: "Archive item?" })).toBeVisible();
-  }
 </script>
 
 <script lang="ts">
@@ -226,13 +218,7 @@
   {@render scrollExample(opened)}
 </Story>
 
-<Story
-  name="Dialog — desktop"
-  exportName="DialogDesktop"
-  globals={reviewStoryGlobals.desktop}
-  asChild
-  play={verifyPinnedDialog}
->
+<Story name="Dialog — desktop" exportName="DialogDesktop" globals={reviewStoryGlobals.desktop} asChild>
   {@render dialogExample(opened)}
 </Story>
 

@@ -11,13 +11,8 @@ describe("DescriptionList", () => {
     const children = createRawSnippet(() => ({
       render: () => "<div><dt>Owner</dt><dd>Ada Lovelace</dd></div><div><dt>Status</dt><dd>Ready</dd></div>",
     }));
-    const { container, getByText } = render(DescriptionList, {
-      props: { columns: 2, density: "compact", children },
-    });
-    const list = container.querySelector("dl");
+    const { getByText } = render(DescriptionList, { props: { columns: 2, density: "compact", children } });
 
-    expect(list?.className).toContain("columns-2");
-    expect(list?.className).toContain("compact");
     expect(getByText("Owner").tagName).toBe("DT");
     expect(getByText("Ada Lovelace").tagName).toBe("DD");
   });

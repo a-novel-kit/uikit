@@ -38,6 +38,7 @@ The caller manages their lifetime and removes dismissed entries; no automatic ti
 </script>
 
 <script lang="ts">
+  import Button from "./Button.svelte";
   import FeedbackIcon from "./internal/FeedbackIcon.svelte";
   import RenderContent from "./internal/RenderContent.svelte";
   import { useMessages } from "./internal/i18n";
@@ -63,10 +64,12 @@ The caller manages their lifetime and removes dismissed entries; no automatic ti
         {#if toast.action}<div class="action">{@render toast.action()}</div>{/if}
       </div>
       {#if onDismiss}
-        <button
-          type="button"
+        <Button
+          variant="text"
+          tone="neutral"
+          size="sm"
           aria-label={toast.dismissLabel ?? t("toastRegion.dismissLabel")}
-          onclick={() => onDismiss?.(toast.id)}>{t("toastRegion.dismiss")}</button
+          onclick={() => onDismiss?.(toast.id)}>{t("toastRegion.dismiss")}</Button
         >
       {/if}
     </div>
@@ -119,27 +122,6 @@ The caller manages their lifetime and removes dismissed entries; no automatic ti
   }
   .action {
     margin-block-start: var(--space-2);
-  }
-  button {
-    cursor: pointer;
-    border: 0;
-    border-radius: var(--radius-sm);
-    background: transparent;
-    padding: var(--space-2);
-    color: var(--color-text-muted);
-    font: inherit;
-    font-size: var(--font-size-xs);
-    font-family: var(--font-family-interface);
-  }
-  @media (hover: hover) {
-    button:hover {
-      background: var(--color-action-ghost-hover);
-      color: var(--color-text-primary);
-    }
-  }
-  button:focus-visible {
-    outline: var(--focus-ring-width) solid var(--color-focus-ring);
-    outline-offset: var(--focus-ring-offset);
   }
 
   @media (forced-colors: active) {

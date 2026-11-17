@@ -93,6 +93,7 @@ For a custom trigger, spread the snippet attributes onto a native button.
 </script>
 
 <script lang="ts">
+  import Button from "./Button.svelte";
   import FloatingSurface from "./internal/FloatingSurface.svelte";
   import { closestCompositeItem, findCompositeTarget, getEnabledCompositeItems } from "./internal/focus";
   import { useMessages } from "./internal/i18n";
@@ -260,10 +261,18 @@ For a custom trigger, spread the snippet attributes onto a native button.
 {#if trigger}
   {@render trigger(triggerAttributes)}
 {:else}
-  <button bind:this={triggerElement} class="a-novel-menu-trigger {className}" type="button" {...triggerAttributes}>
+  <Button
+    variant="outline"
+    tone="neutral"
+    class={className}
+    {...triggerAttributes}
+    {@attach (element: HTMLElement) => {
+      triggerElement = element;
+    }}
+  >
     {#if triggerIcon}<span class="trigger-icon" aria-hidden="true">{@render triggerIcon()}</span>{/if}
     {#if triggerText}<span>{triggerText}</span>{/if}
-  </button>
+  </Button>
 {/if}
 
 <FloatingSurface
@@ -312,48 +321,6 @@ For a custom trigger, spread the snippet attributes onto a native button.
 </FloatingSurface>
 
 <style>
-  :global(.a-novel-menu-trigger) {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    gap: var(--space-2);
-    transition:
-      background-color var(--duration-fast) var(--easing-standard),
-      border-color var(--duration-fast) var(--easing-standard),
-      box-shadow var(--duration-fast) var(--easing-standard);
-    cursor: pointer;
-    box-sizing: border-box;
-    border: var(--border-width-thin) solid var(--color-border-default);
-    border-radius: var(--radius-md);
-    background: var(--color-action-neutral);
-    padding: var(--space-2) var(--space-4);
-    min-block-size: var(--control-height-md);
-    color: var(--color-action-neutral-text);
-    font-weight: var(--font-weight-bold);
-    font-size: var(--font-size-md);
-    font-family: var(--font-family-interface);
-  }
-  @media (hover: hover) {
-    :global(.a-novel-menu-trigger:hover:not(:disabled, [data-state="open"])) {
-      border-color: var(--color-border-strong);
-      background: var(--color-action-neutral-hover);
-    }
-  }
-  :global(.a-novel-menu-trigger[data-state="open"]) {
-    box-shadow: var(--shadow-glow-brand);
-    border-color: var(--color-border-selected);
-    background: var(--color-action-neutral-selected);
-  }
-  :global(.a-novel-menu-trigger:focus-visible) {
-    outline: var(--focus-ring-width) solid var(--color-focus-ring);
-    outline-offset: var(--focus-ring-offset);
-  }
-  :global(.a-novel-menu-trigger:disabled) {
-    cursor: not-allowed;
-    border-color: var(--color-action-disabled-border);
-    background: var(--color-action-disabled-surface);
-    color: var(--color-action-disabled-text);
-  }
   /* The menu's radius is its items' radius plus the padding around them, so their corners share centers. */
   :global(.a-novel-menu-content) {
     position-area: block-end span-inline-end;

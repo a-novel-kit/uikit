@@ -28,6 +28,17 @@ describe("FormActions", () => {
     expect(form.scrollWidth).toBeLessThanOrEqual(form.clientWidth);
   });
 
+  it("stacks its actions where the form has less than 35rem, even on a wide screen", async () => {
+    await page.viewport(1280, 800);
+    const target = document.body.appendChild(document.createElement("div"));
+    target.style.inlineSize = "26rem";
+    const { getByRole } = render(Fixture, { target });
+    const submit = getByRole("button", { name: "Save changes" });
+
+    expect(submit.getBoundingClientRect().width).toBe(submit.closest("form")!.getBoundingClientRect().width);
+    target.remove();
+  });
+
   it("preserves native submission and adds no leading space to an action-only form", async () => {
     const onsubmit = vi.fn();
     const { getByRole } = render(Fixture, { fields: false, onsubmit });

@@ -1,6 +1,7 @@
 <!--
 @component
-Renders a responsive description list. Wrap each related `dt` and `dd` pair in a `div`.
+Renders a description list in up to `columns` columns, one where it has less than 48rem. Wrap each related `dt`
+and `dd` pair in a `div`.
 -->
 <script lang="ts" module>
   import type { Snippet } from "svelte";
@@ -21,9 +22,12 @@ Renders a responsive description list. Wrap each related `dt` and `dd` pair in a
   let { columns = 1, density = "default", children, class: className = "", ...rest }: DescriptionListProps = $props();
 </script>
 
-<dl class="description-list columns-{columns} {density} {className}" {...rest}>
-  {@render children()}
-</dl>
+<!-- The outer box measures the space the list gets, so its columns follow that width, not the screen's. -->
+<div class="container" style:--description-columns={columns}>
+  <dl class="description-list {density} {className}" {...rest}>
+    {@render children()}
+  </dl>
+</div>
 
 <style>
   .description-list {
@@ -33,17 +37,11 @@ Renders a responsive description list. Wrap each related `dt` and `dd` pair in a
     margin: 0;
   }
 
-  .columns-1 {
-    --description-columns: 1;
-  }
-  .columns-2 {
-    --description-columns: 2;
-  }
-  .columns-3 {
-    --description-columns: 3;
+  .container {
+    container-type: inline-size;
   }
 
-  :global(.description-list > div) {
+  .description-list > :global(div) {
     display: grid;
     align-content: start;
     gap: var(--space-1);
@@ -61,21 +59,21 @@ Renders a responsive description list. Wrap each related `dt` and `dd` pair in a
     --description-padding: var(--space-4);
   }
 
-  :global(.description-list dt) {
+  .description-list :global(dt) {
     color: var(--color-text-muted);
     font-weight: var(--font-weight-bold);
     font-size: var(--font-size-sm);
     font-family: var(--font-family-interface);
   }
 
-  :global(.description-list dd) {
+  .description-list :global(dd) {
     margin: 0;
     color: var(--color-text-primary);
     line-height: var(--line-height-normal);
     overflow-wrap: anywhere;
   }
 
-  @media (max-width: 48rem) {
+  @container (width < 48rem) {
     .description-list {
       --description-columns: 1;
     }
