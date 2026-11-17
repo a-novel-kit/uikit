@@ -1,8 +1,8 @@
 <script module lang="ts">
   import Localized from "../Localized.svelte";
-  import { fixedConsent, fixedOpen } from "../controllers";
 
   import { ConsentBanner, Container, Dialog, Link, Stack } from "@a-novel-kit/uikit";
+  import { fixedConsent, fixedOpen } from "@a-novel-kit/uikit-storybook";
 
   import { defineMeta } from "@storybook/addon-svelte-csf";
 

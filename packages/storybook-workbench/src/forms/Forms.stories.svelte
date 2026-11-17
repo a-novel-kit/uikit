@@ -103,7 +103,7 @@
     fixedSelect,
     fixedTags,
     fixedValue,
-  } from "../controllers";
+  } from "@a-novel-kit/uikit-storybook";
 
   type Visibility = (typeof visibilityOptions)[number]["value"];
   type Language = (typeof languageOptions)[number]["value"];

@@ -1,7 +1,8 @@
 # Upgrading to NEXT
 
 uikit drops the components that duplicated another part of the system, the tokens nothing read and the empty icons
-package, and states its browser baseline: Baseline widely available.
+package, states its browser baseline (Baseline widely available), and ships the parts every platform copied: access
+and page states with their copy, the shell's geometry, the root canvas styles and the fixed Storybook controllers.
 
 ## Do I need to act?
 
@@ -76,6 +77,32 @@ to change.
 card stacks on a desktop too. It renders a wrapper `div` that measures its width and takes its parent's full width;
 `class` and the other attributes stay on the `dl`. Form and dialog actions keep the screen's rule: full width and
 stacked below 35rem, side by side at their natural width and aligned to the end above it.
+
+## Adopt the shared platform parts
+
+**Recommended.** Each part replaces a copy every platform keeps, and should change no copy or pixel.
+
+- **Canvas.** Delete the `<style>` block of `src/routes/+layout.svelte` and import the same rules once:
+  `import "@a-novel-kit/uikit-tokens/canvas.css";` beside `tokens.css`. `--fill-canvas`, which no app read, is gone.
+- **Protected pages.** Delete `src/lib/ui/AccessBoundary.*` and render `ProtectedPage` with the same props:
+
+  ```svelte
+  <ProtectedPage {homeHref} {retryHref}>…</ProtectedPage>
+  ```
+
+- **Error screen.** Render `AccessForbiddenState`, `AccessUnavailableState`, `PageNotFoundState` or `PageErrorState` by
+  status, each with `headingLevel={1}`, and delete the `access:` messages from both catalogs: uikit ships them in English
+  and French. Override a text with `title`, `description` or `actions`, or app-wide in the app's own `uikit` messages.
+  `useMessages()` reads uikit's copy where a page title needs it.
+- **Shell.** Wrap the shell in `ShellLayout` with `collapsed`, and snippets `rail`, `header`, `banner` and `children`; it
+  owns the rail grid and collapse, the one-control mobile header, the measured banner, `--shell-sticky-top` and
+  `--shell-sticky-bottom`. The app keeps its landmarks, links, labels, account widget and drawer, and deletes the
+  geometry rules of `screen.svelte`.
+- **Storybook.** Import `fixedOpen`, `fixedPressed`, `fixedConsent` and the other fixed controllers from
+  `@a-novel-kit/uikit-storybook`, and delete the harness tests that proved hand-written no-op controllers stay fixed. The
+  preset now adds the noindex heads and the `ScrollPreview.svelte` pre-bundling: delete `.storybook/manager-head.html`,
+  `.storybook/preview-head.html`, the `viteFinal` of `main.ts` and `parameters.controls` of `preview.ts`.
+- **Tags.** Read a tag field on the server with `readTags(form.getAll("tags"))`.
 
 ## Uninstall `@a-novel-kit/uikit-icons`
 

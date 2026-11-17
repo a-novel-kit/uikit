@@ -15,6 +15,20 @@ interface MdxLoaderOptions {
   [key: string]: unknown;
 }
 
+/** Existing Vite configuration accepted by the preset hook. */
+interface ViteConfig {
+  /** Dependency pre-bundling options already configured by the consuming Storybook. */
+  optimizeDeps?: {
+    /** Dependencies already listed for pre-bundling. */
+    include?: string[];
+    [key: string]: unknown;
+  };
+  [key: string]: unknown;
+}
+
+/** Asks search engines to leave a published Storybook out of their results. */
+const noindex = '<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />';
+
 /** Storybook addons installed by the A-Novel preset. */
 export const addons = [
   resolve("@storybook/addon-svelte-csf/preset"),
@@ -62,3 +76,25 @@ export const features = {
 export const docs = {
   defaultName: "Documentation",
 };
+
+/** Keeps the manager out of search results. */
+export const managerHead = (head = "") => `${head}\n${noindex}`;
+
+/** Keeps the story and docs frames out of search results. */
+export const previewHead = (head = "") => `${head}\n${noindex}`;
+
+/**
+ * Pre-bundles each entry of this package that stories import. Vite matches each specifier exactly, and optimizes an
+ * unlisted one mid-run, which reloads the story tests.
+ */
+export const viteFinal = (config: ViteConfig): ViteConfig => ({
+  ...config,
+  optimizeDeps: {
+    ...config.optimizeDeps,
+    include: [
+      ...(config.optimizeDeps?.include ?? []),
+      "@a-novel-kit/uikit-storybook",
+      "@a-novel-kit/uikit-storybook/ScrollPreview.svelte",
+    ],
+  },
+});

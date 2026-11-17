@@ -52,7 +52,7 @@
 </script>
 
 <script lang="ts">
-  import { fixedOpen } from "../controllers";
+  import { fixedOpen } from "@a-novel-kit/uikit-storybook";
 
   const opened = fixedOpen(true);
   const live = createPictureFrameController({ source: landscape, ratio: wide });

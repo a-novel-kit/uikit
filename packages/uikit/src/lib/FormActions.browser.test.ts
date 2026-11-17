@@ -18,6 +18,10 @@ describe("FormActions", () => {
     const form = input.closest("form")!;
 
     expect(submit.getBoundingClientRect().top - inputSurface.getBoundingClientRect().bottom).toBe(24);
+    // The actions end at the form's inline end.
+    expect(getByRole("button", { name: "Cancel" }).getBoundingClientRect().right).toBeCloseTo(
+      form.getBoundingClientRect().right
+    );
     if (width < 560) expect(submit.getBoundingClientRect().width).toBe(form.getBoundingClientRect().width);
     else expect(submit.getBoundingClientRect().width).toBeLessThan(form.getBoundingClientRect().width / 2);
 

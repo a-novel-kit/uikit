@@ -1,4 +1,4 @@
-import { kebabTag, splitTags } from "./tags";
+import { kebabTag, readTags } from "./tags";
 
 import { describe, expect, it } from "vitest";
 
@@ -25,25 +25,19 @@ describe("kebabTag", () => {
   });
 });
 
-describe("splitTags", () => {
-  /** The server recipe TagInput documents: each tag once, none empty, split where the field splits. */
-  const read = (entries: string[]) => [
-    ...new Set(
-      entries
-        .flatMap((entry) => splitTags(entry))
-        .map(kebabTag)
-        .filter(Boolean)
-    ),
-  ];
-
+describe("readTags", () => {
   it("splits where a TagInput ends a tag, so a server reads its entries the same way", () => {
     const entry = ["科幻", "奇幻、noir", "slow burn،maps"].join("，");
 
-    expect(read([entry])).toEqual(["科幻", "奇幻", "noir", "slow", "burn", "maps"]);
+    expect(readTags([entry])).toEqual(["科幻", "奇幻", "noir", "slow", "burn", "maps"]);
   });
 
   it("drops the empty text a scripted field sends, and repeats of a tag the field holds once", () => {
-    expect(read(["maps", "noir", ""])).toEqual(["maps", "noir"]);
-    expect(read(["maps", "maps Maps noir"])).toEqual(["maps", "noir"]);
+    expect(readTags(["maps", "noir", ""])).toEqual(["maps", "noir"]);
+    expect(readTags(["maps", "maps Maps noir"])).toEqual(["maps", "noir"]);
+  });
+
+  it("reads no tag from a file entry", () => {
+    expect(readTags([new File(["noir"], "noir.txt"), "maps"])).toEqual(["maps"]);
   });
 });

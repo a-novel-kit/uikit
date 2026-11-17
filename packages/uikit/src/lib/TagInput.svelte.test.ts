@@ -1,7 +1,7 @@
 import I18nFixture from "../../test/I18nFixture.svelte";
 import TagInput from "./TagInput.svelte";
 import { createTagInputController } from "./controllers.svelte";
-import { kebabTag, splitTags } from "./tags";
+import { kebabTag, readTags } from "./tags";
 
 import { describe, expect, it } from "vitest";
 
@@ -75,17 +75,7 @@ describe("TagInput", () => {
 
     // A capital whose mark has no precomposed form, then its lowercase, then a repeat: one tag each time.
     await fireEvent.input(input, { target: { value: ["T\u0308", "\u1e97", "Maps", "noir "].join(" ") } });
-    const read = [
-      ...new Set(
-        new FormData(form)
-          .getAll("tags")
-          .flatMap((entry) => splitTags(String(entry)))
-          .map(kebabTag)
-          .filter(Boolean)
-      ),
-    ];
-
-    expect(read).toEqual(controller.state.tags);
+    expect(readTags(new FormData(form).getAll("tags"))).toEqual(controller.state.tags);
     expect(controller.state.tags).toEqual(["maps", "\u1e97", "noir"]);
     form.remove();
   });

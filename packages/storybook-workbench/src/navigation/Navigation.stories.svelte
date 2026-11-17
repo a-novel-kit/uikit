@@ -27,7 +27,7 @@
 </script>
 
 <script lang="ts">
-  import { fixedOpen, fixedValue } from "../controllers";
+  import { fixedOpen, fixedValue } from "@a-novel-kit/uikit-storybook";
 
   const tabsController = fixedValue("profile");
   const actionMenuController = fixedOpen(true);

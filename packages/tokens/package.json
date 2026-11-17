@@ -13,6 +13,7 @@
   ],
   "type": "module",
   "exports": {
+    "./canvas.css": "./canvas.css",
     "./palette": {
       "types": "./palette.d.ts",
       "default": "./palette.js"
@@ -20,6 +21,7 @@
     "./tokens.css": "./tokens.css"
   },
   "files": [
+    "canvas.css",
     "colors.css",
     "palette.d.ts",
     "palette.js",
