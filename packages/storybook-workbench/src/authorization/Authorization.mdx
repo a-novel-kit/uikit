@@ -13,8 +13,9 @@ Server endpoints must enforce permissions independently.
 
 ## Page states
 
-The boundary has no appearance of its own. These application-owned fallback examples use `StatusState`
-for loading, guidance, and errors. Access decisions and transitions are covered by component and SSR tests.
+The boundary has no appearance of its own. `ProtectedPage` shows uikit's default state for each decision, with
+translated copy (see Protected pages). These examples compose an app's own fallback from `StatusState` instead.
+Access decisions and transitions are covered by component and SSR tests.
 
 <ResponsiveStoryPair desktop={Stories.Anonymous} mobile={Stories.Anonymous} meta={Stories} />
 <ResponsiveStoryPair desktop={Stories.Forbidden} mobile={Stories.Forbidden} meta={Stories} />
@@ -77,8 +78,8 @@ A false `when` changes allowed access to `forbidden`; other states are preserved
 including the fallback, inherit this effective decision. Siblings are unaffected.
 
 For non-allowed states, `fallback(status)` replaces the content; without one, the region disappears.
-The application owns page feedback, login with a return destination, HTTP 403, and retry. An outage
-must not redirect to login. Server loads and actions must enforce access independently of these views.
+The application owns login with a return destination, HTTP 403, and retry; `ProtectedPage` gives a page the
+default feedback. An outage must not redirect to login. Server loads and actions must enforce access independently of these views.
 
 ### Read the decision with the hook
 

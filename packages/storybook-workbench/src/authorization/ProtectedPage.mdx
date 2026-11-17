@@ -1,0 +1,122 @@
+import * as Stories from "./ProtectedPage.stories.svelte";
+
+import {
+  AccessForbiddenState,
+  AccessPendingState,
+  AccessUnavailableState,
+  PageErrorState,
+  PageNotFoundState,
+  ProtectedPage,
+} from "@a-novel-kit/uikit";
+import { Meta, ResponsiveStoryPair } from "@a-novel-kit/uikit-storybook";
+
+import { ArgTypes } from "@storybook/addon-docs/blocks";
+
+<Meta of={Stories} />
+
+# Protected pages
+
+A page that needs access shows it once access is allowed, and otherwise the state that stops it. uikit translates
+every state's copy; the app supplies only where its links go.
+
+## Protected page
+
+`ProtectedPage` inherits the app's authorization decision, as `AuthorizationBoundary` does, and centers the state
+in the page while the decision is pending, forbidden or unavailable. It shows nothing for an anonymous decision,
+since the app sends that visitor to its sign-in. Its `when` prop restricts access further.
+
+```svelte
+<script lang="ts">
+  import { ProtectedPage } from "@a-novel-kit/uikit";
+
+  let { data } = $props();
+</script>
+
+<ProtectedPage homeHref="/" retryHref={data.path}>
+  <h1>Your projects</h1>
+</ProtectedPage>
+```
+
+<ResponsiveStoryPair desktop={Stories.CheckingAccess} mobile={Stories.CheckingAccess} meta={Stories} />
+
+A forbidden decision links home:
+
+<ResponsiveStoryPair desktop={Stories.AccessDenied} mobile={Stories.AccessDenied} meta={Stories} />
+
+An unavailable decision keeps the session and links to the page itself. The link reloads the page from the server,
+which checks access again:
+
+<ResponsiveStoryPair desktop={Stories.AccessUnavailable} mobile={Stories.AccessUnavailable} meta={Stories} />
+
+During an outage, `unavailable` replaces the state with content that is safe to show without a verified account.
+Each form in it still checks access on the server:
+
+<ResponsiveStoryPair
+  desktop={Stories.PublicContentDuringAnOutage}
+  mobile={Stories.PublicContentDuringAnOutage}
+  meta={Stories}
+/>
+
+## Error pages
+
+Each state is also a component of its own, for an error page that maps a status to a state: `AccessForbiddenState`
+for 403, `AccessUnavailableState` for 503, `PageNotFoundState` for 404 and `PageErrorState` for any other failure.
+`AccessPendingState` completes the set. The page around them owns its height and centering.
+
+```svelte
+<script lang="ts">
+  import { AccessForbiddenState, PageErrorState, PageNotFoundState } from "@a-novel-kit/uikit";
+
+  let { status, homeHref }: { status: number; homeHref: string } = $props();
+</script>
+
+{#if status === 403}
+  <AccessForbiddenState {homeHref} headingLevel={1} />
+{:else if status === 404}
+  <PageNotFoundState {homeHref} headingLevel={1} />
+{:else}
+  <PageErrorState {homeHref} headingLevel={1} />
+{/if}
+```
+
+<ResponsiveStoryPair desktop={Stories.PageNotFound} mobile={Stories.PageNotFound} meta={Stories} />
+<ResponsiveStoryPair desktop={Stories.PageError} mobile={Stories.PageError} meta={Stories} />
+
+## Own copy
+
+A string or a snippet replaces a state's `title` or `description`, and `actions` replaces its link. To reword a
+state everywhere, an app sets the message in its own `uikit` messages instead, under `access`, such as
+`access.forbidden.title`. `useMessages()` reads the same text, as a page title naming the state does.
+
+<ResponsiveStoryPair desktop={Stories.OwnCopy} mobile={Stories.OwnCopy} meta={Stories} />
+
+## Accessibility
+
+Each state is a `StatusState`: its heading names the state, a pending state is a `status` live region and the
+others an `alert`. Every state but the pending one offers a way out. The toolbar's language switches the copy.
+
+## API
+
+### ProtectedPage
+
+<ArgTypes of={ProtectedPage} />
+
+### AccessPendingState
+
+<ArgTypes of={AccessPendingState} />
+
+### AccessForbiddenState
+
+<ArgTypes of={AccessForbiddenState} />
+
+### AccessUnavailableState
+
+<ArgTypes of={AccessUnavailableState} />
+
+### PageNotFoundState
+
+<ArgTypes of={PageNotFoundState} />
+
+### PageErrorState
+
+<ArgTypes of={PageErrorState} />

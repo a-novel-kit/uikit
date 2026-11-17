@@ -4,9 +4,8 @@ A text field that turns what the reader types into tags, as GitHub's topics do. 
 Backspace in the empty field takes the last tag back as text, and each tag's cross removes it. The default controller
 writes tags in lower-kebab-case. The form receives each tag under `name`, then the field's text: what is still being
 typed, a word the controller refused, or, without scripting, everything typed. A server reads them all as the field
-keeps them, each once and none empty, with
-`[...new Set(form.getAll(name).flatMap((entry) => splitTags(String(entry))).map(kebabTag).filter(Boolean))]`,
-and validates every tag, refused words included.
+keeps them, each once and none empty, with `readTags(form.getAll(name))`, and validates every tag, refused words
+included.
 Native attributes and events target the text input; `class` styles the surrounding field.
 
 ```svelte

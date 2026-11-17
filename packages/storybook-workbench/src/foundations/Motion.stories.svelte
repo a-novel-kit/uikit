@@ -31,7 +31,7 @@
     docs: {
       description: {
         story:
-          "The application paints `--fill-canvas` on its root element and colors the lamp with `--color-lamp` there, such as `--color-lamp-magenta`, so each app is recognizable at a glance. An ember lights any app that sets none. Navigation the lamp crosses uses `--fill-navigation`.",
+          "The application imports `@a-novel-kit/uikit-tokens/canvas.css`, which hangs the lamp (`--gradient-lamp`) behind the page, and colors it with `--color-lamp` on its root element, such as `--color-lamp-magenta`, so each app is recognizable at a glance. An ember lights any app that sets none. Navigation the lamp crosses uses `--fill-navigation`.",
       },
     },
   }}
@@ -136,7 +136,9 @@
     align-content: end;
     box-sizing: border-box;
     border-radius: var(--radius-lg);
-    background: var(--fill-canvas);
+    background:
+      var(--gradient-lamp) fixed,
+      var(--color-surface-canvas);
     padding: var(--space-8);
     min-block-size: 24rem;
   }

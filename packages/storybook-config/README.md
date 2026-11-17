@@ -27,8 +27,24 @@ const config: StorybookConfig = {
 export default config;
 ```
 
-The preset installs the manager and preview configuration. Add local configuration only for
+The preset installs the manager and preview configuration. It also keeps the manager and the story frames out
+of search results, and pre-bundles this package's entries for Vite. Add local configuration only for
 application-specific story ordering or parameters.
+
+## Fixed-state controllers
+
+A review story pins its scenario with a fixed-state controller: clicks, Escape and submissions leave the state
+as it is, while focus, scrolling and text selection still work. The package root exports them for uikit's
+controller contracts, such as `fixedOpen`, `fixedPressed`, `fixedSelect` and `fixedConsent`.
+
+```svelte
+<script lang="ts">
+  import { Dialog } from "@a-novel-kit/uikit";
+  import { fixedOpen } from "@a-novel-kit/uikit-storybook";
+</script>
+
+<Dialog controller={fixedOpen(true)} title="Delete this project?">…</Dialog>
+```
 
 ## Scroll previews
 

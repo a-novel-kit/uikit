@@ -6,6 +6,13 @@ A-Novel's design tokens ship as one dependency-free stylesheet. Import it once i
 import "@a-novel-kit/uikit-tokens/tokens.css";
 ```
 
+An application also imports the page canvas once. It paints the canvas color on the root, hangs the app's lamp on
+a layer fixed behind the page, and sets the body's font and the 20rem reflow floor.
+
+```ts
+import "@a-novel-kit/uikit-tokens/canvas.css";
+```
+
 ## Scale model
 
 A small set of base values controls each foundation. Public tokens multiply those bases, so a global

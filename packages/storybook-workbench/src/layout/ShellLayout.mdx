@@ -1,0 +1,63 @@
+import * as Stories from "./ShellLayout.stories.svelte";
+
+import { Meta, ResponsiveStoryPair } from "@a-novel-kit/uikit-storybook";
+
+import { ArgTypes } from "@storybook/addon-docs/blocks";
+
+<Meta of={Stories} />
+
+# Shell layout
+
+Every Agora app shares one shell geometry: a collapsible rail beside the page on wide screens, and a header one
+control tall, fixed to the top, on narrow ones. `ShellLayout` owns that geometry and the navigation surface the lamp
+lights. The app renders its own landmarks, links, labels and account controls into it, and its fullscreen
+navigation drawer beside it.
+
+## Rail
+
+The rail stays in view while the page scrolls, and `collapsed` narrows it to one small control. The app's
+navigation fills it, inset by `--space-2`, and lays out its own rows. Scroll the examples to try them:
+
+<ResponsiveStoryPair desktop={Stories.ExpandedRail} mobile={Stories.ExpandedRail} meta={Stories} />
+
+<ResponsiveStoryPair desktop={Stories.CollapsedRail} mobile={Stories.CollapsedRail} meta={Stories} />
+
+Under 48rem of width, the rail gives way to the header, fixed to the screen so iOS stretches the page under it past
+the top while the header stays in place. The app's header fills it.
+
+## Banner
+
+`banner` holds a notice that stays in view, such as a started `DowntimeBanner`: above the page on wide screens, and
+at the bottom on narrow ones, away from where reading starts.
+
+<ResponsiveStoryPair desktop={Stories.BannerOnDesktop} mobile={Stories.BannerOnMobile} meta={Stories} />
+
+## Usage
+
+```svelte
+<script lang="ts">
+  import { DowntimeBanner, ShellLayout, SkipLink } from "@a-novel-kit/uikit";
+</script>
+
+<SkipLink href="#main-content">Skip to content</SkipLink>
+<ShellLayout collapsed={railCollapsed}>
+  {#snippet rail()}<aside aria-label="Navigation">…</aside>{/snippet}
+  {#snippet header()}<header>…</header>{/snippet}
+  {#snippet banner()}<DowntimeBanner {start} {end} started />{/snippet}
+  <main id="main-content" tabindex="-1">…</main>
+</ShellLayout>
+```
+
+Leave `banner` out while there is nothing to show. The page's sticky parts stay clear of the header and banner:
+the layout sets `--shell-sticky-top` and, on narrow screens, `--shell-sticky-bottom` to their sizes, which a
+`StickyBar` reads.
+
+## Accessibility
+
+The layout adds no landmark, name or focus stop of its own, so the app's landmarks keep their order: rail, header,
+banner, then page. In forced colors, the rail and the header keep a border, since the navigation surface is gone.
+Reduced motion turns the rail's collapse into a switch.
+
+## API
+
+<ArgTypes of={Stories} />

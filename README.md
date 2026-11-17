@@ -40,10 +40,11 @@ Install the components with their peer dependencies and the foundations:
 pnpm add @a-novel-kit/uikit @a-novel-kit/uikit-fonts @a-novel-kit/uikit-tokens @a-novel-kit/nodelib-i18n i18next
 ```
 
-Import the foundation styles once in the application shell:
+Import the foundation styles and the page canvas once in the application shell:
 
 ```ts
 import "@a-novel-kit/uikit-fonts/fonts.css";
+import "@a-novel-kit/uikit-tokens/canvas.css";
 import "@a-novel-kit/uikit-tokens/tokens.css";
 ```
 

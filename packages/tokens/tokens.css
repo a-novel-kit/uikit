@@ -457,12 +457,9 @@
     color-mix(in oklab, var(--lamp-color) calc(var(--lamp-peak) * 0.0625), transparent) 75%,
     transparent
   );
-  /* iOS ignores a fixed background, so the canvas paints its fill on a layer fixed to the viewport
-     behind the page, and the root element keeps the plain canvas color accessibility checks measure
-     text against. Navigation stays in the viewport's corner, so the light it carries lines up with
-     the canvas in every browser; its text keeps at least 4.6:1, muted or linked, under any palette lamp.
-     Frosted islands let the canvas's light through. */
-  --fill-canvas: var(--gradient-lamp) fixed, var(--color-surface-canvas);
+  /* canvas.css hangs the lamp on a layer fixed behind the page. Navigation stays in the viewport's
+     corner, so the light it carries lines up with the canvas in every browser; its text keeps at least
+     4.6:1, muted or linked, under any palette lamp. Frosted islands let the canvas's light through. */
   --fill-navigation: var(--gradient-lamp) fixed, var(--color-surface-island-strong);
 
   --font-family-display: "TeX Gyre Heros Cn", "Arial Narrow", "Noto Sans", sans-serif;

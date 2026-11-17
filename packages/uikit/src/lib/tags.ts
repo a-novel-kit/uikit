@@ -2,18 +2,34 @@
 const tagSeparators = /[\s,\u060c\u3001\uff0c]+/u;
 
 /**
- * Splits typed text where a TagInput ends a tag: whitespace, and Latin, Arabic, ideographic or full-width commas. A
- * server that reads a TagInput's form entries splits each with it before `kebabTag`, as the field does.
+ * Splits typed text where a TagInput ends a tag: whitespace, and Latin, Arabic, ideographic or full-width commas.
+ * `readTags` splits each form entry with it.
  *
  * @example
  * ```ts
- * import { kebabTag, splitTags } from "@a-novel-kit/uikit";
- * const entries = form.getAll("tags").flatMap((entry) => splitTags(String(entry)));
- * const tags = [...new Set(entries.map(kebabTag).filter(Boolean))];
+ * import { splitTags } from "@a-novel-kit/uikit";
+ * splitTags("noir, slow burn"); // ["noir", "slow", "burn"]
  * ```
  */
 export function splitTags(text: string): string[] {
   return text.split(tagSeparators);
+}
+
+/**
+ * Reads a TagInput's form entries as the field keeps them: split where the field ends a tag, in lower-kebab-case,
+ * each tag once and none empty. A file entry, which only a forged request sends, holds no tag. The server still
+ * validates every tag it reads.
+ *
+ * @example
+ * ```ts
+ * import { readTags } from "@a-novel-kit/uikit";
+ * const tags = readTags(form.getAll("tags"));
+ * ```
+ */
+export function readTags(entries: readonly FormDataEntryValue[]): string[] {
+  const words = entries.flatMap((entry) => (typeof entry === "string" ? splitTags(entry) : []));
+
+  return [...new Set(words.map(kebabTag).filter(Boolean))];
 }
 
 /** Lowercase, modifier and caseless letters and decimal digits: what a tag's word starts with. */

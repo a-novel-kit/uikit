@@ -1,7 +1,6 @@
 <script module lang="ts">
-  import { fixedSelect } from "../controllers";
-
   import { Flag, Inline, LanguageName, Select, type SelectOption, Stack } from "@a-novel-kit/uikit";
+  import { fixedSelect } from "@a-novel-kit/uikit-storybook";
 
   import { defineMeta } from "@storybook/addon-svelte-csf";
 
