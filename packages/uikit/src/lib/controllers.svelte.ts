@@ -201,13 +201,14 @@ export interface PressedControllerOptions {
 }
 
 /**
- * Creates local reactive state for a ToggleButton. Unchanged requests do not notify.
+ * Creates local reactive state for a pressed control, such as PasswordInput's visibility toggle. Unchanged
+ * requests do not notify.
  *
  * @example
  * ```ts
  * import { createPressedController } from "@a-novel-kit/uikit";
- * const bold = createPressedController();
- * bold.toggle();
+ * const visibility = createPressedController();
+ * visibility.toggle();
  * ```
  */
 export function createPressedController({
@@ -624,7 +625,9 @@ export function createTagInputController({
   normalize = kebabTag,
   onTagsChange,
 }: TagInputControllerOptions = {}): TagInputController {
-  // Replaced whole on every change, so it needs no deep proxy and the tags stay cloneable.
+  // Replaced whole on every change, so it needs no deep proxy and the tags stay cloneable. The Set only drops
+  // duplicates and is never kept, so it needs no reactive SvelteSet.
+  // eslint-disable-next-line svelte/prefer-svelte-reactivity
   let state = $state.raw<TagInputState>({ tags: [...new Set(initialTags)] });
 
   function setTags(tags: readonly string[]) {

@@ -101,5 +101,5 @@
   border-radius: var(--metric-radius);
   background: var(--color-surface-island);
   padding: var(--space-4);
-  min-block-size: calc(var(--space-8) * var(--multiplier-2));
+  min-block-size: calc(var(--space-8) * 2);
 }

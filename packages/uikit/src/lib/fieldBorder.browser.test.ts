@@ -9,8 +9,6 @@ import Fieldset from "./Fieldset.svelte";
 import FileInput from "./FileInput.svelte";
 import Input from "./Input.svelte";
 import PasswordInput from "./PasswordInput.svelte";
-import Popover from "./Popover.svelte";
-import type { PopoverTriggerAttributes } from "./Popover.svelte";
 import Select from "./Select.svelte";
 import StickyBar from "./StickyBar.svelte";
 import TagInput from "./TagInput.svelte";
@@ -21,8 +19,6 @@ import {
   createPressedController,
   createSelectController,
 } from "./controllers.svelte";
-
-import { createRawSnippet } from "svelte";
 
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { page, userEvent } from "vitest/browser";
@@ -103,10 +99,6 @@ const fields: [string, RenderField][] = [
   ],
 ];
 
-const popoverTrigger = createRawSnippet<[PopoverTriggerAttributes]>((attributes) => ({
-  render: () => `<button popovertarget="${attributes().popovertarget}">Open</button>`,
-}));
-
 /** A surface, and how to render it and return the element a field goes into. */
 interface Surface {
   name: string;
@@ -136,17 +128,6 @@ const islands: Surface[] = [
       render(Dialog, {
         props: { controller: createOpenController({ initialOpen: true }), title: "Surface", modal: false },
       }).getByRole("dialog"),
-  },
-  {
-    name: "a popover",
-    mount: () =>
-      render(Popover, {
-        props: {
-          controller: createOpenController({ initialOpen: true }),
-          trigger: popoverTrigger,
-          "data-testid": "surface",
-        },
-      }).getByTestId("surface"),
   },
   { name: "a fieldset", mount: () => render(Fieldset, { props: { legend: "Surface" } }).getByRole("group") },
   {

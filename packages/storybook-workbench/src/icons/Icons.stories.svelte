@@ -1,6 +1,4 @@
 <script module lang="ts">
-  import { IconBase } from "@a-novel-kit/uikit-icons";
-
   import {
     Plus as AddIcon,
     ArrowRight as ArrowRightIcon,
@@ -82,7 +80,7 @@
     parameters: {
       docs: {
         description: {
-          component: "Import standard SVG components from @lucide/svelte. Use IconBase for custom 24-unit glyphs.",
+          component: "Import standard SVG components from @lucide/svelte.",
         },
       },
     },
@@ -97,16 +95,6 @@
         <code>{name}</code>
       </div>
     {/each}
-  </div>
-</Story>
-
-<Story name="Custom icon contract" asChild>
-  <div class="custom-example">
-    <IconBase size="var(--space-12)" label="Example custom diamond">
-      <path d="M12 2 22 12 12 22 2 12Z" />
-      <path d="m8 12 3 3 5-6" />
-    </IconBase>
-    <div><strong>24-unit canvas</strong><p>Inherits currentColor and the shared stroke contract.</p></div>
   </div>
 </Story>
 
@@ -130,18 +118,5 @@
     color: var(--color-text-muted);
     font-size: var(--font-size-xs);
     font-family: var(--font-family-mono);
-  }
-  .custom-example {
-    display: flex;
-    align-items: center;
-    gap: var(--space-4);
-    color: var(--color-graphic-brand);
-  }
-  strong {
-    color: var(--color-text-primary);
-  }
-  p {
-    margin: var(--space-1) 0 0;
-    color: var(--color-text-muted);
   }
 </style>

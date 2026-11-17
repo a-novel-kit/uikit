@@ -354,18 +354,20 @@ For a custom trigger, spread the snippet attributes onto a native button.
     background: var(--color-action-disabled-surface);
     color: var(--color-action-disabled-text);
   }
+  /* The menu's radius is its items' radius plus the padding around them, so their corners share centers. */
   :global(.a-novel-menu-content) {
     position-area: block-end span-inline-end;
     z-index: var(--layer-dropdown);
+    -webkit-backdrop-filter: blur(var(--blur-md));
+    backdrop-filter: blur(var(--blur-md));
     inset-block-start: var(--space-2);
     outline: none;
     box-shadow: var(--shadow-lg);
     border: 0;
-    /* The items' radius plus the padding around them, so their corners share centers. */
     border-radius: calc(var(--radius-md) + var(--space-1));
-    background: var(--color-surface-island-strong);
+    background: var(--color-surface-glass);
     padding: var(--space-1);
-    min-inline-size: max(var(--a-novel-menu-anchor-width), calc(var(--size-base) * var(--multiplier-48)));
+    min-inline-size: max(var(--a-novel-menu-anchor-width), calc(var(--size-base) * 48));
     max-block-size: min(calc(100dvb - var(--space-8)), var(--control-menu-max-height));
     overflow-x: hidden;
     overflow-y: auto;
@@ -413,6 +415,8 @@ For a custom trigger, spread the snippet attributes onto a native button.
     text-align: start;
   }
   :global(.a-novel-menu-item[data-highlighted]) {
+    -webkit-backdrop-filter: blur(var(--blur-sm));
+    backdrop-filter: blur(var(--blur-sm));
     background: var(--color-surface-glass-hover);
     color: var(--color-navigation-hover-text);
   }
@@ -441,19 +445,6 @@ For a custom trigger, spread the snippet attributes onto a native button.
     color: var(--color-text-muted);
     font-size: var(--font-size-xs);
     font-family: var(--font-family-mono);
-  }
-
-  @supports (backdrop-filter: blur(0)) or (-webkit-backdrop-filter: blur(0)) {
-    :global(.a-novel-menu-content) {
-      -webkit-backdrop-filter: blur(var(--blur-md));
-      backdrop-filter: blur(var(--blur-md));
-      background: var(--color-surface-glass);
-    }
-
-    :global(.a-novel-menu-item[data-highlighted]) {
-      -webkit-backdrop-filter: blur(var(--blur-sm));
-      backdrop-filter: blur(var(--blur-sm));
-    }
   }
 
   @media (forced-colors: active) {

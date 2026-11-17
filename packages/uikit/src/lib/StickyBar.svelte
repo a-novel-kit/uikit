@@ -23,53 +23,33 @@ and the bar stays clear of them.
   let { edge, bleed = false, as = "div", class: className = "", children, ...rest }: StickyBarProps = $props();
 </script>
 
-<svelte:element this={as} class="sticky-bar {edge} {className}" class:bleed {...rest}>
+<svelte:element this={as} class="sticky-bar {edge} {className}" class:bleed data-frost {...rest}>
   {@render children?.()}
 </svelte:element>
 
 <style>
+  /* Glass: the lamp shines through it, and only what scrolls under it frosts. Like any layout, it draws no line. */
   .sticky-bar {
     position: sticky;
     z-index: var(--layer-sticky);
-    background: var(--color-surface-canvas);
+    -webkit-backdrop-filter: blur(var(--blur-lg));
+    backdrop-filter: blur(var(--blur-lg));
+    background: transparent;
   }
 
   .start {
     inset-block-start: var(--shell-sticky-top, 0);
   }
 
+  /* A bar at the page's foot holds actions under the thumb, over whatever scrolls by: it darkens to the canvas under
+     its frost, as the navigation does, so its controls stand clear of the content. */
   .end {
     inset-block-end: var(--shell-sticky-bottom, 0);
+    background: color-mix(in oklab, var(--color-surface-canvas) var(--color-mix-12), transparent);
   }
 
   .bleed {
     margin-inline: calc(-1 * var(--layout-gutter));
     padding-inline: var(--layout-gutter);
-  }
-
-  /* Where the browser blurs a backdrop, the canvas color clears to glass: the lamp shines through it, and only what
-     scrolls under it frosts. Like any layout, it draws no line. */
-  @supports (backdrop-filter: blur(0)) or (-webkit-backdrop-filter: blur(0)) {
-    .sticky-bar {
-      -webkit-backdrop-filter: blur(var(--blur-lg));
-      backdrop-filter: blur(var(--blur-lg));
-      background: transparent;
-    }
-
-    /* A bar at the page's foot holds actions under the thumb, over whatever scrolls by: it darkens to the canvas
-       under its frost, as the navigation does, so its controls stand clear of the content. */
-    .end {
-      background: color-mix(in oklab, var(--color-surface-canvas) var(--color-mix-12), transparent);
-    }
-
-    /* Under a modal dialog's blurred backdrop, its own blur sits unseen: it drops once the backdrop has faded in and
-       returns at once, as a card's does. One inside a dialog keeps it. */
-    :global(:root:has(dialog.dialog:modal)) .sticky-bar:not(:global(dialog *)) {
-      -webkit-backdrop-filter: none;
-      backdrop-filter: none;
-      transition:
-        backdrop-filter 0s var(--duration-normal),
-        -webkit-backdrop-filter 0s var(--duration-normal);
-    }
   }
 </style>

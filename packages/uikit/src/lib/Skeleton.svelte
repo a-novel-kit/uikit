@@ -22,7 +22,7 @@ announce loading once in the surrounding region.
 <style>
   .skeleton {
     display: block;
-    animation: shimmer calc(var(--duration-slow) * var(--multiplier-4)) linear infinite;
+    animation: shimmer calc(var(--duration-slow) * 4) linear infinite;
     background:
       linear-gradient(
         90deg,

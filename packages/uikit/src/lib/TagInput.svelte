@@ -80,13 +80,7 @@ Native attributes and events target the text input; `class` styles the surroundi
   const tags = $derived(controller.state.tags);
   const editable = $derived(!disabled && !readonly);
   // The status region tells assistive technology how many tags the field holds as it changes.
-  const status = $derived(
-    tags.length === 0
-      ? t("tagInput.none")
-      : tags.length === 1
-        ? t("tagInput.one")
-        : t("tagInput.count", { count: String(tags.length) })
-  );
+  const status = $derived(t("tagInput.count", { count: tags.length }));
 
   let field = $state<HTMLInputElement>();
 
@@ -367,7 +361,7 @@ Native attributes and events target the text input; `class` styles the surroundi
 
   /* A small field keeps a small button's height once it holds a tag. */
   .sm {
-    padding: calc(var(--space-1) / var(--multiplier-2)) var(--space-3);
+    padding: calc(var(--space-1) / 2) var(--space-3);
     min-block-size: var(--control-height-sm);
     font-size: var(--font-size-sm);
   }

@@ -7,7 +7,6 @@
     "paths": {
       "@a-novel-kit/uikit": ["../uikit/src/lib/index.ts"],
       "@a-novel-kit/uikit/authorization": ["../uikit/src/lib/authorization.ts"],
-      "@a-novel-kit/uikit-icons": ["../icons/src/lib/index.ts"],
       "@a-novel-kit/uikit-storybook": ["../storybook-config/src/index.ts"]
     }
   },

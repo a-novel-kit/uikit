@@ -1,9 +1,5 @@
 <script module lang="ts">
   import {
-    Accordion,
-    AccordionItem,
-    ActionGroup,
-    Badge,
     Button,
     Dialog,
     Disclosure,
@@ -12,8 +8,6 @@
     IconButton,
     Input,
     NavList,
-    PanelHeader,
-    Popover,
     Stack,
     Tooltip,
   } from "@a-novel-kit/uikit";
@@ -30,8 +24,7 @@
     parameters: {
       docs: {
         description: {
-          component:
-            "Accordion and Disclosure reveal inline content. Popover, Dialog, and Tooltip layer non-modal or modal content.",
+          component: "Disclosure reveals inline content. Dialog and Tooltip layer modal or non-modal content.",
         },
       },
     },
@@ -149,20 +142,6 @@
 
 {#snippet homeIcon()}<HomeIcon size="var(--icon-size-sm)" />{/snippet}
 
-{#snippet popoverExample(controller: OpenController)}
-  <Popover {controller} position="bottom">
-    {#snippet trigger(props)}
-      <Button {...props} variant="outline" tone="neutral">Export options</Button>
-    {/snippet}
-    <Stack gap="4" style="inline-size: min(20rem, 75vi)">
-      <PanelHeader title="Export a copy" description="The original stays in your workspace." />
-      <ActionGroup>
-        <Button onclick={controller.close}>Export</Button>
-      </ActionGroup>
-    </Stack>
-  </Popover>
-{/snippet}
-
 {#snippet tooltipExample(controller: OpenController)}
   <Tooltip {controller} content="Open help" side="right" delayDuration={0}>
     {#snippet trigger(props)}
@@ -184,21 +163,6 @@
       >
     </Stack></div
   >
-</Story>
-
-<Story name="Accordion" asChild>
-  <div class="narrow">
-    <Accordion>
-      <AccordionItem controller={opened}>
-        {#snippet summary()}Sharing <Badge>Private</Badge>{/snippet}
-        Only people you invite can view this workspace.
-      </AccordionItem>
-      <AccordionItem controller={closed} summary="Export preferences"
-        >Choose a format and image quality for exported copies.</AccordionItem
-      >
-      <AccordionItem controller={closed} summary="Version history" disabled>No saved versions yet.</AccordionItem>
-    </Accordion>
-  </div>
 </Story>
 
 {#snippet formExample(controller: OpenController, error?: string)}
@@ -298,14 +262,6 @@
 
 <Story name="Fullscreen — mobile" exportName="FullscreenMobile" globals={reviewStoryGlobals.mobile} asChild>
   {@render fullscreenExample(opened)}
-</Story>
-
-<Story name="Popover — desktop" exportName="PopoverDesktop" globals={reviewStoryGlobals.desktop} asChild>
-  {@render popoverExample(opened)}
-</Story>
-
-<Story name="Popover — mobile" exportName="PopoverMobile" globals={reviewStoryGlobals.mobile} asChild>
-  {@render popoverExample(opened)}
 </Story>
 
 <Story name="Tooltip — desktop" exportName="TooltipDesktop" globals={reviewStoryGlobals.desktop} asChild>

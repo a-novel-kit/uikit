@@ -215,6 +215,19 @@ child with `autofocus` takes focus instead. Opening and closing fade the dialog 
   :global(:root:has(dialog.dialog:modal)) {
     overflow: hidden;
   }
+  /* A modal dialog blurs the whole page behind it, so a frosted page surface's own blur sits unseen there and still
+     costs every frame. Each one (a card, a sticky bar, the consent banner, a toast) carries data-frost: its blur
+     drops once the backdrop has faded in, so none shows unfrosted, and returns at once when the dialog closes. One
+     inside a dialog keeps it, and a ghost card lit by the pointer still fades as it dims. */
+  :global(:root:has(dialog.dialog:modal) [data-frost]:not(dialog *)) {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    transition:
+      background-color var(--duration-fast) var(--easing-standard),
+      box-shadow var(--duration-fast) var(--easing-standard),
+      backdrop-filter 0s var(--duration-normal),
+      -webkit-backdrop-filter 0s var(--duration-normal);
+  }
   .dialog:focus {
     outline: none;
   }

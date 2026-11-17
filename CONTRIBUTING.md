@@ -17,7 +17,6 @@ Each package owns one layer of the system:
 - `packages/tokens` owns every design value. Components read semantic tokens, never primitive palette
   steps.
 - `packages/fonts` owns the font files, their declarations, and their licenses.
-- `packages/icons` owns the canvas for custom glyphs. Standard icons come from `@lucide/svelte`.
 - `packages/storybook-config` is the Storybook preset that the workbench and the applications share.
 - `packages/storybook-workbench` is the private workbench that documents every component and foundation.
 

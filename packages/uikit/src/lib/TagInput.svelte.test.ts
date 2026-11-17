@@ -1,3 +1,4 @@
+import I18nFixture from "../../test/I18nFixture.svelte";
 import TagInput from "./TagInput.svelte";
 import { createTagInputController } from "./controllers.svelte";
 import { kebabTag, splitTags } from "./tags";
@@ -152,6 +153,18 @@ describe("TagInput", () => {
     input.value = "";
     await fireEvent.keyDown(input, { key: "Backspace" });
     expect(status.textContent).toBe("No tags");
+  });
+
+  it.each([
+    [[], "Aucune étiquette"],
+    [["maps"], "1 étiquette"],
+    [["maps", "noir"], "2 étiquettes"],
+  ])("counts %j tags in the app's language", (initialTags, text) => {
+    const controller = createTagInputController({ initialTags });
+    const props = { "aria-label": "Tags", name: "tags", controller };
+    const { getByRole } = render(I18nFixture, { props: { locale: "fr", component: TagInput, props } });
+
+    expect(getByRole("status").textContent).toBe(text);
   });
 
   it("describes the field with its tag count, after Field's own description", () => {

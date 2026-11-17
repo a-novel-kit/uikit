@@ -14,7 +14,6 @@
     "@a-novel-kit/ui-images": "0.3.0",
     "@a-novel-kit/uikit": "workspace:*",
     "@a-novel-kit/uikit-fonts": "workspace:*",
-    "@a-novel-kit/uikit-icons": "workspace:*",
     "@a-novel-kit/uikit-storybook": "workspace:*",
     "@a-novel-kit/uikit-tokens": "workspace:*",
     "@lucide/svelte": "catalog:"

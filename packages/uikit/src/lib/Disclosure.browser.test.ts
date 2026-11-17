@@ -21,16 +21,19 @@ describe("Disclosure", () => {
     await expect.poll(() => details.open).toBe(open);
   });
 
-  it.each([false, true])("preserves native accordion grouping with multiple=%s", async (multiple) => {
-    const first = createOpenController({ initialOpen: true });
-    const second = createOpenController();
-    const { getByText } = render(Fixture, { first, second, multiple });
-    expect(getByText("Private").closest("summary")).not.toBeNull();
-    await page.getByText("Export preferences").click();
-    await expect.poll(() => second.state.open).toBe(true);
-    await expect.poll(() => first.state.open).toBe(multiple);
-    await expect.element(page.getByText("Export a copy while keeping your original.")).toBeVisible();
-    await userEvent.keyboard("{Enter}");
-    await expect.poll(() => second.state.open).toBe(false);
-  });
+  it.each([false, true])(
+    "follows native exclusive grouping when disclosures share a name, multiple=%s",
+    async (multiple) => {
+      const first = createOpenController({ initialOpen: true });
+      const second = createOpenController();
+      const { getByText } = render(Fixture, { first, second, multiple });
+      expect(getByText("Private").closest("summary")).not.toBeNull();
+      await page.getByText("Export preferences").click();
+      await expect.poll(() => second.state.open).toBe(true);
+      await expect.poll(() => first.state.open).toBe(multiple);
+      await expect.element(page.getByText("Export a copy while keeping your original.")).toBeVisible();
+      await userEvent.keyboard("{Enter}");
+      await expect.poll(() => second.state.open).toBe(false);
+    }
+  );
 });

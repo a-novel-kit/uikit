@@ -72,7 +72,7 @@ Styles a native multiline input. Native attributes and events target the textare
     border: 0;
     background: transparent;
     inline-size: 100%;
-    min-block-size: calc(var(--control-height-lg) * var(--multiplier-2));
+    min-block-size: calc(var(--control-height-lg) * 2);
     resize: block;
     color: var(--color-control-text);
     font: inherit;
@@ -81,7 +81,7 @@ Styles a native multiline input. Native attributes and events target the textare
   }
 
   .auto-size {
-    max-block-size: calc(var(--space-24) * var(--multiplier-3));
+    max-block-size: calc(var(--space-24) * 3);
     field-sizing: content;
   }
 

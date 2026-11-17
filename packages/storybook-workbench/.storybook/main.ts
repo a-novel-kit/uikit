@@ -22,10 +22,6 @@ const config: StorybookConfig = {
             find: /^@a-novel-kit\/uikit$/,
             replacement: fileURLToPath(new URL("../../uikit/src/lib/index.ts", import.meta.url)),
           },
-          {
-            find: /^@a-novel-kit\/uikit-icons$/,
-            replacement: fileURLToPath(new URL("../../icons/src/lib/index.ts", import.meta.url)),
-          },
         ],
       },
     }),

@@ -62,9 +62,9 @@
     "uncaptioned": "Tableau défilant"
   },
   "tagInput": {
-    "count": "{{count}} étiquettes",
-    "none": "Aucune étiquette",
-    "one": "1 étiquette",
+    "count_zero": "Aucune étiquette",
+    "count_one": "{{count}} étiquette",
+    "count_other": "{{count}} étiquettes",
     "remove": "Retirer l’étiquette {{tag}}"
   },
   "toastRegion": {
