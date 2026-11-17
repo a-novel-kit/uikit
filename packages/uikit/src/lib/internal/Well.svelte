@@ -12,8 +12,9 @@ icons at the field's end carries `data-well-end`. Content inside reads the well'
 
   /** Props for a field's well; other attributes go to its element. */
   export interface WellProps extends Omit<HTMLButtonAttributes, "children"> {
-    /** The element the well is: a wrapper around its control by default, or the control itself. */
-    as?: "span" | "button";
+    /** The element the well is: a wrapper around its control by default (a `div` around block content), or the
+     * control itself. */
+    as?: "span" | "div" | "button";
     /** Sets the well's height, inset and type scale. */
     size?: ComponentSize;
     /** Applies the invalid surface and focus treatment. */

@@ -152,7 +152,7 @@ Native attributes and events target the text input; `class` styles the surroundi
   }
 </script>
 
-<Well size={controlSize} invalid={isInvalid} class={className}>
+<Well as="div" size={controlSize} invalid={isInvalid} class={className}>
   <div class="entries">
     {#if tags.length > 0}
       <ul class="tags">

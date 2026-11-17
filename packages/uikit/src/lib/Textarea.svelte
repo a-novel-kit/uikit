@@ -42,7 +42,7 @@ Styles a native multiline input. Native attributes and events target the textare
   const isInvalid = $derived(resolveInvalidState(invalid, ariaInvalid));
 </script>
 
-<Well size={controlSize} invalid={isInvalid} flush class={className}>
+<Well as="div" size={controlSize} invalid={isInvalid} flush class={className}>
   <div class="body {controlSize}">
     <textarea
       class="control {autoSize ? 'auto-size' : ''}"

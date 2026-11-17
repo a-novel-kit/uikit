@@ -53,7 +53,7 @@ so its accessible name, description, required state, and invalid state stay conn
 </script>
 
 <script lang="ts">
-  import FieldMessages, { describedBy } from "./internal/FieldMessages.svelte";
+  import FieldMessages, { messageIds } from "./internal/FieldMessages.svelte";
   import RenderContent from "./internal/RenderContent.svelte";
 
   const generatedId = $props.id();
@@ -72,7 +72,7 @@ so its accessible name, description, required state, and invalid state stay conn
 
   const controlProps = $derived<FieldControlProps>({
     id: controlId,
-    "aria-describedby": describedBy({ id: controlId, hint, error }),
+    "aria-describedby": messageIds({ id: controlId, hint, error }),
     "aria-invalid": error ? true : undefined,
     required: required ? true : undefined,
   });

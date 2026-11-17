@@ -104,9 +104,14 @@
       shown = false;
       return;
     }
+    // The wait goes stale once the surface reopens or its owner unmounts, so it never reads a destroyed owner's state.
+    let live = true;
     void Promise.allSettled(exits.map((exit) => exit.finished)).then(() => {
-      if (!open) shown = false;
+      if (live) shown = false;
     });
+    return () => {
+      live = false;
+    };
   });
 
   // The browser reads the anchor when the surface shows, so a source that arrives later shows it again.
@@ -144,6 +149,9 @@
   });
 
   function handleToggle(event: ToggleEvent) {
+    // A surface removed with its owner still reports its popover closing, after the owner's state is gone.
+    if (!(event.currentTarget as HTMLElement).isConnected) return;
+
     const nextOpen = event.newState === "open";
     if (nextOpen === open) return;
 

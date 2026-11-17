@@ -77,7 +77,7 @@ swaps for the field once the page hydrates.
   import Button from "./Button.svelte";
   import Dialog from "./Dialog.svelte";
   import { createChipGroupController } from "./controllers.svelte";
-  import FieldMessages, { describedBy as describedByMessages } from "./internal/FieldMessages.svelte";
+  import FieldMessages, { messageIds } from "./internal/FieldMessages.svelte";
   import RenderContent from "./internal/RenderContent.svelte";
   import Well from "./internal/Well.svelte";
   import { useMessages } from "./internal/i18n";
@@ -146,7 +146,7 @@ swaps for the field once the page hydrates.
 </script>
 
 {#snippet well(inSheet: boolean)}
-  <Well invalid={Boolean(error)} hover={false}>
+  <Well as="div" invalid={Boolean(error)} hover={false}>
     <div class="chips" class:sheet={inSheet}>
       {#if searchLabel}
         <label class="search">
@@ -204,7 +204,7 @@ swaps for the field once the page hydrates.
   class="chip-group {tone} {className}"
   class:searchable={Boolean(searchLabel)}
   {...rest}
-  aria-describedby={describedByMessages({ id, hint, error }, describedBy)}
+  aria-describedby={messageIds({ id, hint, error }, describedBy)}
 >
   <legend><RenderContent content={legend} /></legend>
   {#if sheet}

@@ -85,6 +85,19 @@ it.each(openings)("shows a $name list at its field's width when opened by $path"
   expect(await shown).toBe(opening.field(control).getBoundingClientRect().width + "px");
 });
 
+// A list its controller opens starts on the chosen option, as one a click opens does.
+it.each(fields)("starts a $name list its controller opens on the chosen option", async ({ renderClosed }) => {
+  const { controller } = renderClosed();
+  controller.select("fr");
+  const control = page.getByRole("combobox", { name: "Field" }).element() as HTMLElement;
+
+  controller.open();
+
+  const french = page.getByRole("option", { name: "French" });
+  await expect.element(french).toBeInTheDocument();
+  await expect.poll(() => control.getAttribute("aria-activedescendant")).toBe(french.element().id);
+});
+
 /** Each open list of the fixture, and the rows that render an option: its options, and a select's trigger. */
 const lists = [
   { kind: "select", rows: "[role=combobox], [role=option]", count: 3 },

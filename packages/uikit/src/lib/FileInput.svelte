@@ -153,7 +153,7 @@ Native attributes and events target the input; `class` styles the surrounding su
   /* The folder lights with the field under the pointer and in focus. The well is the field's root, which Well styles,
      so its hover reaches the folder as a global class. */
   @media (hover: hover) {
-    :global(.well:hover:not(:has(:disabled))) .browse {
+    :global(.well:hover:not(:has(:disabled))) > .end .browse {
       color: var(--color-text-primary);
     }
   }
@@ -214,6 +214,11 @@ Native attributes and events target the input; `class` styles the surrounding su
     .status,
     .end {
       display: none;
+    }
+
+    /* The native control brings its own height, so the field drops the padding it keeps for the icons. */
+    :global(.well):has(> .control) {
+      padding-block: 0;
     }
   }
 </style>
