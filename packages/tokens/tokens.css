@@ -7,12 +7,12 @@
   --ratio-emphasis: 1.5;
   --ratio-major: 1.618;
 
-  /* Space between and inside elements steps by 3px. Sizes, such as controls, icons, marks and surface widths,
-     and the reach of shadows and glows keep a 4px grid. */
+  /* Space between and inside elements steps by 3px, and its half step rounds to a whole pixel. Sizes, such as
+     controls, icons, marks and surface widths, and the reach of shadows and glows keep a 4px grid. */
   --space-base: 0.1875rem;
   --space-0: 0;
   --space-1: calc(var(--space-base) * 1);
-  --space-1-5: calc(var(--space-base) * 1.5);
+  --space-1-5: round(var(--space-base) * 1.5, 1px);
   --space-2: calc(var(--space-base) * 2);
   --space-3: calc(var(--space-base) * 3);
   --space-4: calc(var(--space-base) * 4);
@@ -478,10 +478,15 @@
   --font-weight-regular: 400;
   --font-weight-medium: 500;
   --font-weight-bold: 700;
-  --line-height-tight: 1;
-  --line-height-compact: 1.25;
-  --line-height-normal: 1.5;
-  --line-height-loose: 1.75;
+  /* Each line height rounds its element's line box to an even pixel count, so lines stacked from a whole pixel stay
+     on whole pixels, and a line centered on the 4px size grid lands on one. A browser snaps each baseline to a whole
+     pixel, so a line near the middle of one moves a whole pixel on any sub-pixel layout difference.
+     The length resolves against the font size of the element that declares it, and its children inherit that length,
+     so an element that sets its own font size sets its own line height. */
+  --line-height-tight: round(1em, 2px);
+  --line-height-compact: round(1.25em, 2px);
+  --line-height-normal: round(1.5em, 2px);
+  --line-height-loose: round(1.75em, 2px);
   --letter-spacing-tight: -0.02em;
   --letter-spacing-normal: 0;
   --letter-spacing-wide: 0.08em;

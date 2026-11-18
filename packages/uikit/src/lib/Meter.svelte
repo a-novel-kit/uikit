@@ -38,6 +38,7 @@ Use Progress for task completion.
     justify-content: space-between;
     gap: var(--space-4);
     font-size: var(--font-size-sm);
+    line-height: var(--line-height-compact);
   }
   meter {
     border: 0;

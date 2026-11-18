@@ -195,6 +195,7 @@ Every panel stays mounted; inactive panels are hidden. Initialize the controller
     color: var(--color-text-muted);
     font-weight: var(--font-weight-regular);
     font-size: var(--font-size-sm);
+    line-height: var(--line-height-compact);
     font-family: var(--font-family-interface);
     user-select: none;
   }

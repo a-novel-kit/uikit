@@ -133,6 +133,7 @@ Mount after validation and enable `focusOnMount` when focus should move to the s
     gap: var(--space-2);
     padding-inline-start: var(--space-6);
     font-size: var(--font-size-sm);
+    line-height: var(--line-height-compact);
   }
 
   a {

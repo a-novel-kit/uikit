@@ -1,0 +1,47 @@
+# Upgrading to NEXT
+
+Text lands on whole pixels: each line height token rounds its element's line box to an even pixel count, and uikit's
+components set a line height wherever they set a font size, so a screenshot no longer moves a text one pixel on a
+sub-pixel layout difference.
+
+## Do I need to act?
+
+**Required only if you compute with a `--line-height-*` token, or set a font size inside an element that uses one
+without setting a line height.** In the A-Novel platforms that is two rules of Account, below. Every other
+`line-height: var(--line-height-*)` keeps working and lands on whole pixels. Screenshots of text set on the scale
+move by up to a pixel per line; menus, list options, tabs, breadcrumbs, table rows and choice labels, which followed
+the font's own line height, take the compact line and lose about 2px each.
+
+## Read the line height tokens as lengths
+
+`--line-height-tight`, `--line-height-compact`, `--line-height-normal` and `--line-height-loose` were plain numbers
+(`1`, `1.25`, `1.5`, `1.75`). Each is now that ratio of the element's font size, rounded to an even pixel count:
+`--line-height-compact` gives a 14.22px text an 18px line, not 17.78px. Use a token as a line height directly; a
+calculation that multiplies one becomes invalid, and the element falls back to its inherited line height.
+
+```diff
+ .heading p {
+   font-size: var(--font-size-sm);
+-  line-height: round(var(--line-height-normal) * 1em, 1px);
++  line-height: var(--line-height-normal);
+ }
+```
+
+## Set a line height wherever you set a font size
+
+A length passes to children as it is, where a number scaled with each child's font size. An element that sets its own
+font size inside one that sets a line height token, such as a block in an `Alert`'s message, now inherits that
+line's pixels. Give it its own line height:
+
+```diff
+ .pending-email {
+   display: block;
+   font-size: var(--font-size-sm);
++  line-height: var(--line-height-compact);
+ }
+```
+
+## Notes
+
+`--space-1-5` rounds to a whole pixel (5px rather than 4.5px), and a `ChipGroup` chip takes a badge's 2px padding, so
+its rows keep whole pixels.

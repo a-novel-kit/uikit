@@ -81,6 +81,7 @@ Renders an ordered navigation trail; the final item is always the current, unlin
     gap: var(--space-2);
     color: var(--color-text-muted);
     font-size: var(--font-size-sm);
+    line-height: var(--line-height-compact);
     font-family: var(--font-family-interface);
   }
   .separator {

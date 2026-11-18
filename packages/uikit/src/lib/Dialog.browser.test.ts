@@ -92,8 +92,9 @@ describe("Dialog browser lifecycle", () => {
       expect(description.getBoundingClientRect().left).toBe(heading.getBoundingClientRect().left);
       expect(description.getBoundingClientRect().right).toBe(close.getBoundingClientRect().right);
       expect(description.getBoundingClientRect().top - heading.getBoundingClientRect().bottom).toBe(6);
-      expect(parseFloat(getComputedStyle(heading).lineHeight) / parseFloat(getComputedStyle(heading).fontSize)).toBe(
-        1.25
+      // The compact line: 1.25 times the font size, rounded to an even pixel count.
+      expect(parseFloat(getComputedStyle(heading).lineHeight)).toBe(
+        2 * Math.round((1.25 * parseFloat(getComputedStyle(heading).fontSize)) / 2)
       );
       expect(dialog.scrollWidth).toBe(dialog.clientWidth);
       const closeTop = close.getBoundingClientRect().top;

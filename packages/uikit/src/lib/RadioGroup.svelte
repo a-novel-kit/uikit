@@ -108,6 +108,7 @@ Use `createValueController` with a selected option value or `undefined`.
     color: var(--color-text-secondary);
     font-weight: var(--font-weight-bold);
     font-size: var(--font-size-sm);
+    line-height: var(--line-height-compact);
   }
 
   .options {

@@ -84,6 +84,7 @@ Composes a page heading, supporting copy, and actions. Defaults to a header cont
     color: var(--color-text-accent);
     font-weight: var(--font-weight-bold);
     font-size: var(--font-size-xs);
+    line-height: var(--line-height-compact);
     font-family: var(--font-family-mono);
     letter-spacing: var(--letter-spacing-wide);
     text-transform: uppercase;

@@ -373,6 +373,7 @@ For a custom trigger, spread the snippet attributes onto a native button.
     min-block-size: calc(var(--control-height-sm) - var(--size-1));
     color: var(--color-text-secondary);
     font-size: var(--font-size-sm);
+    line-height: var(--line-height-compact);
     font-family: var(--font-family-interface);
     user-select: none;
     text-align: start;
@@ -407,6 +408,7 @@ For a custom trigger, spread the snippet attributes onto a native button.
     margin-inline-start: auto;
     color: var(--color-text-muted);
     font-size: var(--font-size-xs);
+    line-height: var(--line-height-compact);
     font-family: var(--font-family-mono);
   }
 

@@ -51,11 +51,14 @@ other tones use status. Override `role` for static content.
 </div>
 
 <style>
+  /* A page centers its state, so an even height splits the space around it into whole pixels on an even viewport,
+     and its text stays on them. A browser without calc-size keeps the auto height. */
   .status {
     display: grid;
     justify-items: center;
     gap: var(--space-4);
     min-inline-size: 0;
+    block-size: calc-size(auto, round(up, size, 2px));
     text-align: center;
     overflow-wrap: anywhere;
   }

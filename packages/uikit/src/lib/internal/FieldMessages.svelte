@@ -46,6 +46,7 @@ Renders a field's hint and error under its control, each with the id `messageIds
     padding-inline: var(--space-1);
     color: var(--color-text-hint);
     font-size: var(--font-size-xs);
+    line-height: var(--line-height-compact);
   }
 
   .error {

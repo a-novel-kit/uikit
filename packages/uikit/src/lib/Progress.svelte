@@ -39,6 +39,7 @@ Shows labeled task progress against `max` (100 by default). Omit `value` for ind
     justify-content: space-between;
     gap: var(--space-4);
     font-size: var(--font-size-sm);
+    line-height: var(--line-height-compact);
   }
   progress {
     border: 0;

@@ -56,6 +56,7 @@ Wraps a native table in a keyboard-scrollable region. Supply semantic table sect
     inline-size: 100%;
     color: var(--color-text-primary);
     font-size: var(--font-size-sm);
+    line-height: var(--line-height-compact);
     font-family: var(--font-family-interface);
   }
 

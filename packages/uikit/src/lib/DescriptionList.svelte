@@ -67,6 +67,7 @@ width. Wrap each related `dt` and `dd` pair in a `div`.
     color: var(--color-text-muted);
     font-weight: var(--font-weight-bold);
     font-size: var(--font-size-sm);
+    line-height: var(--line-height-compact);
     font-family: var(--font-family-interface);
   }
 

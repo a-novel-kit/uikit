@@ -23,7 +23,8 @@ describe("Badge reflow", () => {
     expect(css.letterSpacing).toBe("normal");
     expect(parseFloat(css.fontSize)).toBeGreaterThanOrEqual(12);
     expect(parseFloat(css.fontSize)).toBeLessThan(13);
-    expect(badge.getBoundingClientRect().height).toBeLessThan(20);
+    // One 16px line between 2px paddings.
+    expect(badge.getBoundingClientRect().height).toBe(20);
     expect(badge.getBoundingClientRect().width).toBeCloseTo(content.getBoundingClientRect().width + 12);
   });
 

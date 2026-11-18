@@ -48,6 +48,7 @@ control. Children replace both, as a radio group's rendered option does.
   .label {
     font-weight: var(--font-weight-regular);
     font-size: var(--font-size-sm);
+    line-height: var(--line-height-compact);
   }
 
   .description {

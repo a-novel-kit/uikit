@@ -39,6 +39,16 @@ Applies readable editorial typography to semantic article content supplied by th
     font-family: var(--font-family-display);
     text-wrap: balance;
   }
+  /* The browser's heading margins, rounded to whole pixels so the text after a heading stays on them. */
+  .prose :global(h1) {
+    margin-block: round(0.67em, 1px);
+  }
+  .prose :global(h2) {
+    margin-block: round(0.83em, 1px);
+  }
+  .prose :global(h3) {
+    margin-block: round(1em, 1px);
+  }
 
   .prose :global(a) {
     color: var(--color-text-link);
@@ -46,6 +56,7 @@ Applies readable editorial typography to semantic article content supplied by th
   }
   .prose :global(code) {
     font-size: var(--font-size-sm);
+    line-height: var(--line-height-tight);
     font-family: var(--font-family-mono);
   }
   .prose :global(blockquote) {
