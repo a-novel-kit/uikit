@@ -161,13 +161,14 @@
   --color-text-link-hover: var(--base-brand);
 
   --color-border-subtle: var(--color-neutral-5);
-  --color-border-default: var(--color-neutral-6);
+  /* A control's outline, as an outline button's, a quarter step over the ramp's sixth so it holds on the canvas. */
+  --color-border-default: color-mix(in oklab, var(--color-neutral-7) var(--color-mix-4), var(--color-neutral-6));
   --color-border-strong: var(--color-neutral-8);
   --color-border-selected: var(--base-brand);
   /* A translucent light line, so a divider shows on every surface, a lit navigation included. */
   --color-border-divider: color-mix(in oklab, var(--color-neutral-12) var(--color-mix-2), transparent);
-  /* A collection item's ring, as a ghost card's: a step over a divider, since nothing else sets the item apart. */
-  --color-border-item: color-mix(in oklab, var(--color-neutral-12) var(--color-mix-3), transparent);
+  /* A collection item's ring, as a ghost card's: a control's outline, since nothing else sets the item apart. */
+  --color-border-item: var(--color-border-default);
 
   --color-control-surface: var(--color-surface-sunken);
   --color-control-surface-hover: color-mix(
@@ -278,13 +279,13 @@
      rarer than the brand blue and never a failure. */
   --color-accent-secondary: var(--base-pressure);
   /* A label filled with a tone, as a badge or a chosen chip, takes a deep step of its tone's own ramp under light
-     text: the full accent glared behind its few words. Amber brightens faster along its ramp, so it stops half a
-     step deeper. Each keeps 4.5:1. */
+     text: the full accent glared behind its few words, and each sits a quarter step under a whole one, mixed with the
+     step below. Amber brightens faster along its ramp, so it stops half a step deeper. Each keeps 4.5:1. */
   --color-label-text: var(--color-text-primary);
-  --color-label-neutral: var(--color-neutral-8);
-  --color-label-brand: var(--color-brand-7);
-  --color-label-accent: var(--color-pressure-8);
-  --color-label-highlight: color-mix(in oklab, var(--color-signal-6), var(--color-signal-7));
+  --color-label-neutral: color-mix(in oklab, var(--color-neutral-7) var(--color-mix-4), var(--color-neutral-8));
+  --color-label-brand: color-mix(in oklab, var(--color-brand-6) var(--color-mix-4), var(--color-brand-7));
+  --color-label-accent: color-mix(in oklab, var(--color-pressure-7) var(--color-mix-4), var(--color-pressure-8));
+  --color-label-highlight: color-mix(in oklab, var(--color-signal-6) var(--color-mix-12), var(--color-signal-7));
   --color-label-success: var(--color-label-highlight);
   --color-label-warning: var(--color-label-accent);
   --color-label-danger: var(--color-label-accent);
