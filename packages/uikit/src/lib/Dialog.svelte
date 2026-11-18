@@ -289,6 +289,11 @@ child with `autofocus` takes focus instead. Opening and closing fade the dialog 
     }
   }
 
+  /* Its auto margins center the dialog, so an even height splits the space they share into whole pixels on an even
+     viewport, and its text stays on them. A browser without calc-size keeps the fitted height. */
+  .centered {
+    block-size: calc-size(fit-content, round(up, size, 2px));
+  }
   /* A fullscreen dialog covers the page as a phone's navigation menu does, and only fades. Its thin
      edge matches the compact app header it covers, so its title and close button open where the
      header's controls were. */

@@ -76,6 +76,7 @@ is generic and translated, and only the times vary.
   span {
     color: var(--color-text-secondary);
     font-size: var(--font-size-xs);
+    line-height: var(--line-height-compact);
   }
 
   @media (forced-colors: active) {

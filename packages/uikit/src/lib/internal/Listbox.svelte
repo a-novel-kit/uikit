@@ -298,6 +298,7 @@ keys into requests to a `ListboxNavigation`, which this list shares for the poin
     min-block-size: calc(var(--control-height-sm) - var(--size-1));
     color: var(--color-text-secondary);
     font-size: var(--font-size-sm);
+    line-height: var(--line-height-compact);
     font-family: var(--font-family-interface);
     user-select: none;
     text-align: start;
@@ -343,6 +344,7 @@ keys into requests to a `ListboxNavigation`, which this list shares for the poin
     padding: var(--space-3);
     color: var(--color-text-muted);
     font-size: var(--font-size-sm);
+    line-height: var(--line-height-compact);
     font-family: var(--font-family-interface);
   }
 

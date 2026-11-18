@@ -113,4 +113,17 @@
       inset-block-start: auto;
     }
   }
+
+  /* The page's copy takes the scale's lines and the stack's gap, not the browser's margins, so it stays on whole
+     pixels. */
+  h1,
+  p {
+    margin: 0;
+  }
+  h1 {
+    line-height: var(--line-height-compact);
+  }
+  p {
+    line-height: var(--line-height-normal);
+  }
 </style>

@@ -59,7 +59,7 @@
     {@render page()}
     <ConsentBanner controller={fixedConsent()} {title} children={message} />
     <Dialog controller={fixedOpen(true)} title="Log in" size="sm">
-      <p style="margin: 0">
+      <p>
         <Localized en="Log in to reach your library." fr="Connectez-vous pour retrouver votre bibliothèque." />
       </p>
     </Dialog>
@@ -77,5 +77,18 @@
   .page {
     padding-block: var(--space-8);
     min-block-size: 100dvb;
+  }
+
+  /* The page's copy takes the scale's lines and the stack's gap, not the browser's margins, so it stays on whole
+     pixels. */
+  h1,
+  p {
+    margin: 0;
+  }
+  h1 {
+    line-height: var(--line-height-compact);
+  }
+  p {
+    line-height: var(--line-height-normal);
   }
 </style>

@@ -50,6 +50,7 @@ Presents an empty result with an h2 heading and optional guidance or recovery ac
     margin: 0;
     color: var(--color-text-primary);
     font-size: var(--font-size-2xl);
+    line-height: var(--line-height-compact);
     font-family: var(--font-family-display);
   }
   p {

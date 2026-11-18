@@ -391,6 +391,7 @@ swaps for the field once the page hydrates.
   .empty {
     color: var(--color-text-hint);
     font-size: var(--font-size-xs);
+    line-height: var(--line-height-compact);
   }
 
   .empty:empty {
@@ -412,7 +413,7 @@ swaps for the field once the page hydrates.
     border-radius: var(--radius-sm);
     background: var(--color-action-neutral);
     padding-inline: var(--size-1-5);
-    padding-block: calc(var(--space-1) / 2);
+    padding-block: calc(var(--size-1) / 2);
     min-inline-size: var(--icon-size-lg);
     color: var(--color-text-secondary);
     font-size: var(--font-size-xs);

@@ -20,7 +20,8 @@ it.each(["page", "status"])("keeps wrapped %s headings legible and supporting te
   const heading = getByRole("heading");
   const style = getComputedStyle(heading);
   const lineHeight = parseFloat(style.lineHeight);
-  expect(lineHeight / parseFloat(style.fontSize)).toBeCloseTo(1.25);
+  // The compact line: 1.25 times the font size, rounded to an even pixel count.
+  expect(lineHeight).toBe(2 * Math.round((1.25 * parseFloat(style.fontSize)) / 2));
   expect(heading.getBoundingClientRect().height / lineHeight).toBeGreaterThan(1.9);
   expect(getByText(description).getBoundingClientRect().top - heading.getBoundingClientRect().bottom).toBe(6);
   expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(320);

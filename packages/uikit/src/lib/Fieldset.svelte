@@ -47,6 +47,7 @@ Groups related native form controls with an optional legend and supporting descr
     color: var(--color-text-primary);
     font-weight: var(--font-weight-bold);
     font-size: var(--font-size-md);
+    line-height: var(--line-height-compact);
   }
 
   .description {
