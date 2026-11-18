@@ -220,6 +220,9 @@ keys into requests to a `ListboxNavigation`, which this list shares for the poin
       border: var(--border-width-thin) solid var(--color-border-subtle);
       /* The options' radius plus the padding around them, so their corners share centers. */
       border-radius: calc(var(--radius-md) + var(--space-1));
+      /* The frost carries the list's color. A popover's own opaque canvas would sit under it, leaving it nothing of
+         the page to blur. */
+      background: none;
       padding: 0;
       inline-size: var(--floating-anchor-width);
       min-inline-size: var(--floating-anchor-width);

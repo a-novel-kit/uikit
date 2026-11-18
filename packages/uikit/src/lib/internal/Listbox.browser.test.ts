@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
 import RenderedOptionsFixture from "../../../test/RenderedOptionsFixture.svelte";
 import { offsetFromMiddle } from "../../../test/geometry";
-import { anchorWidthOnShow } from "../../../test/style";
+import { anchorWidthOnShow, resolveColor } from "../../../test/style";
 import Combobox from "../Combobox.svelte";
 import Select from "../Select.svelte";
 import { createComboboxController, createSelectController } from "../controllers.svelte";
@@ -96,6 +96,18 @@ it.each(fields)("starts a $name list its controller opens on the chosen option",
   const french = page.getByRole("option", { name: "French" });
   await expect.element(french).toBeInTheDocument();
   await expect.poll(() => control.getAttribute("aria-activedescendant")).toBe(french.element().id);
+});
+
+// The list paints nothing over the page, so its frost blurs what lies under it.
+it.each(fields)("frosts the page under a $name list", async ({ renderClosed }) => {
+  const { controller } = renderClosed();
+
+  controller.open();
+
+  const list = page.getByRole("listbox");
+  await expect.element(list).toBeVisible();
+  expect(getComputedStyle(list.element()).backgroundColor).toBe(resolveColor("transparent"));
+  expect(getComputedStyle(list.element(), "::before").backdropFilter).toContain("blur");
 });
 
 /** Each open list of the fixture, and the rows that render an option: its options, and a select's trigger. */

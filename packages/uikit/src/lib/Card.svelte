@@ -3,8 +3,8 @@
 Groups content on a tokenized surface with optional header and footer snippets.
 A raised card is frosted glass the app's lamp shines through. Inside another card, it keeps the
 parent's glass and stands out by its shadow alone, so a group of settings can hold one card per option.
-A ghost card is one item of a collection: the canvas's own color under a raised card's veil and blur, ringed a
-step over a divider, and lit as a raised card under the pointer or once something in it takes the keyboard's focus.
+A ghost card is one item of a collection: the canvas's own color under a raised card's veil and blur, ringed as an
+outline button is, and lit as a raised card under the pointer or once something in it takes the keyboard's focus.
 
 A card inside another sits half the parent's radius from its edge and takes the next radius step down, so their
 corners stay concentric at any depth. Other content sits a spacing step further in.
@@ -88,7 +88,7 @@ corners stay concentric at any depth. Other content sits a spacing step further 
   }
   /* A ghost card is a raised card dark as the canvas, the same veil in the canvas's color, so a
      collection of them reads as the page itself until the pointer lights one. With no surface of its
-     own to set it apart, its ring sits a step over a divider's strength. */
+     own to set it apart, it takes a control's outline for its ring. */
   .surface-ghost {
     -webkit-backdrop-filter: blur(var(--blur-md));
     backdrop-filter: blur(var(--blur-md));
