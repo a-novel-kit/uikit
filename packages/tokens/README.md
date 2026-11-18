@@ -71,9 +71,10 @@ requires. That conversion stays outside the token and component APIs.
 
 ## Spacing, shape, and motion
 
-Spacing uses a `0.25rem` base. Blur, radius, control height, border, focus-ring, duration, and
-opacity tokens follow the same compact model. Changing a base preserves the relationships between
-generated values.
+Spacing steps by a `0.1875rem` (3px) base, and sizes, such as control heights, icons and blurs, by a
+`0.25rem` (4px) one. Radius, border, duration and opacity tokens each multiply their own base, and the
+focus ring derives from the border's. Changing a base preserves the relationships between generated
+values.
 
 ## Type
 
