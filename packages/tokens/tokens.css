@@ -192,8 +192,8 @@
     var(--color-control-surface) var(--color-mix-6),
     transparent
   );
-  /* The rim of a small choice control (a checkbox, a radio, a switch): opaque, a quarter step over the ramp's sixth,
-     so it holds around its own well. */
+  /* The rim of a small shape that carries its own fill (a checkbox, a radio button, a switch, an avatar): opaque, a
+     quarter step over the ramp's sixth, so it holds around that fill. */
   --color-control-border: color-mix(in oklab, var(--color-neutral-7) var(--color-mix-4), var(--color-neutral-6));
   /* A field outside an island, on the canvas or a sticky bar, takes a ghost card's ring, so it stays in view. An
      island resets this border to transparent for its fields: a well's tone carries a field there, and only focus and
@@ -516,8 +516,9 @@
   --layer-toast: calc(var(--layer-step) * 4);
 }
 
-/* What holds a control changes how it draws itself. The canvas gives a field its ring and every outline its double
-   weight, since nothing else sets them apart there. An island (a card, a dialog, an open disclosure, a fieldset, a
+/* What holds a control changes how it draws itself. The canvas gives a field its ring and every veil outline its
+   double weight, since nothing else sets them apart there; a field keeps that weight through focus and errors, which
+   only color its line. An island (a card, a dialog, an open disclosure, a fieldset, a
    message box) carries them on its own tone: its fields are bare wells, its outlines hairlines, and its disabled
    actions wells. Every island carries data-island, an application's own included; the context starts at its content,
    so the island's own outline still follows what holds it. */

@@ -521,7 +521,7 @@
 </Story>
 
 <Story name="Validation on raised surface" asChild>
-  <div class="raised-surface">
+  <div class="raised-surface" data-island>
     <Field label="Project name" error="Enter a project name." required>
       {#snippet children(control)}
         <Input {...control} invalid />
