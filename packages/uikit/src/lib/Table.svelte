@@ -38,9 +38,12 @@ Wraps a native table in a keyboard-scrollable region. Supply semantic table sect
 </div>
 
 <style>
+  /* The scroller carries the table's fill under its own border: a fill on the table would be clipped over the
+     border's inner edge, and thin it along each corner. */
   .scroller {
-    border: var(--border-width-thin) solid var(--color-border-subtle);
+    border: var(--border-width-thin) solid var(--color-border-divider);
     border-radius: var(--radius-lg);
+    background: var(--color-surface-sunken);
     max-inline-size: 100%;
     overflow: auto;
   }
@@ -52,7 +55,6 @@ Wraps a native table in a keyboard-scrollable region. Supply semantic table sect
 
   table {
     border-collapse: collapse;
-    background: var(--color-surface-sunken);
     inline-size: 100%;
     color: var(--color-text-primary);
     font-size: var(--font-size-sm);
@@ -71,7 +73,7 @@ Wraps a native table in a keyboard-scrollable region. Supply semantic table sect
   table :global(th),
   table :global(td) {
     vertical-align: top;
-    border-block-end: var(--border-width-thin) solid var(--color-border-subtle);
+    border-block-end: var(--border-width-thin) solid var(--color-border-divider);
     padding: var(--table-padding);
     text-align: start;
   }

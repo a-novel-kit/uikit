@@ -186,17 +186,18 @@ The default range is 0–100; the caller owns persistence and value validation.
     box-shadow: var(--shadow-action-selected);
   }
 
+  /* Disabled, the value still reads, in the muted text's color, on an inert track. */
   input:disabled {
-    --slider-fill: var(--color-action-disabled-border);
+    --slider-fill: var(--color-action-disabled-text);
     --slider-track: var(--color-action-disabled-surface);
 
     cursor: not-allowed;
   }
   input:disabled::-webkit-slider-thumb {
-    border-color: var(--color-action-disabled-border);
+    border-color: transparent;
   }
   input:disabled::-moz-range-thumb {
-    border-color: var(--color-action-disabled-border);
+    border-color: transparent;
   }
   .slider:has(input:disabled) {
     color: var(--color-text-disabled);

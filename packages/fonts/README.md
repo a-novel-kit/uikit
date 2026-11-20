@@ -10,11 +10,12 @@ application serves them from its own origin.
 | Interface / Display | TeX Gyre Heros + Heros Cn (Latin, 400/700) | GUST Font License (LPPL 1.3c) |
 | Story               | Lora (variable serif)                      | SIL OFL 1.1                   |
 | Mono                | JetBrains Mono (variable)                  | SIL OFL 1.1                   |
+| Interface medium    | Arimo (Latin, weights 500 to 600)          | SIL OFL 1.1                   |
 | Interface fallback  | Arimo (Latin, metric-compatible)           | SIL OFL 1.1                   |
 
 Every face is scoped to Latin through `unicode-range`, so other scripts fall through the family
 stack. Platforms add locale-specific faces, such as Noto, for those scripts. Heros exposes real 400
-and 700 weights.
+and 700 weights; Arimo's weight axis supplies the interface's 500 to 600 under the same family name.
 
 ## Usage
 

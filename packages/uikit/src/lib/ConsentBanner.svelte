@@ -54,7 +54,7 @@ leaves the page inert, so the topmost one open shows the banner too, where it st
 </script>
 
 {#snippet banner(id: string)}
-  <section class="banner {className}" aria-labelledby={id} data-frost {...rest}>
+  <section class="banner {className}" aria-labelledby={id} data-frost data-island {...rest}>
     <div class="text">
       <strong {id}><RenderContent content={title} /></strong>
       <p>{@render children()}</p>

@@ -79,7 +79,11 @@
 >
   <div class="surface-grid">
     {#each ["Canvas", "Island", "Glass", "Overlay"] as surface (surface)}
-      <section class="surface-sample {surface.toLowerCase()}" aria-label={surface}>
+      <section
+        class="surface-sample {surface.toLowerCase()}"
+        aria-label={surface}
+        data-island={surface === "Canvas" ? undefined : ""}
+      >
         <h3>{surface}</h3>
         <ButtonGroup label="Document actions">
           <Button>Save</Button>
@@ -91,6 +95,8 @@
           </IconButton>
           <Button aria-pressed="true" variant="outline">Preview</Button>
           <Button aria-pressed="true" variant="ghost" tone="neutral">Guides</Button>
+          <Button disabled>Publish</Button>
+          <Button variant="outline" tone="neutral" disabled>Archive</Button>
         </ButtonGroup>
         <Button href="#surface-help" variant="text">Help</Button>
       </section>

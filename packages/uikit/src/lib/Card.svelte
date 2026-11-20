@@ -3,8 +3,9 @@
 Groups content on a tokenized surface with optional header and footer snippets.
 A raised card is frosted glass the app's lamp shines through. Inside another card, it keeps the
 parent's glass and stands out by its shadow alone, so a group of settings can hold one card per option.
-A ghost card is one item of a collection: the canvas's own color under a raised card's veil and blur, ringed as an
-outline button is, and lit as a raised card under the pointer or once something in it takes the keyboard's focus.
+A ghost card is one item of a collection: the canvas's own color under a raised card's veil and blur, ringed in the
+veil that fills it once lit, and lit as a raised card under the pointer or once something in it takes the keyboard's
+focus. A card holds its section's content: `Section` titles it from outside, and a card names itself only as an item.
 
 A card inside another sits half the parent's radius from its edge and takes the next radius step down, so their
 corners stay concentric at any depth. Other content sits a spacing step further in.
@@ -41,7 +42,12 @@ corners stay concentric at any depth. Other content sits a spacing step further 
   const frosted = $derived(surface === "raised" || surface === "ghost" || surface === "overlay");
 </script>
 
-<div class="card surface-{surface} padding-{padding} {className}" data-frost={frosted || undefined} {...rest}>
+<div
+  class="card surface-{surface} padding-{padding} {className}"
+  data-frost={frosted || undefined}
+  data-island={surface === "plain" ? undefined : ""}
+  {...rest}
+>
   {#if header}<div class="header">{@render header()}</div>{/if}
   <div class="content">{@render children?.()}</div>
   {#if footer}<div class="footer">{@render footer()}</div>{/if}
@@ -63,11 +69,6 @@ corners stay concentric at any depth. Other content sits a spacing step further 
   .surface-plain {
     background: transparent;
   }
-  /* A card's surface carries the wells in it, so its fields drop the ring a field takes outside an island. A plain
-     card has no surface, and its fields keep whatever holds the card. */
-  .card:not(.surface-plain) {
-    --color-field-border: transparent;
-  }
   .surface-subtle {
     background: var(--color-surface-island-subtle);
   }
@@ -88,14 +89,17 @@ corners stay concentric at any depth. Other content sits a spacing step further 
   }
   /* A ghost card is a raised card dark as the canvas, the same veil in the canvas's color, so a
      collection of them reads as the page itself until the pointer lights one. With no surface of its
-     own to set it apart, it takes a control's outline for its ring. */
+     own to set it apart, it takes an outline for its ring: the veil that fills it once lit. */
   .surface-ghost {
     -webkit-backdrop-filter: blur(var(--blur-md));
     backdrop-filter: blur(var(--blur-md));
     transition:
       background-color var(--duration-fast) var(--easing-standard),
+      outline-color var(--duration-fast) var(--easing-standard),
       box-shadow var(--duration-fast) var(--easing-standard);
-    box-shadow: 0 0 0 var(--border-width-thin) var(--color-border-item);
+    /* An outline is painted last, above the card's own fill. A ring drawn as a shadow sits under that fill, whose
+       edge then eats the ring's inner antialiasing: the ring thins along every corner and reads as cropped. */
+    outline: var(--border-width-outline) solid var(--color-border-item);
     background: color-mix(in oklab, var(--color-surface-canvas) var(--color-mix-2), transparent);
   }
   @media (hover: hover) {
@@ -116,11 +120,13 @@ corners stay concentric at any depth. Other content sits a spacing step further 
   }
   @media (hover: hover) {
     .card :global(.card.surface-ghost:hover) {
+      outline-color: transparent;
       box-shadow: var(--shadow-md);
       background: transparent;
     }
   }
   .card :global(.card.surface-ghost:has(:focus-visible)) {
+    outline-color: transparent;
     box-shadow: var(--shadow-md);
     background: transparent;
   }
@@ -161,6 +167,11 @@ corners stay concentric at any depth. Other content sits a spacing step further 
   @media (forced-colors: active) {
     .card:not(.surface-plain) {
       border: var(--border-width-thin) solid CanvasText;
+    }
+
+    /* The border above already rings a ghost card. */
+    .surface-ghost {
+      outline: none;
     }
   }
 </style>

@@ -70,6 +70,9 @@
   --border-width-base: 0.0625rem;
   --border-width-thin: var(--border-width-base);
   --border-width-strong: calc(var(--border-width-base) * 2);
+  /* An outline's weight. On the canvas the veil is at its dimmest, so an outline doubles there to hold its shape; an
+     island resets it to a hairline. */
+  --border-width-outline: var(--border-width-strong);
   --focus-ring-width: calc(var(--border-width-base) * 3);
   --focus-ring-offset: var(--space-1);
 
@@ -94,6 +97,11 @@
   --color-mix-11: calc(var(--color-mix-base) * 11);
   --color-mix-12: calc(var(--color-mix-base) * 12);
 
+  /* One veil of light: the lightest neutral, an eighth strong, over whatever lies behind it. A raised surface is one
+     veil over the canvas, a pointer adds one to what it hovers, and a line is one veil drawn thin, so each shows on
+     every surface and an outline takes the color its shape fills with under the pointer. */
+  --color-veil: color-mix(in oklab, var(--color-neutral-12) var(--color-mix-2), transparent);
+
   --color-surface-canvas: var(--base-canvas);
   /* A well darkens the surface it is cut into, so it keeps that surface's tone. */
   --color-surface-sunken: color-mix(in oklab, var(--color-neutral-1) var(--color-mix-10), transparent);
@@ -116,23 +124,15 @@
   --color-surface-island-subtle: var(--color-surface-subtle);
   --color-surface-island: var(--color-surface-raised);
   --color-surface-island-strong: var(--color-surface-overlay);
-  /* Frosted glass: a light veil over the canvas, as light as an island, so the lamp shines through it
-     as it lights the navigation. */
-  --color-surface-island-glass: color-mix(
-    in oklab,
-    var(--color-neutral-12) var(--color-mix-2),
-    transparent
-  );
+  /* Frosted glass: one veil over the canvas, as light as an island, so the lamp shines through it as it lights the
+     navigation. */
+  --color-surface-island-glass: var(--color-veil);
   --color-surface-glass: color-mix(
     in oklab,
     var(--color-surface-island-strong) var(--color-mix-12),
     transparent
   );
-  --color-surface-glass-hover: color-mix(
-    in oklab,
-    var(--color-neutral-12) var(--color-mix-2),
-    transparent
-  );
+  --color-surface-glass-hover: var(--color-veil);
   --color-surface-selected: color-mix(
     in oklab,
     var(--base-brand) var(--color-mix-2),
@@ -160,14 +160,14 @@
   --color-text-link: var(--color-brand-11);
   --color-text-link-hover: var(--base-brand);
 
-  --color-border-subtle: var(--color-neutral-5);
-  /* A control's outline, as an outline button's, a quarter step over the ramp's sixth so it holds on the canvas. */
-  --color-border-default: color-mix(in oklab, var(--color-neutral-7) var(--color-mix-4), var(--color-neutral-6));
+  /* Every line is one veil. A divider parts siblings on one surface, a hairline wide. An outline draws a shape that
+     has no fill of its own (an outline button, a ghost card, a field outside an island), at --border-width-outline. */
+  --color-border-divider: var(--color-veil);
+  --color-border-default: var(--color-veil);
+  /* An outline under the pointer. */
   --color-border-strong: var(--color-neutral-8);
   --color-border-selected: var(--base-brand);
-  /* A translucent light line, so a divider shows on every surface, a lit navigation included. */
-  --color-border-divider: color-mix(in oklab, var(--color-neutral-12) var(--color-mix-2), transparent);
-  /* A collection item's ring, as a ghost card's: a control's outline, since nothing else sets the item apart. */
+  /* A collection item's ring, as a ghost card's. */
   --color-border-item: var(--color-border-default);
 
   --color-control-surface: var(--color-surface-sunken);
@@ -192,7 +192,9 @@
     var(--color-control-surface) var(--color-mix-6),
     transparent
   );
-  --color-control-border: var(--color-border-default);
+  /* The rim of a small choice control (a checkbox, a radio, a switch): opaque, a quarter step over the ramp's sixth,
+     so it holds around its own well. */
+  --color-control-border: color-mix(in oklab, var(--color-neutral-7) var(--color-mix-4), var(--color-neutral-6));
   /* A field outside an island, on the canvas or a sticky bar, takes a ghost card's ring, so it stays in view. An
      island resets this border to transparent for its fields: a well's tone carries a field there, and only focus and
      errors outline it. A transparent border still outlines a field in forced-colors mode. */
@@ -248,8 +250,10 @@
     currentColor var(--color-mix-3),
     transparent
   );
-  --color-action-disabled-surface: var(--color-neutral-3);
-  --color-action-disabled-border: var(--color-border-subtle);
+  /* A disabled action draws no outline and no glow: only an inert fill under muted text. On the canvas the fill is
+     half a veil, a slight gray; an island resets it to a field's well, so the action sits level with the fields
+     around it. */
+  --color-action-disabled-surface: color-mix(in oklab, var(--color-neutral-12) var(--color-mix-1), transparent);
   --color-action-disabled-text: var(--color-text-disabled);
 
   --color-navigation-text: var(--color-text-muted);
@@ -510,6 +514,17 @@
   --layer-sticky: calc(var(--layer-step) * 2);
   --layer-modal: calc(var(--layer-step) * 3);
   --layer-toast: calc(var(--layer-step) * 4);
+}
+
+/* What holds a control changes how it draws itself. The canvas gives a field its ring and every outline its double
+   weight, since nothing else sets them apart there. An island (a card, a dialog, an open disclosure, a fieldset, a
+   message box) carries them on its own tone: its fields are bare wells, its outlines hairlines, and its disabled
+   actions wells. Every island carries data-island, an application's own included; the context starts at its content,
+   so the island's own outline still follows what holds it. */
+[data-island] > * {
+  --color-field-border: transparent;
+  --border-width-outline: var(--border-width-thin);
+  --color-action-disabled-surface: var(--color-control-surface);
 }
 
 /* Every text a reader selects takes the selection pair. Buttons and menus are not selectable. */

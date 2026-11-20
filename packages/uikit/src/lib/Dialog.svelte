@@ -155,6 +155,7 @@ child with `autofocus` takes focus instead. Opening and closing fade the dialog 
   class="dialog {presentation} {size} {className}"
   class:mounted
   class:steady
+  data-island
   aria-labelledby={titleId}
   aria-describedby={description ? descriptionId : undefined}
   oncancel={handleCancel}
@@ -180,8 +181,6 @@ child with `autofocus` takes focus instead. Opening and closing fade the dialog 
     --dialog-margin: var(--space-2);
     --dialog-width: var(--layout-container-sm);
     --dialog-rise: var(--space-2);
-    /* The dialog is an island, centered or fullscreen, so its fields drop the ring a field takes outside one. */
-    --color-field-border: transparent;
     position: fixed;
     z-index: var(--layer-modal);
     transition:
@@ -228,6 +227,14 @@ child with `autofocus` takes focus instead. Opening and closing fade the dialog 
       backdrop-filter 0s var(--duration-normal),
       -webkit-backdrop-filter 0s var(--duration-normal);
   }
+  /* Each frame drawn under the backdrop makes it blur the whole page again. What animates on the page, such as a
+     skeleton's shimmer, pauses while a modal dialog holds the page inert, and carries on when the dialog closes. What
+     the dialog holds keeps moving. */
+  :global(:root:has(dialog.dialog:modal) :not(dialog, dialog *)),
+  :global(:root:has(dialog.dialog:modal) :not(dialog, dialog *)::before),
+  :global(:root:has(dialog.dialog:modal) :not(dialog, dialog *)::after) {
+    animation-play-state: paused;
+  }
   .dialog:focus {
     outline: none;
   }
@@ -242,6 +249,11 @@ child with `autofocus` takes focus instead. Opening and closing fade the dialog 
   }
   .dialog:not([open])::backdrop {
     opacity: 0;
+  }
+  /* A fullscreen dialog covers its backdrop, whose blur would cost every frame unseen. */
+  .fullscreen::backdrop {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
   @starting-style {
     .mounted[open] {
