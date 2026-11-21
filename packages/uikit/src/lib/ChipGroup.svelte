@@ -416,6 +416,7 @@ swaps for the field once the page hydrates.
     padding-block: calc(var(--size-1) / 2);
     min-inline-size: var(--icon-size-lg);
     color: var(--color-text-secondary);
+    font-weight: var(--font-weight-medium);
     font-size: var(--font-size-xs);
     line-height: var(--line-height-compact);
     font-family: var(--font-family-interface);

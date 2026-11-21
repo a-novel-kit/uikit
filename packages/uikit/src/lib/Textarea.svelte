@@ -101,7 +101,7 @@ Styles a native multiline input. Native attributes and events target the textare
   .adornments {
     display: grid;
     gap: var(--space-2);
-    border-block-start: var(--border-width-thin) solid var(--color-border-subtle);
+    border-block-start: var(--border-width-thin) solid var(--color-border-divider);
     color: var(--well-muted-text);
     font-size: var(--font-size-sm);
     line-height: var(--line-height-compact);

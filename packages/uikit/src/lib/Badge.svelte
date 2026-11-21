@@ -30,7 +30,8 @@ Labels a category or status compactly. Use InlineMessage when changes need live 
     inline-size: fit-content;
     max-inline-size: 100%;
     color: var(--color-label-text);
-    font-weight: var(--font-weight-regular);
+    /* Light text on a fill thins out, so a label takes the medium weight to hold its strokes. */
+    font-weight: var(--font-weight-medium);
     font-size: var(--font-size-xs);
     line-height: var(--line-height-compact);
     font-family: var(--font-family-interface);

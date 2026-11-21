@@ -108,7 +108,7 @@
     display: grid;
     justify-items: center;
     gap: var(--space-3);
-    border: var(--border-width-thin) solid var(--color-border-subtle);
+    border: var(--border-width-thin) solid var(--color-border-divider);
     border-radius: var(--radius-lg);
     background: var(--color-surface-sunken);
     padding: var(--space-4);

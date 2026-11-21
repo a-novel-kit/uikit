@@ -228,6 +228,12 @@ item.
     border-color: var(--button-border);
   }
 
+  /* A neutral outline is a veil, which doubles on the canvas, where it is dimmest. A colored outline carries
+     itself. */
+  .outline.neutral {
+    border-width: var(--border-width-outline);
+  }
+
   @media (hover: hover) {
     .outline:hover:not(:disabled):not([aria-pressed="true"]) {
       border-color: var(--button-border-hover);
@@ -325,9 +331,10 @@ item.
     color: var(--color-action-disabled-text);
   }
 
-  /* A ghost or text button has no border or fill to dim, so it stays bare text while disabled. */
+  /* A disabled action draws no outline: only an inert fill. A ghost or text button has no fill to dim, so it stays
+     bare text while disabled. */
   .button:is(.solid, .outline):disabled:not([aria-pressed="true"]) {
-    border-color: var(--color-action-disabled-border);
+    border-color: transparent;
     background-color: var(--color-action-disabled-surface);
   }
 

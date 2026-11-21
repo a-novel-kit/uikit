@@ -170,12 +170,12 @@ Every panel stays mounted; inactive panels are hidden. Initialize the controller
   .a-novel-tabs-list {
     display: flex;
     gap: var(--space-1);
-    border-block-end: var(--border-width-thin) solid var(--color-border-subtle);
+    border-block-end: var(--border-width-thin) solid var(--color-border-divider);
   }
   .a-novel-tabs.vertical .a-novel-tabs-list {
     flex: none;
     flex-direction: column;
-    border-inline-end: var(--border-width-thin) solid var(--color-border-subtle);
+    border-inline-end: var(--border-width-thin) solid var(--color-border-divider);
     border-block-end: 0;
   }
   .a-novel-tabs-trigger {

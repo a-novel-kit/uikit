@@ -111,6 +111,7 @@
   const visibilityController = fixedSelect<Visibility>();
   const openVisibilityController = fixedSelect<Visibility>("private", true);
   const openUnsetVisibilityController = fixedSelect<Visibility>(undefined, true);
+  const overContentBarController = fixedSelect<Visibility>("private", true);
   const invalidVisibilityController = fixedSelect<Visibility>();
   const composedVisibilityController = fixedSelect<Visibility>("private");
   const productUpdatesController = fixedChecked(true);
@@ -520,7 +521,7 @@
 </Story>
 
 <Story name="Validation on raised surface" asChild>
-  <div class="raised-surface">
+  <div class="raised-surface" data-island>
     <Field label="Project name" error="Enter a project name." required>
       {#snippet children(control)}
         <Input {...control} invalid />
@@ -701,6 +702,39 @@
   </div>
 </Story>
 
+<Story
+  name="Open selection over content"
+  parameters={{
+    docs: {
+      description: {
+        story:
+          "An open list is frosted glass that continues its focused field: what lies behind it shows through, blurred and dimmed.",
+      },
+      story: { inline: false, height: "420px" },
+    },
+  }}
+  asChild
+>
+  <div class="over-content">
+    <StickyBar edge="start">
+      <div class="over-content-bar">
+        <Select aria-label="Sort by" controller={overContentBarController} options={visibilityOptions} />
+      </div>
+    </StickyBar>
+    <div class="over-content-cards">
+      {#each ["The harbor lights", "The cartographer", "Salt and ash", "Notebooks"] as title (title)}
+        <Card surface="ghost">
+          <Stack gap="2">
+            <strong>{title}</strong>
+            <span>A mapmaker who only draws places that no longer exist is hired to chart a town.</span>
+            <Button size="sm">Open</Button>
+          </Stack>
+        </Card>
+      {/each}
+    </div>
+  </div>
+</Story>
+
 <Story name="Composition" asChild>
   <div class="composition-grid">
     <Field>
@@ -750,7 +784,7 @@
     inline-size: min(100%, var(--layout-container-sm));
   }
   .raised-surface {
-    border: var(--border-width-thin) solid var(--color-border-subtle);
+    border: var(--border-width-thin) solid var(--color-border-divider);
     border-radius: var(--radius-md);
     background: var(--color-surface-raised);
     padding: var(--space-5);
@@ -780,6 +814,19 @@
   }
   .narrow {
     inline-size: min(100%, calc(var(--space-base) * 80));
+  }
+  .over-content {
+    display: grid;
+    gap: var(--space-4);
+    inline-size: min(100%, var(--layout-container-sm));
+  }
+  .over-content-bar {
+    padding-block: var(--space-2);
+  }
+  .over-content-cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
   }
   .adornment-grid {
     display: grid;

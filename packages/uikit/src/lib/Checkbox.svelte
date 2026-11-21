@@ -148,7 +148,7 @@ Provide `label` or an accessible name; native input attributes are forwarded to 
 
   input:disabled {
     box-shadow: none;
-    border-color: var(--color-action-disabled-border);
+    border-color: transparent;
     background: var(--color-action-disabled-surface);
     color: var(--color-action-disabled-text);
   }

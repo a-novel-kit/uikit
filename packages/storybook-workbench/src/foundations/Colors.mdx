@@ -140,7 +140,7 @@ immediate attention, and, rarer than the brand, a distinction that reports nothi
     <button type="button" className="action-state action-state--disabled" disabled>
       <span>Disabled</span>
     </button>
-    <code>neutral.3 / neutral.8</code>
+    <code>half a veil / neutral.8</code>
   </div>
 </div>
 
@@ -188,6 +188,38 @@ The pressure magenta also sets apart a distinction that reports nothing, such as
 chip fills with a deep step of its tone's own ramp under light text (`--color-label-*`), so its words read clear
 of the glare; every tone keeps 4.5:1. Each app's lamp takes one hue (`--color-lamp-{ember,magenta}`): Account's ember,
 Studio's magenta.
+
+## Surfaces and lines
+
+Light comes in steps of one veil (`--color-veil`): the lightest neutral, an eighth strong, over whatever lies behind
+it. Since a veil is translucent, each role below shows on every surface.
+
+| Role                                            | Token                                           | Drawn as                                      |
+| ----------------------------------------------- | ----------------------------------------------- | --------------------------------------------- |
+| A raised card                                   | `--color-surface-island-glass`                  | One veil over the canvas, frosted             |
+| What the pointer hovers                         | `--color-surface-glass-hover`                   | One more veil                                 |
+| A divider between siblings                      | `--color-border-divider`                        | One veil, a hairline wide                     |
+| An outline around a shape with no fill          | `--color-border-default`, `--color-border-item` | One veil, `--border-width-outline` wide       |
+| A field's well                                  | `--color-control-surface`                       | A translucent darkening of its surface        |
+| A disabled action                               | `--color-action-disabled-surface`               | An inert fill, with no outline and no glow    |
+| The rim of a checkbox, a radio button, a switch | `--color-control-border`                        | An opaque line that holds around its own well |
+
+An outline takes the color its shape fills with under the pointer, so a ghost card's ring floods the card when it
+lights.
+
+A line sits above what it frames. Put a border and its fill on one element, or draw the line as an `outline` when a
+layer of its own fills the shape. A ring drawn as a spread shadow, or a child clipped over its parent's border, loses
+its antialiasing along every corner.
+
+What holds a control changes how it draws itself. On the canvas nothing else sets a control apart, so a field takes
+a ring, every veil outline doubles (`--border-width-outline`), and a disabled action fills with half a veil. An island
+carries its controls on its own tone: its fields are bare wells, its outlines hairlines, and its disabled actions take
+a field's well. Every uikit island sets this context for its content. An application's own island carries
+`data-island`:
+
+```html
+<aside data-island>...</aside>
+```
 
 ## Primitive ramps
 

@@ -20,6 +20,24 @@ Use logical properties and fluid primitives. Prefer wrapping, reflow, and scroll
 
 Components must tolerate longer labels, right-to-left direction, 200% text zoom, and a narrow container. Density changes spacing and control height; it must not remove labels, focus indicators, or targets.
 
+## Page anatomy
+
+A page reads as sections, each a `Section`: a title, an optional explanation and its controls, above the content.
+
+- The title sits on the surface that holds the section, never inside the card that follows. A page's sections title
+  on the canvas, and a section inside a card titles on that card.
+- A card holds the section's content. Several things of one kind sit as sibling cards under one title.
+- A card names itself only as an item of a collection, such as a project or one way to sign in.
+- A dialog titles itself, since nothing outside it can.
+- Rows that share a card part with a `Separator` or `--color-border-divider`.
+- Sections sit `--space-8` apart, and a title `--space-4` above its content.
+
+```svelte
+<Section title="Devices" description="The devices signed in to your account.">
+  <Card>...</Card>
+</Section>
+```
+
 ## Visual hierarchy
 
 Start with spacing and type. Use borderless islands for grouping, shadows for raised layers, and glow for selected, focused, or confirmed states. Avoid permanent glow and decorative borders around every region.

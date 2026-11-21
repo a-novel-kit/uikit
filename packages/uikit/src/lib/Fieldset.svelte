@@ -22,16 +22,14 @@ Groups related native form controls with an optional legend and supporting descr
   let { legend, description, class: className = "", children, ...rest }: FieldsetProps = $props();
 </script>
 
-<fieldset class="fieldset {className}" {...rest}>
+<fieldset class="fieldset {className}" data-island {...rest}>
   {#if legend}<legend><RenderContent content={legend} /></legend>{/if}
   {#if description}<div class="description"><RenderContent content={description} /></div>{/if}
   <div class="content">{@render children?.()}</div>
 </fieldset>
 
 <style>
-  /* A fieldset is an island, so its fields drop the ring a field takes outside one. */
   .fieldset {
-    --color-field-border: transparent;
     display: grid;
     gap: var(--space-3);
     margin: 0;

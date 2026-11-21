@@ -131,7 +131,7 @@ Provide a visible label or an accessible name.
   }
   input:disabled {
     box-shadow: none;
-    border-color: var(--color-border-subtle);
+    border-color: transparent;
     background: var(--color-action-disabled-surface);
   }
 </style>

@@ -152,7 +152,7 @@ Native attributes and events target the search input; `class` styles the compone
 </script>
 
 <div class="combobox {className}">
-  <Well bind:element={wellElement} invalid={isInvalid}>
+  <Well bind:element={wellElement} invalid={isInvalid} data-state={controller.state.open ? "open" : "closed"}>
     <input
       bind:this={inputElement}
       {...rest}

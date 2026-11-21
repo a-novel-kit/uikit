@@ -254,6 +254,36 @@ describe("Dialog over a frosted page", () => {
     expect(frosted.map(blur)).not.toContain("none");
   });
 
+  // Each frame an animation draws under the backdrop blurs the whole page again.
+  it("pauses what animates on the page while it is modal, and never what it holds", async () => {
+    const controller = createOpenController();
+    const { getByTestId, container } = render(BlurredPageFixture, { controller });
+    const dialog = container.querySelector("dialog")!;
+    const playState = (id: string) => getComputedStyle(getByTestId(id)).animationPlayState;
+    expect(playState("page-skeleton")).toBe("running");
+
+    controller.open();
+    await expect.poll(() => dialog.matches(":modal")).toBe(true);
+    expect(playState("page-skeleton")).toBe("paused");
+    expect(playState("dialog-skeleton")).toBe("running");
+
+    controller.close();
+    await expect.poll(() => dialog.matches(":modal")).toBe(false);
+    expect(playState("page-skeleton")).toBe("running");
+  });
+
+  it.each([
+    ["blurs the page behind a centered dialog", "centered", true],
+    ["leaves the backdrop a fullscreen dialog covers unblurred", "fullscreen", false],
+  ] as const)("%s", async (_, presentation, blurred) => {
+    const controller = createOpenController({ initialOpen: true });
+    const { getByRole } = render(Dialog, { controller, title: "Menu", presentation });
+    const dialog = getByRole("dialog");
+    await expect.poll(() => dialog.matches(":modal")).toBe(true);
+
+    expect(getComputedStyle(dialog, "::backdrop").backdropFilter.includes("blur")).toBe(blurred);
+  });
+
   // A fixed request inside a moving dialog would travel with it.
   it.each([
     ["fades without rising while it shows a page's request", true, "none"],

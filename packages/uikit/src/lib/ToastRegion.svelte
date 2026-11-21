@@ -56,7 +56,7 @@ The caller manages their lifetime and removes dismissed entries; no automatic ti
 
 <section class="region {className}" aria-label={label} {...rest}>
   {#each toasts as toast (toast.id)}
-    <div class="toast" role={toast.tone === "error" ? "alert" : "status"} data-frost>
+    <div class="toast" role={toast.tone === "error" ? "alert" : "status"} data-frost data-island>
       <FeedbackIcon tone={toast.tone ?? "info"} size="sm" />
       <div class="message">
         {#if toast.title}<strong><RenderContent content={toast.title} /></strong>{/if}

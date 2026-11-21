@@ -165,6 +165,8 @@ export { default as ProtectedPage } from "./ProtectedPage.svelte";
 export type { ProtectedPageProps } from "./ProtectedPage.svelte";
 export { default as RadioGroup } from "./RadioGroup.svelte";
 export type { RadioGroupController, RadioGroupProps, RadioOption } from "./RadioGroup.svelte";
+export { default as Section } from "./Section.svelte";
+export type { SectionProps } from "./Section.svelte";
 export { default as Select } from "./Select.svelte";
 export type { SelectController, SelectOption, SelectProps } from "./Select.svelte";
 export { default as Separator } from "./Separator.svelte";

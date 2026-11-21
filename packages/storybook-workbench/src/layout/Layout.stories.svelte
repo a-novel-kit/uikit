@@ -1,9 +1,26 @@
 <script module lang="ts">
-  import { Button, Card, Container, Grid, Inline, Input, PageHeader, SplitPane, Stack } from "@a-novel-kit/uikit";
+  import {
+    Badge,
+    Button,
+    Card,
+    Container,
+    Grid,
+    Inline,
+    Input,
+    PageHeader,
+    Section,
+    Separator,
+    SplitPane,
+    Stack,
+    Switch,
+  } from "@a-novel-kit/uikit";
+  import { fixedChecked } from "@a-novel-kit/uikit-storybook";
 
   import { Search as SearchIcon, ArrowDownUp as SortIcon } from "@lucide/svelte";
   import { defineMeta } from "@storybook/addon-svelte-csf";
   import { expect, within } from "storybook/test";
+
+  const sectionSwitchController = fixedChecked(true);
 
   const ghostItems = [
     { title: "The harbor lights", text: "A short one." },
@@ -108,6 +125,63 @@
 </Story>
 
 <Story
+  name="Titled sections"
+  parameters={{
+    docs: {
+      description: {
+        story:
+          "A section's title, explanation and controls sit on the surface that holds it, above its cards. A card names itself only as an item, with a section inside it, and its rows part with a separator.",
+      },
+    },
+  }}
+  asChild
+>
+  <Container size="sm">
+    <Stack gap="8">
+      <Section title="Devices" description="The devices signed in to your account.">
+        {#snippet actions()}
+          <Button variant="outline" tone="neutral" size="sm">Sign out everywhere</Button>
+        {/snippet}
+        <Card>
+          <Stack gap="3">
+            <Inline gap="2">
+              <span>Firefox on Linux</span>
+              <Badge tone="brand">This device</Badge>
+            </Inline>
+            <Separator />
+            <span>Safari on iOS</span>
+          </Stack>
+        </Card>
+      </Section>
+      <Section title="Privacy">
+        <Card>
+          <Switch
+            controller={sectionSwitchController}
+            label="Record where my devices sign in from"
+            description="Shows the approximate location of each device on your account page."
+          />
+        </Card>
+      </Section>
+      <Section title="Credentials" description="What you sign in with.">
+        <Card>
+          <Section title="Email and password" headingLevel={3}>
+            <span class="muted">maya.chen@example.test</span>
+          </Section>
+        </Card>
+        <Card>
+          <Section title="Passkey" headingLevel={3}>
+            <Inline gap="2">
+              <Button disabled>Add a passkey</Button>
+              <Button variant="outline" tone="neutral" disabled>Learn more</Button>
+            </Inline>
+          </Section>
+        </Card>
+      </Section>
+    </Stack>
+  </Container>
+</Story>
+
+<Story
   name="Nested cards"
   parameters={{
     docs: {
@@ -143,7 +217,7 @@
     docs: {
       description: {
         story:
-          "Each item of a collection is a ghost card: the canvas's own color under a raised card's veil and blur, ringed as an outline button is. It lights as a raised card under the pointer, or once something in it takes the keyboard's focus. The items run down one column before the next, each as tall as it needs.",
+          "Each item of a collection is a ghost card: the canvas's own color under a raised card's veil and blur, ringed in the veil that fills it once lit, double weight on the canvas. It lights as a raised card under the pointer, or once something in it takes the keyboard's focus. The items run down one column before the next, each as tall as it needs.",
       },
     },
   }}
