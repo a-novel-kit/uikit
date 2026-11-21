@@ -43,7 +43,7 @@
     "@trivago/prettier-plugin-sort-imports": "catalog:",
     "@types/node": "catalog:",
     "@vitest/browser-playwright": "catalog:",
-    "@vitest/coverage-v8": "5.1.0",
+    "@vitest/coverage-v8": "5.1.1",
     "eslint": "catalog:",
     "eslint-config-prettier": "catalog:",
     "eslint-plugin-storybook": "catalog:",
