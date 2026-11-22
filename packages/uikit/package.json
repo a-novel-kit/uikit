@@ -50,7 +50,7 @@
   },
   "peerDependencies": {
     "@a-novel-kit/nodelib-i18n": "^2.14.0",
-    "i18next": "^27.2.1",
+    "i18next": "^27.2.2",
     "svelte": "^5.58.0"
   },
   "publishConfig": {
