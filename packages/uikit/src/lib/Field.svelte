@@ -110,17 +110,26 @@ so its accessible name, description, required state, and invalid state stay conn
     gap: var(--space-1) var(--space-4);
   }
 
-  /* A small action stands taller than the label and wider than its text. Its box overhangs the row by half the
-     difference each way, and the field's end by its own inset, so a label row keeps one height with or without an
-     action, and the action's text ends where the field does: a text button insets its label by a step and its
-     hairline border. */
+  /* The label row's actions end where the field does. */
   .label-actions {
     display: flex;
     gap: var(--space-3);
-    margin-inline: auto calc(-1 * (var(--space-2) + var(--border-width-thin)));
+    margin-inline-start: auto;
+    font: var(--text-ui);
+  }
+
+  /* A small button stands taller than the label. Its box overhangs the row by half the difference each way, so a
+     label row keeps one height with or without it. Any other action, such as a link, is no taller than its line. */
+  .label-actions:has(> :global(.button)) {
     /* off-scale: half the difference between the label's line and a small control, each way */
     margin-block: calc((1lh - var(--control-height-sm)) / 2);
-    font: var(--text-ui);
+  }
+
+  /* A text button insets its label by a step and its hairline border. Last in the row, its box overhangs the field's
+     end by that inset, so its text ends where the field does. A link is its own text and takes no overhang: it once
+     ended 7px past the field. */
+  .label-actions:has(> :global(.button.text:last-child)) {
+    margin-inline-end: calc(-1 * (var(--space-2) + var(--border-width-thin)));
   }
 
   /* A label names one control, so it stays regular: bold is kept for actions and group names. */
