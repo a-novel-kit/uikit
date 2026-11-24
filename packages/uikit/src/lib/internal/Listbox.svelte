@@ -162,6 +162,7 @@ keys into requests to a `ListboxNavigation`, which this list shares for the poin
   style={maxBlockSize ? "--listbox-max-block-size: " + maxBlockSize : undefined}
   onOpenChange={handleOpenChange}
 >
+  <div class="frost"></div>
   <div class="options">
     {#each options as option, index (option.value)}
       {@const selected = controller.state.value === option.value}
@@ -208,16 +209,21 @@ keys into requests to a `ListboxNavigation`, which this list shares for the poin
       z-index: var(--layer-dropdown);
       transition:
         translate var(--duration-fast) var(--easing-standard),
-        border-color var(--duration-fast) var(--easing-standard),
+        outline-color var(--duration-fast) var(--easing-standard),
         box-shadow var(--duration-fast) var(--easing-standard),
         overlay var(--duration-fast) allow-discrete,
         display var(--duration-fast) allow-discrete;
       /* Against the field's focus ring, without covering it. */
       inset-block-start: var(--border-width-strong);
-      outline: none;
-      box-shadow: var(--shadow-lg);
-      /* A subtle border keeps the list visible past the island it opens from. */
-      border: var(--border-width-thin) solid var(--color-border-subtle);
+      /* The list continues its field, which reads as focused while the list shows: the same outline and glow, over
+         the shadow that lifts the list off the page. The outline is painted last, above the frost. A border would
+         sit under it, and the frost's clip would eat the border's inner antialiasing, so each corner would read as
+         cropped. */
+      outline: var(--border-width-outline) solid var(--color-control-border-focus);
+      outline-offset: calc(-1 * var(--border-width-outline));
+      box-shadow: var(--shadow-focus-ring), var(--shadow-lg);
+      /* A transparent border holds the outline's room, and outlines the list in forced-colors mode. */
+      border: var(--border-width-outline) solid transparent;
       /* The options' radius plus the padding around them, so their corners share centers. */
       border-radius: calc(var(--radius-md) + var(--space-1));
       /* The frost carries the list's color. A popover's own opaque canvas would sit under it, leaving it nothing of
@@ -227,23 +233,10 @@ keys into requests to a `ListboxNavigation`, which this list shares for the poin
       inline-size: var(--floating-anchor-width);
       min-inline-size: var(--floating-anchor-width);
       max-block-size: min(calc(100dvb - var(--space-8)), var(--listbox-max-block-size, var(--control-menu-max-height)));
-      overflow: clip;
+      /* A popover clips by default. The frost layer clips itself, at the list's whole box, and the options scroll on
+         their own. */
+      overflow: visible;
       color: var(--color-text-primary);
-    }
-
-    /* The list takes the field's own well, frosted. A blur reads only what lies under its own box, so a button
-       crossing the list's edge would stay sharp there: the frost reaches past the list to blur what lies beyond its
-       edges too, and the list's clip trims it back to the list. It dims what it blurs, so a bright action behind the
-       list stays apart from its options. */
-    .a-novel-listbox::before {
-      position: absolute;
-      z-index: -1;
-      -webkit-backdrop-filter: blur(var(--blur-md)) var(--filter-dim);
-      backdrop-filter: blur(var(--blur-md)) var(--filter-dim);
-      transition: opacity var(--duration-fast) var(--easing-standard);
-      inset: calc(var(--blur-md) * -2);
-      background: var(--color-control-surface);
-      content: "";
     }
 
     /* Opening fades the list in as it drops a little from its field, and closing plays it back. The list's own
@@ -251,11 +244,10 @@ keys into requests to a `ListboxNavigation`, which this list shares for the poin
        from the first render is there at once. */
     .a-novel-listbox[popover]:not(:popover-open) {
       translate: 0 calc(-1 * var(--space-1));
+      outline-color: transparent;
       box-shadow: none;
-      border-color: transparent;
     }
-    .a-novel-listbox[popover]:not(:popover-open) > *,
-    .a-novel-listbox[popover]:not(:popover-open)::before {
+    .a-novel-listbox[popover]:not(:popover-open) > * {
       opacity: 0;
     }
   }
@@ -264,21 +256,44 @@ keys into requests to a `ListboxNavigation`, which this list shares for the poin
     :global {
       .a-novel-listbox[data-animate]:popover-open {
         translate: 0 calc(-1 * var(--space-1));
+        outline-color: transparent;
         box-shadow: none;
-        border-color: transparent;
       }
-      .a-novel-listbox[data-animate]:popover-open > *,
-      .a-novel-listbox[data-animate]:popover-open::before {
+      .a-novel-listbox[data-animate]:popover-open > * {
         opacity: 0;
       }
     }
   }
 
-  /* The options scroll inside the list, so the list's frost stays in place. */
+  /* The list takes its focused field's well, frosted, on a layer of its own that fills the list's whole box, under
+     its outline. A blur reads only what lies under its own box, so a button crossing the list's edge would stay sharp
+     there: the frost reaches past the layer to blur what lies beyond its edges too, and the layer's clip trims it back
+     to the list. It dims what it blurs, so a bright action behind the list stays apart from its options, and its veil
+     thins by as much, so the list lands on its field's tone over an island and what lies behind it still shows
+     through. Its option text keeps 6.1:1 over the brand color at its peak. */
+  .frost {
+    position: absolute;
+    z-index: -1;
+    transition: opacity var(--duration-fast) var(--easing-standard);
+    inset: calc(-1 * var(--border-width-outline));
+    border-radius: inherit;
+    overflow: clip;
+  }
+  .frost::before {
+    position: absolute;
+    -webkit-backdrop-filter: blur(var(--blur-md)) var(--filter-dim);
+    backdrop-filter: blur(var(--blur-md)) var(--filter-dim);
+    inset: calc(var(--blur-md) * -2);
+    background: color-mix(in oklab, var(--color-control-surface-focus) var(--color-mix-12), transparent);
+    content: "";
+  }
+
+  /* The options scroll inside the list, so the list's frost stays in place, and keep to its corners. */
   .options {
     display: grid;
     gap: var(--space-1);
     transition: opacity var(--duration-fast) var(--easing-standard);
+    border-radius: inherit;
     padding: var(--space-1);
     min-block-size: 0;
     overflow-x: hidden;

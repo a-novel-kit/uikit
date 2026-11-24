@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
 import RenderedOptionsFixture from "../../../test/RenderedOptionsFixture.svelte";
 import { offsetFromMiddle } from "../../../test/geometry";
-import { anchorWidthOnShow, resolveColor } from "../../../test/style";
+import { anchorWidthOnShow, resolveColor, settledStyle } from "../../../test/style";
 import Combobox from "../Combobox.svelte";
 import Select from "../Select.svelte";
 import { createComboboxController, createSelectController } from "../controllers.svelte";
@@ -107,7 +107,46 @@ it.each(fields)("frosts the page under a $name list", async ({ renderClosed }) =
   const list = page.getByRole("listbox");
   await expect.element(list).toBeVisible();
   expect(getComputedStyle(list.element()).backgroundColor).toBe(resolveColor("transparent"));
-  expect(getComputedStyle(list.element(), "::before").backdropFilter).toContain("blur");
+  expect(getComputedStyle(list.element().querySelector(".frost")!, "::before").backdropFilter).toContain("blur");
+});
+
+/** Resolves a shadow, such as a token reference, to its computed value. */
+function resolveShadow(value: string) {
+  const sample = document.body.appendChild(document.createElement("span"));
+  sample.style.boxShadow = value;
+  const shadow = getComputedStyle(sample).boxShadow;
+  sample.remove();
+  return shadow;
+}
+
+// The field reads as focused while its list shows, and the list carries the same outline and glow.
+it.each(fields)("outlines an open $name list as its focused field", async ({ renderClosed }) => {
+  const { controller } = renderClosed();
+
+  controller.open();
+
+  const list = page.getByRole("listbox");
+  await expect.element(list).toBeVisible();
+  const style = await settledStyle(list.element());
+  expect(style.outlineColor).toBe(resolveColor("var(--color-control-border-focus)"));
+  expect(style.boxShadow.startsWith(resolveShadow("var(--shadow-focus-ring)"))).toBe(true);
+});
+
+// A border sits under the frost, whose clip eats the border's inner edge along each corner. An outline is painted
+// last, and the frost fills the list's whole box under it.
+it.each(fields)("draws an open $name list's outline above its frost", async ({ renderClosed }) => {
+  const { controller } = renderClosed();
+
+  controller.open();
+
+  const list = page.getByRole("listbox");
+  await expect.element(list).toBeVisible();
+  const style = getComputedStyle(list.element());
+  const frost = list.element().querySelector(".frost")!.getBoundingClientRect();
+  const box = list.element().getBoundingClientRect();
+  expect(style.borderTopColor).toBe(resolveColor("transparent"));
+  expect(parseFloat(style.outlineOffset)).toBe(-parseFloat(style.outlineWidth));
+  expect([frost.left, frost.top, frost.right, frost.bottom]).toEqual([box.left, box.top, box.right, box.bottom]);
 });
 
 /** Each open list of the fixture, and the rows that render an option: its options, and a select's trigger. */

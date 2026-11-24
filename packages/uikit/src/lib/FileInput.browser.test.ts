@@ -24,10 +24,10 @@ describe("FileInput", () => {
   it("keeps the browser's control over its whole surface", () => {
     const { input } = inForm();
     const control = input.element().getBoundingClientRect();
-    const surface = input.element().parentElement!.getBoundingClientRect();
+    const surface = input.element().parentElement!;
 
-    expect(control.width).toBeCloseTo(surface.width - 2, 0);
-    expect(control.height).toBeCloseTo(surface.height - 2, 0);
+    expect(control.width).toBeCloseTo(surface.clientWidth, 0);
+    expect(control.height).toBeCloseTo(surface.clientHeight, 0);
   });
 
   it("opens the picker from its folder icon, and removes the choice from its cross", () => {

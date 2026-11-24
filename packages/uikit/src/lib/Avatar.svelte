@@ -58,7 +58,8 @@ Provide a meaningful `label` for either representation.
 
   .avatar {
     flex: none;
-    border: var(--border-width-thin) solid var(--color-border-default);
+    /* A rim that holds around the avatar's own fill: a veil would dim over a dark picture. */
+    border: var(--border-width-thin) solid var(--color-control-border);
     background: var(--color-surface-selected);
     overflow: hidden;
     color: var(--color-text-accent);

@@ -1,7 +1,7 @@
 <!--
 @component
 Composes a compact panel heading, optional explanation, and trailing controls.
-Use titleId and descriptionId to label a containing dialog or region.
+Use titleId and descriptionId to label a containing dialog or region. `Section` composes it over a group of content.
 -->
 <script lang="ts" module>
   import type { Content } from "./content";
@@ -17,6 +17,8 @@ Use titleId and descriptionId to label a containing dialog or region.
     description?: Content;
     /** Controls beside the title, such as a localized close button. */
     actions?: Snippet;
+    /** Semantic level of the heading, which also steps its size down; defaults to 2. */
+    headingLevel?: 2 | 3 | 4;
     /** Identifier for the heading when the parent uses aria-labelledby. */
     titleId?: string;
     /** Identifier for the explanation when the parent uses aria-describedby. */
@@ -31,6 +33,7 @@ Use titleId and descriptionId to label a containing dialog or region.
     title,
     description,
     actions,
+    headingLevel = 2,
     titleId,
     descriptionId,
     class: className = "",
@@ -39,7 +42,9 @@ Use titleId and descriptionId to label a containing dialog or region.
 </script>
 
 <div class="header {className}" class:has-actions={Boolean(actions)} {...rest}>
-  <h2 id={titleId}><span><RenderContent content={title} /></span></h2>
+  <svelte:element this={`h${headingLevel}`} class="title level-{headingLevel}" id={titleId}>
+    <span><RenderContent content={title} /></span>
+  </svelte:element>
   {#if actions}<div class="actions">{@render actions()}</div>{/if}
   {#if description}<div class="description" id={descriptionId}><RenderContent content={description} /></div>{/if}
 </div>
@@ -56,14 +61,14 @@ Use titleId and descriptionId to label a containing dialog or region.
   .has-actions {
     grid-template-columns: minmax(0, 1fr) auto;
   }
-  .has-actions h2 {
+  .has-actions .title {
     min-block-size: var(--control-height-sm);
   }
   .actions {
     display: flex;
     gap: var(--space-2);
   }
-  h2 {
+  .title {
     display: flex;
     align-items: center;
     margin: 0;
@@ -72,6 +77,12 @@ Use titleId and descriptionId to label a containing dialog or region.
     line-height: var(--line-height-compact);
     font-family: var(--font-family-display);
     text-wrap: balance;
+  }
+  .level-3 {
+    font-size: var(--font-size-lg);
+  }
+  .level-4 {
+    font-size: var(--font-size-md);
   }
   .description {
     grid-column: 1 / -1;

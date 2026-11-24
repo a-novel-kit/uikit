@@ -30,12 +30,15 @@ describe("Card", () => {
     expect(resting).not.toBe(resolveColor("var(--color-surface-island-glass)"));
   });
 
-  it("rings a ghost card as an outline button is", () => {
+  // An outline is painted above the card's fill, which would eat the inner edge of a ring drawn as a shadow.
+  it("rings a ghost card with an outline, in an outline button's color", () => {
     const children = createRawSnippet(() => ({ render: () => "<span>Lantern</span>" }));
     const { container } = render(Card, { props: { surface: "ghost", children } });
-    const ring = getComputedStyle(container.querySelector(".card")!).boxShadow;
+    const style = getComputedStyle(container.querySelector(".card")!);
 
-    expect(ring).toContain(resolveColor("var(--color-border-default)"));
+    expect(style.outlineStyle).toBe("solid");
+    expect(style.outlineColor).toBe(resolveColor("var(--color-border-default)"));
+    expect(style.boxShadow).toBe("none");
   });
 
   it("sits a nested card half the parent's radius from its edge, on the parent's radius less that inset", () => {

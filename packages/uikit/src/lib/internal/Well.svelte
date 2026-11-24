@@ -68,7 +68,7 @@ icons at the field's end carries `data-well-end`. Content inside reads the well'
       border-color var(--duration-fast) var(--easing-standard),
       box-shadow var(--duration-fast) var(--easing-standard);
     box-sizing: border-box;
-    border: var(--border-width-thin) solid var(--color-field-border);
+    border: var(--border-width-outline) solid var(--color-field-border);
     border-radius: var(--radius-lg);
     background: var(--well-surface);
     inline-size: 100%;
