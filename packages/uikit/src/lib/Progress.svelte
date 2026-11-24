@@ -43,15 +43,17 @@ Shows labeled task progress against `max` (100 by default). Omit `value` for ind
   progress {
     border: 0;
     border-radius: var(--radius-xl);
-    background: var(--color-surface-island-strong);
+    /* An empty track is one veil over what holds it, so it shows on every surface. */
+    background: var(--color-action-neutral);
     inline-size: 100%;
     block-size: var(--size-2);
     overflow: hidden;
     accent-color: var(--color-control-on);
   }
 
+  /* The element draws the track. A veil painted here too would double. */
   progress::-webkit-progress-bar {
-    background: var(--color-surface-island-strong);
+    background: transparent;
   }
   progress::-webkit-progress-value {
     background: var(--color-control-on);

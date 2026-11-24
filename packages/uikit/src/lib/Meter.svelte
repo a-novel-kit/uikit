@@ -45,7 +45,8 @@ Use Progress for task completion.
     appearance: none;
     border: 0;
     border-radius: var(--radius-xl);
-    background: var(--color-surface-island-strong);
+    /* An empty track is one veil over what holds it, so it shows on every surface. */
+    background: var(--color-action-neutral);
     inline-size: 100%;
     block-size: var(--size-2);
     overflow: hidden;
@@ -54,7 +55,8 @@ Use Progress for task completion.
   meter::-webkit-meter-bar {
     border: 0;
     border-radius: var(--radius-xl);
-    background: var(--color-surface-island-strong);
+    /* The element draws the track. A veil painted here too would double. */
+    background: transparent;
     block-size: var(--size-2);
   }
 

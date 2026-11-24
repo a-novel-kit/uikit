@@ -86,8 +86,9 @@ The default range is 0–100; the caller owns persistence and value validation.
   }
   input {
     --slider-fill: var(--color-control-on);
-    /* A track is the tone a progress bar's and a meter's take, which shows on the canvas as on an island. */
-    --slider-track: var(--color-surface-island-strong);
+    /* An empty track is one veil over what holds it, as a progress bar's and a meter's, so it shows on every
+       surface. An opaque island tone vanished on that island. */
+    --slider-track: var(--color-action-neutral);
 
     appearance: none;
     cursor: pointer;

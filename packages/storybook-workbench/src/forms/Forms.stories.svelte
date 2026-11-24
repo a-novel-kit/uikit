@@ -867,7 +867,7 @@
   .preview {
     display: block;
     border-radius: var(--radius-sm);
-    background: var(--gradient-action-primary);
+    background: var(--color-ink-brand);
     inline-size: calc(var(--size-12) * 1.5);
     block-size: var(--size-12);
   }
