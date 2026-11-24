@@ -23,7 +23,7 @@
     "lint:ci": "pnpm lint",
     "lint:docs": "node scripts/check-public-docs.mjs",
     "lint:eslint": "eslint .",
-    "lint:generated": "pnpm --filter @a-novel-kit/uikit-tokens check:colors",
+    "lint:generated": "pnpm --filter @a-novel-kit/uikit-tokens check:colors && pnpm --filter @a-novel-kit/uikit-tokens check:tokens",
     "lint:stylecheck": "prettier --check . --config prettier.config.ts",
     "lint:typecheck": "pnpm -r --if-present typecheck",
     "prepare:vitest": "pnpm --filter @a-novel-kit/uikit-storybook build",
@@ -32,7 +32,7 @@
     "test:browser": "pnpm prepare:vitest && vitest run --project='*-browser'",
     "test:ci": "pnpm test:unit && pnpm test:browser && pnpm test:storybook",
     "test:storybook": "pnpm prepare:vitest && vitest run --project=storybook --coverage.enabled=false",
-    "test:unit": "pnpm prepare:vitest && vitest run --project=storybook-config --project=uikit-unit --project=uikit-ssr"
+    "test:unit": "pnpm prepare:vitest && vitest run --project=storybook-config --project=tokens --project=uikit-unit --project=uikit-ssr"
   },
   "devDependencies": {
     "@a-novel-kit/nodelib-config": "catalog:",

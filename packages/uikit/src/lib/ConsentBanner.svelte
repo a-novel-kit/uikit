@@ -90,7 +90,8 @@ leaves the page inert, so the topmost one open shows the banner too, where it st
     border-radius: var(--radius-md);
     background: var(--color-surface-glass);
     padding: var(--space-4);
-    inline-size: min(calc(100vi - var(--space-8)), calc(var(--size-base) * 64 * 2));
+    /* off-scale: the viewport less the banner's inset on each side */
+    inline-size: min(calc(100vi - var(--space-8)), var(--layout-floating-xl));
     color: var(--color-text-primary);
   }
 
@@ -102,23 +103,20 @@ leaves the page inert, so the topmost one open shows the banner too, where it st
   strong {
     display: block;
     margin-block-end: var(--space-1);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-compact);
-    font-family: var(--font-family-interface);
+    font: var(--text-ui-strong);
   }
 
   p {
     margin: 0;
     color: var(--color-text-secondary);
-    font-size: var(--font-size-xs);
-    line-height: var(--line-height-normal);
+    font: var(--text-ui);
   }
 
   .answers {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-end;
-    gap: var(--space-2);
+    gap: var(--space-3);
   }
 
   @media (forced-colors: active) {

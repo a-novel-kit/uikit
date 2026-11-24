@@ -54,7 +54,7 @@ Composes a page heading, supporting copy, and actions. Defaults to a header cont
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    align-items: flex-end;
+    align-items: last baseline;
     gap: var(--space-6);
     padding-block: var(--space-4);
     min-inline-size: 0;
@@ -74,26 +74,21 @@ Composes a page heading, supporting copy, and actions. Defaults to a header cont
 
   .title {
     color: var(--color-text-primary);
-    font-size: clamp(var(--font-size-2xl), 4vw, var(--font-size-4xl));
-    line-height: var(--line-height-compact);
-    font-family: var(--font-family-display);
+    font: var(--text-display);
     letter-spacing: var(--letter-spacing-tight);
   }
 
   .eyebrow {
     color: var(--color-text-accent);
-    font-weight: var(--font-weight-bold);
-    font-size: var(--font-size-xs);
-    line-height: var(--line-height-compact);
-    font-family: var(--font-family-mono);
+    /* off-scale: a kicker is a spaced mono mark over the title, set nowhere else */
+    font: var(--font-weight-bold) var(--font-size-xs) / var(--line-height-compact) var(--font-family-mono);
     letter-spacing: var(--letter-spacing-wide);
     text-transform: uppercase;
   }
 
   .description {
-    color: var(--color-text-muted);
-    font-size: var(--font-size-md);
-    line-height: var(--line-height-normal);
+    color: var(--color-text-secondary);
+    font: var(--text-body);
   }
 
   /* The actions take the row's free space and sit at its end, so an action that grows, such as a search, fills it. */
@@ -102,6 +97,6 @@ Composes a page heading, supporting copy, and actions. Defaults to a header cont
     flex: 1 1 auto;
     flex-wrap: wrap;
     justify-content: flex-end;
-    gap: var(--space-2);
+    gap: var(--space-3);
   }
 </style>

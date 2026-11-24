@@ -35,6 +35,6 @@ view: sticky headers, banners and rails. For stories only; applications render t
   }
 
   li:nth-child(even) {
-    background: var(--color-surface-subtle);
+    background: var(--color-surface-island-subtle);
   }
 </style>

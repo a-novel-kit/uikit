@@ -67,6 +67,6 @@
 <style>
   .select {
     inline-size: var(--layout-container-xs);
-    min-block-size: var(--space-24);
+    min-block-size: var(--size-20);
   }
 </style>

@@ -61,7 +61,6 @@ Native attributes and events target the input; `class` styles the surrounding su
     min-inline-size: 0;
     color: var(--color-control-text);
     font: inherit;
-    line-height: var(--line-height-compact);
   }
 
   .control::placeholder {
@@ -77,7 +76,6 @@ Native attributes and events target the input; `class` styles the surrounding su
     flex: none;
     align-items: center;
     color: var(--well-muted-text);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-compact);
+    font: var(--text-ui);
   }
 </style>

@@ -276,7 +276,7 @@ Native attributes and events target the text input; `class` styles the surroundi
   }
 
   .control {
-    flex: 1 1 var(--space-24);
+    flex: 1 1 var(--size-20);
     appearance: none;
     box-sizing: border-box;
     outline: none;
@@ -286,8 +286,6 @@ Native attributes and events target the text input; `class` styles the surroundi
     min-inline-size: 0;
     color: var(--color-control-text);
     font: inherit;
-    line-height: var(--line-height-compact);
-    font-family: var(--font-family-interface);
   }
 
   .control::placeholder {

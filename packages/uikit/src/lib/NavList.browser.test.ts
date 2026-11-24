@@ -11,8 +11,21 @@ import "@a-novel-kit/uikit-tokens/tokens.css";
 
 import { render } from "@testing-library/svelte";
 
+/** Paints CSS colors over one another, the canvas first, and reads the sRGB the browser shows. */
+function painted(...layers: string[]) {
+  const context = document.createElement("canvas").getContext("2d")!;
+  const probe = document.body.appendChild(document.createElement("span"));
+  for (const layer of ["var(--color-surface-canvas)", ...layers]) {
+    probe.style.backgroundColor = layer;
+    context.fillStyle = getComputedStyle(probe).backgroundColor;
+    context.fillRect(0, 0, 1, 1);
+  }
+  probe.remove();
+  return context.getImageData(0, 0, 1, 1).data.slice(0, 3).join(" ");
+}
+
 describe("NavList", () => {
-  it.each(["canvas", "island", "island-strong"])(
+  it.each(["canvas", "island-glass", "island-strong"])(
     "shares ghost-button hover feedback on the %s surface without changing selection",
     async (surface) => {
       const { container, getByRole, getByText } = render(NavList, {
@@ -32,7 +45,9 @@ describe("NavList", () => {
       const account = getByRole("link", { name: "Account" });
       await userEvent.hover(account);
       await expect.poll(() => getComputedStyle(account).backgroundColor).toBe(feedback);
-      expect(feedback).not.toBe(getComputedStyle(container).backgroundColor);
+      // A card's glass is a veil, as the hover is: the hover shows as one veil more over it.
+      const surfaceColor = getComputedStyle(container).backgroundColor;
+      expect(painted(surfaceColor, feedback)).not.toBe(painted(surfaceColor));
 
       for (const unchanged of [getByRole("link", { name: "Home" }), getByText("Unavailable")]) {
         const background = getComputedStyle(unchanged).backgroundColor;

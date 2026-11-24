@@ -229,7 +229,7 @@
   }
 
   .not-applicable {
-    color: var(--color-text-subtle);
+    color: var(--color-text-muted);
     font-size: var(--font-size-sm);
   }
 

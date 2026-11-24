@@ -110,24 +110,23 @@ so its accessible name, description, required state, and invalid state stay conn
     gap: var(--space-1) var(--space-4);
   }
 
-  /* A small action stands taller than the label; its hover box overhangs the row, so every field's
-     label sits at the same distance from its control. */
+  /* A small action stands taller than the label and wider than its text. Its box overhangs the row by half the
+     difference each way, and the field's end by its own inset, so a label row keeps one height with or without an
+     action, and the action's text ends where the field does: a text button insets its label by a step and its
+     hairline border. */
   .label-actions {
     display: flex;
     gap: var(--space-3);
-    margin-inline-start: auto;
-    margin-block: calc(var(--space-1) * -1);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-compact);
+    margin-inline: auto calc(-1 * (var(--space-2) + var(--border-width-thin)));
+    /* off-scale: half the difference between the label's line and a small control, each way */
+    margin-block: calc((1lh - var(--control-height-sm)) / 2);
+    font: var(--text-ui);
   }
 
   /* A label names one control, so it stays regular: bold is kept for actions and group names. */
   label {
     color: var(--color-text-secondary);
-    font-weight: var(--font-weight-regular);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-compact);
-    font-family: var(--font-family-interface);
+    font: var(--text-ui);
   }
 
   .required {

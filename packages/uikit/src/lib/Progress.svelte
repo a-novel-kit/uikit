@@ -38,26 +38,25 @@ Shows labeled task progress against `max` (100 by default). Omit `value` for ind
     display: flex;
     justify-content: space-between;
     gap: var(--space-4);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-compact);
+    font: var(--text-ui);
   }
   progress {
     border: 0;
     border-radius: var(--radius-xl);
-    background: var(--color-surface-overlay);
+    background: var(--color-surface-island-strong);
     inline-size: 100%;
     block-size: var(--size-2);
     overflow: hidden;
-    accent-color: var(--color-action-primary);
+    accent-color: var(--color-control-on);
   }
 
   progress::-webkit-progress-bar {
-    background: var(--color-surface-overlay);
+    background: var(--color-surface-island-strong);
   }
   progress::-webkit-progress-value {
-    background: var(--color-action-primary);
+    background: var(--color-control-on);
   }
   progress::-moz-progress-bar {
-    background: var(--color-action-primary);
+    background: var(--color-control-on);
   }
 </style>

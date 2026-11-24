@@ -22,50 +22,47 @@ Labels a category or status compactly. Use InlineMessage when changes need live 
   .badge {
     display: inline-block;
     box-sizing: border-box;
-    box-shadow: 0 0 var(--size-3) color-mix(in oklab, var(--badge-fill) var(--color-mix-2), transparent);
+    box-shadow: 0 0 var(--size-3)
+      color-mix(in oklab, var(--badge-glow, var(--badge-ink)) var(--color-mix-2), transparent);
     border-radius: var(--radius-sm);
     background: var(--badge-fill);
-    padding-inline: var(--size-1-5);
+    padding-inline: var(--space-2);
+    /* off-scale: half a grid step above and below its line stands a badge on the 4px grid */
     padding-block: calc(var(--size-1) / 2);
     inline-size: fit-content;
     max-inline-size: 100%;
-    color: var(--color-label-text);
-    /* Light text on a fill thins out, so a label takes the medium weight to hold its strokes. */
-    font-weight: var(--font-weight-medium);
-    font-size: var(--font-size-xs);
-    line-height: var(--line-height-compact);
-    font-family: var(--font-family-interface);
+    color: var(--badge-ink);
+    font: var(--text-tag);
     letter-spacing: var(--letter-spacing-normal);
     text-transform: none;
     overflow-wrap: break-word;
   }
 
+  /* A tone is one of the three hues' pairs, its ink on its tint, under a faint glow of the ink. A success is a
+     highlight; a warning and a danger share the accent's magenta. A neutral badge has no light of its own: one veil
+     under secondary text, as a chip not chosen. */
   .neutral {
-    --badge-fill: var(--color-label-neutral);
+    --badge-fill: var(--color-action-neutral);
+    --badge-ink: var(--color-text-secondary);
+    --badge-glow: transparent;
   }
 
   .brand {
-    --badge-fill: var(--color-label-brand);
+    --badge-fill: var(--color-tint-brand);
+    --badge-ink: var(--color-ink-brand);
   }
 
-  .accent {
-    --badge-fill: var(--color-label-accent);
-  }
-
-  .highlight {
-    --badge-fill: var(--color-label-highlight);
-  }
-
-  .success {
-    --badge-fill: var(--color-label-success);
-  }
-
-  .warning {
-    --badge-fill: var(--color-label-warning);
-  }
-
+  .accent,
+  .warning,
   .danger {
-    --badge-fill: var(--color-label-danger);
+    --badge-fill: var(--color-tint-pressure);
+    --badge-ink: var(--color-ink-pressure);
+  }
+
+  .highlight,
+  .success {
+    --badge-fill: var(--color-tint-signal);
+    --badge-ink: var(--color-ink-signal);
   }
 
   @media (forced-colors: active) {

@@ -30,7 +30,7 @@ announce loading once in the surrounding region.
         color-mix(in oklab, var(--color-text-muted) var(--color-mix-2), transparent),
         transparent
       ),
-      var(--color-surface-overlay);
+      var(--color-surface-island-strong);
     background-size: 200% 100%;
     inline-size: 100%;
     min-block-size: var(--size-4);

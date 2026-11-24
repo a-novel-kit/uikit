@@ -179,6 +179,7 @@ keys, the mouse wheel or a pinch zoom it. Encode the framed picture with `browse
     border-radius: var(--radius-md);
     background: var(--color-surface-sunken);
     aspect-ratio: var(--frame-ratio);
+    /* off-scale: the frame stands 20rem tall, and as wide as its ratio makes it */
     inline-size: min(100%, calc(var(--font-size-base) * 20 * var(--frame-ratio)));
     overflow: hidden;
     touch-action: none;
@@ -218,8 +219,7 @@ keys, the mouse wheel or a pinch zoom it. Encode the framed picture with `browse
   .instructions {
     margin: 0;
     color: var(--color-text-secondary);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-normal);
+    font: var(--text-body-sm);
   }
 
   @media (forced-colors: active) {

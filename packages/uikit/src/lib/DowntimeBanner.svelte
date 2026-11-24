@@ -51,8 +51,6 @@ is generic and translated, and only the times vary.
     padding-inline: var(--space-4);
     padding-block: var(--space-2);
     color: var(--color-text-primary);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-compact);
     overflow-wrap: anywhere;
   }
 
@@ -73,10 +71,13 @@ is generic and translated, and only the times vary.
     min-inline-size: 0;
   }
 
+  strong {
+    font: var(--text-ui-strong);
+  }
+
   span {
     color: var(--color-text-secondary);
-    font-size: var(--font-size-xs);
-    line-height: var(--line-height-compact);
+    font: var(--text-ui);
   }
 
   @media (forced-colors: active) {

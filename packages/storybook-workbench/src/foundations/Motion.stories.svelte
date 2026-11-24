@@ -19,7 +19,7 @@
 <Story name="Surfaces" asChild>
   <div class="surface-grid">
     <div class="surface sunken"><strong>Sunken</strong><code>surface-sunken</code></div>
-    <div class="surface island"><strong>Island</strong><code>surface-island + shadow-sm</code></div>
+    <div class="surface island"><strong>Island</strong><code>surface-island-glass + shadow-ring</code></div>
     <div class="surface overlay"><strong>Overlay</strong><code>surface-island-strong + shadow-lg</code></div>
   </div>
 </Story>
@@ -37,7 +37,7 @@
   }}
 >
   <div class="lamp">
-    <div class="surface island"><strong>Island</strong><code>surface-island</code></div>
+    <div class="surface island"><strong>Island</strong><code>surface-island-glass</code></div>
   </div>
 </Story>
 
@@ -101,7 +101,7 @@
   .glow-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
-    gap: var(--space-5);
+    gap: var(--space-4);
     inline-size: 100%;
   }
   .glow-grid {
@@ -116,7 +116,7 @@
     gap: var(--space-2);
     box-sizing: border-box;
     border-radius: var(--radius-lg);
-    padding: var(--space-5);
+    padding: var(--space-4);
     min-block-size: 9rem;
     color: var(--color-text-secondary);
   }
@@ -124,8 +124,8 @@
     background: var(--color-surface-sunken);
   }
   .island {
-    box-shadow: var(--shadow-sm);
-    background: var(--color-surface-island);
+    box-shadow: var(--shadow-ring);
+    background: var(--color-surface-island-glass);
   }
   .overlay {
     box-shadow: var(--shadow-lg);
@@ -169,12 +169,12 @@
   .motion span {
     border-radius: var(--radius-round);
     background: var(--base-brand);
-    inline-size: var(--space-4);
-    block-size: var(--space-4);
+    inline-size: var(--size-3);
+    block-size: var(--size-3);
   }
   .motion:hover span,
   .motion:focus-visible span {
-    transform: translateX(var(--space-10));
+    transform: translateX(var(--space-12));
     box-shadow: var(--shadow-glow-brand);
   }
   .motion:focus-visible {
@@ -183,13 +183,13 @@
   }
   .fast span {
     transition:
-      transform var(--duration-fast) var(--easing-standard),
-      box-shadow var(--duration-fast) var(--easing-standard);
+      transform var(--motion-state),
+      box-shadow var(--motion-state);
   }
   .normal span {
     transition:
-      transform var(--duration-normal) var(--easing-standard),
-      box-shadow var(--duration-normal) var(--easing-standard);
+      transform var(--motion-surface),
+      box-shadow var(--motion-surface);
   }
   .slow span {
     transition:
@@ -198,15 +198,15 @@
   }
   .brand {
     box-shadow: var(--shadow-glow-brand);
-    background: color-mix(in oklab, var(--base-brand) var(--color-mix-2), var(--color-surface-island));
+    background: color-mix(in oklab, var(--base-brand) var(--color-mix-2), var(--color-action-neutral));
   }
   .pressure {
     box-shadow: var(--shadow-glow-pressure);
-    background: color-mix(in oklab, var(--base-pressure) var(--color-mix-2), var(--color-surface-island));
+    background: color-mix(in oklab, var(--base-pressure) var(--color-mix-2), var(--color-action-neutral));
   }
   .signal {
     box-shadow: var(--shadow-glow-signal);
-    background: color-mix(in oklab, var(--base-signal) var(--color-mix-2), var(--color-surface-island));
+    background: color-mix(in oklab, var(--base-signal) var(--color-mix-2), var(--color-action-neutral));
   }
   .brand.strong {
     box-shadow: var(--shadow-glow-brand-strong);

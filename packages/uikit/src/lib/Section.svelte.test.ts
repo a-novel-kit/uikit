@@ -1,3 +1,4 @@
+import NestedSectionsFixture from "../../test/NestedSectionsFixture.svelte";
 import Section from "./Section.svelte";
 
 import { createRawSnippet } from "svelte";
@@ -22,7 +23,16 @@ describe("Section", () => {
     expect(heading.compareDocumentPosition(region.querySelector("p")!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 
-  it("steps its heading down for a section inside another", () => {
+  it("steps its heading down for a section inside another, and stops at level 4", () => {
+    const { getByRole } = render(NestedSectionsFixture);
+
+    expect(getByRole("heading", { level: 2, name: "Credentials" })).toBeTruthy();
+    expect(getByRole("heading", { level: 3, name: "Email and password" })).toBeTruthy();
+    expect(getByRole("heading", { level: 4, name: "Recovery" })).toBeTruthy();
+    expect(getByRole("heading", { level: 4, name: "Codes" })).toBeTruthy();
+  });
+
+  it("takes the level a caller gives it", () => {
     const { getByRole } = render(Section, { title: "Email and password", headingLevel: 3, children: content });
 
     expect(getByRole("region", { name: "Email and password" })).toBeTruthy();

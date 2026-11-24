@@ -78,15 +78,24 @@ Styles a native multiline input. Native attributes and events target the textare
     border: 0;
     background: transparent;
     inline-size: 100%;
+    /* off-scale: a field of several lines opens two large controls tall */
     min-block-size: calc(var(--control-height-lg) * 2);
     resize: block;
     color: var(--color-control-text);
-    font: inherit;
-    line-height: var(--line-height-normal);
+    font: var(--text-body);
+  }
+
+  .sm .control {
+    font: var(--text-body-sm);
+  }
+
+  .lg .control {
+    /* off-scale: a large field's text grows with it */
+    font: var(--font-weight-regular) var(--font-size-lg) / var(--line-height-normal) var(--font-family-interface);
   }
 
   .auto-size {
-    max-block-size: calc(var(--space-24) * 3);
+    max-block-size: var(--control-menu-max-height);
     field-sizing: content;
   }
 
@@ -103,8 +112,7 @@ Styles a native multiline input. Native attributes and events target the textare
     gap: var(--space-2);
     border-block-start: var(--border-width-thin) solid var(--color-border-divider);
     color: var(--well-muted-text);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-compact);
+    font: var(--text-ui);
   }
 
   .adornment {

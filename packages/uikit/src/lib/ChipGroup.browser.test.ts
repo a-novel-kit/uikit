@@ -66,8 +66,10 @@ describe("ChipGroup", () => {
       children: createRawSnippet(() => ({ render: () => "<span>Badge</span>" })),
     });
 
-    const chip = getComputedStyle(container.querySelector(".chip")!).backgroundColor;
-    expect(chip).toBe(getComputedStyle(getByText("Badge").parentElement!).backgroundColor);
+    const chip = getComputedStyle(container.querySelector(".chip")!);
+    const badge = getComputedStyle(getByText("Badge").parentElement!);
+    expect(chip.backgroundColor).toBe(badge.backgroundColor);
+    expect(chip.color).toBe(badge.color);
   });
 
   it("keeps its error surface while disabled", () => {

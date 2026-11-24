@@ -117,23 +117,19 @@ Mount after validation and enable `focusOnMount` when focus should move to the s
   }
 
   .title {
-    font-weight: var(--font-weight-bold);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-compact);
+    font: var(--text-ui-strong);
   }
 
   p {
     color: var(--color-text-secondary);
-    font-size: var(--font-size-xs);
-    line-height: var(--line-height-compact);
+    font: var(--text-ui);
   }
 
   ul {
     display: grid;
     gap: var(--space-2);
     padding-inline-start: var(--space-6);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-compact);
+    font: var(--text-ui);
   }
 
   a {
@@ -143,7 +139,7 @@ Mount after validation and enable `focusOnMount` when focus should move to the s
 
   @media (hover: hover) {
     a:hover {
-      color: var(--color-action-danger-hover);
+      color: var(--color-action-danger-foreground-hover);
       text-decoration-thickness: var(--border-width-strong);
     }
   }

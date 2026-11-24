@@ -46,15 +46,12 @@ control. Children replace both, as a radio group's rendered option does.
 
   /* A label names one control, so it stays regular: bold is kept for actions and group names. */
   .label {
-    font-weight: var(--font-weight-regular);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-compact);
+    font: var(--text-ui);
   }
 
   .description {
-    color: var(--color-text-muted);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-compact);
+    color: var(--color-text-secondary);
+    font: var(--text-ui);
   }
 
   :global(label:has(> input:disabled)) .copy,

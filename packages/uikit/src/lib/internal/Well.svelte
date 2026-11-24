@@ -64,9 +64,9 @@ icons at the field's end carries `data-well-end`. Content inside reads the well'
     gap: var(--space-2);
     appearance: none;
     transition:
-      background-color var(--duration-fast) var(--easing-standard),
-      border-color var(--duration-fast) var(--easing-standard),
-      box-shadow var(--duration-fast) var(--easing-standard);
+      background-color var(--motion-state),
+      border-color var(--motion-state),
+      box-shadow var(--motion-state);
     box-sizing: border-box;
     border: var(--border-width-outline) solid var(--color-field-border);
     border-radius: var(--radius-lg);
@@ -74,8 +74,6 @@ icons at the field's end carries `data-well-end`. Content inside reads the well'
     inline-size: 100%;
     min-inline-size: 0;
     color: var(--color-control-text);
-    font: inherit;
-    font-family: var(--font-family-interface);
     text-align: start;
     --well-surface: var(--color-control-surface);
     --well-muted-text: var(--color-text-muted);
@@ -87,19 +85,20 @@ icons at the field's end carries `data-well-end`. Content inside reads the well'
 
   /* A small well keeps a small button's height around a tag. */
   .sm {
+    /* off-scale: half a step above and below, so a small well keeps a small button's height around a tag */
     padding: calc(var(--space-1) / 2) var(--space-3);
     min-block-size: var(--control-height-sm);
-    font-size: var(--font-size-sm);
+    font: var(--text-ui);
   }
   .md {
     padding: var(--space-1) var(--space-3);
     min-block-size: var(--control-height-md);
-    font-size: var(--font-size-md);
+    font: var(--text-field);
   }
   .lg {
     padding: var(--space-2) var(--space-4);
     min-block-size: var(--control-height-lg);
-    font-size: var(--font-size-lg);
+    font: var(--text-field-lg);
   }
   .flush {
     padding: 0;
@@ -112,6 +111,7 @@ icons at the field's end carries `data-well-end`. Content inside reads the well'
     flex: none;
     gap: var(--space-1);
     margin-inline-end: calc(-1 * (var(--space-2) + var(--border-width-thin)));
+    /* off-scale: minus half the nested control's height each way, so the group adds none to the field */
     margin-block: calc(var(--control-height-nested) / -2);
   }
 

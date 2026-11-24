@@ -29,5 +29,7 @@ a[x-apple-data-detectors] {
 body {
   margin: 0;
   min-block-size: 100dvb;
-  font-family: var(--font-family-interface);
+  font: var(--text-body);
+  /* A paragraph never ends on a single word where the browser can help it. */
+  text-wrap: pretty;
 }

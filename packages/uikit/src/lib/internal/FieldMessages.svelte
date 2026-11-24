@@ -37,16 +37,11 @@ Renders a field's hint and error under its control, each with the id `messageIds
   .hint,
   .error {
     margin: 0;
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-compact);
+    font: var(--text-meta);
   }
 
-  /* A hint is quieter than the label and sits slightly inset, so it reads as the field's note. */
   .hint {
-    padding-inline: var(--space-1);
-    color: var(--color-text-hint);
-    font-size: var(--font-size-xs);
-    line-height: var(--line-height-compact);
+    color: var(--color-text-muted);
   }
 
   .error {

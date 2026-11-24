@@ -34,6 +34,8 @@ const preview: Preview = {
         runOnly: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"],
       },
     },
+    // No background is chosen at first: the root paints the canvas, so a preview that loads the tokens' canvas.css
+    // shows its lamp. Paper checks a component on a light backdrop.
     backgrounds: {
       options: {
         night: { name: "A-Novel night", value: "var(--color-surface-canvas)" },
@@ -53,9 +55,6 @@ const preview: Preview = {
     viewport: {
       options: reviewViewportOptions,
     },
-  },
-  initialGlobals: {
-    backgrounds: { value: "night" },
   },
 };
 

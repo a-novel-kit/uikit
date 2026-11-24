@@ -184,8 +184,8 @@ child with `autofocus` takes focus instead. Opening and closing fade the dialog 
     position: fixed;
     z-index: var(--layer-modal);
     transition:
-      opacity var(--duration-normal) var(--easing-standard),
-      translate var(--duration-normal) var(--easing-standard),
+      opacity var(--motion-surface),
+      translate var(--motion-surface),
       overlay var(--duration-normal) allow-discrete,
       display var(--duration-normal) allow-discrete;
     box-sizing: border-box;
@@ -222,8 +222,8 @@ child with `autofocus` takes focus instead. Opening and closing fade the dialog 
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
     transition:
-      background-color var(--duration-fast) var(--easing-standard),
-      box-shadow var(--duration-fast) var(--easing-standard),
+      background-color var(--motion-state),
+      box-shadow var(--motion-state),
       backdrop-filter 0s var(--duration-normal),
       -webkit-backdrop-filter 0s var(--duration-normal);
   }
@@ -242,7 +242,7 @@ child with `autofocus` takes focus instead. Opening and closing fade the dialog 
     -webkit-backdrop-filter: blur(var(--blur-sm));
     backdrop-filter: blur(var(--blur-sm));
     transition:
-      opacity var(--duration-normal) var(--easing-standard),
+      opacity var(--motion-surface),
       overlay var(--duration-normal) allow-discrete,
       display var(--duration-normal) allow-discrete;
     background: var(--color-overlay-backdrop);
@@ -279,6 +279,9 @@ child with `autofocus` takes focus instead. Opening and closing fade the dialog 
   /* The body scrolls on its own, out to the dialog's sides and bottom, so only the dialog's own edge
      cuts a child's focus ring or the glow of an action. */
   .content {
+    /* What scrolls toward the footer fades out over the body's end inset, where nothing sits at rest, so a long
+       form never ends on a line sliced against its actions. */
+    mask-image: linear-gradient(black calc(100% - var(--dialog-padding)), transparent);
     margin: calc(-1 * var(--space-2)) calc(-1 * var(--dialog-padding)) calc(-1 * var(--dialog-padding));
     padding: var(--space-2) var(--dialog-padding) var(--dialog-padding);
     min-inline-size: 0;
@@ -304,6 +307,7 @@ child with `autofocus` takes focus instead. Opening and closing fade the dialog 
   /* Its auto margins center the dialog, so an even height splits the space they share into whole pixels on an even
      viewport, and its text stays on them. A browser without calc-size keeps the fitted height. */
   .centered {
+    /* off-scale: an even height, so what the page centers stays on whole pixels */
     block-size: calc-size(fit-content, round(up, size, 2px));
   }
   /* A fullscreen dialog covers the page as a phone's navigation menu does, and only fades. Its thin

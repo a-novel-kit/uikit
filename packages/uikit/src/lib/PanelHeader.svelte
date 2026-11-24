@@ -66,28 +66,25 @@ Use titleId and descriptionId to label a containing dialog or region. `Section` 
   }
   .actions {
     display: flex;
-    gap: var(--space-2);
+    gap: var(--space-3);
   }
   .title {
     display: flex;
     align-items: center;
     margin: 0;
     color: var(--color-text-primary);
-    font-size: var(--font-size-xl);
-    line-height: var(--line-height-compact);
-    font-family: var(--font-family-display);
+    font: var(--text-title);
     text-wrap: balance;
   }
   .level-3 {
-    font-size: var(--font-size-lg);
+    font: var(--text-title-sm);
   }
   .level-4 {
-    font-size: var(--font-size-md);
+    font: var(--text-title-xs);
   }
   .description {
     grid-column: 1 / -1;
-    color: var(--color-text-muted);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-normal);
+    color: var(--color-text-secondary);
+    font: var(--text-body-sm);
   }
 </style>

@@ -11,7 +11,7 @@ import "@a-novel-kit/uikit-tokens/tokens.css";
 import { render } from "@testing-library/svelte";
 
 describe("Alert presentation", () => {
-  it.each([320, 1100])("centers the icon beside wrapped content and actions at %ipx", async (width) => {
+  it.each([320, 1100])("centers the icon on the title's first line, above wrapped content at %ipx", async (width) => {
     await page.viewport(width, 800);
     const { getByRole, rerender } = render(Alert, {
       tone: "error",
@@ -24,8 +24,9 @@ describe("Alert presentation", () => {
     for (const dir of ["ltr", "rtl"] as const) {
       await rerender({ dir });
       const icon = alert.querySelector('[aria-hidden="true"]')!.getBoundingClientRect();
-      const box = alert.getBoundingClientRect();
-      expect(icon.y + icon.height / 2).toBeCloseTo(box.y + box.height / 2, 0);
+      const title = alert.querySelector("strong")!;
+      const firstLine = title.getBoundingClientRect().y + parseFloat(getComputedStyle(title).lineHeight) / 2;
+      expect(icon.y + icon.height / 2).toBeCloseTo(firstLine, 0);
       expect(alert.scrollWidth).toBeLessThanOrEqual(alert.clientWidth);
     }
   });

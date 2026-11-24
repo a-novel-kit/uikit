@@ -166,7 +166,6 @@ Native attributes and events target the input; `class` styles the surrounding su
     flex: 1 1 0;
     min-inline-size: 0;
     overflow: hidden;
-    line-height: var(--line-height-compact);
     text-overflow: ellipsis;
     white-space: nowrap;
   }
@@ -190,7 +189,7 @@ Native attributes and events target the input; `class` styles the surrounding su
   .browse {
     display: grid;
     place-items: center;
-    transition: color var(--duration-fast) var(--easing-standard);
+    transition: color var(--motion-state);
     inline-size: var(--control-height-nested);
     block-size: var(--control-height-nested);
     color: var(--well-muted-text);

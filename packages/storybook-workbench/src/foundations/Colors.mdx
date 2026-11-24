@@ -121,20 +121,47 @@ Brand is the base and marks interaction. Signal highlights what deserves notice 
 action, such as a success or an upcoming change. Pressure marks errors and anything that needs
 immediate attention, and, rarer than the brand, a distinction that reports nothing.
 
+## Ink and tint
+
+A hue shows two ways, and they pair. Its ink is the neon itself, for what is drawn thin: text, an icon, a line. Its
+tint is a deep step of its ramp, as saturated as that depth allows, for what is filled under its ink: a tag, a chosen
+chip, a colored action. The neon never fills behind text: it glared there, and left only black or white to write with.
+
+<div className="pairs">
+  <span className="pair pair--brand">Brand</span>
+  <span className="pair pair--pressure">Pressure</span>
+  <span className="pair pair--signal">Signal</span>
+  <span className="pair pair--neutral">Neutral</span>
+</div>
+
+| Hue              | Ink                      | Tint                     | Ink on tint |
+| ---------------- | ------------------------ | ------------------------ | ----------- |
+| Brand blue       | `--color-ink-brand`      | `--color-tint-brand`     | 5.7:1       |
+| Pressure magenta | `--color-ink-pressure`   | `--color-tint-pressure`  | 4.9:1       |
+| Signal amber     | `--color-ink-signal`     | `--color-tint-signal`    | 6.5:1       |
+| No hue           | `--color-text-secondary` | `--color-action-neutral` | 7:1 or more |
+
+An ink is its hue's neon, and a tint the third step of its ramp. Without a hue, the pair is secondary text on one
+veil, and primary text under the pointer or once chosen.
+
+The magenta sits darker than the blue and the amber, so its ink takes a quarter of light to read with theirs. Each ink
+keeps 5.4:1 or more on a card and in a dialog. A mark that is on, such as a checked box, a switch or the filled part of
+a slider, is small: the brand's ink fills it (`--color-control-on`).
+
 ## Semantic roles
 
 <div className="action-states" aria-label="Action state progression">
   <div>
     <span className="action-state action-state--idle">Idle</span>
-    <code>brand.9</code>
+    <code>ink on brand.3</code>
   </div>
   <div>
     <span className="action-state action-state--hover">Hover</span>
-    <code>brand.11</code>
+    <code>lifted ink on brand.4</code>
   </div>
   <div>
     <span className="action-state action-state--selected">Selected</span>
-    <code>brand.12 + glow</code>
+    <code>the same + glow</code>
   </div>
   <div>
     <button type="button" className="action-state action-state--disabled" disabled>
@@ -175,34 +202,33 @@ immediate attention, and, rarer than the brand, a distinction that reports nothi
   </div>
 </div>
 
-Selected actions keep their peak color and localized glow through interaction. Rest action colors are
-derived from steps 9–10 and meet at least {colorSystem.contrast.minimumNormalText}:1 against inverse
-text.
+A colored action is its hue's pair. The pointer lifts both, the fill one step up its ramp and the ink a quarter of
+the way to white, so the pair keeps {colorSystem.contrast.minimumNormalText}:1 or more. A chosen action stays lifted
+and glows, and a press drops the fill a step. The primary action also lightens toward its top and glows underneath.
 
 Selected text reads in signal amber on a translucent brand veil (`--color-selection-{text,surface}`).
 No other state pairs them, so a selection stands out on every surface. Buttons, tabs and menus are
 not selectable.
 
-The pressure magenta also sets apart a distinction that reports nothing, such as a project's genres
-(`--color-accent-secondary`), as `Badge tone="accent"` and `ChipGroup tone="accent"` do. A badge or a chosen
-chip fills with a deep step of its tone's own ramp under light text (`--color-label-*`), so its words read clear
-of the glare; every tone keeps 4.5:1. Each app's lamp takes one hue (`--color-lamp-{ember,magenta}`): Account's ember,
-Studio's magenta.
+The pressure magenta also sets apart a distinction that reports nothing, such as a project's genres,
+as `Badge tone="accent"` and `ChipGroup tone="accent"` do. A badge and a chosen chip take their tone's pair, and a
+neutral badge one veil under secondary text. Each app's lamp takes one of the three hues, never a blend of two
+(`--color-lamp-{amber,magenta,blue}`): Account's amber, Studio's magenta.
 
 ## Surfaces and lines
 
 Light comes in steps of one veil (`--color-veil`): the lightest neutral, an eighth strong, over whatever lies behind
 it. Since a veil is translucent, each role below shows on every surface.
 
-| Role                                            | Token                                           | Drawn as                                      |
-| ----------------------------------------------- | ----------------------------------------------- | --------------------------------------------- |
-| A raised card                                   | `--color-surface-island-glass`                  | One veil over the canvas, frosted             |
-| What the pointer hovers                         | `--color-surface-glass-hover`                   | One more veil                                 |
-| A divider between siblings                      | `--color-border-divider`                        | One veil, a hairline wide                     |
-| An outline around a shape with no fill          | `--color-border-default`, `--color-border-item` | One veil, `--border-width-outline` wide       |
-| A field's well                                  | `--color-control-surface`                       | A translucent darkening of its surface        |
-| A disabled action                               | `--color-action-disabled-surface`               | An inert fill, with no outline and no glow    |
-| The rim of a checkbox, a radio button, a switch | `--color-control-border`                        | An opaque line that holds around its own well |
+| Role                                            | Token                             | Drawn as                                      |
+| ----------------------------------------------- | --------------------------------- | --------------------------------------------- |
+| A raised card                                   | `--color-surface-island-glass`    | Three quarters of a veil, frosted             |
+| What the pointer hovers                         | `--color-surface-glass-hover`     | One more veil                                 |
+| A divider between siblings                      | `--color-border-divider`          | One veil, a hairline wide                     |
+| An outline around a shape with no fill          | `--color-border-default`          | One veil, `--border-width-outline` wide       |
+| A field's well                                  | `--color-control-surface`         | A translucent darkening of its surface        |
+| A disabled action                               | `--color-action-disabled-surface` | An inert fill, with no outline and no glow    |
+| The rim of a checkbox, a radio button, a switch | `--color-control-border`          | An opaque line that holds around its own well |
 
 An outline takes the color its shape fills with under the pointer, so a ghost card's ring floods the card when it
 lights.

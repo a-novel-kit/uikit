@@ -26,7 +26,7 @@ Groups related buttons under one accessible name without changing their individu
   .group {
     display: inline-flex;
     align-items: stretch;
-    gap: var(--space-2);
+    gap: var(--space-3);
   }
 
   .vertical {

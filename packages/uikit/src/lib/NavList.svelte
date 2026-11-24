@@ -95,7 +95,6 @@ URLs and the current destination are supplied by the caller.
     margin: 0;
     padding: 0;
     min-inline-size: 0;
-    font-family: var(--font-family-interface);
     list-style: none;
   }
 
@@ -113,8 +112,8 @@ URLs and the current destination are supplied by the caller.
     align-items: center;
     gap: var(--space-2);
     transition:
-      background-color var(--duration-fast) var(--easing-standard),
-      color var(--duration-fast) var(--easing-standard);
+      background-color var(--motion-state),
+      color var(--motion-state);
     box-sizing: border-box;
     border: 0;
     border-radius: var(--radius-lg);
@@ -122,9 +121,7 @@ URLs and the current destination are supplied by the caller.
     min-block-size: var(--control-height-sm);
     overflow: hidden;
     color: var(--color-navigation-text);
-    font-weight: var(--font-weight-regular);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-compact);
+    font: var(--text-ui);
     user-select: none;
     text-decoration: none;
   }
@@ -183,16 +180,18 @@ URLs and the current destination are supplied by the caller.
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+  /* A count centers its line in a round mark one grid step taller. */
   .badge {
+    display: grid;
+    place-items: center;
     margin-inline-start: auto;
     border-radius: var(--radius-round);
     background: var(--color-surface-island-strong);
-    padding-inline: var(--size-1-5);
+    padding-inline: var(--space-2);
     min-inline-size: var(--size-5);
+    block-size: var(--size-5);
     color: var(--color-text-secondary);
-    font-size: var(--font-size-xs);
-    line-height: var(--size-5);
-    text-align: center;
+    font: var(--text-meta);
   }
 
   @media (forced-colors: active) {

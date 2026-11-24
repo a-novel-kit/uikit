@@ -329,7 +329,8 @@ For a custom trigger, spread the snippet attributes onto a native button.
       border-radius: calc(var(--radius-md) + var(--space-1));
       background: var(--color-surface-glass);
       padding: var(--space-1);
-      min-inline-size: max(var(--floating-anchor-width, 0px), calc(var(--size-base) * 48));
+      min-inline-size: max(var(--floating-anchor-width, 0px), var(--layout-floating-sm));
+      /* off-scale: the viewport less a margin, so the menu never outgrows a short screen */
       max-block-size: min(calc(100dvb - var(--space-8)), var(--control-menu-max-height));
       overflow-x: hidden;
       overflow-y: auto;
@@ -372,9 +373,7 @@ For a custom trigger, spread the snippet attributes onto a native button.
     inline-size: 100%;
     min-block-size: calc(var(--control-height-sm) - var(--size-1));
     color: var(--color-text-secondary);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-compact);
-    font-family: var(--font-family-interface);
+    font: var(--text-ui);
     user-select: none;
     text-align: start;
   }
@@ -407,9 +406,7 @@ For a custom trigger, spread the snippet attributes onto a native button.
   kbd {
     margin-inline-start: auto;
     color: var(--color-text-muted);
-    font-size: var(--font-size-xs);
-    line-height: var(--line-height-compact);
-    font-family: var(--font-family-mono);
+    font: var(--text-code);
   }
 
   @media (forced-colors: active) {

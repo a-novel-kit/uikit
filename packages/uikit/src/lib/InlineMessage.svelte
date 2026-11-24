@@ -33,8 +33,7 @@ other tones use status. Override `role` for static content.
     gap: var(--space-2);
     min-inline-size: 0;
     color: var(--color-text-primary);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-compact);
+    font: var(--text-ui);
   }
 
   .content {

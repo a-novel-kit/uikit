@@ -78,26 +78,24 @@ item.
 
 <style>
   .button {
-    --button-border: var(--button-rest);
-    --button-border-hover: var(--button-hover);
-    --button-selected-border: var(--button-selected);
+    --button-border: var(--button-foreground);
+    --button-border-hover: var(--button-foreground-hover);
+    --button-selected-border: var(--button-selected-foreground);
     display: inline-flex;
     justify-content: center;
     align-items: center;
     gap: var(--space-2);
     transition:
-      background-color var(--duration-fast) var(--easing-standard),
-      border-color var(--duration-fast) var(--easing-standard),
-      box-shadow var(--duration-fast) var(--easing-standard),
-      color var(--duration-fast) var(--easing-standard);
+      background-color var(--motion-state),
+      border-color var(--motion-state),
+      box-shadow var(--motion-state),
+      color var(--motion-state);
     cursor: pointer;
     box-sizing: border-box;
     box-shadow: none;
     border: var(--border-width-thin) solid transparent;
     border-radius: var(--radius-lg);
-    font-weight: var(--font-weight-bold);
-    line-height: var(--line-height-tight);
-    font-family: var(--font-family-interface);
+    font: var(--text-action);
     user-select: none;
     text-decoration: none;
   }
@@ -108,7 +106,6 @@ item.
     --button-active: var(--color-action-primary-active);
     --button-selected: var(--color-action-primary-selected);
     --button-selected-foreground: var(--color-action-primary-foreground);
-    --button-text: var(--color-action-primary-text);
     --button-foreground: var(--color-action-primary-foreground);
     --button-foreground-hover: var(--color-action-primary-foreground-hover);
     --button-glow: var(--shadow-glow-brand-strong);
@@ -119,8 +116,7 @@ item.
     --button-hover: var(--color-action-neutral-hover);
     --button-active: var(--color-action-neutral-active);
     --button-selected: var(--color-action-neutral-selected);
-    --button-selected-foreground: var(--color-action-neutral-text);
-    --button-text: var(--color-action-neutral-text);
+    --button-selected-foreground: var(--color-text-primary);
     --button-foreground: var(--color-text-secondary);
     --button-foreground-hover: var(--color-text-primary);
     --button-border: var(--color-border-default);
@@ -135,7 +131,6 @@ item.
     --button-active: var(--color-action-danger-active);
     --button-selected: var(--color-action-danger-selected);
     --button-selected-foreground: var(--color-action-danger-foreground);
-    --button-text: var(--color-action-danger-text);
     --button-foreground: var(--color-action-danger-foreground);
     --button-foreground-hover: var(--color-action-danger-foreground-hover);
     --button-glow: var(--shadow-glow-pressure-strong);
@@ -154,19 +149,17 @@ item.
     padding-inline: var(--space-3);
     padding-block: var(--space-1);
     min-block-size: var(--control-height-sm);
-    font-size: var(--font-size-sm);
   }
   .md {
     padding-inline: var(--space-4);
     padding-block: var(--space-1);
     min-block-size: var(--control-height-md);
-    font-size: var(--font-size-sm);
   }
   .lg {
     padding-inline: var(--space-6);
     padding-block: var(--space-2);
     min-block-size: var(--control-height-lg);
-    font-size: var(--font-size-md);
+    font: var(--text-action-lg);
   }
 
   /* A square holds only an icon, and the radius of a labeled button would round it. */
@@ -188,14 +181,16 @@ item.
     inline-size: var(--control-height-lg);
   }
 
+  /* A solid button is its tone's pair: its ink on its tint, both lifted under the pointer. */
   .solid {
     background-color: var(--button-rest);
-    color: var(--button-text);
+    color: var(--button-foreground);
   }
 
   @media (hover: hover) {
     .solid:hover:not(:disabled):not([aria-pressed="true"]) {
       background-color: var(--button-hover);
+      color: var(--button-foreground-hover);
     }
   }
 
@@ -219,9 +214,11 @@ item.
     background-color: var(--button-active);
   }
 
+  /* Chosen, it stays lifted and glows. */
   .solid[aria-pressed="true"] {
     box-shadow: var(--button-glow);
     background-color: var(--button-selected);
+    color: var(--button-foreground-hover);
   }
 
   .outline {

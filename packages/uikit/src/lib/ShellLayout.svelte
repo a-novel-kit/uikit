@@ -73,7 +73,7 @@ edges, so a `StickyBar` stays clear of them.
 
     display: grid;
     grid-template-columns: var(--shell-rail-width) minmax(0, 1fr);
-    transition: grid-template-columns var(--duration-normal) var(--easing-standard);
+    transition: grid-template-columns var(--motion-surface);
     min-block-size: 100dvb;
   }
 
@@ -87,7 +87,7 @@ edges, so a `StickyBar` stays clear of them.
     position: sticky;
     grid-template-rows: minmax(0, 1fr);
     z-index: var(--layer-sticky);
-    transition: inline-size var(--duration-normal) var(--easing-standard);
+    transition: inline-size var(--motion-surface);
     box-sizing: border-box;
     inset-block-start: 0;
     padding: var(--space-2);

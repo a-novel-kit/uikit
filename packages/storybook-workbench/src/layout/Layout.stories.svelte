@@ -164,12 +164,12 @@
       </Section>
       <Section title="Credentials" description="What you sign in with.">
         <Card>
-          <Section title="Email and password" headingLevel={3}>
+          <Section title="Email and password">
             <span class="muted">maya.chen@example.test</span>
           </Section>
         </Card>
         <Card>
-          <Section title="Passkey" headingLevel={3}>
+          <Section title="Passkey">
             <Inline gap="2">
               <Button disabled>Add a passkey</Button>
               <Button variant="outline" tone="neutral" disabled>Learn more</Button>
@@ -305,18 +305,16 @@
   .item-link {
     color: var(--color-text-primary);
     font-weight: var(--font-weight-bold);
-    font-family: var(--font-family-interface);
   }
   .header-search {
     flex: 1;
   }
   strong {
     color: var(--color-text-primary);
-    font-family: var(--font-family-interface);
   }
   .muted {
     margin: 0;
     color: var(--color-text-muted);
-    line-height: var(--line-height-normal);
+    font: var(--text-body);
   }
 </style>

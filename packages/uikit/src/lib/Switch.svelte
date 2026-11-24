@@ -65,9 +65,9 @@ Provide a visible label or an accessible name.
     place-content: center;
     appearance: none;
     transition:
-      background-color var(--duration-fast) var(--easing-standard),
-      border-color var(--duration-fast) var(--easing-standard),
-      box-shadow var(--duration-fast) var(--easing-standard);
+      background-color var(--motion-state),
+      border-color var(--motion-state),
+      box-shadow var(--motion-state);
     cursor: inherit;
     box-sizing: border-box;
     margin: 0;
@@ -81,8 +81,8 @@ Provide a visible label or an accessible name.
   input::before {
     transform: translateX(calc(var(--size-2) * -1));
     transition:
-      background-color var(--duration-fast) var(--easing-standard),
-      transform var(--duration-fast) var(--easing-standard);
+      background-color var(--motion-state),
+      transform var(--motion-state);
     border-radius: var(--radius-round);
     background: var(--color-text-secondary);
     inline-size: var(--size-4);
@@ -99,13 +99,13 @@ Provide a visible label or an accessible name.
 
   input:checked {
     box-shadow: var(--shadow-glow-brand);
-    border-color: var(--color-action-primary-selected);
-    background: var(--color-action-primary);
+    border-color: var(--color-control-on);
+    background: var(--color-control-on);
   }
 
   input:checked::before {
     transform: translateX(var(--size-2));
-    background: var(--color-action-primary-text);
+    background: var(--color-control-on-mark);
   }
 
   input:focus-visible {
@@ -116,7 +116,7 @@ Provide a visible label or an accessible name.
   }
 
   input:focus-visible:checked {
-    background: var(--color-action-primary);
+    background: var(--color-control-on);
   }
 
   @media (forced-colors: active) {

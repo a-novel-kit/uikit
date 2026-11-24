@@ -19,9 +19,7 @@ Applies readable editorial typography to semantic article content supplied by th
   .prose {
     max-inline-size: var(--layout-readable-measure);
     color: var(--color-text-secondary);
-    font-size: var(--font-size-lg);
-    line-height: var(--line-height-loose);
-    font-family: var(--font-family-story);
+    font: var(--text-story);
     text-wrap: pretty;
   }
 
@@ -35,18 +33,23 @@ Applies readable editorial typography to semantic article content supplied by th
   .prose :global(h2),
   .prose :global(h3) {
     color: var(--color-text-primary);
+    /* off-scale: a story's headings keep the browser's scale against its prose */
     line-height: var(--line-height-compact);
+    /* off-scale: and take the display face */
     font-family: var(--font-family-display);
     text-wrap: balance;
   }
   /* The browser's heading margins, rounded to whole pixels so the text after a heading stays on them. */
   .prose :global(h1) {
+    /* off-scale: a story's heading spaces by its own size */
     margin-block: round(0.67em, 1px);
   }
   .prose :global(h2) {
+    /* off-scale: a story's heading spaces by its own size */
     margin-block: round(0.83em, 1px);
   }
   .prose :global(h3) {
+    /* off-scale: a story's heading spaces by its own size */
     margin-block: round(1em, 1px);
   }
 
@@ -55,9 +58,7 @@ Applies readable editorial typography to semantic article content supplied by th
     text-underline-offset: var(--space-1);
   }
   .prose :global(code) {
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-tight);
-    font-family: var(--font-family-mono);
+    font: var(--text-code);
   }
   .prose :global(blockquote) {
     margin-inline: 0;

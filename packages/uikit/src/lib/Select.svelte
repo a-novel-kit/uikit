@@ -221,7 +221,6 @@ Native attributes and events target the trigger; `class` styles it.
     display: flex;
     flex: 1;
     align-items: center;
-    line-height: var(--line-height-compact);
   }
 
   .placeholder {
@@ -231,7 +230,7 @@ Native attributes and events target the trigger; `class` styles it.
   .indicator {
     display: inline-flex;
     flex: none;
-    transition: transform var(--duration-fast) var(--easing-standard);
+    transition: transform var(--motion-state);
     color: var(--well-muted-text);
   }
 

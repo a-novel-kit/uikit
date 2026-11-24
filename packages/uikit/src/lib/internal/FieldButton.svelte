@@ -27,8 +27,8 @@ the control, so the button shows only its icon, a background and a color.
     display: grid;
     place-items: center;
     transition:
-      background-color var(--duration-fast) var(--easing-standard),
-      color var(--duration-fast) var(--easing-standard);
+      background-color var(--motion-state),
+      color var(--motion-state);
     cursor: pointer;
     box-sizing: border-box;
     border: 0;
