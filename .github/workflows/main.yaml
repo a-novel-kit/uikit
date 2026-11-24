@@ -17,7 +17,7 @@ jobs:
       contents: read
       packages: read
     steps:
-      - uses: a-novel-kit/workflows/node-actions/lint-node@v1.87.1
+      - uses: a-novel-kit/workflows/node-actions/lint-node@v1.87.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           lint_action: lint:ci
@@ -27,14 +27,14 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: a-novel-kit/workflows/security-actions/scan-secrets@v1.87.1
+      - uses: a-novel-kit/workflows/security-actions/scan-secrets@v1.87.2
 
   lint-workflows:
     runs-on: ubuntu-latest
     permissions:
       contents: read
     steps:
-      - uses: a-novel-kit/workflows/security-actions/lint-workflows@v1.87.1
+      - uses: a-novel-kit/workflows/security-actions/lint-workflows@v1.87.2
 
   test-unit:
     runs-on: ubuntu-latest
@@ -42,7 +42,7 @@ jobs:
       contents: read
       packages: read
     steps:
-      - uses: a-novel-kit/workflows/node-actions/test-node@v1.87.1
+      - uses: a-novel-kit/workflows/node-actions/test-node@v1.87.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           test_action: "test:unit"
@@ -63,7 +63,7 @@ jobs:
       statuses: write
       id-token: write
     steps:
-      - uses: a-novel-kit/workflows/node-actions/test-playwright@v1.87.1
+      - uses: a-novel-kit/workflows/node-actions/test-playwright@v1.87.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           component_test_action: "test:browser"
@@ -89,7 +89,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: a-novel-kit/workflows/generic-actions/codecov@v1.87.1
+      - uses: a-novel-kit/workflows/generic-actions/codecov@v1.87.2
         with:
           codecov_token: ${{ secrets.CODECOV_TOKEN }}
 
@@ -99,7 +99,7 @@ jobs:
       contents: read
       packages: read
     steps:
-      - uses: a-novel-kit/workflows/node-actions/build-node@v1.87.1
+      - uses: a-novel-kit/workflows/node-actions/build-node@v1.87.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           build_action: "build:ci"
