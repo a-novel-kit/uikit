@@ -76,9 +76,9 @@ Provide `label` or an accessible name; native input attributes are forwarded to 
     place-content: center;
     appearance: none;
     transition:
-      background-color var(--duration-fast) var(--easing-standard),
-      border-color var(--duration-fast) var(--easing-standard),
-      box-shadow var(--duration-fast) var(--easing-standard);
+      background-color var(--motion-state),
+      border-color var(--motion-state),
+      box-shadow var(--motion-state);
     cursor: inherit;
     margin: 0;
     outline: none;
@@ -88,12 +88,12 @@ Provide `label` or an accessible name; native input attributes are forwarded to 
     padding: 0;
     inline-size: var(--icon-size-md);
     block-size: var(--icon-size-md);
-    color: var(--color-action-primary-text);
+    color: var(--color-control-on-mark);
   }
 
   input::before {
     transform: rotate(45deg) scale(0);
-    transition: transform var(--duration-fast) var(--easing-emphasized);
+    transition: transform var(--motion-mark);
     box-sizing: border-box;
     border: solid currentColor;
     border-width: 0 var(--border-width-strong) var(--border-width-strong) 0;
@@ -112,8 +112,8 @@ Provide `label` or an accessible name; native input attributes are forwarded to 
   input:checked,
   input:indeterminate {
     box-shadow: var(--shadow-action-selected);
-    border-color: var(--color-action-primary-selected);
-    background: var(--color-action-primary);
+    border-color: var(--color-control-on);
+    background: var(--color-control-on);
   }
 
   input:checked::before {
@@ -136,7 +136,7 @@ Provide `label` or an accessible name; native input attributes are forwarded to 
   }
 
   input:focus-visible:is(:checked, :indeterminate) {
-    background: var(--color-action-primary);
+    background: var(--color-control-on);
   }
 
   @media (forced-colors: active) {

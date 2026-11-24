@@ -97,18 +97,16 @@ Errors use an alert live region; other tones use status. Override `role` for sta
     min-inline-size: 0;
   }
   strong {
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-compact);
+    font: var(--text-ui-strong);
   }
   .message {
     color: var(--color-text-secondary);
-    font-size: var(--font-size-xs);
-    line-height: var(--line-height-compact);
+    font: var(--text-ui);
   }
   .actions {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-2);
+    gap: var(--space-3);
     margin-block-start: var(--space-1);
   }
 

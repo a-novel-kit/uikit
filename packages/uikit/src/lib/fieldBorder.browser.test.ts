@@ -163,7 +163,7 @@ describe("a field's border", () => {
   it.each(fields)("rings a %s outside an island as a ghost card", async (_, renderField) => {
     const control = renderField(document.body, {});
 
-    expect((await settledStyle(outline(control))).borderTopColor).toBe(resolveColor("var(--color-border-item)"));
+    expect((await settledStyle(outline(control))).borderTopColor).toBe(resolveColor("var(--color-border-default)"));
   });
 
   it.each(fields)("drops the ring of a %s in a card", async (_, renderField) => {
@@ -195,11 +195,11 @@ describe("a field's border", () => {
   it.each(fields)("keeps the ring of a disabled %s, so it still reads as a field", async (_, renderField) => {
     const control = renderField(document.body, { disabled: true });
 
-    expect((await settledStyle(outline(control))).borderTopColor).toBe(resolveColor("var(--color-border-item)"));
+    expect((await settledStyle(outline(control))).borderTopColor).toBe(resolveColor("var(--color-border-default)"));
   });
 
   it.each(outsideIslands)("rings a field on $name", async (surface) => {
-    expect((await settledStyle(inputOn(surface))).borderTopColor).toBe(resolveColor("var(--color-border-item)"));
+    expect((await settledStyle(inputOn(surface))).borderTopColor).toBe(resolveColor("var(--color-border-default)"));
   });
 
   it.each(islands)("drops the ring of a field in $name", async (surface) => {

@@ -3,26 +3,33 @@
 /* A-Novel metric tokens derive in the browser from compact CSS bases. */
 :root {
   --ratio-density: 1.125;
-  --ratio-hierarchy: 1.25;
   --ratio-emphasis: 1.5;
   --ratio-major: 1.618;
 
-  /* Space between and inside elements steps by 3px, and its half step rounds to a whole pixel. Sizes, such as
-     controls, icons, marks and surface widths, and the reach of shadows and glows keep a 4px grid. */
+  /* Space between and inside elements steps by 3px, and its half step rounds to a whole pixel. Each step sets one
+     relationship, named beside it: pick the relationship, never the pixels. Sizes, such as controls, icons, marks
+     and surface widths, and the reach of shadows and glows keep a 4px grid: a size never takes a space token, and
+     a space never takes a size. */
   --space-base: 0.1875rem;
   --space-0: 0;
+  /* Lines of one item, such as a name and its details; a list's edge and its options. */
   --space-1: calc(var(--space-base) * 1);
+  /* Chips or tags side by side, nothing else. */
   --space-1-5: round(var(--space-base) * 1.5, 1px);
+  /* Parts of one thing: an icon and its label, a label and its field, a field and its note, a title and its
+     description. */
   --space-2: calc(var(--space-base) * 2);
+  /* Things that work as one unit: buttons in a group, a mark and its text block, islands side by side; a control's
+     edge and its text. */
   --space-3: calc(var(--space-base) * 3);
+  /* Siblings: fields, list rows, a heading and its content; a compact island's edge and its content. */
   --space-4: calc(var(--space-base) * 4);
-  --space-5: calc(var(--space-base) * 5);
+  /* A card's or a dialog's edge and its content, a dialog's parts, a page's top. */
   --space-6: calc(var(--space-base) * 6);
+  /* Groups: sections of a page, a form's actions under its last field. */
   --space-8: calc(var(--space-base) * 8);
-  --space-10: calc(var(--space-base) * 10);
+  /* A page's foot. */
   --space-12: calc(var(--space-base) * 12);
-  --space-16: calc(var(--space-base) * 16);
-  --space-24: calc(var(--space-base) * 24);
 
   --size-base: 0.25rem;
   --size-1: calc(var(--size-base) * 1);
@@ -60,7 +67,6 @@
   /* Each radius step doubles the one below. A surface padded by half its radius then holds the next
      step down on the same corner centers, as a card holds a nested card. */
   --radius-base: 0.1875rem;
-  --radius-none: 0;
   --radius-sm: calc(var(--radius-base) * 1);
   --radius-md: calc(var(--radius-base) * 2);
   --radius-lg: calc(var(--radius-base) * 4);
@@ -76,12 +82,21 @@
   --focus-ring-width: calc(var(--border-width-base) * 3);
   --focus-ring-offset: var(--space-1);
 
+  /* Fast for a control changing state, normal for a surface that enters, leaves or resizes, slow for the beat of a
+     loop. The emphasized easing lands a mark in place, as a check does; everything else eases standard. */
   --duration-base: 100ms;
   --duration-fast: calc(var(--duration-base) * 1);
   --duration-normal: calc(var(--duration-base) * 2);
   --duration-slow: calc(var(--duration-base) * 3);
   --easing-standard: cubic-bezier(0.2, 0, 0, 1);
   --easing-emphasized: cubic-bezier(0.2, 0, 0, 1.4);
+  /* A motion binds a duration to its easing, so a transition names what moves and why, never how fast:
+     transition: color var(--motion-state). A control changing state. */
+  --motion-state: var(--duration-fast) var(--easing-standard);
+  /* A surface entering, leaving or resizing. */
+  --motion-surface: var(--duration-normal) var(--easing-standard);
+  /* A mark landing in place, as a check does. */
+  --motion-mark: var(--duration-fast) var(--easing-emphasized);
   --opacity-base: 0.125;
   --opacity-disabled: calc(var(--opacity-base) * 4);
 
@@ -102,41 +117,53 @@
      every surface and an outline takes the color its shape fills with under the pointer. */
   --color-veil: color-mix(in oklab, var(--color-neutral-12) var(--color-mix-2), transparent);
 
+  /* A hue shows two ways, and they pair. Its ink is the neon itself, for what is drawn thin: text, an icon, a line.
+     Its tint is a deep step of its ramp, as saturated as that depth allows, for what is filled under its ink: a tag,
+     a colored action. The neon never fills behind text: it glared there, and left only black or white to write
+     with. The magenta sits darker than the blue and the amber, so its ink takes a quarter of light and reads with
+     theirs. Each ink keeps 4.9:1 or more on its tint, and 5.4:1 or more on a card and in a dialog. */
+  --color-ink-brand: var(--base-brand);
+  --color-ink-pressure: color-mix(in oklab, var(--color-neutral-12) var(--color-mix-4), var(--base-pressure));
+  --color-ink-signal: var(--base-signal);
+  --color-tint-brand: var(--color-brand-3);
+  --color-tint-pressure: var(--color-pressure-3);
+  --color-tint-signal: var(--color-signal-3);
+
   --color-surface-canvas: var(--base-canvas);
   /* A well darkens the surface it is cut into, so it keeps that surface's tone. */
   --color-surface-sunken: color-mix(in oklab, var(--color-neutral-1) var(--color-mix-10), transparent);
-  --color-surface-subtle: color-mix(
+  /* Each surface has one name. A passive group inside an island: a fieldset, a description's cell. */
+  --color-surface-island-subtle: color-mix(
     in oklab,
     var(--color-neutral-3) var(--color-mix-8),
     var(--color-neutral-4)
   );
-  --color-surface-raised: color-mix(
-    in oklab,
-    var(--color-neutral-5) var(--color-mix-2),
-    var(--color-neutral-4)
-  );
-  --color-surface-overlay: color-mix(
+  /* An opaque island: the navigation, a dialog, a menu. */
+  --color-surface-island-strong: color-mix(
     in oklab,
     var(--color-neutral-4) var(--color-mix-8),
     var(--color-neutral-5)
   );
-  --color-surface-hover: var(--color-surface-overlay);
-  --color-surface-island-subtle: var(--color-surface-subtle);
-  --color-surface-island: var(--color-surface-raised);
-  --color-surface-island-strong: var(--color-surface-overlay);
-  /* Frosted glass: one veil over the canvas, as light as an island, so the lamp shines through it as it lights the
-     navigation. */
-  --color-surface-island-glass: var(--color-veil);
+  /* A card. Frosted glass, three quarters of a veil over the canvas, so the lamp shines through it as it lights the
+     navigation. A full veil stood too light beside the night: a card sits a step under a dialog or the rail, which
+     rise above it, and what lights on it (a hover, a neutral action) still adds a whole veil. */
+  --color-surface-island-glass: color-mix(
+    in oklab,
+    var(--color-neutral-12) calc(var(--color-mix-base) * 1.5),
+    transparent
+  );
+  /* A frosted bar or popover. */
   --color-surface-glass: color-mix(
     in oklab,
     var(--color-surface-island-strong) var(--color-mix-12),
     transparent
   );
+  /* What the pointer hovers, on any surface: one veil more. */
   --color-surface-glass-hover: var(--color-veil);
   --color-surface-selected: color-mix(
     in oklab,
     var(--base-brand) var(--color-mix-2),
-    var(--color-surface-raised)
+    color-mix(in oklab, var(--color-neutral-5) var(--color-mix-2), var(--color-neutral-4))
   );
   /* A modal backdrop returns the page to the night, so it dims with the canvas. */
   --color-overlay-backdrop: color-mix(
@@ -145,20 +172,20 @@
     transparent
   );
 
+  /* A text's color follows its role. Primary is what the reader came for: a title, content, a value, the label of a
+     choice they make. Secondary names or explains it: a field's label, a description, a message's body. Muted is what
+     a reader can skip: a hint, a timestamp, a count. Each keeps 4.5:1 on the canvas and on an island. A frosted card
+     lets the lamp through, so nothing reads quieter than muted: it keeps at least 4.8:1 on a frosted card under any
+     palette lamp up to three quarters of its peak, which only the viewport's corner exceeds, where navigation sits,
+     and 6.6:1 in a dialog. */
   --color-text-primary: var(--color-neutral-12);
   --color-text-secondary: var(--color-neutral-11);
   --color-text-muted: var(--color-neutral-10);
-  --color-text-subtle: var(--color-neutral-9);
-  /* A field hint reads as muted text, set apart from its label by its smaller size. A frosted card lets the lamp
-     through, so a hint any quieter fails 4.5:1 near the lamp; this one keeps at least 4.8:1 on a frosted card under
-     any palette lamp up to three quarters of its peak, which only the viewport's corner exceeds, where navigation
-     sits, and 6.6:1 in a dialog. */
-  --color-text-hint: var(--color-text-muted);
   --color-text-disabled: var(--color-neutral-8);
   --color-text-inverse: var(--color-neutral-1);
-  --color-text-accent: var(--base-brand);
+  --color-text-accent: var(--color-ink-brand);
   --color-text-link: var(--color-brand-11);
-  --color-text-link-hover: var(--base-brand);
+  --color-text-link-hover: var(--color-ink-brand);
 
   /* Every line is one veil. A divider parts siblings on one surface, a hairline wide. An outline draws a shape that
      has no fill of its own (an outline button, a ghost card, a field outside an island), at --border-width-outline. */
@@ -167,8 +194,6 @@
   /* An outline under the pointer. */
   --color-border-strong: var(--color-neutral-8);
   --color-border-selected: var(--base-brand);
-  /* A collection item's ring, as a ghost card's. */
-  --color-border-item: var(--color-border-default);
 
   --color-control-surface: var(--color-surface-sunken);
   --color-control-surface-hover: color-mix(
@@ -198,47 +223,46 @@
   /* A field outside an island, on the canvas or a sticky bar, takes a ghost card's ring, so it stays in view. An
      island resets this border to transparent for its fields: a well's tone carries a field there, and only focus and
      errors outline it. A transparent border still outlines a field in forced-colors mode. */
-  --color-field-border: var(--color-border-item);
+  --color-field-border: var(--color-border-default);
   --color-control-border-hover: var(--color-border-strong);
   --color-control-border-focus: var(--base-brand);
   --color-control-text: var(--color-text-primary);
-  --color-control-placeholder: var(--color-text-subtle);
+  /* A placeholder shows inside a well only: its gray fails 4.5:1 on an island, so no other text takes it. */
+  --color-control-placeholder: var(--color-neutral-9);
   --color-control-disabled-text: var(--color-text-disabled);
+  /* A mark that is on is lit: a checked box, a radio button, a switch, the filled part of a slider or a bar. The
+     brand's ink fills it, since a mark is small, lifted under the pointer as an action's, and what it draws inside
+     takes the darkest neutral. */
+  --color-control-on: var(--color-ink-brand);
+  --color-control-on-hover: var(--color-action-primary-foreground-hover);
+  --color-control-on-mark: var(--color-text-inverse);
 
-  --color-action-primary: var(--color-brand-9);
-  --color-action-primary-hover: var(--color-brand-11);
-  --color-action-primary-active: var(--color-brand-8);
-  --color-action-primary-selected: var(--base-brand);
-  --color-action-primary-text: var(--color-text-inverse);
-  --color-action-primary-foreground: color-mix(
-    in oklab,
-    var(--base-brand) var(--color-mix-12),
-    var(--color-text-primary)
-  );
+  /* A colored action is its hue's pair: the ink on the tint. The pointer lifts both, the fill one step up its ramp
+     and the ink a quarter of the way to white, so the pair keeps 4.7:1; a chosen one stays lifted, and a press
+     drops the fill a step. */
+  --color-action-primary: var(--color-tint-brand);
+  --color-action-primary-hover: var(--color-brand-4);
+  --color-action-primary-active: var(--color-brand-2);
+  --color-action-primary-selected: var(--color-action-primary-hover);
+  --color-action-primary-foreground: var(--color-ink-brand);
   --color-action-primary-foreground-hover: oklch(
-    from var(--color-action-primary-foreground) calc(l + (1 - l) * var(--opacity-base)) c h
+    from var(--color-action-primary-foreground) calc(l + (1 - l) * var(--opacity-base) * 2) c h
   );
-  --color-action-neutral: var(--color-surface-raised);
-  --color-action-neutral-hover: var(--color-neutral-5);
-  --color-action-neutral-active: var(--color-neutral-3);
-  --color-action-neutral-selected: var(--color-neutral-6);
-  --color-action-neutral-text: var(--color-text-primary);
-  --color-action-danger: color-mix(
-    in oklab,
-    var(--color-pressure-10) var(--color-mix-8),
-    var(--color-pressure-9)
-  );
-  --color-action-danger-hover: var(--color-pressure-11);
-  --color-action-danger-active: var(--color-pressure-8);
-  --color-action-danger-selected: var(--base-pressure);
-  --color-action-danger-text: var(--color-text-inverse);
-  --color-action-danger-foreground: color-mix(
-    in oklab,
-    var(--base-pressure) var(--color-mix-12),
-    var(--color-text-primary)
-  );
+  /* A neutral action is one veil over whatever holds it, so it stands out of the canvas and of a card alike: an
+     opaque gray held on one backdrop only, and vanished on a card of its own tone. The pointer adds half a veil,
+     a press takes half away, and a chosen one holds two. Its text is secondary at rest, so a colored action beside
+     it leads, and primary under the pointer or once chosen. */
+  --color-action-neutral: var(--color-veil);
+  --color-action-neutral-hover: color-mix(in oklab, var(--color-neutral-12) var(--color-mix-3), transparent);
+  --color-action-neutral-active: color-mix(in oklab, var(--color-neutral-12) var(--color-mix-1), transparent);
+  --color-action-neutral-selected: color-mix(in oklab, var(--color-neutral-12) var(--color-mix-4), transparent);
+  --color-action-danger: var(--color-tint-pressure);
+  --color-action-danger-hover: var(--color-pressure-4);
+  --color-action-danger-active: var(--color-pressure-2);
+  --color-action-danger-selected: var(--color-action-danger-hover);
+  --color-action-danger-foreground: var(--color-ink-pressure);
   --color-action-danger-foreground-hover: oklch(
-    from var(--color-action-danger-foreground) calc(l + (1 - l) * var(--opacity-base)) c h
+    from var(--color-action-danger-foreground) calc(l + (1 - l) * var(--opacity-base) * 2) c h
   );
   --color-action-subtle-hover: color-mix(
     in oklab,
@@ -260,7 +284,7 @@
   --color-navigation-hover-surface: var(--color-action-subtle-hover);
   --color-navigation-hover-text: var(--color-text-primary);
   --color-navigation-selected-surface: var(--color-surface-selected);
-  --color-navigation-selected-text: var(--base-brand);
+  --color-navigation-selected-text: var(--color-ink-brand);
   --color-navigation-selected-indicator: var(--base-brand);
 
   --color-focus-ring: var(--base-brand);
@@ -271,35 +295,21 @@
     var(--color-brand-5) var(--color-mix-8),
     transparent
   );
-  --color-selection-text: var(--base-signal);
+  --color-selection-text: var(--color-ink-signal);
 
   --color-feedback-info-surface: color-mix(
     in oklab,
     var(--base-brand) var(--color-mix-2),
     var(--color-surface-canvas)
   );
-  --color-feedback-info-text: var(--base-brand);
-  /* The second accent: the magenta for a distinction that reports nothing, such as a project's genres,
-     rarer than the brand blue and never a failure. */
-  --color-accent-secondary: var(--base-pressure);
-  /* A label filled with a tone, as a badge or a chosen chip, takes a deep step of its tone's own ramp under light
-     text: the full accent glared behind its few words, and each sits a quarter step under a whole one, mixed with the
-     step below. Amber brightens faster along its ramp, so it stops half a step deeper. Each keeps 4.5:1. */
-  --color-label-text: var(--color-text-primary);
-  --color-label-neutral: color-mix(in oklab, var(--color-neutral-7) var(--color-mix-4), var(--color-neutral-8));
-  --color-label-brand: color-mix(in oklab, var(--color-brand-6) var(--color-mix-4), var(--color-brand-7));
-  --color-label-accent: color-mix(in oklab, var(--color-pressure-7) var(--color-mix-4), var(--color-pressure-8));
-  --color-label-highlight: color-mix(in oklab, var(--color-signal-6) var(--color-mix-12), var(--color-signal-7));
-  --color-label-success: var(--color-label-highlight);
-  --color-label-warning: var(--color-label-accent);
-  --color-label-danger: var(--color-label-accent);
+  --color-feedback-info-text: var(--color-ink-brand);
   /* Signal highlights what deserves notice without calling for action, such as an upcoming change. */
   --color-feedback-highlight-surface: color-mix(
     in oklab,
     var(--base-signal) var(--color-mix-2),
     var(--color-surface-canvas)
   );
-  --color-feedback-highlight-text: var(--base-signal);
+  --color-feedback-highlight-text: var(--color-ink-signal);
   /* A success is one such highlight. */
   --color-feedback-success-surface: var(--color-feedback-highlight-surface);
   --color-feedback-success-text: var(--color-feedback-highlight-text);
@@ -308,7 +318,7 @@
     var(--base-pressure) var(--color-mix-2),
     var(--color-surface-canvas)
   );
-  --color-feedback-warning-text: var(--base-pressure);
+  --color-feedback-warning-text: var(--color-feedback-error-text);
   --color-feedback-error-surface: color-mix(
     in oklab,
     var(--base-pressure) var(--color-mix-2),
@@ -317,13 +327,9 @@
   --color-feedback-error-border: color-mix(
     in oklab,
     var(--base-pressure) var(--color-mix-10),
-    var(--color-surface-subtle)
+    var(--color-surface-island-subtle)
   );
-  --color-feedback-error-text: color-mix(
-    in oklab,
-    var(--color-text-primary) var(--color-mix-4),
-    var(--base-pressure)
-  );
+  --color-feedback-error-text: var(--color-ink-pressure);
 
   --color-graphic-brand: var(--base-brand);
   --color-glow-brand: color-mix(
@@ -343,15 +349,11 @@
   );
 
   /* Raised surfaces stay flat, since the app's lamp gives the page its volume. A hairline ring holds
-     a raised surface's shape on any backdrop, so it needs no border. */
+     a raised surface's shape on any backdrop, so it needs no border. Elevation has four steps: the ring alone for a
+     raised card, --shadow-md for an island on an island (a nested card, a tooltip), --shadow-lg for a surface that
+     opens over the page (a menu, a list, a dialog, a toast), and --shadow-floating at the screen's edge. */
   --shadow-ring: 0 0 0 var(--border-width-thin)
     color-mix(in oklab, var(--color-neutral-12) var(--color-mix-1), transparent);
-  --shadow-sm:
-    var(--shadow-ring),
-    0 var(--border-width-thin) var(--size-1)
-      color-mix(in oklab, var(--color-neutral-1) var(--color-mix-8), transparent),
-    0 var(--size-1) var(--size-3)
-      color-mix(in oklab, var(--color-neutral-1) var(--color-mix-8), transparent);
   --shadow-md:
     var(--shadow-ring),
     0 var(--border-width-thin) var(--size-1)
@@ -371,23 +373,22 @@
       color-mix(in oklab, var(--color-neutral-12) var(--color-mix-3), transparent),
     0 0 var(--size-8) var(--size-2)
       color-mix(in oklab, var(--color-neutral-1) var(--color-mix-12), transparent);
-  /* The primary action glows: a slight gradient that lightens toward the top, and a soft underglow
-     in its own color. The gradient only lightens, so its darkest stop is the measured text pair. */
+  /* The primary action glows: a slight gradient that lightens toward the top, and a soft underglow in its own
+     color. Its ink is measured on the lightest stop. */
   --gradient-action-primary: linear-gradient(
     in oklab,
-    var(--color-brand-10),
+    var(--color-action-primary-hover),
     var(--color-action-primary)
   );
   --gradient-action-primary-hover: linear-gradient(
     in oklab,
-    var(--color-action-primary-hover),
-    var(--color-brand-10)
+    var(--color-brand-5),
+    var(--color-action-primary-hover)
   );
   --shadow-action-primary: 0 var(--size-1) var(--size-4) calc(-1 * var(--size-1))
     color-mix(in oklab, var(--base-brand) var(--color-mix-6), transparent);
   --shadow-action-primary-hover: 0 var(--size-1) var(--size-6) calc(-1 * var(--size-1))
     color-mix(in oklab, var(--base-brand) var(--color-mix-10), transparent);
-  --shadow-island: var(--shadow-md);
   --shadow-glow-brand:
     0 0 var(--size-4)
       color-mix(in oklab, var(--color-glow-brand) var(--color-mix-4), transparent),
@@ -449,10 +450,12 @@
   /* One lamp in the top-start corner, its strength falling with the square of the distance and its
      reach with the viewport, so a phone keeps a corner light rather than a tinted screen. Each
      application colors it with --color-lamp on its root element, so people tell the apps apart at
-     a glance; an ember lights any application that sets none. */
-  --color-lamp-ember: color-mix(in oklch, var(--base-signal) var(--color-mix-11), var(--base-pressure));
+     a glance; the amber lights any application that sets none. A lamp is one of the three hues, never a blend
+     of two, which reads as a fourth. */
+  --color-lamp-amber: var(--base-signal);
   --color-lamp-magenta: var(--base-pressure);
-  --lamp-color: var(--color-lamp, var(--color-lamp-ember));
+  --color-lamp-blue: var(--base-brand);
+  --lamp-color: var(--color-lamp, var(--color-lamp-amber));
   --lamp-peak: var(--color-mix-3);
   --gradient-lamp: radial-gradient(
     in oklab min(var(--layout-container-md), 80vi) min(var(--layout-container-sm), 50vb) at 0 0,
@@ -473,13 +476,15 @@
   --font-family-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
   --font-size-base: 1rem;
   --font-size-ratio: var(--ratio-density);
-  --font-size-xs: calc(var(--font-size-base) / pow(var(--font-size-ratio), 2));
-  --font-size-sm: calc(var(--font-size-base) / var(--font-size-ratio));
+  /* Each size rounds to a whole pixel: 13, 14, 16, 18, 20, 23 and 29. A fractional size blurs its stems at one
+     pixel per point, most on the small interface text. */
+  --font-size-xs: round(calc(var(--font-size-base) / pow(var(--font-size-ratio), 2)), 1px);
+  --font-size-sm: round(calc(var(--font-size-base) / var(--font-size-ratio)), 1px);
   --font-size-md: var(--font-size-base);
-  --font-size-lg: calc(var(--font-size-base) * var(--font-size-ratio));
-  --font-size-xl: calc(var(--font-size-base) * pow(var(--font-size-ratio), 2));
-  --font-size-2xl: calc(var(--font-size-base) * pow(var(--font-size-ratio), 3));
-  --font-size-4xl: calc(var(--font-size-base) * pow(var(--font-size-ratio), 5));
+  --font-size-lg: round(calc(var(--font-size-base) * var(--font-size-ratio)), 1px);
+  --font-size-xl: round(calc(var(--font-size-base) * pow(var(--font-size-ratio), 2)), 1px);
+  --font-size-2xl: round(calc(var(--font-size-base) * pow(var(--font-size-ratio), 3)), 1px);
+  --font-size-4xl: round(calc(var(--font-size-base) * pow(var(--font-size-ratio), 5)), 1px);
   --font-weight-regular: 400;
   --font-weight-medium: 500;
   --font-weight-bold: 700;
@@ -487,7 +492,7 @@
      on whole pixels, and a line centered on the 4px size grid lands on one. A browser snaps each baseline to a whole
      pixel, so a line near the middle of one moves a whole pixel on any sub-pixel layout difference.
      The length resolves against the font size of the element that declares it, and its children inherit that length,
-     so an element that sets its own font size sets its own line height. */
+     so a text style below sets both together. */
   --line-height-tight: round(1em, 2px);
   --line-height-compact: round(1.25em, 2px);
   --line-height-normal: round(1.5em, 2px);
@@ -496,14 +501,67 @@
   --letter-spacing-normal: 0;
   --letter-spacing-wide: 0.08em;
 
+  /* A text style binds a role's weight, size, line height and family. An element takes its role with one
+     declaration, font: var(--text-<role>), and never picks a size: the sizes, line heights and families above are
+     the scale these styles draw from. Each line height resolves against the size beside it. */
+  /* A page's title. */
+  --text-display: var(--font-weight-bold) round(clamp(var(--font-size-2xl), 4vw, var(--font-size-4xl)), 1px) /
+    var(--line-height-compact) var(--font-family-display);
+  /* The title of a section, a dialog, or a state that replaces content. */
+  --text-title: var(--font-weight-bold) var(--font-size-xl) / var(--line-height-compact) var(--font-family-display);
+  /* A title one level down: a card that names itself. */
+  --text-title-sm: var(--font-weight-bold) var(--font-size-lg) / var(--line-height-compact)
+    var(--font-family-display);
+  /* A title two levels down. */
+  --text-title-xs: var(--font-weight-bold) var(--font-size-md) / var(--line-height-compact)
+    var(--font-family-display);
+  /* Content: a value, a name, a dialog's or a state's copy, what a field of several lines holds. The page's root
+     takes it, so text that sets no style reads as content. */
+  --text-body: var(--font-weight-regular) var(--font-size-md) / var(--line-height-normal)
+    var(--font-family-interface);
+  /* What a field holds, on one line, so the field keeps a control's height; a large field's text grows with it. */
+  --text-field: var(--font-weight-regular) var(--font-size-md) / var(--line-height-compact)
+    var(--font-family-interface);
+  --text-field-lg: var(--font-weight-regular) var(--font-size-lg) / var(--line-height-compact)
+    var(--font-family-interface);
+  /* An explanation that may run several lines, such as a description under a title. */
+  --text-body-sm: var(--font-weight-regular) var(--font-size-sm) / var(--line-height-normal)
+    var(--font-family-interface);
+  /* Interface text: a label, a tab, a link of the rail, an option, a cell, a message's body. */
+  --text-ui: var(--font-weight-regular) var(--font-size-sm) / var(--line-height-compact)
+    var(--font-family-interface);
+  /* A group's name, a message's title, a column's header. */
+  --text-ui-strong: var(--font-weight-bold) var(--font-size-sm) / var(--line-height-compact)
+    var(--font-family-interface);
+  /* A button's label, and a large button's. */
+  --text-action: var(--font-weight-bold) var(--font-size-sm) / var(--line-height-tight)
+    var(--font-family-interface);
+  --text-action-lg: var(--font-weight-bold) var(--font-size-md) / var(--line-height-tight)
+    var(--font-family-interface);
+  /* A compact fact: a field's hint or error, a timestamp, a count, a tooltip. */
+  --text-meta: var(--font-weight-regular) var(--font-size-xs) / var(--line-height-compact)
+    var(--font-family-interface);
+  /* Small text on a fill: a badge, a chip, a tag. */
+  --text-tag: var(--font-weight-medium) var(--font-size-xs) / var(--line-height-compact)
+    var(--font-family-interface);
+  /* An identifier, a shortcut, code. */
+  --text-code: var(--font-weight-regular) var(--font-size-sm) / var(--line-height-compact) var(--font-family-mono);
+  /* Narrative prose. */
+  --text-story: var(--font-weight-regular) var(--font-size-lg) / var(--line-height-loose) var(--font-family-story);
+
   --layout-gutter: clamp(var(--space-4), 2vw, var(--space-8));
-  --layout-container-xs: calc(var(--layout-container-sm) / var(--ratio-emphasis));
+  /* A width a ratio derives lands on the size grid, so what sits beside it starts on a whole pixel. */
+  --layout-container-xs: round(calc(var(--layout-container-sm) / var(--ratio-emphasis)), var(--size-base));
   --layout-container-sm: calc(var(--font-size-base) * 40);
   --layout-container-md: calc(var(--font-size-base) * 64);
   --layout-container-lg: calc(var(--font-size-base) * 80);
-  --layout-sidebar: calc(var(--layout-container-sm) / pow(var(--ratio-major), 2));
+  --layout-sidebar: round(calc(var(--layout-container-sm) / pow(var(--ratio-major), 2)), var(--size-base));
   --layout-sidebar-min: calc(var(--font-size-base) * 12);
-  --layout-island-gap: var(--space-3);
+  /* A floating surface's width: a menu's least, a tooltip's most, a toast, a banner. */
+  --layout-floating-sm: calc(var(--font-size-base) * 12);
+  --layout-floating-md: calc(var(--font-size-base) * 16);
+  --layout-floating-lg: calc(var(--font-size-base) * 20);
+  --layout-floating-xl: calc(var(--font-size-base) * 32);
   --layout-readable-measure: 68ch;
   /* A longer measure for a short block set in a narrow surface, such as a card's summary, where a few
      extra characters per line cost less than another line. */

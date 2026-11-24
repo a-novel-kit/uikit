@@ -87,10 +87,7 @@ Controller methods may reject a toggle; the rendered disclosure follows the acce
     padding: var(--space-3) var(--space-4);
     min-block-size: var(--control-height-lg);
     color: var(--color-text-primary);
-    font-weight: var(--font-weight-bold);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-compact);
-    font-family: var(--font-family-interface);
+    font: var(--text-ui-strong);
     list-style: none;
     user-select: none;
   }
@@ -126,7 +123,7 @@ Controller methods may reject a toggle; the rendered disclosure follows the acce
 
   .disclosure > summary > :global(.indicator) {
     flex: none;
-    transition: transform var(--duration-fast) var(--easing-standard);
+    transition: transform var(--motion-state);
   }
 
   .disclosure[open] > summary > :global(.indicator) {
@@ -135,7 +132,7 @@ Controller methods may reject a toggle; the rendered disclosure follows the acce
 
   .content {
     padding: 0 var(--space-4) var(--space-4);
-    line-height: var(--line-height-normal);
+    font: var(--text-body);
     overflow-wrap: anywhere;
   }
   @media (prefers-reduced-motion: reduce) {

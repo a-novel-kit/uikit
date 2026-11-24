@@ -253,10 +253,7 @@ swaps for the field once the page hydrates.
     margin-block-end: var(--space-2);
     padding: 0;
     color: var(--color-text-secondary);
-    font-weight: var(--font-weight-regular);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-compact);
-    font-family: var(--font-family-interface);
+    font: var(--text-ui);
   }
 
   /* The chips sit in a medium field's well, growing with their rows. */
@@ -276,8 +273,7 @@ swaps for the field once the page hydrates.
 
   .placeholder {
     color: var(--color-control-placeholder);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-compact);
+    font: var(--text-ui);
   }
 
   /* On the chips' screen, the well fills the screen and its chips scroll under the search; a search that leaves few
@@ -305,10 +301,8 @@ swaps for the field once the page hydrates.
   /* A section's title takes its own line over its chips, quieter than the group's legend. */
   .section-title {
     flex-basis: 100%;
-    color: var(--color-text-hint);
-    font-size: var(--font-size-xs);
-    line-height: var(--line-height-compact);
-    font-family: var(--font-family-interface);
+    color: var(--color-text-muted);
+    font: var(--text-meta);
   }
 
   /* Under a search, a section's title stays flush under the search while its chips scroll under it. It paints the
@@ -377,10 +371,7 @@ swaps for the field once the page hydrates.
     padding: 0;
     min-inline-size: 0;
     color: var(--color-control-text);
-    font: inherit;
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-compact);
-    font-family: var(--font-family-interface);
+    font: var(--text-ui);
   }
 
   .query::placeholder {
@@ -389,9 +380,8 @@ swaps for the field once the page hydrates.
 
   /* An empty status takes no room, yet stays in the page to announce the next empty search. */
   .empty {
-    color: var(--color-text-hint);
-    font-size: var(--font-size-xs);
-    line-height: var(--line-height-compact);
+    color: var(--color-text-muted);
+    font: var(--text-meta);
   }
 
   .empty:empty {
@@ -406,20 +396,18 @@ swaps for the field once the page hydrates.
     justify-content: center;
     align-items: center;
     transition:
-      background-color var(--duration-fast) var(--easing-standard),
-      box-shadow var(--duration-fast) var(--easing-standard),
-      color var(--duration-fast) var(--easing-standard);
+      background-color var(--motion-state),
+      box-shadow var(--motion-state),
+      color var(--motion-state);
     cursor: pointer;
     border-radius: var(--radius-sm);
     background: var(--color-action-neutral);
-    padding-inline: var(--size-1-5);
+    padding-inline: var(--space-2);
+    /* off-scale: half a grid step above and below its line, as a badge's */
     padding-block: calc(var(--size-1) / 2);
     min-inline-size: var(--icon-size-lg);
     color: var(--color-text-secondary);
-    font-weight: var(--font-weight-medium);
-    font-size: var(--font-size-xs);
-    line-height: var(--line-height-compact);
-    font-family: var(--font-family-interface);
+    font: var(--text-tag);
     user-select: none;
     overflow-wrap: anywhere;
   }
@@ -448,18 +436,20 @@ swaps for the field once the page hydrates.
   }
 
   .brand {
-    --chip-fill: var(--color-label-brand);
+    --chip-fill: var(--color-tint-brand);
+    --chip-ink: var(--color-ink-brand);
   }
 
   .accent {
-    --chip-fill: var(--color-label-accent);
+    --chip-fill: var(--color-tint-pressure);
+    --chip-ink: var(--color-ink-pressure);
   }
 
   /* Chosen, a chip reads as the badge that shows the same choice. */
   .chip:has(:checked) {
-    box-shadow: 0 0 var(--size-3) color-mix(in oklab, var(--chip-fill) var(--color-mix-2), transparent);
+    box-shadow: 0 0 var(--size-3) color-mix(in oklab, var(--chip-ink) var(--color-mix-2), transparent);
     background: var(--chip-fill);
-    color: var(--color-label-text);
+    color: var(--chip-ink);
   }
 
   /* The ring stays clear of the next chip, the chips' gap apart. */

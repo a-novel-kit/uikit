@@ -59,9 +59,16 @@ component meaning and play no part in foreground contrast.
 Components use semantic aliases such as `--color-action-primary` and `--color-feedback-error-text`.
 Brand is the base and carries agency. Signal highlights what deserves notice without calling for
 action: a success, or an upcoming change. Pressure marks errors and anything that needs immediate
-attention. Actions use a restrained idle step, lighten once on hover, and reserve the peak plus glow for
-selected state. Disabled controls use neutral surface, border, and text tokens. Feedback components pair
-color with a label or icon. Primitive palette steps remain available for design-system work.
+attention.
+
+A hue shows two ways, and they pair. Its ink is the neon itself (`--color-ink-{brand,pressure,signal}`), for
+what is drawn thin: text, an icon, a line. Its tint is a deep step of its ramp
+(`--color-tint-{brand,pressure,signal}`), for what is filled under its ink: a tag, a chosen chip, a colored
+action. The neon never fills behind text. The pointer lifts an action's fill one step and its ink a quarter of
+the way to white; a chosen action stays lifted and glows. A mark that is on, such as a checked box or a
+switch, is small, so the brand's ink fills it (`--color-control-on`). Disabled controls use neutral surface,
+border, and text tokens. Feedback components pair color with a label or icon. Primitive palette steps remain
+available for design-system work.
 
 `scripts/generate-colors.mjs` is the authoring source. Run
 `pnpm --filter @a-novel-kit/uikit-tokens generate:colors` after changing its compact bases. It writes
@@ -81,3 +88,47 @@ values.
 The font-family tokens map to the faces vendored in [`@a-novel-kit/uikit-fonts`](../fonts). The size
 scale multiplies or divides a `1rem` base by powers of the `1.125` density ratio. Heros exposes
 regular and bold faces, so interface emphasis uses `400` or `700`.
+
+## Token contract
+
+`uikit-token-contract` holds an application's CSS to these tokens. It reads the stylesheets and the
+Svelte style blocks under each directory it is given, and fails on:
+
+- A `var(--name)` with no fallback that nothing defines. A misspelled or removed custom property fails
+  silently in the browser.
+- A property that reads outside its family: a padding that takes a `--size-*` token, a width that takes
+  a `--space-*` one, a `font-size` where `font: var(--text-*)` sets the whole text style.
+- A raw value where a scale exists: a length, a time, an easing, a `z-index`.
+- A scale taken apart: a base such as `--space-base`, or a `calc()` that multiplies a space or a size
+  by a number.
+- An `@media` width other than `35rem` or `48rem`.
+- A primitive palette token, such as `--color-brand-9`.
+- A hex, `rgb()`, `hsl()` or Display P3 color literal. The check reads scripts and documents for this
+  rule too.
+
+Each violation prints the family its property takes. Run the check from the application's root, where
+it also reads the custom properties that uikit's components declare:
+
+```bash
+pnpm exec uikit-token-contract src
+```
+
+Stories and documentation show primitives and demo values. Under a `--docs` directory, only the
+unknown token and color literal rules hold:
+
+```bash
+pnpm exec uikit-token-contract --docs src/stories src
+```
+
+A value no scale holds states its reason in a comment directly above its declaration:
+
+```css
+/* off-scale: half a grid step above and below its line */
+padding-block: calc(var(--size-1) / 2);
+```
+
+The comment exempts that declaration, or the `@media` rule it sits above. An unknown token and a color
+literal still fail under it, and so does a comment that excuses nothing. The check prints how many
+exceptions it let through, and `--list-exceptions` lists them.
+
+In this repository, `pnpm lint` runs the check over every package.

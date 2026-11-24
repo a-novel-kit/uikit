@@ -170,70 +170,79 @@ Every panel stays mounted; inactive panels are hidden. Initialize the controller
   .a-novel-tabs-list {
     display: flex;
     gap: var(--space-1);
-    border-block-end: var(--border-width-thin) solid var(--color-border-divider);
   }
+
   .a-novel-tabs.vertical .a-novel-tabs-list {
     flex: none;
     flex-direction: column;
-    border-inline-end: var(--border-width-thin) solid var(--color-border-divider);
-    border-block-end: 0;
   }
+
   .a-novel-tabs-trigger {
     display: inline-flex;
     position: relative;
     align-items: center;
     gap: var(--space-2);
     transition:
-      background-color var(--duration-fast) var(--easing-standard),
-      color var(--duration-fast) var(--easing-standard);
+      background-color var(--motion-state),
+      color var(--motion-state);
     cursor: pointer;
     border: 0;
-    border-block-end: var(--border-width-strong) solid transparent;
+    border-radius: var(--radius-lg);
     background: transparent;
-    padding: var(--space-2) var(--space-3);
+    padding: var(--space-1) var(--space-3);
     min-block-size: var(--control-height-sm);
     color: var(--color-text-muted);
-    font-weight: var(--font-weight-regular);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-compact);
-    font-family: var(--font-family-interface);
+    font: var(--text-ui);
     user-select: none;
   }
+
   .a-novel-tabs.vertical .a-novel-tabs-trigger {
-    border-inline-end: var(--border-width-strong) solid transparent;
-    border-block-end: 0;
     inline-size: 100%;
   }
+
   @media (hover: hover) {
     .a-novel-tabs-trigger:hover:not([data-disabled], [data-state="active"]) {
       background: var(--color-navigation-hover-surface);
       color: var(--color-navigation-hover-text);
     }
   }
+
+  /* The tab showing reads as the navigation's current item, as a chosen ghost button does: a tinted box and a
+     glowing indicator, under the label in a row and at the start edge in a column. The list draws no line. */
   .a-novel-tabs-trigger[data-state="active"] {
-    border-color: transparent;
+    background: var(--color-navigation-selected-surface);
     color: var(--color-navigation-selected-text);
   }
+
   .a-novel-tabs-trigger[data-state="active"]::after {
     position: absolute;
-    inset-block-end: calc(var(--border-width-strong) * -1);
-    inset-inline: 0;
+    inset-block: auto 0;
+    inset-inline: var(--space-2);
     box-shadow: var(--shadow-indicator-brand);
     background: var(--color-navigation-selected-indicator);
     block-size: var(--border-width-strong);
     content: "";
   }
+
   .a-novel-tabs.vertical .a-novel-tabs-trigger[data-state="active"]::after {
-    inset-block: 0;
-    inset-inline-end: calc(var(--border-width-strong) * -1);
-    inset-inline-start: auto;
+    inset-block: var(--space-2);
+    inset-inline: 0 auto;
     inline-size: var(--border-width-strong);
     block-size: auto;
   }
+
   .a-novel-tabs-trigger:focus-visible {
     outline: var(--focus-ring-width) solid var(--color-focus-ring);
     outline-offset: calc(var(--focus-ring-offset) * -1);
-    border-radius: var(--radius-sm);
+  }
+
+  /* Forced colors paint the indicator Canvas, so it keeps its line in the text color. */
+  @media (forced-colors: active) {
+    .a-novel-tabs-trigger[data-state="active"]::after {
+      box-shadow: none;
+      background: CanvasText;
+      forced-color-adjust: none;
+    }
   }
   .a-novel-tabs-trigger[data-disabled] {
     cursor: not-allowed;

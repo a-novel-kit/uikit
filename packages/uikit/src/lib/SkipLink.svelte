@@ -23,16 +23,15 @@ Reveals a bypass link on keyboard focus. Provide link text and a matching conten
     position: fixed;
     translate: 0 calc(-100% - var(--space-4));
     z-index: var(--layer-toast);
-    transition: translate var(--duration-fast) var(--easing-standard);
+    transition: translate var(--motion-state);
     inset-block-start: var(--space-2);
     inset-inline-start: var(--space-2);
     border: var(--border-width-thin) solid var(--color-focus-ring);
     border-radius: var(--radius-md);
-    background: var(--color-surface-overlay);
+    background: var(--color-surface-island-strong);
     padding: var(--space-2) var(--space-3);
     color: var(--color-text-primary);
-    font-weight: var(--font-weight-bold);
-    font-family: var(--font-family-interface);
+    font: var(--text-action-lg);
     text-decoration: none;
   }
   .skip-link:focus {

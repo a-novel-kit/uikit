@@ -84,7 +84,8 @@ The caller manages their lifetime and removes dismissed entries; no automatic ti
     z-index: var(--layer-toast);
     inset-block-end: var(--space-4);
     inset-inline-end: var(--space-4);
-    inline-size: min(calc(100vi - var(--space-8)), calc(var(--size-base) * 80));
+    /* off-scale: the viewport less the region's inset on each side */
+    inline-size: min(calc(100vi - var(--space-8)), var(--layout-floating-lg));
     pointer-events: none;
   }
   .toast {
@@ -110,15 +111,12 @@ The caller manages their lifetime and removes dismissed entries; no automatic ti
   strong {
     display: block;
     margin-block-end: var(--space-1);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-compact);
-    font-family: var(--font-family-interface);
+    font: var(--text-ui-strong);
   }
   p {
     margin: 0;
     color: var(--color-text-secondary);
-    font-size: var(--font-size-xs);
-    line-height: var(--line-height-compact);
+    font: var(--text-ui);
   }
   .action {
     margin-block-start: var(--space-2);

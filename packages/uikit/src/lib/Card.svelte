@@ -94,12 +94,12 @@ corners stay concentric at any depth. Other content sits a spacing step further 
     -webkit-backdrop-filter: blur(var(--blur-md));
     backdrop-filter: blur(var(--blur-md));
     transition:
-      background-color var(--duration-fast) var(--easing-standard),
-      outline-color var(--duration-fast) var(--easing-standard),
-      box-shadow var(--duration-fast) var(--easing-standard);
+      background-color var(--motion-state),
+      outline-color var(--motion-state),
+      box-shadow var(--motion-state);
     /* An outline is painted last, above the card's own fill. A ring drawn as a shadow sits under that fill, whose
        edge then eats the ring's inner antialiasing: the ring thins along every corner and reads as cropped. */
-    outline: var(--border-width-outline) solid var(--color-border-item);
+    outline: var(--border-width-outline) solid var(--color-border-default);
     background: color-mix(in oklab, var(--color-surface-canvas) var(--color-mix-2), transparent);
   }
   @media (hover: hover) {
@@ -133,7 +133,7 @@ corners stay concentric at any depth. Other content sits a spacing step further 
   .surface-overlay {
     -webkit-backdrop-filter: blur(var(--blur-md));
     backdrop-filter: blur(var(--blur-md));
-    box-shadow: var(--shadow-island);
+    box-shadow: var(--shadow-md);
     background: var(--color-surface-glass);
   }
   /* Content that reaches the edges keeps to the rounded corners. A padded card clips nothing, so the

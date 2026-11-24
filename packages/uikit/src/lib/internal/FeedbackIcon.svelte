@@ -35,10 +35,19 @@
     block-size: var(--feedback-mark-size);
     color: var(--feedback-color);
   }
+  /* A message's mark sits on the message's first line, however many follow. The mark starts at the top, and the text
+     beside it starts a step lower, half the difference between the mark and a line of interface text, so that line
+     centers on the mark and a single line keeps the mark's height. The text is whatever follows the mark. */
   .sm {
     --feedback-icon-size: var(--icon-size-sm);
     --feedback-mark-size: var(--size-6);
+    align-self: start;
   }
+
+  .sm + :global(*) {
+    padding-block: var(--space-1);
+  }
+
   .md {
     --feedback-icon-size: var(--icon-size-md);
     --feedback-mark-size: var(--size-8);

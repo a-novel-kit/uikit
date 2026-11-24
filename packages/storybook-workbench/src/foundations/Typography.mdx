@@ -31,7 +31,48 @@ export const families = [
   },
 ];
 
-export const sizes = ["xs", "sm", "md", "lg", "xl", "2xl", "4xl"];
+export const styles = [
+  { token: "--text-display", use: "A page's title", sample: "Projects" },
+  {
+    token: "--text-title",
+    use: "The title of a section, a dialog, or a state that replaces content",
+    sample: "Devices",
+  },
+  { token: "--text-title-sm", use: "A title one level down: a card that names itself", sample: "Email and password" },
+  { token: "--text-title-xs", use: "A title two levels down", sample: "Recovery codes" },
+  {
+    token: "--text-body",
+    use: "Content: a value, a name, a dialog's or a state's copy",
+    sample: "maya.chen@example.test",
+  },
+  { token: "--text-field", use: "What a field holds on one line", sample: "Summer sketches" },
+  { token: "--text-field-lg", use: "What a large field holds", sample: "Summer sketches" },
+  {
+    token: "--text-body-sm",
+    use: "An explanation that may run several lines",
+    sample: "The devices signed in to your account.",
+  },
+  {
+    token: "--text-ui",
+    use: "Interface text: a label, a tab, an option, a cell, a message's body",
+    sample: "Workspace name",
+  },
+  {
+    token: "--text-ui-strong",
+    use: "A group's name, a message's title, a column's header",
+    sample: "Check your inbox",
+  },
+  { token: "--text-action", use: "A button's label", sample: "Save changes" },
+  { token: "--text-action-lg", use: "A large button's label", sample: "Start writing" },
+  {
+    token: "--text-meta",
+    use: "A compact fact: a hint, an error, a timestamp, a count",
+    sample: "Last active 2 Nov 2026, 21:15",
+  },
+  { token: "--text-tag", use: "Small text on a fill: a badge, a chip, a tag", sample: "Fantasy" },
+  { token: "--text-code", use: "An identifier, a shortcut, code", sample: "scene.intensity = 0.72" },
+  { token: "--text-story", use: "Narrative prose", sample: "Beyond the last lantern, the road became a promise." },
+];
 
 export const FamilySpecimen = ({ family }) => (
   <div className="type-family">
@@ -58,28 +99,48 @@ Import `@a-novel-kit/uikit-fonts/fonts.css` once, then use the family and size t
   ))}
 </div>
 
-## Scale
+## Text styles
 
-Use `md` for body text and move through adjacent steps to establish hierarchy.
+Text takes a style, never a size. One declaration sets the weight, size, line height and family of a role:
 
-<div className="type-scale" aria-label="Typography size scale">
-  {sizes.map((size) => (
-    <div key={size}>
-      <code>{"--font-size-" + size}</code>
-      <span style={{ fontSize: "var(--font-size-" + size + ")" }}>A-Novel interface</span>
+```css
+.title {
+  font: var(--text-title);
+}
+```
+
+Pick the row that says what the text is. A component or an application never sets `font-size`, `line-height`
+or `font-family`; `font: inherit` on a native control stays, and `font-weight` alone, with a weight token,
+marks a state such as a chosen item. The page's root takes `--text-body`, so text with no style of its own
+reads as content.
+
+<div className="type-scale" aria-label="Text styles">
+  {styles.map((style) => (
+    <div key={style.token}>
+      <code>{style.token}</code>
+      <span style={{ font: "var(" + style.token + ")" }}>{style.sample}</span>
+      <small>{style.use}</small>
     </div>
   ))}
 </div>
 
-## Line heights
+A heading's level sets its style: level 2 takes `--text-title`, level 3 `--text-title-sm`, level 4
+`--text-title-xs`. A `Section` finds its level from the sections that hold it.
 
-Set `--line-height-tight`, `--line-height-compact`, `--line-height-normal` or `--line-height-loose` wherever you set a
-font size. Each is 1, 1.25, 1.5 or 1.75 times that size, rounded to an even pixel count, so stacked lines and a line
-centered in a control land on whole pixels. Children inherit the length, not the ratio.
+## Color follows the role
 
-## Weights
+| The text is                                                                          | Token                         |
+| ------------------------------------------------------------------------------------ | ----------------------------- |
+| What the reader came for: a title, content, a value, the label of a choice they make | `--color-text-primary`        |
+| What names or explains it: a field's label, a description, a message's body          | `--color-text-secondary`      |
+| What a reader can skip: a hint, a timestamp, a count, a link of the rail at rest     | `--color-text-muted`          |
+| A placeholder, inside a well only: it fails 4.5:1 on an island                       | `--color-control-placeholder` |
+| Disabled                                                                             | `--color-text-disabled`       |
 
-Use `--font-weight-regular` for body copy, field labels and text buttons, `--font-weight-medium` for light text on a
-fill, as a badge, a chip and a tag set it, and `--font-weight-bold` for headings, other actions and group names. A
-ChipGroup's legend reads as a field's label, so it stays regular. TeX Gyre Heros ships 400 and 700 alone: the
-interface's medium comes from Arimo's weight axis, under the same family name. The display face has no medium.
+## The scale under the styles
+
+The styles draw from seven sizes, `--font-size-{xs,sm,md,lg,xl,2xl,4xl}`: 13, 14, 16, 18, 20, 23 and 29 pixels,
+each a step of the density ratio rounded to a whole pixel. Line heights are 1, 1.25, 1.5 or 1.75 times their
+size, rounded to an even pixel count, so stacked lines and a line centered in a control land on whole pixels.
+TeX Gyre Heros ships 400 and 700 alone: the interface's medium comes from Arimo's weight axis, under the same
+family name. The display face has no medium.

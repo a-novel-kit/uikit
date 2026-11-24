@@ -64,17 +64,14 @@ width. Wrap each related `dt` and `dd` pair in a `div`.
   }
 
   .description-list :global(dt) {
-    color: var(--color-text-muted);
-    font-weight: var(--font-weight-bold);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-compact);
-    font-family: var(--font-family-interface);
+    color: var(--color-text-secondary);
+    font: var(--text-ui);
   }
 
   .description-list :global(dd) {
     margin: 0;
     color: var(--color-text-primary);
-    line-height: var(--line-height-normal);
+    font: var(--text-body);
     overflow-wrap: anywhere;
   }
 

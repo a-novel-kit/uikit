@@ -63,9 +63,8 @@ Provide a meaningful `label` for either representation.
     background: var(--color-surface-selected);
     overflow: hidden;
     color: var(--color-text-accent);
-    font-weight: var(--font-weight-bold);
-    line-height: var(--line-height-tight);
-    font-family: var(--font-family-mono);
+    /* off-scale: initials are the mark's own glyphs, scaled with its size */
+    font: var(--font-weight-bold) var(--avatar-text-size) / var(--line-height-tight) var(--font-family-mono);
   }
 
   img {
@@ -80,29 +79,29 @@ Provide a meaningful `label` for either representation.
   .sm {
     inline-size: var(--control-height-sm);
     block-size: var(--control-height-sm);
-    font-size: var(--font-size-xs);
+    --avatar-text-size: var(--font-size-xs);
   }
   .md {
     inline-size: var(--control-height-md);
     block-size: var(--control-height-md);
-    font-size: var(--font-size-sm);
+    --avatar-text-size: var(--font-size-sm);
   }
   .lg {
     inline-size: var(--control-height-lg);
     block-size: var(--control-height-lg);
-    font-size: var(--font-size-md);
+    --avatar-text-size: var(--font-size-md);
   }
   /* A profile picture shrinks on a phone-width screen to leave room for the details beside it. */
   .xl {
     inline-size: var(--size-16);
     block-size: var(--size-16);
-    font-size: var(--font-size-xl);
+    --avatar-text-size: var(--font-size-xl);
   }
   @media (min-width: 35rem) {
     .xl {
       inline-size: var(--size-24);
       block-size: var(--size-24);
-      font-size: var(--font-size-2xl);
+      --avatar-text-size: var(--font-size-2xl);
     }
   }
 </style>

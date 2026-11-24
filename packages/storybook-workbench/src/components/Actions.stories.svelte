@@ -126,7 +126,7 @@
     background: var(--color-surface-canvas);
   }
   .island {
-    background: var(--color-surface-island);
+    background: var(--color-surface-island-glass);
   }
   .glass {
     background: var(--color-surface-glass);

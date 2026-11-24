@@ -31,7 +31,7 @@ Groups related native form controls with an optional legend and supporting descr
 <style>
   .fieldset {
     display: grid;
-    gap: var(--space-3);
+    gap: var(--space-2);
     margin: 0;
     border: 0;
     border-radius: var(--radius-lg);
@@ -40,24 +40,26 @@ Groups related native form controls with an optional legend and supporting descr
     min-inline-size: 0;
   }
 
+  /* A browser sets a legend on its fieldset's top edge, half outside the island's tone. Floated, it lays out as the
+     island's first row instead. */
   legend {
+    float: inline-start;
     padding: 0;
     color: var(--color-text-primary);
-    font-weight: var(--font-weight-bold);
-    font-size: var(--font-size-md);
-    line-height: var(--line-height-compact);
+    font: var(--text-ui-strong);
   }
 
   .description {
     margin: 0;
-    color: var(--color-text-muted);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-normal);
+    color: var(--color-text-secondary);
+    font: var(--text-body-sm);
   }
 
+  /* With the grid's gap, the content sits a sibling's distance under the group's name and explanation. */
   .content {
     display: grid;
-    gap: var(--space-3);
+    gap: var(--space-4);
+    margin-block-start: var(--space-2);
   }
 
   @media (forced-colors: active) {

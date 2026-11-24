@@ -11,7 +11,7 @@
   gap: var(--space-3);
   border-radius: var(--radius-lg);
   background: var(--color-surface-island-subtle);
-  padding: var(--space-5);
+  padding: var(--space-4);
   min-inline-size: 0;
 }
 
@@ -41,7 +41,7 @@
 }
 
 .type-family > span {
-  line-height: var(--line-height-normal);
+  font: var(--text-body);
 }
 
 .type-scale {
@@ -52,7 +52,7 @@
 
 .type-scale > div {
   display: grid;
-  grid-template-columns: max-content minmax(0, 1fr);
+  grid-template-columns: minmax(10rem, max-content) minmax(0, 1fr) minmax(0, 1fr);
   align-items: baseline;
   gap: var(--space-4);
   border-radius: var(--radius-sm);
@@ -63,8 +63,13 @@
   background: var(--color-surface-island-subtle);
 }
 
-.type-scale code {
+.type-scale code,
+.type-scale small {
   color: var(--color-text-muted);
+}
+
+.type-scale small {
+  font: var(--text-body-sm);
 }
 
 .type-scale span {

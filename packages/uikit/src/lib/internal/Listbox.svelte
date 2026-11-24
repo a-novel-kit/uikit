@@ -208,9 +208,9 @@ keys into requests to a `ListboxNavigation`, which this list shares for the poin
       justify-self: start;
       z-index: var(--layer-dropdown);
       transition:
-        translate var(--duration-fast) var(--easing-standard),
-        outline-color var(--duration-fast) var(--easing-standard),
-        box-shadow var(--duration-fast) var(--easing-standard),
+        translate var(--motion-state),
+        outline-color var(--motion-state),
+        box-shadow var(--motion-state),
         overlay var(--duration-fast) allow-discrete,
         display var(--duration-fast) allow-discrete;
       /* Against the field's focus ring, without covering it. */
@@ -232,6 +232,7 @@ keys into requests to a `ListboxNavigation`, which this list shares for the poin
       padding: 0;
       inline-size: var(--floating-anchor-width);
       min-inline-size: var(--floating-anchor-width);
+      /* off-scale: the viewport less a margin, so the list never outgrows a short screen */
       max-block-size: min(calc(100dvb - var(--space-8)), var(--listbox-max-block-size, var(--control-menu-max-height)));
       /* A popover clips by default. The frost layer clips itself, at the list's whole box, and the options scroll on
          their own. */
@@ -274,7 +275,7 @@ keys into requests to a `ListboxNavigation`, which this list shares for the poin
   .frost {
     position: absolute;
     z-index: -1;
-    transition: opacity var(--duration-fast) var(--easing-standard);
+    transition: opacity var(--motion-state);
     inset: calc(-1 * var(--border-width-outline));
     border-radius: inherit;
     overflow: clip;
@@ -292,7 +293,7 @@ keys into requests to a `ListboxNavigation`, which this list shares for the poin
   .options {
     display: grid;
     gap: var(--space-1);
-    transition: opacity var(--duration-fast) var(--easing-standard);
+    transition: opacity var(--motion-state);
     border-radius: inherit;
     padding: var(--space-1);
     min-block-size: 0;
@@ -315,9 +316,7 @@ keys into requests to a `ListboxNavigation`, which this list shares for the poin
     inline-size: 100%;
     min-block-size: calc(var(--control-height-sm) - var(--size-1));
     color: var(--color-text-secondary);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-compact);
-    font-family: var(--font-family-interface);
+    font: var(--text-ui);
     user-select: none;
     text-align: start;
   }
@@ -361,9 +360,7 @@ keys into requests to a `ListboxNavigation`, which this list shares for the poin
     display: block;
     padding: var(--space-3);
     color: var(--color-text-muted);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-compact);
-    font-family: var(--font-family-interface);
+    font: var(--text-ui);
   }
 
   @media (forced-colors: active) {

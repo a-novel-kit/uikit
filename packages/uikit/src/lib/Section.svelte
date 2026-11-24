@@ -28,29 +28,32 @@ card titles on that card. Renders a `section` its heading names.
     description?: Content;
     /** Controls beside the heading, such as an action on the whole group. */
     actions?: Snippet;
-    /** Semantic level of the heading, which also steps its size down; defaults to 2. */
+    /**
+     * Semantic level of the heading, which also sets its style. Defaults to one level under the section that
+     * holds this one, and to 2 at the top, so a caller counts no level.
+     */
     headingLevel?: 2 | 3 | 4;
   }
+
+  const enclosingLevel = Symbol("enclosing section level");
 </script>
 
 <script lang="ts">
   import PanelHeader from "./PanelHeader.svelte";
 
-  let {
-    title,
-    description,
-    actions,
-    headingLevel = 2,
-    class: className = "",
-    children,
-    ...rest
-  }: SectionProps = $props();
+  import { getContext, setContext } from "svelte";
+
+  let { title, description, actions, headingLevel, class: className = "", children, ...rest }: SectionProps = $props();
 
   const titleId = $props.id();
+  const enclosing = getContext<(() => number) | undefined>(enclosingLevel);
+  const level = $derived(headingLevel ?? (Math.min((enclosing?.() ?? 1) + 1, 4) as 2 | 3 | 4));
+
+  setContext(enclosingLevel, () => level);
 </script>
 
 <section class="section {className}" aria-labelledby={titleId} {...rest}>
-  <PanelHeader {title} {description} {actions} {headingLevel} {titleId} />
+  <PanelHeader {title} {description} {actions} headingLevel={level} {titleId} />
   {@render children?.()}
 </section>
 

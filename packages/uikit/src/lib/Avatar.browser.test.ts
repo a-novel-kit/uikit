@@ -10,8 +10,8 @@ import { render } from "@testing-library/svelte";
 
 describe("Avatar sizes", () => {
   it.each([
-    { width: 320, diameter: 64, fontSize: 20.25 },
-    { width: 1280, diameter: 96, fontSize: 22.78 },
+    { width: 320, diameter: 64, fontSize: 20 },
+    { width: 1280, diameter: 96, fontSize: 23 },
   ])("sizes a profile picture $diameter px wide at $width px", async ({ width, diameter, fontSize }) => {
     await page.viewport(width, 800);
     const { getByRole } = render(Avatar, { label: "Ada Lovelace", size: "xl" });

@@ -10,16 +10,15 @@ export const spacingTokens = [
   "--space-2",
   "--space-3",
   "--space-4",
-  "--space-5",
   "--space-6",
   "--space-8",
+  "--space-12",
 ];
 
-export const radiusTokens = ["--radius-none", "--radius-sm", "--radius-md", "--radius-lg", "--radius-xl"];
+export const radiusTokens = ["--radius-sm", "--radius-md", "--radius-lg", "--radius-xl"];
 
 export const ratios = [
   { token: "--ratio-density", label: "Density", use: "Type and compact details" },
-  { token: "--ratio-hierarchy", label: "Hierarchy", use: "Local component emphasis" },
   { token: "--ratio-emphasis", label: "Emphasis", use: "Strong local contrast" },
   { token: "--ratio-major", label: "Major", use: "Page and split hierarchy" },
 ];
@@ -30,34 +29,35 @@ Use public spacing, radius, control, border, focus, and motion tokens in compone
 
 ## Spacing
 
-The spacing scale starts at `--space-base`, 3 pixels, and exposes named steps. Space inside and between
-elements repeats a few of them: 3, 6, 9, 12, 18 and 24 pixels (`--space-{1,2,3,4,6,8}`), with 36 and 48
-(`--space-{12,16}`) for page layout. The in-between `--space-1-5` only separates chips and tags. Sizes keep
-a 4-pixel grid on the `--size-{N}` steps: control heights, icons, badges, marks, surface widths, and the
-reach of shadows and glows.
+The spacing scale starts at `--space-base`, 3 pixels. Each step sets one relationship: pick the
+relationship, never the pixels. A component that owns a relationship already sets it: `Field`,
+`Section`, `Stack`, `ActionGroup`, `FormActions`, `Card`.
 
-Pick a gap by its role. A component that owns the role, such as `Stack` or `FormActions`, already
-applies it.
+| The space separates                                                                                                              | Token             | Size        |
+| -------------------------------------------------------------------------------------------------------------------------------- | ----------------- | ----------- |
+| Links of one navigation group                                                                                                    | none              | 0           |
+| Lines of one item, such as a name and its details; a list's edge and its options                                                 | `--space-1`       | 3 px        |
+| Chips or tags side by side, nothing else                                                                                         | `--space-1-5`     | 5 px        |
+| Parts of one thing: an icon and its label, a label and its field, a field and its note, a title and its description              | `--space-2`       | 6 px        |
+| Things that work as one unit: buttons in a group, a mark and its text block, islands side by side; a control's edge and its text | `--space-3`       | 9 px        |
+| Siblings: fields, list rows, a heading and its content; a compact island's edge and its content                                  | `--space-4`       | 12 px       |
+| A card's or a dialog's edge and its content, a dialog's parts, a page's top                                                      | `--space-6`       | 18 px       |
+| Groups: sections of a page, a form's actions under its last field, a rail's top and bottom groups                                | `--space-8`       | 24 px       |
+| A page's foot                                                                                                                    | `--space-12`      | 36 px       |
+| A page's sides                                                                                                                   | `--layout-gutter` | 12 to 24 px |
 
-| Role                                              | Token                                           | Size               |
-| ------------------------------------------------- | ----------------------------------------------- | ------------------ |
-| Links of one navigation group                     | none, as `NavList` sets                         | 0 px               |
-| Lines of one item, such as a name and its details | `--space-1`                                     | 3 px               |
-| Icon and its label, compact inline items          | `--space-2`                                     | 6 px               |
-| Navigation groups, either side of a `Separator`   | `--space-2`                                     | 6 px               |
-| Buttons in a group                                | `--space-3`, as `ActionGroup` sets              | 9 px               |
-| A heading and the content it names                | `--space-3`                                     | 9 px               |
-| Islands side by side                              | `--layout-island-gap`                           | 9 px               |
-| Fields, list rows and stacked items               | `--space-4`, as `Stack` sets by default         | 12 px              |
-| Inside an island                                  | three quarters of the radius, as `Card` sets    | 18 px, 9 px nested |
-| Sections of a page or a dialog                    | `--space-6`                                     | 18 px              |
-| A form's actions, below its last field            | `--space-8`, as `FormActions` sets in a `Stack` | 24 px              |
-| A navigation rail's top and bottom groups         | `--space-8`, so they never run together         | 24 px              |
-| A page's top and bottom                           | `--space-6` and `--space-12`                    | 18, 36 px          |
-| A page's sides                                    | `--layout-gutter`                               | 12 to 24 px        |
-| Chips and tags side by side                       | `--space-1-5`                                   | 4.5 px             |
+Sizes keep a 4-pixel grid on the `--size-{N}` steps: control heights, icons, badges, marks, and the reach of
+shadows and glows. A size never takes a `--space-*` token, and a space never takes a size.
 
-A value outside this table is an exception: it sits beside a comment naming its reason.
+A value no row holds is an exception. It carries an `/* off-scale: <reason> */` comment directly above
+its declaration, and the token contract check lists every one:
+
+```sh
+uikit-token-contract --list-exceptions src
+```
+
+The check also fails on a token nothing defines, on a property that reads outside its family, and on a raw
+length, duration or color where a scale exists. Run it in an application's lint.
 
 <div className="metric-stack">
   {spacingTokens.map((token) => (
@@ -74,18 +74,23 @@ A value outside this table is an exception: it sits beside a comment naming its 
 
 Widths come from the layout tokens, never from a hand-picked size.
 
-| Token                            | Use                                                      | Size      |
-| -------------------------------- | -------------------------------------------------------- | --------- |
-| `--layout-container-xs`          | Compact dialogs, `Dialog size="sm"`                      | 26.67 rem |
-| `--layout-container-sm`          | Forms, settings pages and dialogs, `Container size="sm"` | 40 rem    |
-| `--layout-container-md`          | Wider pages, `Container size="md"`                       | 64 rem    |
-| `--layout-container-lg`          | Full application pages, `Container`'s default            | 80 rem    |
-| `--layout-readable-measure`      | Running text, `Container size="readable"` and `Prose`    | 68 ch     |
-| `--layout-readable-measure-long` | A short block in a card, such as a project's premise     | 80 ch     |
-| `--layout-sidebar`               | A navigation rail or a split pane's side                 | 15.28 rem |
+| Token                             | Use                                                                           | Size               |
+| --------------------------------- | ----------------------------------------------------------------------------- | ------------------ |
+| `--layout-container-xs`           | Compact dialogs, `Dialog size="sm"`                                           | 26.67 rem          |
+| `--layout-container-sm`           | Forms, settings pages and dialogs, `Container size="sm"`                      | 40 rem             |
+| `--layout-container-md`           | Wider pages, `Container size="md"`                                            | 64 rem             |
+| `--layout-container-lg`           | Full application pages, `Container`'s default                                 | 80 rem             |
+| `--layout-readable-measure`       | Running text, `Container size="readable"` and `Prose`                         | 68 ch              |
+| `--layout-readable-measure-long`  | A short block in a card, such as a project's premise                          | 80 ch              |
+| `--layout-sidebar`                | A navigation rail or a split pane's side                                      | 15.28 rem          |
+| `--layout-floating-{sm,md,lg,xl}` | A floating surface: a menu's least width, a tooltip's most, a toast, a banner | 12, 16, 20, 32 rem |
 
 Every page fills the viewport's height with `100dvb`, and the root keeps `min-inline-size: 20rem`:
 WCAG 1.4.10 reflows content down to 320 CSS pixels, and a narrower window scrolls instead.
+
+A viewport breakpoint is one of two widths, which a media query cannot read from a token: 35rem, where an
+action group stops stacking, and 48rem, where a page stops being a phone's. A container query follows its
+own content.
 
 ## Proportion
 
@@ -107,7 +112,7 @@ Use smaller ratios for dense interface details and reserve the major ratio for p
 ## Surfaces
 
 Group related content with spacing first. Use a borderless island when a region needs its own visual
-plane. `--shadow-{sm,md,lg}` give an island a hairline ring and a soft shadow; its face stays flat.
+plane. `--shadow-{md,lg}` give an island a hairline ring and a soft shadow; its face stays flat.
 `--shadow-floating` reaches every side, for a surface that floats over other islands. A
 well, such as a field, darkens the surface it sits on, so it keeps that surface's tone. A field inside an
 island, such as a card, a dialog or a fieldset, needs no border: only focus and errors outline it. A field
@@ -151,15 +156,20 @@ shape's radius plus the space between them.
 
 ## Control and interaction metrics
 
-| Contract       | Tokens                                                  |
-| -------------- | ------------------------------------------------------- |
-| Control height | `--control-height-{sm,md,lg}`, one step taller on touch |
-| Icon size      | `--icon-size-{sm,md,lg}`: 16, 20 and 24 pixels          |
-| Nested control | `--control-height-nested`, inside a medium field        |
-| Border         | `--border-width-thin`                                   |
-| Focus          | `--focus-ring-{width,offset}` and `--color-focus-ring`  |
-| Motion         | `--duration-{fast,normal}` and `--easing-standard`      |
-| Disabled state | `--opacity-disabled`                                    |
+| Contract       | Tokens                                                                                                                                                      |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Control height | `--control-height-{sm,md,lg}`, one step taller on touch                                                                                                     |
+| Icon size      | `--icon-size-{sm,md,lg}`: 16, 20 and 24 pixels                                                                                                              |
+| Nested control | `--control-height-nested`, inside a medium field                                                                                                            |
+| Border         | `--border-width-thin`                                                                                                                                       |
+| Focus          | `--focus-ring-{width,offset}` and `--color-focus-ring`                                                                                                      |
+| Motion         | `--motion-state` for a control changing state, `--motion-surface` for a surface that enters, leaves or resizes, `--motion-mark` for a mark landing in place |
+| Disabled state | `--opacity-disabled`                                                                                                                                        |
+
+A control's size follows its place. Medium is the default and takes no prop: a field, and the actions of a
+form, a dialog or a toolbar. Small is an action inside a row or beside a title, a tab or an option. Large is
+a page's only action, on a page built around it. An icon is 16 pixels inside a control, beside interface text
+or in a message's mark, 20 beside content, and 24 when it stands alone as the icon of a state.
 
 The [Button](?path=/docs/components-button--documentation) stories show these tokens on an interactive
 control.

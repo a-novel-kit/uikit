@@ -29,8 +29,10 @@ Presents an empty result with an h2 heading and optional guidance or recovery ac
 
 <div class="empty {className}" {...rest}>
   {#if illustration}<div class="illustration" aria-hidden="true">{@render illustration()}</div>{/if}
-  <h2><RenderContent content={title} /></h2>
-  {#if description}<p><RenderContent content={description} /></p>{/if}
+  <div class="copy">
+    <h2><RenderContent content={title} /></h2>
+    {#if description}<p><RenderContent content={description} /></p>{/if}
+  </div>
   {#if actions}<div class="actions">{@render actions()}</div>{/if}
 </div>
 
@@ -38,7 +40,7 @@ Presents an empty result with an h2 heading and optional guidance or recovery ac
   .empty {
     display: grid;
     justify-items: center;
-    gap: var(--space-3);
+    gap: var(--space-4);
     padding: var(--space-12) var(--layout-gutter);
     text-align: center;
   }
@@ -46,24 +48,27 @@ Presents an empty result with an h2 heading and optional guidance or recovery ac
   .illustration {
     color: var(--color-graphic-brand);
   }
+  .copy {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-2);
+    min-inline-size: 0;
+  }
   h2 {
     margin: 0;
     color: var(--color-text-primary);
-    font-size: var(--font-size-2xl);
-    line-height: var(--line-height-compact);
-    font-family: var(--font-family-display);
+    font: var(--text-title);
   }
   p {
     margin: 0;
     max-inline-size: var(--layout-readable-measure);
-    color: var(--color-text-muted);
-    line-height: var(--line-height-normal);
+    color: var(--color-text-secondary);
+    font: var(--text-body);
   }
   .actions {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: var(--space-2);
-    margin-block-start: var(--space-2);
+    gap: var(--space-3);
   }
 </style>

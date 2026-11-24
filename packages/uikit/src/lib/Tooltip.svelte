@@ -158,12 +158,10 @@ Spread all trigger attributes onto that element; an open controller owns visibil
       border-radius: var(--radius-md);
       background: var(--color-surface-glass);
       padding: var(--space-2) var(--space-3);
-      max-inline-size: calc(var(--size-base) * 64);
+      max-inline-size: var(--layout-floating-md);
       pointer-events: none;
       color: var(--color-text-primary);
-      font-size: var(--font-size-xs);
-      line-height: var(--line-height-compact);
-      font-family: var(--font-family-interface);
+      font: var(--text-meta);
     }
     .a-novel-tooltip.top {
       position-area: block-start span-inline-end;

@@ -58,6 +58,7 @@ other tones use status. Override `role` for static content.
     justify-items: center;
     gap: var(--space-4);
     min-inline-size: 0;
+    /* off-scale: an even height, so what the page centers stays on whole pixels */
     block-size: calc-size(auto, round(up, size, 2px));
     text-align: center;
     overflow-wrap: anywhere;
@@ -75,20 +76,17 @@ other tones use status. Override `role` for static content.
   }
   .title {
     color: var(--color-text-primary);
-    font-weight: var(--font-weight-bold);
-    font-size: var(--font-size-lg);
-    line-height: var(--line-height-compact);
+    font: var(--text-title);
   }
   p {
     color: var(--color-text-secondary);
-    line-height: var(--line-height-normal);
+    font: var(--text-body);
   }
   .actions {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: var(--space-2);
-    margin-block-start: var(--space-1);
+    gap: var(--space-3);
     max-inline-size: 100%;
   }
 </style>

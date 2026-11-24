@@ -1,4 +1,5 @@
 /// <reference types="vite/client" />
+import { contrast, luminance, painted, resolveColor } from "../../test/style";
 import Badge from "./Badge.svelte";
 
 import { createRawSnippet } from "svelte";
@@ -21,8 +22,7 @@ describe("Badge reflow", () => {
     const css = getComputedStyle(badge);
     expect(css.textTransform).toBe("none");
     expect(css.letterSpacing).toBe("normal");
-    expect(parseFloat(css.fontSize)).toBeGreaterThanOrEqual(12);
-    expect(parseFloat(css.fontSize)).toBeLessThan(13);
+    expect(parseFloat(css.fontSize)).toBe(13);
     // One 16px line between 2px paddings.
     expect(badge.getBoundingClientRect().height).toBe(20);
     expect(badge.getBoundingClientRect().width).toBeCloseTo(content.getBoundingClientRect().width + 12);
@@ -79,7 +79,7 @@ describe("Badge surfaces", () => {
       });
       const badge = getByText("Status").parentElement!;
       const background = getComputedStyle(badge).backgroundColor;
-      for (const surface of ["canvas", "raised", "overlay"]) {
+      for (const surface of ["canvas", "island-glass", "island-strong"]) {
         container.style.backgroundColor = `var(--color-surface-${surface})`;
         expect(getComputedStyle(badge).backgroundColor).toBe(background);
         expect(background).not.toBe(getComputedStyle(container).backgroundColor);
@@ -88,43 +88,48 @@ describe("Badge surfaces", () => {
   );
 });
 
-/** Paints a CSS color on a canvas and reads the sRGB the browser shows, gamut mapping included. */
-function painted(color: string) {
-  const context = document.createElement("canvas").getContext("2d")!;
-  context.fillStyle = color;
-  context.fillRect(0, 0, 1, 1);
-  return [...context.getImageData(0, 0, 1, 1).data.slice(0, 3)];
-}
-
-/** WCAG 2 relative luminance of a painted sRGB color. */
-function luminance(channels: number[]) {
-  return channels
-    .map((channel) => channel / 255)
-    .map((channel) => (channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4))
-    .reduce((sum, channel, index) => sum + channel * [0.2126, 0.7152, 0.0722][index], 0);
-}
-
-/** WCAG 2 contrast ratio of two painted sRGB colors. */
-function contrast(first: number[], second: number[]) {
-  const [light, dark] = [luminance(first), luminance(second)].sort((a, b) => b - a);
-  return (light + 0.05) / (dark + 0.05);
-}
-
 describe("Badge fill", () => {
   const tones = ["neutral", "brand", "accent", "highlight", "success", "warning", "danger"] as const;
 
-  it.each(tones)("keeps its text readable on the %s fill", (tone) => {
+  // A neutral badge fills with a veil, so each fill is painted over what holds it.
+  it.each(tones)("keeps its text readable on the %s fill, on every surface", (tone) => {
     const { getByText } = render(Badge, {
       tone,
       children: createRawSnippet(() => ({ render: () => "<span>Label</span>" })),
     });
     const css = getComputedStyle(getByText("Label").parentElement!);
-    expect(contrast(painted(css.backgroundColor), painted(css.color))).toBeGreaterThanOrEqual(4.5);
+    const canvas = resolveColor("var(--color-surface-canvas)");
+    const backdrops = [
+      [canvas],
+      [canvas, resolveColor("var(--color-surface-island-glass)")],
+      [resolveColor("var(--color-surface-island-strong)")],
+    ];
+    for (const backdrop of backdrops) {
+      const fill = painted(...backdrop, css.backgroundColor);
+      expect(contrast(fill, painted(...backdrop, css.backgroundColor, css.color))).toBeGreaterThanOrEqual(4.5);
+    }
+  });
+
+  it.each([
+    ["brand", "brand"],
+    ["accent", "pressure"],
+    ["warning", "pressure"],
+    ["danger", "pressure"],
+    ["highlight", "signal"],
+    ["success", "signal"],
+  ] as const)("writes the %s tone in the %s ink on its tint", (tone, hue) => {
+    const { getByText } = render(Badge, {
+      tone,
+      children: createRawSnippet(() => ({ render: () => "<span>Label</span>" })),
+    });
+    const css = getComputedStyle(getByText("Label").parentElement!);
+    expect(css.color).toBe(resolveColor(`var(--color-ink-${hue})`));
+    expect(css.backgroundColor).toBe(resolveColor(`var(--color-tint-${hue})`));
   });
 
   // The genre and tag tones glared as solid accents: their fill is a deep shade of the same hue, near the canvas.
   it.each([
-    ["accent", "--color-accent-secondary"],
+    ["accent", "--color-feedback-warning-text"],
     ["brand", "--color-feedback-info-text"],
   ] as const)("fills the %s tone deeper than its accent", (tone, accent) => {
     const { getByText } = render(Badge, {

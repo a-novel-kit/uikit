@@ -54,13 +54,15 @@ The default range is 0–100; the caller owns persistence and value validation.
     <span>{label}</span>
     {#if showValue}<output>{controller.state.value}</output>{/if}
   </span>
+  <!-- The value comes last: set before its range and step, a browser rounds it to the default ones, and the thumb
+       leaves the fill. -->
   <input
-    value={controller.state.value}
     type="range"
     {min}
     {max}
     oninput={handleInput}
     {...rest}
+    value={controller.state.value}
     style:--slider-progress={`${progress}%`}
   />
 </label>
@@ -75,17 +77,18 @@ The default range is 0–100; the caller owns persistence and value validation.
     display: flex;
     justify-content: space-between;
     gap: var(--space-4);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-compact);
+    font: var(--text-ui);
   }
 
   output {
     color: var(--color-text-muted);
-    font-family: var(--font-family-mono);
+    font: var(--text-code);
   }
   input {
-    --slider-fill: var(--color-action-primary);
-    --slider-track: var(--color-control-surface-hover);
+    --slider-fill: var(--color-control-on);
+    /* An empty track is one veil over what holds it, as a progress bar's and a meter's, so it shows on every
+       surface. An opaque island tone vanished on that island. */
+    --slider-track: var(--color-action-neutral);
 
     appearance: none;
     cursor: pointer;
@@ -96,19 +99,15 @@ The default range is 0–100; the caller owns persistence and value validation.
     block-size: var(--control-height-md);
   }
 
+  /* The pointer, a press and the keyboard's focus lift the fill. */
   @media (hover: hover) {
-    input:hover:not(:disabled, :focus-visible) {
-      --slider-fill: var(--color-action-primary-hover);
+    input:hover:not(:disabled) {
+      --slider-fill: var(--color-control-on-hover);
     }
   }
 
-  input:active:not(:disabled, :focus-visible) {
-    --slider-fill: var(--color-action-primary-selected);
-  }
-
-  input:focus-visible {
-    --slider-fill: var(--color-action-primary-hover);
-    --slider-track: var(--color-control-surface-focus);
+  input:is(:active, :focus-visible):not(:disabled) {
+    --slider-fill: var(--color-control-on-hover);
   }
 
   input::-webkit-slider-runnable-track {
@@ -124,9 +123,10 @@ The default range is 0–100; the caller owns persistence and value validation.
   input::-webkit-slider-thumb {
     appearance: none;
     transition:
-      background-color var(--duration-fast) var(--easing-standard),
-      border-color var(--duration-fast) var(--easing-standard),
-      box-shadow var(--duration-fast) var(--easing-standard);
+      background-color var(--motion-state),
+      border-color var(--motion-state),
+      box-shadow var(--motion-state);
+    /* off-scale: half the thumb's height past the track's, which centers it on the track */
     margin-block-start: calc(var(--size-2) * -1);
     border: var(--border-width-thin) solid var(--color-control-border-focus);
     border-radius: var(--radius-round);
@@ -149,9 +149,9 @@ The default range is 0–100; the caller owns persistence and value validation.
 
   input::-moz-range-thumb {
     transition:
-      background-color var(--duration-fast) var(--easing-standard),
-      border-color var(--duration-fast) var(--easing-standard),
-      box-shadow var(--duration-fast) var(--easing-standard);
+      background-color var(--motion-state),
+      border-color var(--motion-state),
+      box-shadow var(--motion-state);
     box-sizing: border-box;
     border: var(--border-width-thin) solid var(--color-control-border-focus);
     border-radius: var(--radius-round);

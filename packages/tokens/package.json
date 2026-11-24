@@ -20,18 +20,23 @@
     },
     "./tokens.css": "./tokens.css"
   },
+  "bin": {
+    "uikit-token-contract": "./scripts/check-token-contract.mjs"
+  },
   "files": [
     "canvas.css",
     "colors.css",
     "palette.d.ts",
     "palette.js",
+    "scripts/check-token-contract.mjs",
     "tokens.css",
     "README.md",
     "LICENSE"
   ],
   "scripts": {
     "build": "pnpm generate:colors",
-    "check:colors": "node scripts/generate-colors.mjs --check && node scripts/check-color-contract.mjs",
+    "check:colors": "node scripts/generate-colors.mjs --check",
+    "check:tokens": "node scripts/check-token-contract.mjs --docs .. ../uikit/src/lib",
     "generate:colors": "node scripts/generate-colors.mjs"
   },
   "devDependencies": {

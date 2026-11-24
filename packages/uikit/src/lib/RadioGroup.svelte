@@ -105,10 +105,9 @@ Use `createValueController` with a selected option value or `undefined`.
 
   legend {
     margin-block-end: var(--space-2);
+    padding: 0;
     color: var(--color-text-secondary);
-    font-weight: var(--font-weight-bold);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-compact);
+    font: var(--text-ui-strong);
   }
 
   .options {
@@ -135,9 +134,9 @@ Use `createValueController` with a selected option value or `undefined`.
     place-content: center;
     appearance: none;
     transition:
-      background-color var(--duration-fast) var(--easing-standard),
-      border-color var(--duration-fast) var(--easing-standard),
-      box-shadow var(--duration-fast) var(--easing-standard);
+      background-color var(--motion-state),
+      border-color var(--motion-state),
+      box-shadow var(--motion-state);
     cursor: inherit;
     margin: 0;
     outline: none;
@@ -147,12 +146,12 @@ Use `createValueController` with a selected option value or `undefined`.
     padding: 0;
     inline-size: var(--icon-size-md);
     block-size: var(--icon-size-md);
-    color: var(--color-action-primary-text);
+    color: var(--color-control-on-mark);
   }
 
   input::before {
     transform: scale(0);
-    transition: transform var(--duration-fast) var(--easing-emphasized);
+    transition: transform var(--motion-mark);
     border-radius: var(--radius-round);
     background: currentColor;
     inline-size: var(--size-2);
@@ -169,8 +168,8 @@ Use `createValueController` with a selected option value or `undefined`.
 
   input:checked {
     box-shadow: var(--shadow-action-selected);
-    border-color: var(--color-action-primary-selected);
-    background: var(--color-action-primary);
+    border-color: var(--color-control-on);
+    background: var(--color-control-on);
   }
 
   input:checked::before {
@@ -185,7 +184,7 @@ Use `createValueController` with a selected option value or `undefined`.
   }
 
   input:focus-visible:checked {
-    background: var(--color-action-primary);
+    background: var(--color-control-on);
   }
 
   @media (forced-colors: active) {

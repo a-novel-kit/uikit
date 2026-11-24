@@ -37,15 +37,50 @@ Use Progress for task completion.
     display: flex;
     justify-content: space-between;
     gap: var(--space-4);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-compact);
+    font: var(--text-ui);
   }
+  /* A browser draws a meter as a light bar in its own greens and reds. The track and its fill are drawn here
+     instead, as a progress bar's: the fill is blue in its best range, amber next to it and magenta at its worst. */
   meter {
+    appearance: none;
     border: 0;
     border-radius: var(--radius-xl);
-    background: var(--color-surface-overlay);
+    /* An empty track is one veil over what holds it, so it shows on every surface. */
+    background: var(--color-action-neutral);
     inline-size: 100%;
     block-size: var(--size-2);
-    accent-color: var(--color-action-primary);
+    overflow: hidden;
+  }
+
+  meter::-webkit-meter-bar {
+    border: 0;
+    border-radius: var(--radius-xl);
+    /* The element draws the track. A veil painted here too would double. */
+    background: transparent;
+    block-size: var(--size-2);
+  }
+
+  meter::-webkit-meter-optimum-value {
+    background: var(--color-control-on);
+  }
+
+  meter::-webkit-meter-suboptimum-value {
+    background: var(--color-feedback-highlight-text);
+  }
+
+  meter::-webkit-meter-even-less-good-value {
+    background: var(--color-feedback-error-text);
+  }
+
+  meter::-moz-meter-bar {
+    background: var(--color-control-on);
+  }
+
+  meter:-moz-meter-sub-optimum::-moz-meter-bar {
+    background: var(--color-feedback-highlight-text);
+  }
+
+  meter:-moz-meter-sub-sub-optimum::-moz-meter-bar {
+    background: var(--color-feedback-error-text);
   }
 </style>

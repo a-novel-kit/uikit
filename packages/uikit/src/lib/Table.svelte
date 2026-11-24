@@ -57,15 +57,13 @@ Wraps a native table in a keyboard-scrollable region. Supply semantic table sect
     border-collapse: collapse;
     inline-size: 100%;
     color: var(--color-text-primary);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-compact);
-    font-family: var(--font-family-interface);
+    font: var(--text-ui);
   }
 
   caption {
     padding: var(--space-3) var(--space-4);
     color: var(--color-text-secondary);
-    font-weight: var(--font-weight-bold);
+    font: var(--text-ui-strong);
     text-align: start;
   }
 
@@ -80,11 +78,11 @@ Wraps a native table in a keyboard-scrollable region. Supply semantic table sect
 
   table :global(th) {
     color: var(--color-text-secondary);
-    font-weight: var(--font-weight-bold);
+    font: var(--text-ui-strong);
   }
   @media (hover: hover) {
     table :global(tbody tr:hover) {
-      background: var(--color-surface-hover);
+      background: var(--color-surface-glass-hover);
     }
   }
   .compact {

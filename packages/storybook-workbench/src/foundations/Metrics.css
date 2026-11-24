@@ -16,13 +16,13 @@
   align-items: center;
   border-radius: var(--radius-sm);
   background: var(--color-surface-island-subtle);
-  block-size: var(--space-6);
+  block-size: var(--size-5);
   overflow: hidden;
 }
 
 .spacing-swatch {
   display: block;
-  background: var(--color-action-primary);
+  background: var(--color-ink-brand);
   inline-size: var(--metric-size);
   block-size: 100%;
 }
@@ -63,16 +63,16 @@
 .ratio-card span,
 .surface-demo span {
   color: var(--color-text-muted);
-  line-height: var(--line-height-normal);
+  font: var(--text-body);
 }
 
 .ratio-card i {
   display: block;
   border-radius: var(--radius-sm);
-  background: var(--color-action-primary);
-  inline-size: calc(var(--space-16) * var(--metric-ratio));
+  background: var(--color-ink-brand);
+  inline-size: calc(var(--size-12) * var(--metric-ratio));
   max-inline-size: 100%;
-  block-size: var(--space-2);
+  block-size: var(--size-1-5);
 }
 
 .surface-group {
@@ -84,7 +84,7 @@
 }
 
 .surface-island--strong {
-  box-shadow: var(--shadow-island);
+  box-shadow: var(--shadow-md);
   background: var(--color-surface-island-strong);
 }
 
@@ -99,7 +99,7 @@
   display: grid;
   place-items: center;
   border-radius: var(--metric-radius);
-  background: var(--color-surface-island);
+  background: var(--color-action-neutral);
   padding: var(--space-4);
-  min-block-size: calc(var(--space-8) * 2);
+  min-block-size: var(--size-12);
 }

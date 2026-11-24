@@ -786,13 +786,13 @@
   .raised-surface {
     border: var(--border-width-thin) solid var(--color-border-divider);
     border-radius: var(--radius-md);
-    background: var(--color-surface-raised);
-    padding: var(--space-5);
+    background: var(--color-surface-island-glass);
+    padding: var(--space-4);
     inline-size: min(100%, var(--layout-container-sm));
   }
   .surfaces {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, calc(var(--space-base) * 64)), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, calc(var(--size-24) * 2)), 1fr));
     align-items: start;
     gap: var(--space-6);
     inline-size: 100%;
@@ -813,7 +813,7 @@
     inline-size: auto;
   }
   .narrow {
-    inline-size: min(100%, calc(var(--space-base) * 80));
+    inline-size: min(100%, calc(var(--size-20) * 3));
   }
   .over-content {
     display: grid;
@@ -830,7 +830,7 @@
   }
   .adornment-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, calc(var(--space-base) * 64)), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, calc(var(--size-24) * 2)), 1fr));
     align-items: start;
     gap: var(--space-6);
     inline-size: 100%;
@@ -850,7 +850,7 @@
   :global(kbd) {
     border: var(--border-width-thin) solid var(--color-border-default);
     border-radius: var(--radius-sm);
-    background: var(--color-surface-raised);
+    background: var(--color-action-neutral);
     padding: var(--space-1) var(--space-2);
     color: var(--color-text-secondary);
     font-size: var(--font-size-xs);
@@ -867,8 +867,8 @@
   .preview {
     display: block;
     border-radius: var(--radius-sm);
-    background: var(--gradient-action-primary);
-    inline-size: var(--space-24);
-    block-size: var(--space-16);
+    background: var(--color-ink-brand);
+    inline-size: calc(var(--size-12) * 1.5);
+    block-size: var(--size-12);
   }
 </style>

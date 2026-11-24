@@ -21,11 +21,10 @@ control is a `Button` with `href`.
 <style>
   .link {
     transition:
-      color var(--duration-fast) var(--easing-standard),
-      background-color var(--duration-fast) var(--easing-standard);
+      color var(--motion-state),
+      background-color var(--motion-state);
     border-radius: var(--radius-sm);
     color: var(--color-text-link);
-    font-family: inherit;
     text-decoration-thickness: var(--border-width-thin);
     text-underline-offset: var(--space-1);
   }

@@ -89,6 +89,6 @@
     line-height: var(--line-height-compact);
   }
   p {
-    line-height: var(--line-height-normal);
+    font: var(--text-body);
   }
 </style>

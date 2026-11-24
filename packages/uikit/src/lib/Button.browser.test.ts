@@ -130,6 +130,27 @@ describe("low-emphasis action feedback", () => {
   });
 });
 
+describe("a solid colored button", () => {
+  it.each([
+    ["brand", "primary"],
+    ["danger", "danger"],
+  ] as const)(
+    "writes a %s action in its hue's ink on its tint, and lifts both under the pointer",
+    async (tone, role) => {
+      const { getByRole } = render(Button, { tone, "aria-label": "Save" });
+      const button = getByRole("button");
+      const rest = await settledStyle(button);
+      expect(rest.backgroundColor).toBe(resolveColor(`var(--color-action-${role})`));
+      expect(rest.color).toBe(resolveColor(`var(--color-action-${role}-foreground)`));
+
+      await userEvent.hover(button);
+      const hovered = await settledStyle(button);
+      expect(hovered.backgroundColor).toBe(resolveColor(`var(--color-action-${role}-hover)`));
+      expect(hovered.color).toBe(resolveColor(`var(--color-action-${role}-foreground-hover)`));
+    }
+  );
+});
+
 describe("an outline button whose popup shows", () => {
   it("keeps its hover look without the pointer, as an open menu's trigger", async () => {
     const { getByRole } = render(Button, { variant: "outline", tone: "neutral", "aria-expanded": true });

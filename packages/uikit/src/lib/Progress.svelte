@@ -38,26 +38,27 @@ Shows labeled task progress against `max` (100 by default). Omit `value` for ind
     display: flex;
     justify-content: space-between;
     gap: var(--space-4);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-compact);
+    font: var(--text-ui);
   }
   progress {
     border: 0;
     border-radius: var(--radius-xl);
-    background: var(--color-surface-overlay);
+    /* An empty track is one veil over what holds it, so it shows on every surface. */
+    background: var(--color-action-neutral);
     inline-size: 100%;
     block-size: var(--size-2);
     overflow: hidden;
-    accent-color: var(--color-action-primary);
+    accent-color: var(--color-control-on);
   }
 
+  /* The element draws the track. A veil painted here too would double. */
   progress::-webkit-progress-bar {
-    background: var(--color-surface-overlay);
+    background: transparent;
   }
   progress::-webkit-progress-value {
-    background: var(--color-action-primary);
+    background: var(--color-control-on);
   }
   progress::-moz-progress-bar {
-    background: var(--color-action-primary);
+    background: var(--color-control-on);
   }
 </style>

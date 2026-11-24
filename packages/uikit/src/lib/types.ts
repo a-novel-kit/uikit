@@ -8,7 +8,7 @@ export type FeedbackTone = "info" | "highlight" | "success" | "warning" | "error
 export type FeedbackState = FeedbackTone | "loading";
 
 /** Spacing steps supported by the layout primitives. */
-export type LayoutGap = "0" | "1" | "2" | "3" | "4" | "6" | "8" | "12" | "16";
+export type LayoutGap = "0" | "1" | "2" | "3" | "4" | "6" | "8" | "12";
 
 /** A labeled value accepted by single-choice controls. */
 export interface SelectionOption<Value extends string> {
