@@ -107,7 +107,6 @@
 }
 
 .action-state--selected {
-  box-shadow: var(--shadow-action-selected);
   background: var(--color-action-primary-selected);
   color: var(--color-action-primary-foreground-hover);
 }
@@ -143,6 +142,26 @@
 .pair--neutral {
   background: var(--color-action-neutral);
   color: var(--color-text-secondary);
+}
+
+.pair--brand.pair--lit {
+  background: var(--color-tint-brand-lit);
+  color: var(--color-ink-brand-lit);
+}
+
+.pair--pressure.pair--lit {
+  background: var(--color-tint-pressure-lit);
+  color: var(--color-ink-pressure-lit);
+}
+
+.pair--signal.pair--lit {
+  background: var(--color-tint-signal-lit);
+  color: var(--color-ink-signal-lit);
+}
+
+.pair--neutral.pair--lit {
+  background: var(--color-action-neutral-hover);
+  color: var(--color-text-primary);
 }
 
 .action-state--disabled {

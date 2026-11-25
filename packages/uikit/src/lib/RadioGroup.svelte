@@ -167,7 +167,6 @@ Use `createValueController` with a selected option value or `undefined`.
   }
 
   input:checked {
-    box-shadow: var(--shadow-action-selected);
     border-color: var(--color-control-on);
     background: var(--color-control-on);
   }
@@ -195,7 +194,6 @@ Use `createValueController` with a selected option value or `undefined`.
   }
 
   input:disabled {
-    box-shadow: none;
     border-color: transparent;
     background: var(--color-action-disabled-surface);
     color: var(--color-action-disabled-text);

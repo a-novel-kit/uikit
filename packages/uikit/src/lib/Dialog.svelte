@@ -214,10 +214,23 @@ child with `autofocus` takes focus instead. Opening and closing fade the dialog 
   :global(:root:has(dialog.dialog:modal)) {
     overflow: hidden;
   }
-  /* A modal dialog blurs the whole page behind it, so a frosted page surface's own blur sits unseen there and still
-     costs every frame. Each one (a card, a sticky bar, the consent banner, a toast) carries data-frost: its blur
-     drops once the backdrop has faded in, so none shows unfrosted, and returns at once when the dialog closes. One
-     inside a dialog keeps it, and a ghost card lit by the pointer still fades as it dims. */
+  /* A modal dialog blurs the page behind it, and the page itself takes that blur, through a filter on the root: the
+     backdrop only dims. A backdrop-filter is recomputed over the whole screen for every frame drawn above it, a
+     keystroke in the dialog included, where a filtered page is blurred once and then only composited: without a GPU,
+     at 1080p, a dialog holds 60 frames a second against 27. The top layer, where a dialog lives, lies outside the
+     root's filter, and a root's filter leaves fixed elements in place, which any other element's would unpin. The
+     blur eases in and out with the dialog, so the root keeps its transition wherever a dialog exists. A fullscreen
+     dialog covers the page, so it blurs nothing. */
+  :global(:root:has(dialog.dialog)) {
+    transition: filter var(--motion-surface);
+  }
+  :global(:root:has(dialog.dialog:modal[open]:not(.fullscreen))) {
+    filter: blur(var(--blur-sm));
+  }
+  /* Under that blur, a frosted page surface's own blur sits unseen and still costs: the root is drawn slower with
+     them. Each one (a card, a sticky bar, the consent banner, a toast) carries data-frost: its blur drops once the
+     backdrop has faded in, so none shows unfrosted, and returns at once when the dialog closes. One inside a dialog
+     keeps it, and a ghost card lit by the pointer still fades as it dims. */
   :global(:root:has(dialog.dialog:modal) [data-frost]:not(dialog *)) {
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
@@ -227,9 +240,9 @@ child with `autofocus` takes focus instead. Opening and closing fade the dialog 
       backdrop-filter 0s var(--duration-normal),
       -webkit-backdrop-filter 0s var(--duration-normal);
   }
-  /* Each frame drawn under the backdrop makes it blur the whole page again. What animates on the page, such as a
-     skeleton's shimmer, pauses while a modal dialog holds the page inert, and carries on when the dialog closes. What
-     the dialog holds keeps moving. */
+  /* Each frame drawn on the page makes the root blur it again. What animates on the page, such as a skeleton's
+     shimmer, pauses while a modal dialog holds the page inert, and carries on when the dialog closes. What the dialog
+     holds keeps moving. */
   :global(:root:has(dialog.dialog:modal) :not(dialog, dialog *)),
   :global(:root:has(dialog.dialog:modal) :not(dialog, dialog *)::before),
   :global(:root:has(dialog.dialog:modal) :not(dialog, dialog *)::after) {
@@ -239,8 +252,6 @@ child with `autofocus` takes focus instead. Opening and closing fade the dialog 
     outline: none;
   }
   .dialog::backdrop {
-    -webkit-backdrop-filter: blur(var(--blur-sm));
-    backdrop-filter: blur(var(--blur-sm));
     transition:
       opacity var(--motion-surface),
       overlay var(--duration-normal) allow-discrete,
@@ -249,11 +260,6 @@ child with `autofocus` takes focus instead. Opening and closing fade the dialog 
   }
   .dialog:not([open])::backdrop {
     opacity: 0;
-  }
-  /* A fullscreen dialog covers its backdrop, whose blur would cost every frame unseen. */
-  .fullscreen::backdrop {
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
   }
   @starting-style {
     .mounted[open] {
@@ -277,7 +283,7 @@ child with `autofocus` takes focus instead. Opening and closing fade the dialog 
     max-block-size: calc(100dvb - 2 * var(--dialog-margin));
   }
   /* The body scrolls on its own, out to the dialog's sides and bottom, so only the dialog's own edge
-     cuts a child's focus ring or the glow of an action. */
+     cuts a child's focus ring. */
   .content {
     /* What scrolls toward the footer fades out over the body's end inset, where nothing sits at rest, so a long
        form never ends on a line sliced against its actions. */

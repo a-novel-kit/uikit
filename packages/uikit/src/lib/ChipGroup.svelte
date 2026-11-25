@@ -397,7 +397,6 @@ swaps for the field once the page hydrates.
     align-items: center;
     transition:
       background-color var(--motion-state),
-      box-shadow var(--motion-state),
       color var(--motion-state);
     cursor: pointer;
     border-radius: var(--radius-sm);
@@ -436,18 +435,17 @@ swaps for the field once the page hydrates.
   }
 
   .brand {
-    --chip-fill: var(--color-tint-brand);
-    --chip-ink: var(--color-ink-brand);
+    --chip-fill: var(--color-tint-brand-lit);
+    --chip-ink: var(--color-ink-brand-lit);
   }
 
   .accent {
-    --chip-fill: var(--color-tint-pressure);
-    --chip-ink: var(--color-ink-pressure);
+    --chip-fill: var(--color-tint-pressure-lit);
+    --chip-ink: var(--color-ink-pressure-lit);
   }
 
   /* Chosen, a chip reads as the badge that shows the same choice. */
   .chip:has(:checked) {
-    box-shadow: 0 0 var(--size-3) color-mix(in oklab, var(--chip-ink) var(--color-mix-2), transparent);
     background: var(--chip-fill);
     color: var(--chip-ink);
   }
@@ -471,7 +469,6 @@ swaps for the field once the page hydrates.
   /* A chosen option that is disabled stays visible, dimmed: the form will not send it. */
   .chip:has(:checked:disabled) {
     opacity: var(--opacity-disabled);
-    box-shadow: none;
   }
 
   /* Forced colors drop the chip's fill, so a border keeps its shape, as Badge does. */
@@ -482,7 +479,6 @@ swaps for the field once the page hydrates.
 
     /* The choice fills the chip, so the outline stays free for the focus ring. */
     .chip:has(:checked) {
-      box-shadow: none;
       background: Highlight;
       color: HighlightText;
       forced-color-adjust: none;

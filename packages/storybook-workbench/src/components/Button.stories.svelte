@@ -28,9 +28,9 @@
       },
       variant: {
         control: "inline-radio",
-        options: ["solid", "outline", "ghost", "text"],
+        options: ["solid", "outline", "ghost", "text", "prominent"],
         description:
-          "Visual emphasis. Solid is primary, outline is secondary, ghost is quiet, and text reads as colored text until hovered.",
+          "Visual emphasis. Solid is primary, outline is secondary, ghost is quiet, and text reads as colored text until hovered. Prominent is a solid button that also draws its edge, for the rare action that must lead a whole view.",
       },
       tone: {
         control: "inline-radio",
@@ -93,6 +93,7 @@
     <Button variant="outline">Outline</Button>
     <Button variant="ghost">Ghost</Button>
     <Button variant="text">Text</Button>
+    <Button variant="prominent">Prominent</Button>
   </Inline>
 </Story>
 <Story name="Tones" asChild>
@@ -108,7 +109,7 @@
     docs: {
       description: {
         story:
-          "A chosen outline button keeps its tone and border. A chosen ghost or text button reads as the navigation's current item, blue whatever its tone, with no border or glow but its indicator's, as NavList's, and stays borderless while disabled. A disabled choice stays visible, dimmed.",
+          "A chosen outline button keeps its tone and border. A chosen ghost or text button reads as the navigation's current item, blue whatever its tone, with no border, over its indicator, as NavList's, and stays borderless while disabled. A disabled choice stays visible, dimmed.",
       },
     },
   }}

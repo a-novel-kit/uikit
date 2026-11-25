@@ -98,7 +98,6 @@ Provide a visible label or an accessible name.
   }
 
   input:checked {
-    box-shadow: var(--shadow-glow-brand);
     border-color: var(--color-control-on);
     background: var(--color-control-on);
   }
@@ -130,7 +129,6 @@ Provide a visible label or an accessible name.
     cursor: not-allowed;
   }
   input:disabled {
-    box-shadow: none;
     border-color: transparent;
     background: var(--color-action-disabled-surface);
   }

@@ -207,8 +207,8 @@ Every panel stays mounted; inactive panels are hidden. Initialize the controller
     }
   }
 
-  /* The tab showing reads as the navigation's current item, as a chosen ghost button does: a tinted box and a
-     glowing indicator, under the label in a row and at the start edge in a column. The list draws no line. */
+  /* The tab showing reads as the navigation's current item, as a chosen ghost button does: a tinted box and an
+     indicator, under the label in a row and at the start edge in a column. The list draws no line. */
   .a-novel-tabs-trigger[data-state="active"] {
     background: var(--color-navigation-selected-surface);
     color: var(--color-navigation-selected-text);
@@ -218,7 +218,6 @@ Every panel stays mounted; inactive panels are hidden. Initialize the controller
     position: absolute;
     inset-block: auto 0;
     inset-inline: var(--space-2);
-    box-shadow: var(--shadow-indicator-brand);
     background: var(--color-navigation-selected-indicator);
     block-size: var(--border-width-strong);
     content: "";
@@ -239,7 +238,6 @@ Every panel stays mounted; inactive panels are hidden. Initialize the controller
   /* Forced colors paint the indicator Canvas, so it keeps its line in the text color. */
   @media (forced-colors: active) {
     .a-novel-tabs-trigger[data-state="active"]::after {
-      box-shadow: none;
       background: CanvasText;
       forced-color-adjust: none;
     }

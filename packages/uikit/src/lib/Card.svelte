@@ -137,7 +137,7 @@ corners stay concentric at any depth. Other content sits a spacing step further 
     background: var(--color-surface-glass);
   }
   /* Content that reaches the edges keeps to the rounded corners. A padded card clips nothing, so the
-     glow of an action inside spills past its edge. */
+     focus ring of a control inside spills past its edge. */
   .padding-none {
     --card-inset: var(--space-0);
     --card-padding: var(--space-0);

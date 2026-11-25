@@ -144,7 +144,6 @@ URLs and the current destination are supplied by the caller.
     position: absolute;
     inset-block: var(--space-2);
     inset-inline-start: 0;
-    box-shadow: var(--shadow-indicator-brand);
     background: var(--color-navigation-selected-indicator);
     inline-size: var(--border-width-strong);
     content: "";

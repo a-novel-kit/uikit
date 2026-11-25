@@ -110,21 +110,31 @@ describe("Badge fill", () => {
     }
   });
 
+  // A label has no resting look to stand out of, so it shows as an action does under the pointer.
   it.each([
-    ["brand", "brand"],
-    ["accent", "pressure"],
-    ["warning", "pressure"],
-    ["danger", "pressure"],
-    ["highlight", "signal"],
-    ["success", "signal"],
-  ] as const)("writes the %s tone in the %s ink on its tint", (tone, hue) => {
+    ["neutral", "--color-text-primary", "--color-action-neutral-hover"],
+    ["brand", "--color-ink-brand-lit", "--color-tint-brand-lit"],
+    ["accent", "--color-ink-pressure-lit", "--color-tint-pressure-lit"],
+    ["warning", "--color-ink-pressure-lit", "--color-tint-pressure-lit"],
+    ["danger", "--color-ink-pressure-lit", "--color-tint-pressure-lit"],
+    ["highlight", "--color-ink-signal-lit", "--color-tint-signal-lit"],
+    ["success", "--color-ink-signal-lit", "--color-tint-signal-lit"],
+  ] as const)("writes the %s tone as a lit pair, %s on %s", (tone, ink, fill) => {
     const { getByText } = render(Badge, {
       tone,
       children: createRawSnippet(() => ({ render: () => "<span>Label</span>" })),
     });
     const css = getComputedStyle(getByText("Label").parentElement!);
-    expect(css.color).toBe(resolveColor(`var(--color-ink-${hue})`));
-    expect(css.backgroundColor).toBe(resolveColor(`var(--color-tint-${hue})`));
+    expect(css.color).toBe(resolveColor(`var(${ink})`));
+    expect(css.backgroundColor).toBe(resolveColor(`var(${fill})`));
+  });
+
+  it.each(["primary", "danger"] as const)("shares the lit pair with a %s action under the pointer", (action) => {
+    const hue = action === "primary" ? "brand" : "pressure";
+    expect(resolveColor(`var(--color-action-${action}-foreground-hover)`)).toBe(
+      resolveColor(`var(--color-ink-${hue}-lit)`)
+    );
+    expect(resolveColor(`var(--color-action-${action}-hover)`)).toBe(resolveColor(`var(--color-tint-${hue}-lit)`));
   });
 
   // The genre and tag tones glared as solid accents: their fill is a deep shade of the same hue, near the canvas.
