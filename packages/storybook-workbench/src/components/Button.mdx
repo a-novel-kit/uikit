@@ -22,20 +22,22 @@ appearance, or use `Link` for an inline text link.
 
 ## Variants
 
-| Variant   | Use                                                 |
-| --------- | --------------------------------------------------- |
-| `solid`   | Primary action in a region.                         |
-| `outline` | Secondary action with a visible border.             |
-| `ghost`   | Quiet or supplementary action.                      |
-| `text`    | Quiet secondary journey, or a cancel beside a form. |
+| Variant     | Use                                                 |
+| ----------- | --------------------------------------------------- |
+| `solid`     | Primary action in a region.                         |
+| `outline`   | Secondary action with a visible border.             |
+| `ghost`     | Quiet or supplementary action.                      |
+| `text`      | Quiet secondary journey, or a cancel beside a form. |
+| `prominent` | The rare action that must lead a whole view.        |
 
 <Canvas of={ButtonStories.Variants} />
 <Canvas of={ButtonStories.ChosenByVariant} />
 
 Outline and ghost buttons share translucent hover and active layers tinted with their text color.
 A pressed outline button keeps its tone and border. A pressed ghost or text button reads as the navigation's
-current item, blue whatever its tone, with no border or glow but its indicator's, as NavList's. Solid buttons keep a
-filled surface.
+current item, blue whatever its tone, with no border, over its indicator, as NavList's. Solid buttons keep a
+filled surface, and draw no glow: their color carries their weight. A prominent button is a solid one that also draws
+its edge, its ink rising out of its fill. Keep it for an action that must lead a whole view: most views have none.
 
 ## Tones
 

@@ -296,7 +296,6 @@ Native attributes and events target the text input; `class` styles the surroundi
      crosses without this component knowing, so they hide on their own state. */
   .entries:has(.control:disabled) :global(.tag) {
     opacity: var(--opacity-disabled);
-    box-shadow: none;
   }
 
   .remove:disabled {

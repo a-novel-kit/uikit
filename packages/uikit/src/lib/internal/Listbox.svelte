@@ -215,7 +215,7 @@ keys into requests to a `ListboxNavigation`, which this list shares for the poin
         display var(--duration-fast) allow-discrete;
       /* Against the field's focus ring, without covering it. */
       inset-block-start: var(--border-width-strong);
-      /* The list continues its field, which reads as focused while the list shows: the same outline and glow, over
+      /* The list continues its field, which reads as focused while the list shows: the same outline and ring, over
          the shadow that lifts the list off the page. The outline is painted last, above the frost. A border would
          sit under it, and the frost's clip would eat the border's inner antialiasing, so each corner would read as
          cropped. */

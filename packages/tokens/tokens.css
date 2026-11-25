@@ -8,7 +8,7 @@
 
   /* Space between and inside elements steps by 3px, and its half step rounds to a whole pixel. Each step sets one
      relationship, named beside it: pick the relationship, never the pixels. Sizes, such as controls, icons, marks
-     and surface widths, and the reach of shadows and glows keep a 4px grid: a size never takes a space token, and
+     and surface widths, and the reach of shadows keep a 4px grid: a size never takes a space token, and
      a space never takes a size. */
   --space-base: 0.1875rem;
   --space-0: 0;
@@ -128,6 +128,15 @@
   --color-tint-brand: var(--color-brand-3);
   --color-tint-pressure: var(--color-pressure-3);
   --color-tint-signal: var(--color-signal-3);
+  /* A pair is lit when it holds the eye: the fill one step up its ramp and the ink a quarter of the way to white.
+     Each lit pair keeps 4.9:1 or more. An action lights under the pointer and once chosen, to stand out of its own
+     resting look. A label has no resting look to stand out of, so a badge, a tag and a chosen chip always show lit. */
+  --color-ink-brand-lit: oklch(from var(--color-ink-brand) calc(l + (1 - l) * var(--opacity-base) * 2) c h);
+  --color-ink-pressure-lit: oklch(from var(--color-ink-pressure) calc(l + (1 - l) * var(--opacity-base) * 2) c h);
+  --color-ink-signal-lit: oklch(from var(--color-ink-signal) calc(l + (1 - l) * var(--opacity-base) * 2) c h);
+  --color-tint-brand-lit: var(--color-brand-4);
+  --color-tint-pressure-lit: var(--color-pressure-4);
+  --color-tint-signal-lit: var(--color-signal-4);
 
   --color-surface-canvas: var(--base-canvas);
   /* A well darkens the surface it is cut into, so it keeps that surface's tone. */
@@ -231,23 +240,21 @@
   --color-control-placeholder: var(--color-neutral-9);
   --color-control-disabled-text: var(--color-text-disabled);
   /* A mark that is on is lit: a checked box, a radio button, a switch, the filled part of a slider or a bar. The
-     brand's ink fills it, since a mark is small, lifted under the pointer as an action's, and what it draws inside
-     takes the darkest neutral. */
+     brand's ink fills it, since a mark is small, its lit ink under the pointer, and what it draws inside takes the
+     darkest neutral. */
   --color-control-on: var(--color-ink-brand);
-  --color-control-on-hover: var(--color-action-primary-foreground-hover);
+  --color-control-on-hover: var(--color-ink-brand-lit);
   --color-control-on-mark: var(--color-text-inverse);
 
-  /* A colored action is its hue's pair: the ink on the tint. The pointer lifts both, the fill one step up its ramp
-     and the ink a quarter of the way to white, so the pair keeps 4.7:1; a chosen one stays lifted, and a press
-     drops the fill a step. */
+  /* A colored action is its hue's pair: the ink on the tint. The pointer lights the pair; a chosen one stays lit on a
+     fill one step higher still, so the pointer never makes an action read as chosen; and a press drops the fill a
+     step under its resting one. */
   --color-action-primary: var(--color-tint-brand);
-  --color-action-primary-hover: var(--color-brand-4);
+  --color-action-primary-hover: var(--color-tint-brand-lit);
   --color-action-primary-active: var(--color-brand-2);
-  --color-action-primary-selected: var(--color-action-primary-hover);
+  --color-action-primary-selected: var(--color-brand-5);
   --color-action-primary-foreground: var(--color-ink-brand);
-  --color-action-primary-foreground-hover: oklch(
-    from var(--color-action-primary-foreground) calc(l + (1 - l) * var(--opacity-base) * 2) c h
-  );
+  --color-action-primary-foreground-hover: var(--color-ink-brand-lit);
   /* A neutral action is one veil over whatever holds it, so it stands out of the canvas and of a card alike: an
      opaque gray held on one backdrop only, and vanished on a card of its own tone. The pointer adds half a veil,
      a press takes half away, and a chosen one holds two. Its text is secondary at rest, so a colored action beside
@@ -257,13 +264,11 @@
   --color-action-neutral-active: color-mix(in oklab, var(--color-neutral-12) var(--color-mix-1), transparent);
   --color-action-neutral-selected: color-mix(in oklab, var(--color-neutral-12) var(--color-mix-4), transparent);
   --color-action-danger: var(--color-tint-pressure);
-  --color-action-danger-hover: var(--color-pressure-4);
+  --color-action-danger-hover: var(--color-tint-pressure-lit);
   --color-action-danger-active: var(--color-pressure-2);
   --color-action-danger-selected: var(--color-action-danger-hover);
   --color-action-danger-foreground: var(--color-ink-pressure);
-  --color-action-danger-foreground-hover: oklch(
-    from var(--color-action-danger-foreground) calc(l + (1 - l) * var(--opacity-base) * 2) c h
-  );
+  --color-action-danger-foreground-hover: var(--color-ink-pressure-lit);
   --color-action-subtle-hover: color-mix(
     in oklab,
     currentColor var(--color-mix-2),
@@ -332,21 +337,6 @@
   --color-feedback-error-text: var(--color-ink-pressure);
 
   --color-graphic-brand: var(--base-brand);
-  --color-glow-brand: color-mix(
-    in oklab,
-    var(--color-neutral-12) var(--color-mix-2),
-    var(--base-brand)
-  );
-  --color-glow-pressure: color-mix(
-    in oklab,
-    var(--color-neutral-12) var(--color-mix-2),
-    var(--base-pressure)
-  );
-  --color-glow-signal: color-mix(
-    in oklab,
-    var(--color-neutral-12) var(--color-mix-2),
-    var(--base-signal)
-  );
 
   /* Raised surfaces stay flat, since the app's lamp gives the page its volume. A hairline ring holds
      a raised surface's shape on any backdrop, so it needs no border. Elevation has four steps: the ring alone for a
@@ -373,8 +363,8 @@
       color-mix(in oklab, var(--color-neutral-12) var(--color-mix-3), transparent),
     0 0 var(--size-8) var(--size-2)
       color-mix(in oklab, var(--color-neutral-1) var(--color-mix-12), transparent);
-  /* The primary action glows: a slight gradient that lightens toward the top, and a soft underglow in its own
-     color. Its ink is measured on the lightest stop. */
+  /* The primary action is its hue's pair under a slight gradient that lightens toward the top. Its ink is measured on
+     the lightest stop. Color carries an action's weight: it draws no glow. */
   --gradient-action-primary: linear-gradient(
     in oklab,
     var(--color-action-primary-hover),
@@ -385,68 +375,12 @@
     var(--color-brand-5),
     var(--color-action-primary-hover)
   );
-  --shadow-action-primary: 0 var(--size-1) var(--size-4) calc(-1 * var(--size-1))
-    color-mix(in oklab, var(--base-brand) var(--color-mix-6), transparent);
-  --shadow-action-primary-hover: 0 var(--size-1) var(--size-6) calc(-1 * var(--size-1))
-    color-mix(in oklab, var(--base-brand) var(--color-mix-10), transparent);
-  --shadow-glow-brand:
-    0 0 var(--size-4)
-      color-mix(in oklab, var(--color-glow-brand) var(--color-mix-4), transparent),
-    0 0 var(--size-10) calc(-1 * var(--size-1))
-      color-mix(in oklab, var(--color-glow-brand) var(--color-mix-4), transparent),
-    0 0 var(--size-20) calc(-1 * var(--size-2))
-      color-mix(in oklab, var(--color-glow-brand) var(--color-mix-3), transparent);
-  --shadow-glow-pressure:
-    0 0 var(--size-4)
-      color-mix(in oklab, var(--color-glow-pressure) var(--color-mix-4), transparent),
-    0 0 var(--size-10) calc(-1 * var(--size-1))
-      color-mix(in oklab, var(--color-glow-pressure) var(--color-mix-4), transparent),
-    0 0 var(--size-20) calc(-1 * var(--size-2))
-      color-mix(in oklab, var(--color-glow-pressure) var(--color-mix-3), transparent);
-  --shadow-glow-neutral:
-    0 0 var(--size-2)
-      color-mix(in oklab, var(--color-neutral-12) var(--color-mix-4), transparent),
-    0 0 var(--size-4)
-      color-mix(in oklab, var(--color-neutral-12) var(--color-mix-1), transparent);
-  --shadow-glow-brand-strong:
-    0 0 var(--size-4)
-      color-mix(in oklab, var(--color-glow-brand) var(--color-mix-5), transparent),
-    0 0 var(--size-10) calc(-1 * var(--size-1))
-      color-mix(in oklab, var(--color-glow-brand) var(--color-mix-5), transparent),
-    0 0 var(--size-20) calc(-1 * var(--size-2))
-      color-mix(in oklab, var(--color-glow-brand) var(--color-mix-4), transparent);
-  --shadow-glow-pressure-strong:
-    0 0 var(--size-4)
-      color-mix(in oklab, var(--color-glow-pressure) var(--color-mix-5), transparent),
-    0 0 var(--size-10) calc(-1 * var(--size-1))
-      color-mix(in oklab, var(--color-glow-pressure) var(--color-mix-5), transparent),
-    0 0 var(--size-20) calc(-1 * var(--size-2))
-      color-mix(in oklab, var(--color-glow-pressure) var(--color-mix-4), transparent);
-  --shadow-glow-signal:
-    0 0 var(--size-4)
-      color-mix(in oklab, var(--color-glow-signal) var(--color-mix-4), transparent),
-    0 0 var(--size-10) calc(-1 * var(--size-1))
-      color-mix(in oklab, var(--color-glow-signal) var(--color-mix-4), transparent),
-    0 0 var(--size-20) calc(-1 * var(--size-2))
-      color-mix(in oklab, var(--color-glow-signal) var(--color-mix-3), transparent);
-  --shadow-indicator-brand:
-    0 0 var(--size-2) color-mix(in oklab, var(--base-brand) var(--color-mix-8), transparent),
-    0 0 var(--size-4) color-mix(in oklab, var(--base-brand) var(--color-mix-3), transparent);
-  --shadow-focus-ring:
-    0 0 0 var(--border-width-strong)
-      color-mix(in oklab, var(--color-focus-ring) var(--color-mix-5), transparent),
-    0 0 var(--size-4)
-      color-mix(in oklab, var(--color-focus-ring) var(--color-mix-3), transparent);
-  --shadow-invalid-focus-ring:
-    0 0 0 var(--border-width-strong)
-      color-mix(
-        in oklab,
-        var(--color-feedback-error-border) var(--color-mix-5),
-        transparent
-      ),
-    0 0 var(--size-4)
-      color-mix(in oklab, var(--base-pressure) var(--color-mix-3), transparent);
-  --shadow-action-selected: var(--shadow-glow-brand);
+  /* Nothing glows, for now: no action, label, mark, indicator or focus ring. A focus ring is a line, drawn around
+     its control. */
+  --shadow-focus-ring: 0 0 0 var(--border-width-strong)
+    color-mix(in oklab, var(--color-focus-ring) var(--color-mix-5), transparent);
+  --shadow-invalid-focus-ring: 0 0 0 var(--border-width-strong)
+    color-mix(in oklab, var(--color-feedback-error-border) var(--color-mix-5), transparent);
   /* One lamp in the top-start corner, its strength falling with the square of the distance and its
      reach with the viewport, so a phone keeps a corner light rather than a tinted screen. Each
      application colors it with --color-lamp on its root element, so people tell the apps apart at

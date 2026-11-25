@@ -119,7 +119,7 @@ function resolveShadow(value: string) {
   return shadow;
 }
 
-// The field reads as focused while its list shows, and the list carries the same outline and glow.
+// The field reads as focused while its list shows, and the list carries the same outline and ring.
 it.each(fields)("outlines an open $name list as its focused field", async ({ renderClosed }) => {
   const { controller } = renderClosed();
 

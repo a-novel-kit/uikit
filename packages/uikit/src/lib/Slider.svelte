@@ -178,14 +178,6 @@ The default range is 0–100; the caller owns persistence and value validation.
     }
   }
 
-  input:active:not(:disabled)::-webkit-slider-thumb {
-    box-shadow: var(--shadow-action-selected);
-  }
-
-  input:active:not(:disabled)::-moz-range-thumb {
-    box-shadow: var(--shadow-action-selected);
-  }
-
   /* Disabled, the value still reads, in the muted text's color, on an inert track. */
   input:disabled {
     --slider-fill: var(--color-action-disabled-text);

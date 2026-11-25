@@ -22,8 +22,6 @@ Labels a category or status compactly. Use InlineMessage when changes need live 
   .badge {
     display: inline-block;
     box-sizing: border-box;
-    box-shadow: 0 0 var(--size-3)
-      color-mix(in oklab, var(--badge-glow, var(--badge-ink)) var(--color-mix-2), transparent);
     border-radius: var(--radius-sm);
     background: var(--badge-fill);
     padding-inline: var(--space-2);
@@ -38,31 +36,30 @@ Labels a category or status compactly. Use InlineMessage when changes need live 
     overflow-wrap: break-word;
   }
 
-  /* A tone is one of the three hues' pairs, its ink on its tint, under a faint glow of the ink. A success is a
-     highlight; a warning and a danger share the accent's magenta. A neutral badge has no light of its own: one veil
-     under secondary text, as a chip not chosen. */
+  /* A label has no resting look to stand out of, so a tone shows as an action does under the pointer: one of the
+     three hues' pairs, lit. A success is a highlight; a warning and a danger share the accent's magenta. A neutral
+     badge takes a neutral action's veil and text under the pointer. */
   .neutral {
-    --badge-fill: var(--color-action-neutral);
-    --badge-ink: var(--color-text-secondary);
-    --badge-glow: transparent;
+    --badge-fill: var(--color-action-neutral-hover);
+    --badge-ink: var(--color-text-primary);
   }
 
   .brand {
-    --badge-fill: var(--color-tint-brand);
-    --badge-ink: var(--color-ink-brand);
+    --badge-fill: var(--color-tint-brand-lit);
+    --badge-ink: var(--color-ink-brand-lit);
   }
 
   .accent,
   .warning,
   .danger {
-    --badge-fill: var(--color-tint-pressure);
-    --badge-ink: var(--color-ink-pressure);
+    --badge-fill: var(--color-tint-pressure-lit);
+    --badge-ink: var(--color-ink-pressure-lit);
   }
 
   .highlight,
   .success {
-    --badge-fill: var(--color-tint-signal);
-    --badge-ink: var(--color-ink-signal);
+    --badge-fill: var(--color-tint-signal-lit);
+    --badge-ink: var(--color-ink-signal-lit);
   }
 
   @media (forced-colors: active) {

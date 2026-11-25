@@ -102,10 +102,7 @@ components.
   </div>
   <div>
     <strong>Light</strong>
-    <span>
-      One lamp per app lights the page, raised surfaces stay flat, and one primary action per view glows in its own
-      color.
-    </span>
+    <span>One lamp per app lights the page, raised surfaces stay flat, and nothing glows.</span>
   </div>
   <div>
     <strong>Accent</strong>
@@ -142,7 +139,25 @@ chip, a colored action. The neon never fills behind text: it glared there, and l
 | No hue           | `--color-text-secondary` | `--color-action-neutral` | 7:1 or more |
 
 An ink is its hue's neon, and a tint the third step of its ramp. Without a hue, the pair is secondary text on one
-veil, and primary text under the pointer or once chosen.
+veil.
+
+A pair is lit when it holds the eye: the fill one step up its ramp, and the ink a quarter of the way to white. An
+action lights under the pointer and once chosen, to stand out of its own resting look. A label has no resting look to
+stand out of, so a badge, a tag and a chosen chip always show lit.
+
+<div className="pairs">
+  <span className="pair pair--brand pair--lit">Brand</span>
+  <span className="pair pair--pressure pair--lit">Pressure</span>
+  <span className="pair pair--signal pair--lit">Signal</span>
+  <span className="pair pair--neutral pair--lit">Neutral</span>
+</div>
+
+| Hue              | Lit ink                    | Lit tint                       | Ink on tint |
+| ---------------- | -------------------------- | ------------------------------ | ----------- |
+| Brand blue       | `--color-ink-brand-lit`    | `--color-tint-brand-lit`       | 6.0:1       |
+| Pressure magenta | `--color-ink-pressure-lit` | `--color-tint-pressure-lit`    | 5.0:1       |
+| Signal amber     | `--color-ink-signal-lit`   | `--color-tint-signal-lit`      | 6.0:1       |
+| No hue           | `--color-text-primary`     | `--color-action-neutral-hover` | 8:1 or more |
 
 The magenta sits darker than the blue and the amber, so its ink takes a quarter of light to read with theirs. Each ink
 keeps 5.4:1 or more on a card and in a dialog. A mark that is on, such as a checked box, a switch or the filled part of
@@ -157,11 +172,11 @@ a slider, is small: the brand's ink fills it (`--color-control-on`).
   </div>
   <div>
     <span className="action-state action-state--hover">Hover</span>
-    <code>lifted ink on brand.4</code>
+    <code>the lit pair</code>
   </div>
   <div>
     <span className="action-state action-state--selected">Selected</span>
-    <code>the same + glow</code>
+    <code>lit ink on brand.5</code>
   </div>
   <div>
     <button type="button" className="action-state action-state--disabled" disabled>
@@ -202,9 +217,14 @@ a slider, is small: the brand's ink fills it (`--color-control-on`).
   </div>
 </div>
 
-A colored action is its hue's pair. The pointer lifts both, the fill one step up its ramp and the ink a quarter of
-the way to white, so the pair keeps {colorSystem.contrast.minimumNormalText}:1 or more. A chosen action stays lifted
-and glows, and a press drops the fill a step. The primary action also lightens toward its top and glows underneath.
+A colored action is its hue's pair. The pointer lights it, so the pair keeps
+{colorSystem.contrast.minimumNormalText}:1 or more. A chosen action stays lit on a fill one step higher still, which
+the pointer never reaches, and a press drops the fill a step under its resting one. The primary action also lightens
+toward its top.
+
+Nothing glows: no action, no label, no mark. Light around a deep tint reads as a blur, and color already carries
+each one's weight. The rare action that must lead a whole view draws its edge instead
+(`Button variant="prominent"`): its ink rises out of its fill, so sharp that it almost reads as a border.
 
 Selected text reads in signal amber on a translucent brand veil (`--color-selection-{text,surface}`).
 No other state pairs them, so a selection stands out on every surface. Buttons, tabs and menus are

@@ -53,7 +53,7 @@ early steps near black, then accelerate into the vivid and readable half of each
 
 Semantic surfaces and borders mix the cusp-derived peaks into the neutral field. Their strengths derive
 from `--color-mix-base: 6.25%`: surfaces use two units and the error border ten.
-Graphic, glow, and gradient tokens use the same palette and mix scale. Effects carry no
+Graphic and gradient tokens use the same palette and mix scale. Effects carry no
 component meaning and play no part in foreground contrast.
 
 Components use semantic aliases such as `--color-action-primary` and `--color-feedback-error-text`.
@@ -64,9 +64,11 @@ attention.
 A hue shows two ways, and they pair. Its ink is the neon itself (`--color-ink-{brand,pressure,signal}`), for
 what is drawn thin: text, an icon, a line. Its tint is a deep step of its ramp
 (`--color-tint-{brand,pressure,signal}`), for what is filled under its ink: a tag, a chosen chip, a colored
-action. The neon never fills behind text. The pointer lifts an action's fill one step and its ink a quarter of
-the way to white; a chosen action stays lifted and glows. A mark that is on, such as a checked box or a
-switch, is small, so the brand's ink fills it (`--color-control-on`). Disabled controls use neutral surface,
+action. The neon never fills behind text. A pair is lit with its fill one step up and its ink a quarter of the
+way to white (`--color-{ink,tint}-{brand,pressure,signal}-lit`): the pointer lights an action, a chosen action
+stays lit, and a label, which has no resting look to stand out of, always shows lit. Nothing glows: no action, no
+label, no mark. A mark that is on, such as a checked box or a switch, is small, so the brand's ink fills it
+(`--color-control-on`). Disabled controls use neutral surface,
 border, and text tokens. Feedback components pair color with a label or icon. Primitive palette steps remain
 available for design-system work.
 

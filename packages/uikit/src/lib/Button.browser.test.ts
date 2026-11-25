@@ -85,7 +85,7 @@ describe("low-emphasis action feedback", () => {
   );
 
   it.each(["brand", "neutral", "danger"] as const)(
-    "turns a chosen ghost or text %s button blue, as the navigation's current item, without a border or glow",
+    "turns a chosen ghost or text %s button blue, as the navigation's current item, without a border",
     async (tone) => {
       const chosen = {
         background: resolveColor("var(--color-navigation-selected-surface)"),
@@ -176,7 +176,6 @@ describe("chosen toggles", () => {
         .poll(() => getComputedStyle(button).backgroundColor)
         .toBe(resolveColor("var(--color-navigation-selected-surface)"));
       expect(Number(getComputedStyle(button).opacity)).toBeLessThan(1);
-      expect(getComputedStyle(button, "::before").boxShadow).toBe("none");
     }
   );
 });

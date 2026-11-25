@@ -254,7 +254,7 @@ describe("Dialog over a frosted page", () => {
     expect(frosted.map(blur)).not.toContain("none");
   });
 
-  // Each frame an animation draws under the backdrop blurs the whole page again.
+  // Each frame an animation draws on the page makes the root blur it again.
   it("pauses what animates on the page while it is modal, and never what it holds", async () => {
     const controller = createOpenController();
     const { getByTestId, container } = render(BlurredPageFixture, { controller });
@@ -272,16 +272,22 @@ describe("Dialog over a frosted page", () => {
     expect(playState("page-skeleton")).toBe("running");
   });
 
+  // The page takes the blur, through the root: a backdrop-filter would blur the whole screen again for every frame
+  // drawn above it, a keystroke in the dialog included.
   it.each([
-    ["blurs the page behind a centered dialog", "centered", true],
-    ["leaves the backdrop a fullscreen dialog covers unblurred", "fullscreen", false],
-  ] as const)("%s", async (_, presentation, blurred) => {
+    ["blurs the page behind a centered dialog through the root, and clears it as it closes", "centered", "blur(8px)"],
+    ["leaves the page a fullscreen dialog covers unblurred", "fullscreen", "none"],
+  ] as const)("%s", async (_, presentation, filter) => {
     const controller = createOpenController({ initialOpen: true });
     const { getByRole } = render(Dialog, { controller, title: "Menu", presentation });
     const dialog = getByRole("dialog");
     await expect.poll(() => dialog.matches(":modal")).toBe(true);
 
-    expect(getComputedStyle(dialog, "::backdrop").backdropFilter.includes("blur")).toBe(blurred);
+    await expect.poll(() => getComputedStyle(document.documentElement).filter).toBe(filter);
+    expect(getComputedStyle(dialog, "::backdrop").backdropFilter).toBe("none");
+
+    controller.close();
+    await expect.poll(() => getComputedStyle(document.documentElement).filter).toBe("none");
   });
 
   // A fixed request inside a moving dialog would travel with it.

@@ -1,6 +1,5 @@
 <script module lang="ts">
   import { defineMeta } from "@storybook/addon-svelte-csf";
-  import { expect } from "storybook/test";
 
   const { Story } = defineMeta({
     title: "Foundations/Motion & depth",
@@ -49,68 +48,15 @@
   </div>
 </Story>
 
-<Story
-  name="Glow"
-  asChild
-  parameters={{
-    docs: {
-      description: {
-        story:
-          "Three faint layers create a gradual falloff behind the surface. Glow is decorative; text and focus indicators remain independent.",
-      },
-    },
-  }}
-  play={({ canvas }) => {
-    for (const name of ["Brand", "Pressure", "Signal"]) {
-      const sample = canvas.getByText(name).parentElement!;
-      // The screenshot owns the glow's look; text never glows, whatever the token.
-      expect(getComputedStyle(sample).textShadow).toBe("none");
-    }
-  }}
->
-  <div class="glow-grid">
-    <div class="glow brand"><strong>Brand</strong><span>Selected or focused</span></div>
-    <div class="glow pressure"><strong>Pressure</strong><span>Destructive confirmation</span></div>
-    <div class="glow signal"><strong>Signal</strong><span>Positive confirmation</span></div>
-  </div>
-</Story>
-
-<Story
-  name="Strong glow"
-  asChild
-  parameters={{
-    docs: { description: { story: "The same soft falloff with slightly more emphasis for accent surfaces." } },
-  }}
-  play={({ canvas }) => {
-    for (const name of ["Brand", "Pressure"]) {
-      const sample = canvas.getByText(name).parentElement!;
-      // The screenshot owns the glow's look; text never glows, whatever the token.
-      expect(getComputedStyle(sample).textShadow).toBe("none");
-    }
-  }}
->
-  <div class="glow-grid">
-    <div class="glow brand strong"><strong>Brand</strong><code>shadow-glow-brand-strong</code></div>
-    <div class="glow pressure strong"><strong>Pressure</strong><code>shadow-glow-pressure-strong</code></div>
-  </div>
-</Story>
-
 <style>
   .surface-grid,
-  .duration-grid,
-  .glow-grid {
+  .duration-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
     gap: var(--space-4);
     inline-size: 100%;
   }
-  .glow-grid {
-    gap: var(--space-12);
-    box-sizing: border-box;
-    padding: var(--space-8);
-  }
-  .surface,
-  .glow {
+  .surface {
     display: grid;
     align-content: end;
     gap: var(--space-2);
@@ -145,8 +91,7 @@
   strong {
     color: var(--color-text-primary);
   }
-  code,
-  .glow span {
+  code {
     color: var(--color-text-muted);
     font-size: var(--font-size-xs);
   }
@@ -175,44 +120,19 @@
   .motion:hover span,
   .motion:focus-visible span {
     transform: translateX(var(--space-12));
-    box-shadow: var(--shadow-glow-brand);
   }
   .motion:focus-visible {
     outline: var(--focus-ring-width) solid var(--color-focus-ring);
     outline-offset: var(--focus-ring-offset);
   }
   .fast span {
-    transition:
-      transform var(--motion-state),
-      box-shadow var(--motion-state);
+    transition: transform var(--motion-state);
   }
   .normal span {
-    transition:
-      transform var(--motion-surface),
-      box-shadow var(--motion-surface);
+    transition: transform var(--motion-surface);
   }
   .slow span {
-    transition:
-      transform var(--duration-slow) var(--easing-standard),
-      box-shadow var(--duration-slow) var(--easing-standard);
-  }
-  .brand {
-    box-shadow: var(--shadow-glow-brand);
-    background: color-mix(in oklab, var(--base-brand) var(--color-mix-2), var(--color-action-neutral));
-  }
-  .pressure {
-    box-shadow: var(--shadow-glow-pressure);
-    background: color-mix(in oklab, var(--base-pressure) var(--color-mix-2), var(--color-action-neutral));
-  }
-  .signal {
-    box-shadow: var(--shadow-glow-signal);
-    background: color-mix(in oklab, var(--base-signal) var(--color-mix-2), var(--color-action-neutral));
-  }
-  .brand.strong {
-    box-shadow: var(--shadow-glow-brand-strong);
-  }
-  .pressure.strong {
-    box-shadow: var(--shadow-glow-pressure-strong);
+    transition: transform var(--duration-slow) var(--easing-standard);
   }
   @media (prefers-reduced-motion: reduce) {
     .motion span {

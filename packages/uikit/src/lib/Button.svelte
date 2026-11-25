@@ -25,9 +25,10 @@ item.
     children?: Snippet;
     /**
      * Visual importance; defaults to "solid". Use tone for semantic intent. "text" reads as plain
-     * colored text until hovered, for a quiet secondary journey beside a form.
+     * colored text until hovered, for a quiet secondary journey beside a form. "prominent" is a solid
+     * button that also draws its edge, for the rare action that must lead a whole view.
      */
-    variant?: "solid" | "outline" | "ghost" | "text";
+    variant?: "solid" | "outline" | "ghost" | "text" | "prominent";
     /** Semantic intent; defaults to "brand". Reserve danger for destructive actions. */
     tone?: "brand" | "neutral" | "danger";
     /** Control size on the shared height and typography scales; defaults to "md". */
@@ -63,7 +64,9 @@ item.
     ...rest
   }: ButtonProps | ButtonLinkProps = $props();
 
-  const classes = $derived(`button ${variant} ${tone} ${size} ${square ? "square" : ""} ${className}`);
+  // A prominent button is a solid one that also draws its edge.
+  const look = $derived(variant === "prominent" ? "solid prominent" : variant);
+  const classes = $derived(`button ${look} ${tone} ${size} ${square ? "square" : ""} ${className}`);
 </script>
 
 {#if rest.href !== undefined}
@@ -108,7 +111,6 @@ item.
     --button-selected-foreground: var(--color-action-primary-foreground);
     --button-foreground: var(--color-action-primary-foreground);
     --button-foreground-hover: var(--color-action-primary-foreground-hover);
-    --button-glow: var(--shadow-glow-brand-strong);
   }
 
   .neutral {
@@ -122,7 +124,6 @@ item.
     --button-border: var(--color-border-default);
     --button-border-hover: var(--color-border-strong);
     --button-selected-border: var(--color-border-strong);
-    --button-glow: var(--shadow-glow-neutral);
   }
 
   .danger {
@@ -133,7 +134,6 @@ item.
     --button-selected-foreground: var(--color-action-danger-foreground);
     --button-foreground: var(--color-action-danger-foreground);
     --button-foreground-hover: var(--color-action-danger-foreground-hover);
-    --button-glow: var(--shadow-glow-pressure-strong);
   }
 
   /* A chosen toggle is positioned for its indicator, so it paints over its neighbors' outlines; a focused button
@@ -181,7 +181,8 @@ item.
     inline-size: var(--control-height-lg);
   }
 
-  /* A solid button is its tone's pair: its ink on its tint, both lifted under the pointer. */
+  /* A solid button is its tone's pair: its ink on its tint, lit under the pointer. It draws no glow: light around a
+     deep tint reads as a blur, and its color already carries its weight. */
   .solid {
     background-color: var(--button-rest);
     color: var(--button-foreground);
@@ -195,13 +196,11 @@ item.
   }
 
   .solid.brand:not(:disabled):not([aria-pressed="true"]) {
-    box-shadow: var(--shadow-action-primary);
     background-image: var(--gradient-action-primary);
   }
 
   @media (hover: hover) {
     .solid.brand:hover:not(:disabled):not([aria-pressed="true"]) {
-      box-shadow: var(--shadow-action-primary-hover);
       background-image: var(--gradient-action-primary-hover);
     }
   }
@@ -214,11 +213,27 @@ item.
     background-color: var(--button-active);
   }
 
-  /* Chosen, it stays lifted and glows. */
+  /* Chosen, it stays lit, on a fill the pointer never reaches. */
   .solid[aria-pressed="true"] {
-    box-shadow: var(--button-glow);
     background-color: var(--button-selected);
     color: var(--button-foreground-hover);
+  }
+
+  /* The rare action that must lead a whole view draws its edge: its ink rises out of its fill within a grid step, so
+     sharp that it almost reads as a border. That bends the rule against bevels, on purpose and for this action alone.
+     The edge takes the lit ink under the pointer. */
+  .prominent {
+    --button-edge: var(--button-foreground);
+    box-shadow:
+      inset 0 0 0 var(--border-width-thin) color-mix(in oklab, var(--button-edge) var(--color-mix-6), transparent),
+      inset 0 0 var(--size-1) var(--border-width-thin)
+        color-mix(in oklab, var(--button-edge) var(--color-mix-4), transparent);
+  }
+
+  @media (hover: hover) {
+    .prominent:hover:not(:disabled) {
+      --button-edge: var(--button-foreground-hover);
+    }
   }
 
   .outline {
@@ -271,14 +286,12 @@ item.
   }
 
   .outline[aria-pressed="true"] {
-    box-shadow: var(--button-glow);
     border-color: var(--button-selected-border);
     background-color: color-mix(in oklab, var(--button-selected-foreground) var(--color-mix-3), transparent);
     color: var(--button-selected-foreground);
   }
 
-  /* A ghost or text button draws no border or glow in any state; only a chosen toggle's indicator
-     glows, as NavList's does. Chosen, or linking to the page showing, it reads as the navigation's
+  /* A ghost or text button draws no border in any state. Chosen, or linking to the page showing, it reads as the navigation's
      current item, blue whatever its tone, as a rail's account link does beside the NavList, and keeps
      that look under the pointer. A current link carries no indicator: it stands beside NavList,
      whose current item marks its start edge. */
@@ -297,14 +310,13 @@ item.
     position: absolute;
     inset-block: auto 0;
     inset-inline: var(--space-2);
-    box-shadow: var(--shadow-indicator-brand);
     background: var(--color-navigation-selected-indicator);
     block-size: var(--border-width-strong);
     content: "";
   }
 
-  /* Forced colors drop every surface and glow, so an outline marks a chosen button of any variant and the current
-     item, as NavList's does. */
+  /* Forced colors drop every surface, so an outline marks a chosen button of any variant and the current item, as
+     NavList's does. */
   @media (forced-colors: active) {
     :is(.button[aria-pressed="true"], :is(.ghost, .text)[aria-current="page"]):not(:focus-visible) {
       outline: var(--border-width-thin) solid CanvasText;
@@ -312,7 +324,6 @@ item.
 
     /* Forced colors paint the indicator Canvas, so it keeps its line in the text color. */
     :is(.ghost, .text)[aria-pressed="true"]::before {
-      box-shadow: none;
       background: CanvasText;
       forced-color-adjust: none;
     }
@@ -338,10 +349,6 @@ item.
   /* A disabled choice stays visible, dimmed, as a disabled chosen chip does. */
   .button[aria-pressed="true"]:disabled {
     opacity: var(--opacity-disabled);
-  }
-
-  .button[aria-pressed="true"]:disabled::before {
-    box-shadow: none;
   }
 
   /* Dimming would halve the user's own disabled color, and a disabled choice's outline and indicator take it too. */
