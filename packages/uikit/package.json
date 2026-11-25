@@ -52,7 +52,7 @@
     "vite": "catalog:"
   },
   "peerDependencies": {
-    "@a-novel-kit/nodelib-i18n": "^2.14.0",
+    "@a-novel-kit/nodelib-i18n": "^2.15.1",
     "i18next": "^27.2.3",
     "svelte": "^5.59.1"
   },
