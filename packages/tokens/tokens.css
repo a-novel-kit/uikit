@@ -137,6 +137,17 @@
   --color-tint-brand-lit: var(--color-brand-4);
   --color-tint-pressure-lit: var(--color-pressure-4);
   --color-tint-signal-lit: var(--color-signal-4);
+  /* A custom color is one a person gives to an item of their own, such as a tag or a calendar. It is a family apart
+     from the three hues: it shows only on what a person colored, never on the interface. uikit's customColorStyle
+     sets these on a colored item, from any opaque color. The mark is that exact color, for a small solid mark. The
+     pair takes the color's hue alone and is built as a hue's pair is, so each ink keeps 4.9:1 or more on its tint
+     whatever lightness and saturation were picked. Left as they are here, an item has no color: no mark, and the
+     neutral pair. */
+  --color-mark-custom: transparent;
+  --color-ink-custom: var(--color-text-secondary);
+  --color-tint-custom: var(--color-action-neutral);
+  --color-ink-custom-lit: var(--color-text-primary);
+  --color-tint-custom-lit: var(--color-action-neutral-hover);
 
   --color-surface-canvas: var(--base-canvas);
   /* A well darkens the surface it is cut into, so it keeps that surface's tone. */

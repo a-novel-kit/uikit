@@ -19,6 +19,10 @@ export const colorSystem = Object.freeze({
   },
   "gamut": {
     "authoring": "OKLCH",
+    "cuspLightness": [
+      0.4,
+      0.9
+    ],
     "mapping": "CSS Color 4",
     "target": "display gamut"
   },
@@ -100,3 +104,19 @@ export const palette = Object.freeze({
   pressure: Object.freeze(["oklch(0.26 0.09386 16)","oklch(0.26922 0.09776 16)","oklch(0.29451 0.10864 16)","oklch(0.3323 0.12544 16)","oklch(0.37901 0.14711 16)","oklch(0.43107 0.17243 16)","oklch(0.48493 0.19992 16)","oklch(0.53699 0.22776 16)","oklch(0.5837 0.25379 16)","oklch(0.62149 0.27557 16)","oklch(0.64678 0.29051 16)","oklch(0.656 0.29603 16)"]),
   signal: Object.freeze(["oklch(0.26 0.05233 68)","oklch(0.27251 0.05517 68)","oklch(0.3068 0.0631 68)","oklch(0.35804 0.07536 68)","oklch(0.42138 0.09119 68)","oklch(0.49199 0.10972 68)","oklch(0.56501 0.12988 68)","oklch(0.63562 0.15031 68)","oklch(0.69896 0.16944 68)","oklch(0.7502 0.18546 68)","oklch(0.78449 0.19646 68)","oklch(0.797 0.20053 68)"]),
 });
+
+// prettier-ignore
+export const swatches = Object.freeze([
+  Object.freeze({"name":"sky","hue":232,"hex":"#01beff"}),
+  Object.freeze({"name":"blue","hue":260.8,"hex":"#0066ff"}),
+  Object.freeze({"name":"violet","hue":289.6,"hex":"#7300ff"}),
+  Object.freeze({"name":"magenta","hue":318.4,"hex":"#d400ff"}),
+  Object.freeze({"name":"pink","hue":347.2,"hex":"#ff00b3"}),
+  Object.freeze({"name":"red","hue":16,"hex":"#ff0053"}),
+  Object.freeze({"name":"orange","hue":42,"hex":"#ff6100"}),
+  Object.freeze({"name":"amber","hue":68,"hex":"#ffa000"}),
+  Object.freeze({"name":"yellow","hue":100.8,"hex":"#fae000"}),
+  Object.freeze({"name":"lime","hue":133.6,"hex":"#92ff00"}),
+  Object.freeze({"name":"mint","hue":166.4,"hex":"#00ffbf"}),
+  Object.freeze({"name":"cyan","hue":199.2,"hex":"#00f6ff"}),
+]);

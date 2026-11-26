@@ -72,6 +72,13 @@ label, no mark. A mark that is on, such as a checked box or a switch, is small, 
 border, and text tokens. Feedback components pair color with a label or icon. Primitive palette steps remain
 available for design-system work.
 
+A custom color is one a person gives to an item of their own, such as a tag or a calendar. It is a family apart
+from the three hues, and shows only on what a person colored. `--color-mark-custom` is the exact color, for a small
+solid mark. `--color-ink-custom` on `--color-tint-custom`, and their `-lit` forms, are its pair, which takes the
+color's hue alone. They default to no mark and the neutral pair: uikit's `customColorStyle` sets them on a colored
+item. The `palette` entry also exports the `swatches` offered beside a free choice: the three hues and the steps
+between them, about 30 degrees apart, each stored as its hue's most saturated sRGB color.
+
 `scripts/generate-colors.mjs` is the authoring source. Run
 `pnpm --filter @a-novel-kit/uikit-tokens generate:colors` after changing its compact bases. It writes
 the literal `colors.css` and an OKLCH `palette` export for tooling. Color.js samples gamut only

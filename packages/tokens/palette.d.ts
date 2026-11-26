@@ -49,6 +49,8 @@ export interface ColorSystem {
   readonly gamut: {
     /** Perceptual color space in which the palette is authored. */
     readonly authoring: string;
+    /** Lowest and highest OKLCH lightness searched for a hue's cusp, on the 0–1 scale. */
+    readonly cuspLightness: readonly [number, number];
     /** Gamut-mapping specification applied during conversion. */
     readonly mapping: string;
     /** Output gamut selected for rendering. */
@@ -172,3 +174,25 @@ export const palette: Readonly<{
   /** Readiness and success accent scale. */
   signal: ColorScale;
 }>;
+
+/** A color offered for an item, as the item stores it once picked. */
+export interface Swatch {
+  /** Stable name of the swatch, for its label. */
+  readonly name: string;
+  /** OKLCH hue in degrees: one of the three hues, or a step between two of them. */
+  readonly hue: number;
+  /** The hue's most saturated sRGB color, as a six-digit hex value. */
+  readonly hex: string;
+}
+
+/**
+ * Frozen swatches a person colors an item with, from the brand hue around the circle. A custom color may also be
+ * any other opaque color.
+ *
+ * @example
+ * ```ts
+ * import { swatches } from "@a-novel-kit/uikit-tokens/palette";
+ * const [sky] = swatches; // { name: "sky", hue: 232, hex: … }
+ * ```
+ */
+export const swatches: readonly Swatch[];
