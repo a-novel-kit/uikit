@@ -163,6 +163,27 @@ The magenta sits darker than the blue and the amber, so its ink takes a quarter 
 keeps 5.4:1 or more on a card and in a dialog. A mark that is on, such as a checked box, a switch or the filled part of
 a slider, is small: the brand's ink fills it (`--color-control-on`).
 
+## Custom colors
+
+A custom color is one a person gives to an item of their own, such as a tag or a calendar: any opaque color, stored
+as a six-digit hex value, or none. It is a family apart from the three hues. It shows only on what a person colored,
+never on the interface, which keeps to the three.
+
+| On a colored item         | Token                                                 | Draws                                 |
+| ------------------------- | ----------------------------------------------------- | ------------------------------------- |
+| A small solid mark        | `--color-mark-custom`                                 | The exact color picked                |
+| What is filled under text | `--color-ink-custom` on `--color-tint-custom`         | The color's hue, as a hue's pair does |
+| A label                   | `--color-ink-custom-lit` on `--color-tint-custom-lit` | That pair, lit                        |
+
+`customColorStyle` sets these tokens on the item, from its color. The pair takes the color's hue alone, at the
+strength every hue's pair has: a pastel, a neon and a dark shade of one hue fill alike, and each ink keeps 4.9:1 or
+more on its tint. Text on a custom tint is its ink, or primary or secondary text, never muted. A black, a white or a
+gray has no hue, so it keeps its mark and draws the neutral pair. An item without a color draws the neutral pair and
+no mark.
+
+[Custom colors](?path=/docs/foundations-custom-colors--documentation) renders the swatches, a range of free colors
+and the measured contrast. [Color field](?path=/docs/forms-color-field--documentation) picks one.
+
 ## Semantic roles
 
 <div className="action-states" aria-label="Action state progression">

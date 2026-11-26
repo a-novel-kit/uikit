@@ -33,6 +33,24 @@
     "empty": "No matching options",
     "placeholder": "Choose"
   },
+  "colorField": {
+    "custom": "Another color",
+    "none": "No color",
+    "swatch": {
+      "amber": "Amber",
+      "blue": "Blue",
+      "cyan": "Cyan",
+      "lime": "Lime",
+      "magenta": "Magenta",
+      "mint": "Mint",
+      "orange": "Orange",
+      "pink": "Pink",
+      "red": "Red",
+      "sky": "Sky blue",
+      "violet": "Violet",
+      "yellow": "Yellow"
+    }
+  },
   "combobox": {
     "empty": "No matching options",
     "placeholder": "Search options",

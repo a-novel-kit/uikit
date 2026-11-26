@@ -44,6 +44,12 @@ const bases = {
     lightnessFloor: 0.11,
     lightnessPeak: 0.96,
   },
+  // The swatches a person colors an item with: the three hues, and between two of them the steps nearest `hueStep`
+  // degrees. The names run from the brand hue around the circle, one per swatch.
+  swatch: {
+    hueStep: 30,
+    names: ["sky", "blue", "violet", "magenta", "pink", "red", "orange", "amber", "yellow", "lime", "mint", "cyan"],
+  },
 };
 
 const normalizeHue = (hue) => ((hue % 360) + 360) % 360;
@@ -66,15 +72,19 @@ const chromaticFamilies = Object.keys(familyHues);
 
 const canvas = `oklch(${bases.canvasLightness} ${bases.neutral.chroma} ${familyHues.brand})`;
 
-/** Finds the highest Display P3 chroma reachable for a hue within the authored lightness range. */
-function findGamutCusp(hue) {
+/** Returns the highest Display P3 chroma a hue reaches at a lightness. */
+const p3Chroma = (lightness, hue) =>
+  new Color("oklch-p3", [lightness, bases.accent.relativeChromaPeak, hue]).to("oklch").coords[1];
+
+/** Finds the highest chroma reachable for a hue within the authored lightness range, in Display P3 by default. */
+function findGamutCusp(hue, chromaAt = p3Chroma) {
   const { lightnessMax, lightnessMin, lightnessStep } = bases.gamutCusp;
   const sampleCount = Math.round((lightnessMax - lightnessMin) / lightnessStep);
   let cusp = { chroma: 0, lightness: lightnessMin };
 
   for (let index = 0; index <= sampleCount; index += 1) {
     const lightness = lightnessMin + lightnessStep * index;
-    const [, chroma] = new Color("oklch-p3", [lightness, bases.accent.relativeChromaPeak, hue]).to("oklch").coords;
+    const chroma = chromaAt(lightness, hue);
     if (chroma > cusp.chroma) cusp = { chroma, lightness };
   }
 
@@ -111,6 +121,51 @@ const toOklch = ({ chroma, hue, lightness }) =>
   `oklch(${round(lightness)} ${round(chroma)} ${round(normalizeHue(hue), 2)})`;
 
 const palette = Object.fromEntries(Object.entries(scales).map(([family, scale]) => [family, scale.map(toOklch)]));
+
+// ---- Swatches ----
+
+/** Returns the highest sRGB chroma a hue reaches at a lightness, by bisection. No sRGB color reaches a chroma of 0.5. */
+function srgbChroma(lightness, hue) {
+  let [inside, outside] = [0, 0.5];
+
+  for (let pass = 0; pass < 20; pass += 1) {
+    const chroma = (inside + outside) / 2;
+    if (new Color("oklch", [lightness, chroma, hue]).inGamut("srgb", { epsilon: 0 })) inside = chroma;
+    else outside = chroma;
+  }
+
+  return inside;
+}
+
+/** Lists the swatch hues from a family to the next one around the circle: its own, then the steps between them. */
+function swatchHues(family, index) {
+  const next = chromaticFamilies[(index + 1) % chromaticFamilies.length];
+  const gap = normalizeHue(familyHues[next] - familyHues[family]);
+  const steps = Math.round(gap / bases.swatch.hueStep);
+
+  return Array.from({ length: steps }, (_, step) => round(normalizeHue(familyHues[family] + (gap * step) / steps), 2));
+}
+
+/**
+ * Derives a swatch: the color an item stores once a person picks it. A custom color is a hex value, which holds no
+ * Display P3, so a swatch is its hue's most saturated sRGB color. Drawing takes the hue back from it.
+ */
+function swatch(hue, index) {
+  const { chroma, lightness } = findGamutCusp(hue, srgbChroma);
+  const hex = new Color("oklch", [lightness, chroma, hue]).to("srgb").toString({ format: "hex", collapse: false });
+  const drift = Math.abs(
+    normalizeHue(new Color(hex).to("oklch").h - hue + bases.harmony.halfTurn) - bases.harmony.halfTurn
+  );
+  if (drift > 1) throw new Error(`Swatch ${hex} drifts ${round(drift, 2)}deg from its hue ${hue}`);
+
+  return { name: bases.swatch.names[index], hue, hex };
+}
+
+const swatchHueList = chromaticFamilies.flatMap(swatchHues);
+if (swatchHueList.length !== bases.swatch.names.length) {
+  throw new Error(`${swatchHueList.length} swatches take ${bases.swatch.names.length} names: name each one`);
+}
+const swatches = swatchHueList.map(swatch);
 
 // ---- Contrast contract ----
 
@@ -161,6 +216,7 @@ const colorSystem = {
   },
   gamut: {
     authoring: "OKLCH",
+    cuspLightness: [bases.gamutCusp.lightnessMin, bases.gamutCusp.lightnessMax],
     mapping: "CSS Color 4",
     target: "display gamut",
   },
@@ -215,6 +271,11 @@ export const colorSystem = Object.freeze(${JSON.stringify(colorSystem, null, 2)}
 export const palette = Object.freeze({
 ${Object.entries(palette).map(paletteFamilyJs).join("\n")}
 });
+
+// prettier-ignore
+export const swatches = Object.freeze([
+${swatches.map((item) => `  Object.freeze(${JSON.stringify(item)}),`).join("\n")}
+]);
 `;
 
 const outputs = { "colors.css": colorsCss, "palette.js": paletteJs };

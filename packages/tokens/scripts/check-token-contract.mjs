@@ -29,6 +29,8 @@ const legacyColorPattern = /#[0-9a-f]{3,8}\b|(?:rgb|rgba|hsl|hsla)\s*\(|color\s*
 const transparentPattern = /rgba\(0, 0, 0, 0\)/g;
 // Tests and fixtures hold sample pictures and computed styles, which a browser serializes outside OKLCH.
 const dataFilePattern = /\.(?:test|fixture)\.\w+$/;
+// The generated palette lists the swatches as a custom color is stored, in hex. Its generator holds none.
+const generatedPalette = resolve(packageDirectory, "palette.js");
 const primitivePattern =
   /var\(\s*--(?:base-(?:brand|pressure|signal|neutral)|color-(?:neutral|brand|pressure|signal)-\d+)\s*[,)]/;
 // The value every step of a scale multiplies.
@@ -384,7 +386,7 @@ export async function checkTokenContract({ strict = [], docs = [], cwd = process
     const source = sources.get(path);
     const css = path.endsWith(".svelte") ? styleBlocks(source) : source;
     const styles = styleExtensions.has(extname(path)) ? checkStyles(css, defined, modes.get(path)) : undefined;
-    const colors = dataFilePattern.test(path) ? [] : legacyColors(source);
+    const colors = dataFilePattern.test(path) || path === generatedPalette ? [] : legacyColors(source);
     const violations = [...colors, ...(styles?.violations ?? [])];
     const file = relative(cwd, path);
 
