@@ -16,7 +16,7 @@
       docs: {
         description: {
           component:
-            "Picks an item's custom color from a grid of squares: a blank square for no color, the swatches, and a last square that opens the browser's own color input for any other opaque color. No color is the default. The choices are native controls: arrow keys move through no color and the swatches, Tab reaches the color input, and each choice carries its name for assistive technology. The form receives a six-digit hex value, or an empty value for no color.",
+            "Picks an item's custom color from a grid of squares in a field's well: a blank square for no color, the swatches, and a last square that opens the browser's own color input for any other opaque color. No color is the default. The choices are native controls: arrow keys move through no color and the swatches, Tab reaches the color input, and each choice carries its name for assistive technology. The form receives a six-digit hex value, or an empty value for no color.",
         },
       },
     },
@@ -44,7 +44,7 @@
     docs: {
       description: {
         story:
-          "A swatch rests dimmed toward its hue's tint. The chosen one shows its color at full strength, inside the line a chosen outline button draws. The blank square is no color. A color outside the swatches shows in the last square, where the color input sits.",
+          "A swatch rests dimmed toward its hue's tint. The chosen one shows its color at full strength, inside a light line. The blank square is no color. A color outside the swatches shows in the last square, where the color input sits.",
       },
     },
   }}
@@ -72,7 +72,8 @@
   parameters={{
     docs: {
       description: {
-        story: "Inside an island the chosen square's line is a hairline, as every outline is there.",
+        story:
+          "On the canvas the field takes a ring; inside an island it is a dark well, as every field is. The chosen square's line is a hairline there, as every outline is.",
       },
     },
   }}

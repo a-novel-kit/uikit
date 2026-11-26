@@ -65,7 +65,7 @@ describe("ColorField", () => {
   });
 
   it("fits a narrow field without overflowing it", () => {
-    const { container } = renderIn("12rem");
+    const { container } = renderIn("13rem");
     const field = container.querySelector("fieldset")!;
 
     expect(field.scrollWidth).toBeLessThanOrEqual(field.clientWidth);
@@ -113,11 +113,29 @@ describe("ColorField", () => {
     expect(blank()).toBe(resolveColor("var(--color-action-neutral-selected)"));
   });
 
-  it("draws a chosen outline button's line around the chosen square, and none around the others", () => {
+  it("sits in a field's well, which holds its grid and no more", () => {
+    const { container } = renderIn("40rem");
+    const well = container.querySelector(".well")!.getBoundingClientRect();
+    const squares = targets(container);
+
+    expect(well.width).toBeLessThan(container.getBoundingClientRect().width / 2);
+    expect(well.right - squares.at(-1)!.right).toBeCloseTo(squares[0].left - well.left, 0);
+    expect(well.bottom - squares.at(-1)!.bottom).toBeCloseTo(squares[0].top - well.top, 0);
+  });
+
+  it("outlines its well as invalid while it shows an error", () => {
+    const { container } = render(ColorField, { props: { legend: "Color", name: "color", error: "Pick a color." } });
+
+    expect(getComputedStyle(container.querySelector(".well")!).borderTopColor).toBe(
+      resolveColor("var(--color-feedback-error-border)")
+    );
+  });
+
+  it("draws a light line around the chosen square, and none around the others", () => {
     const { getByRole } = renderIn("40rem", swatches[0].hex);
     const line = (name: string) => getComputedStyle(getByRole("radio", { name }).parentElement!).borderTopColor;
 
-    expect(line("Sky blue")).toBe(resolveColor("var(--color-border-strong)"));
+    expect(line("Sky blue")).toBe(resolveColor("var(--color-text-primary)"));
     expect(line("Blue")).toBe(resolveColor("transparent"));
     expect(line("No color")).toBe(resolveColor("transparent"));
   });
@@ -126,7 +144,7 @@ describe("ColorField", () => {
     const line = (initialValue?: string) =>
       getComputedStyle(renderIn("40rem", initialValue).getByLabelText("Another color").parentElement!).borderTopColor;
 
-    expect(line(steel)).toBe(resolveColor("var(--color-border-strong)"));
+    expect(line(steel)).toBe(resolveColor("var(--color-text-primary)"));
     expect(line()).toBe(resolveColor("transparent"));
   });
 

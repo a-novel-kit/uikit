@@ -1,9 +1,9 @@
 <!--
 @component
 Picks an item's custom color under a label: no color, one of the swatches, or any other opaque color through the
-browser's own color input. The choices pack as a grid of squares, two rows deep: a blank square for no color, the
-swatches, then the square that opens the color input. A swatch rests dimmed toward its hue's tint, and the chosen one
-shows its color at full strength, inside the line a chosen outline button draws. They are native controls, so the keyboard, assistive
+browser's own color input. The choices pack as a grid of squares, two rows deep, inside a field's well: a blank
+square for no color, the swatches, then the square that opens the color input. A swatch rests dimmed toward its hue's
+tint, and the chosen one shows its color at full strength, inside a light line. They are native controls, so the keyboard, assistive
 technology and the form need nothing else: arrow keys move through no color and the swatches, Tab reaches the color
 input, and the form receives the six-digit hex value under `name`, or an empty value for no color. Draw the chosen
 color with `customColorStyle`.
@@ -36,7 +36,7 @@ color with `customColorStyle`.
     legend: Content;
     /** Supporting content rendered below the choices, before any error. */
     hint?: Content;
-    /** Validation message rendered below the choices, after any hint. */
+    /** Validation message; its presence outlines the field as invalid. */
     error?: Content;
     /** Form name of the chosen color. */
     name: string;
@@ -54,6 +54,7 @@ color with `customColorStyle`.
   import { createValueController } from "./controllers.svelte";
   import FieldMessages, { messageIds } from "./internal/FieldMessages.svelte";
   import RenderContent from "./internal/RenderContent.svelte";
+  import Well from "./internal/Well.svelte";
   import { type MessageKey, useMessages } from "./internal/i18n";
 
   import { Palette as CustomIcon } from "@lucide/svelte";
@@ -95,53 +96,55 @@ color with `customColorStyle`.
   aria-describedby={messageIds({ id, hint, error }, describedBy)}
 >
   <legend><RenderContent content={legend} /></legend>
-  <div class="choices" style:grid-template-columns="repeat({columns}, var(--size-6))">
-    <label class="choice blank">
-      <input
-        type="radio"
-        {name}
-        value=""
-        checked={value === undefined}
-        defaultChecked={value === undefined}
-        aria-label={t("colorField.none")}
-        form={rest.form}
-        onchange={(event) => choose(event.currentTarget)}
-      />
-    </label>
-    {#each swatches as swatch, index (swatch.hex)}
-      <label class="choice swatch" style={swatchStyles[index]}>
+  <Well as="div" class="tray" invalid={Boolean(error)} hover={false} flush>
+    <div class="choices" style:grid-template-columns="repeat({columns}, var(--size-6))">
+      <label class="choice blank">
         <input
           type="radio"
           {name}
-          value={swatch.hex}
-          checked={value === swatch.hex}
-          defaultChecked={value === swatch.hex}
-          aria-label={t(`colorField.swatch.${swatch.name}` as MessageKey)}
+          value=""
+          checked={value === undefined}
+          defaultChecked={value === undefined}
+          aria-label={t("colorField.none")}
           form={rest.form}
           onchange={(event) => choose(event.currentTarget)}
         />
       </label>
-    {/each}
-    <!-- The browser's own color input covers the last square, unseen. It starts from the color showing, returns to
+      {#each swatches as swatch, index (swatch.hex)}
+        <label class="choice swatch" style={swatchStyles[index]}>
+          <input
+            type="radio"
+            {name}
+            value={swatch.hex}
+            checked={value === swatch.hex}
+            defaultChecked={value === swatch.hex}
+            aria-label={t(`colorField.swatch.${swatch.name}` as MessageKey)}
+            form={rest.form}
+            onchange={(event) => choose(event.currentTarget)}
+          />
+        </label>
+      {/each}
+      <!-- The browser's own color input covers the last square, unseen. It starts from the color showing, returns to
          it when its form resets, and the form reads it only while its color is the one chosen. -->
-    <label class="choice" style={custom ? customColorStyle(value) : undefined}>
-      <input
-        type="color"
-        name={custom ? name : undefined}
-        {value}
-        defaultValue={value}
-        aria-label={t("colorField.custom")}
-        aria-current={custom ? "true" : undefined}
-        form={rest.form}
-        oninput={(event) => controller.setValue(event.currentTarget.value)}
-      />
-      {#if custom}
-        <span class="mark"></span>
-      {:else}
-        <CustomIcon class="icon" aria-hidden="true" />
-      {/if}
-    </label>
-  </div>
+      <label class="choice" style={custom ? customColorStyle(value) : undefined}>
+        <input
+          type="color"
+          name={custom ? name : undefined}
+          {value}
+          defaultValue={value}
+          aria-label={t("colorField.custom")}
+          aria-current={custom ? "true" : undefined}
+          form={rest.form}
+          oninput={(event) => controller.setValue(event.currentTarget.value)}
+        />
+        {#if custom}
+          <span class="mark"></span>
+        {:else}
+          <CustomIcon class="icon" aria-hidden="true" />
+        {/if}
+      </label>
+    </div>
+  </Well>
   <FieldMessages {id} {hint} {error} />
 </fieldset>
 
@@ -157,7 +160,7 @@ color with `customColorStyle`.
     min-inline-size: 0;
   }
 
-  /* The name reads as a field's label: regular, above the choices. */
+  /* The name reads as a field's label: regular, above the well. */
   legend {
     margin-block-end: var(--space-2);
     padding: 0;
@@ -165,11 +168,18 @@ color with `customColorStyle`.
     font: var(--text-ui);
   }
 
-  /* The squares pack as a grid, as close as the lines of one item. */
+  /* The field is a well, as every input is: a dark block inside an island, ringed on the canvas. It holds its grid
+     and no more, so the squares stay packed. */
+  .color-field :global(.tray) {
+    inline-size: fit-content;
+  }
+
+  /* The squares pack as a grid, as close as the lines of one item, an even inset from the well's edge. */
   .choices {
     display: grid;
     place-content: start;
     gap: var(--space-1);
+    padding: var(--space-2);
   }
 
   /* A choice is a square, the least size a pointer needs, filled as a neutral action is unless it has a hue. It
@@ -238,10 +248,10 @@ color with `customColorStyle`.
     }
   }
 
-  /* The chosen square takes a chosen outline button's line, at an outline's weight. Its light alone was too faint
-     a mark on the darker hues. */
+  /* The chosen square takes a line at an outline's weight, as light as primary text, so it shows around any color
+     and inside a dark well. Its light alone was too faint a mark on the darker hues. */
   .choice:has(:checked, [aria-current]) {
-    border-color: var(--color-border-strong);
+    border-color: var(--color-text-primary);
   }
 
   /* The chosen swatch also shows its color at full strength. */
