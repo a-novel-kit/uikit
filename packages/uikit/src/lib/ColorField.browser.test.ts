@@ -123,6 +123,20 @@ describe("ColorField", () => {
     expect(well.bottom - squares.at(-1)!.bottom).toBeCloseTo(squares[0].top - well.top, 0);
   });
 
+  // An island thins the well's line, which moves the squares' inset.
+  it.each(["on the canvas", "in an island"])("rounds its squares on the well's own corner centers, %s", (context) => {
+    const { container } = renderIn("40rem");
+    if (context === "in an island") container.dataset.island = "";
+
+    const well = container.querySelector(".well")!;
+    const square = container.querySelector(".choice")!;
+    const inset = square.getBoundingClientRect().left - well.getBoundingClientRect().left;
+    const radius = (element: Element) => parseFloat(getComputedStyle(element).borderTopLeftRadius);
+
+    expect(radius(square)).toBeGreaterThan(0);
+    expect(radius(square)).toBeCloseTo(radius(well) - inset, 1);
+  });
+
   it("outlines its well as invalid while it shows an error", () => {
     const { container } = render(ColorField, { props: { legend: "Color", name: "color", error: "Pick a color." } });
 

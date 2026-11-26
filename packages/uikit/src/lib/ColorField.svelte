@@ -174,12 +174,13 @@ color with `customColorStyle`.
     inline-size: fit-content;
   }
 
-  /* The squares pack as a grid, as close as the lines of one item, an even inset from the well's edge. */
+  /* The squares pack as a grid, as close as the lines of one item. They sit half the well's radius from its edge,
+     its line included, whatever that line weighs. */
   .choices {
     display: grid;
     place-content: start;
     gap: var(--space-1);
-    padding: var(--space-2);
+    padding: calc(var(--space-2) - var(--border-width-outline));
   }
 
   /* A choice is a square, the least size a pointer needs, filled as a neutral action is unless it has a hue. It
@@ -195,7 +196,8 @@ color with `customColorStyle`.
     cursor: pointer;
     box-sizing: border-box;
     border: var(--border-width-outline) solid transparent;
-    border-radius: var(--radius-sm);
+    /* The well's radius less the square's inset, so both corners share centers. */
+    border-radius: calc(var(--radius-lg) - var(--space-2));
     background: var(--color-tint-custom);
     inline-size: var(--size-6);
     block-size: var(--size-6);
