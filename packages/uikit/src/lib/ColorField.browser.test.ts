@@ -1,5 +1,5 @@
 /// <reference types="vite/client" />
-import { resolveColor } from "../../test/style";
+import { contrast, luminance, painted, resolveColor } from "../../test/style";
 import ColorField from "./ColorField.svelte";
 import { createValueController } from "./controllers.svelte";
 
@@ -87,17 +87,47 @@ describe("ColorField", () => {
     }
   });
 
-  it("leaves the square of no color blank", () => {
-    const { container } = renderIn("40rem", steel);
+  it("shows the chosen swatch at full strength, brighter than any swatch at rest", () => {
+    const square = (queries: ReturnType<typeof renderIn>, name: string) =>
+      getComputedStyle(queries.getByRole("radio", { name }).parentElement!).backgroundColor;
 
-    expect(getComputedStyle(container.querySelector(".mark")!).backgroundColor).toBe(resolveColor("transparent"));
+    expect(square(renderIn("40rem", swatches[0].hex), "Sky blue")).toBe(resolveColor(swatches[0].hex));
+
+    // Each swatch at rest, with no color chosen, against its own color.
+    const resting = renderIn("40rem");
+    for (const [index, input] of resting.getAllByRole("radio").slice(1).entries()) {
+      const rest = painted(getComputedStyle(input.parentElement!).backgroundColor);
+      const chosen = painted(swatches[index].hex);
+
+      expect(luminance(chosen), swatches[index].name).toBeGreaterThan(luminance(rest));
+      expect(contrast(chosen, rest), swatches[index].name).toBeGreaterThanOrEqual(1.5);
+    }
   });
 
-  it("shows a color outside the swatches as it was picked, on the last choice", () => {
-    const { container } = renderIn("40rem", steel);
+  it("fills the square of no color as a neutral action, lit once chosen", () => {
+    const blank = (initialValue?: string) =>
+      getComputedStyle(renderIn("40rem", initialValue).getByRole("radio", { name: "No color" }).parentElement!)
+        .backgroundColor;
 
-    const marks = container.querySelectorAll(".mark");
-    expect(marks).toHaveLength(swatches.length + 2);
-    expect(getComputedStyle(marks[marks.length - 1]).backgroundColor).toBe(resolveColor(steel));
+    expect(blank(steel)).toBe(resolveColor("var(--color-action-neutral)"));
+    expect(blank()).toBe(resolveColor("var(--color-action-neutral-selected)"));
+  });
+
+  it("draws no line around a square, chosen or not", () => {
+    const { container } = renderIn("40rem", swatches[0].hex);
+
+    for (const square of container.querySelectorAll(".choice")) {
+      const style = getComputedStyle(square);
+      expect(style.borderStyle).toBe("none");
+      expect(style.outlineStyle).toBe("none");
+      expect(style.boxShadow).toBe("none");
+    }
+  });
+
+  it("shows a color outside the swatches as it was picked, in the last square", () => {
+    const { getByLabelText } = renderIn("40rem", steel);
+    const mark = getByLabelText("Another color").parentElement!.querySelector(".mark")!;
+
+    expect(getComputedStyle(mark).backgroundColor).toBe(resolveColor(steel));
   });
 });

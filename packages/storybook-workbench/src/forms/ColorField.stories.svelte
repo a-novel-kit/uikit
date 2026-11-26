@@ -44,7 +44,7 @@
     docs: {
       description: {
         story:
-          "The chosen square draws in, inside a ring that shows around any color. A color outside the swatches shows in the last square, where the color input sits.",
+          "A swatch rests dimmed toward its hue's tint, and the chosen one shows its color at full strength: its light marks it, with no line. The blank square is no color. A color outside the swatches shows in the last square, where the color input sits.",
       },
     },
   }}
@@ -72,7 +72,7 @@
   parameters={{
     docs: {
       description: {
-        story: "The squares draw the same on the canvas and inside an island, as a checkbox does.",
+        story: "The squares draw the same on the canvas and inside an island.",
       },
     },
   }}

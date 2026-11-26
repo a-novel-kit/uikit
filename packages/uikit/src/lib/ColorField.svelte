@@ -2,7 +2,8 @@
 @component
 Picks an item's custom color under a label: no color, one of the swatches, or any other opaque color through the
 browser's own color input. The choices pack as a grid of squares, two rows deep: a blank square for no color, the
-swatches, then the square that opens the color input. They are native controls, so the keyboard, assistive
+swatches, then the square that opens the color input. A swatch rests dimmed toward its hue's tint, and the chosen one
+shows its color at full strength: its light marks it, with no line. They are native controls, so the keyboard, assistive
 technology and the form need nothing else: arrow keys move through no color and the swatches, Tab reaches the color
 input, and the form receives the six-digit hex value under `name`, or an empty value for no color. Draw the chosen
 color with `customColorStyle`.
@@ -20,8 +21,11 @@ color with `customColorStyle`.
 <script lang="ts" module>
   import type { Content } from "./content";
   import type { ValueController } from "./controllers.svelte";
+  import { customColorStyle } from "./customColor";
 
   import type { HTMLFieldsetAttributes } from "svelte/elements";
+
+  import { swatches } from "@a-novel-kit/uikit-tokens/palette";
 
   /** External state contract for a color field: a six-digit hex value, or `undefined` for no color. */
   export type ColorFieldController = ValueController<string | undefined>;
@@ -39,16 +43,18 @@ color with `customColorStyle`.
     /** State owner of the chosen color; each field has its own by default. */
     controller?: ColorFieldController;
   }
+
+  /** How each swatch draws, worked out once: the swatches never change. */
+  const swatchStyles = swatches.map((swatch) => customColorStyle(swatch.hex));
+  /** No color, the swatches and the color input, over two rows. */
+  const columns = Math.ceil((swatches.length + 2) / 2);
 </script>
 
 <script lang="ts">
   import { createValueController } from "./controllers.svelte";
-  import { customColorStyle } from "./customColor";
   import FieldMessages, { messageIds } from "./internal/FieldMessages.svelte";
   import RenderContent from "./internal/RenderContent.svelte";
   import { type MessageKey, useMessages } from "./internal/i18n";
-
-  import { swatches } from "@a-novel-kit/uikit-tokens/palette";
 
   import { Palette as CustomIcon } from "@lucide/svelte";
 
@@ -69,8 +75,6 @@ color with `customColorStyle`.
 
   const value = $derived(controller.state.value?.toLowerCase());
   const custom = $derived(value !== undefined && !swatches.some((swatch) => swatch.hex === value));
-  // No color, the swatches and the color input, over two rows.
-  const columns = Math.ceil((swatches.length + 2) / 2);
 
   let fieldset: HTMLFieldSetElement;
 
@@ -92,7 +96,7 @@ color with `customColorStyle`.
 >
   <legend><RenderContent content={legend} /></legend>
   <div class="choices" style:grid-template-columns="repeat({columns}, var(--size-6))">
-    <label class="choice">
+    <label class="choice blank">
       <input
         type="radio"
         {name}
@@ -103,10 +107,9 @@ color with `customColorStyle`.
         form={rest.form}
         onchange={(event) => choose(event.currentTarget)}
       />
-      <span class="mark"></span>
     </label>
-    {#each swatches as swatch (swatch.hex)}
-      <label class="choice">
+    {#each swatches as swatch, index (swatch.hex)}
+      <label class="choice swatch" style={swatchStyles[index]}>
         <input
           type="radio"
           {name}
@@ -117,12 +120,11 @@ color with `customColorStyle`.
           form={rest.form}
           onchange={(event) => choose(event.currentTarget)}
         />
-        <span class="mark" style:--color-mark-custom={swatch.hex}></span>
       </label>
     {/each}
     <!-- The browser's own color input covers the last square, unseen. It starts from the color showing, returns to
          it when its form resets, and the form reads it only while its color is the one chosen. -->
-    <label class="choice" class:custom>
+    <label class="choice" style={custom ? customColorStyle(value) : undefined}>
       <input
         type="color"
         name={custom ? name : undefined}
@@ -134,9 +136,9 @@ color with `customColorStyle`.
         oninput={(event) => controller.setValue(event.currentTarget.value)}
       />
       {#if custom}
-        <span class="mark" style={customColorStyle(value)}></span>
+        <span class="mark"></span>
       {:else}
-        <span class="mark"><CustomIcon class="icon" aria-hidden="true" /></span>
+        <CustomIcon class="icon" aria-hidden="true" />
       {/if}
     </label>
   </div>
@@ -170,17 +172,21 @@ color with `customColorStyle`.
     gap: var(--space-1);
   }
 
-  /* A choice is a square the least size a pointer needs, on a checkbox's well, which a blank mark leaves bare: that
-     is no color. Its native control covers it, unseen. */
+  /* A choice is a square, the least size a pointer needs, filled as a neutral action is unless it has a hue. Its
+     native control covers it, unseen. */
   .choice {
     display: grid;
     position: relative;
+    place-items: center;
+    transition:
+      background-color var(--motion-state),
+      color var(--motion-state);
     cursor: pointer;
     border-radius: var(--radius-sm);
-    background: var(--color-control-surface);
+    background: var(--color-tint-custom);
     inline-size: var(--size-6);
     block-size: var(--size-6);
-    color: var(--color-text-muted);
+    color: var(--color-text-secondary);
   }
 
   .choice input {
@@ -195,58 +201,52 @@ color with `customColorStyle`.
     block-size: 100%;
   }
 
-  /* A mark fills the square with its color, inside a checkbox's opaque rim, so a dark color keeps its shape. */
-  .mark {
-    display: grid;
-    place-items: center;
-    transition:
-      margin var(--motion-state),
-      border-color var(--motion-state),
-      background-color var(--motion-state);
-    box-sizing: border-box;
-    border: var(--border-width-thin) solid var(--color-control-border);
-    border-radius: inherit;
-    background: var(--color-mark-custom);
+  .choice :global(.icon) {
+    inline-size: var(--icon-size-sm);
+    block-size: var(--icon-size-sm);
     pointer-events: none;
   }
 
-  .mark :global(.icon) {
-    inline-size: var(--icon-size-sm);
-    block-size: var(--icon-size-sm);
+  /* A swatch rests part of the way from its hue's tint to its color: dim enough for the chosen one to stand out,
+     and bright enough to tell two neighbors apart. */
+  .swatch {
+    background: color-mix(in oklab, var(--color-mark-custom) var(--color-mix-6), var(--color-tint-custom));
   }
 
-  /* The pointer rings a square it can choose, a hairline away, which fits between two squares. */
+  /* A color outside the swatches shows as it was picked, small, on its own tint: a dark one keeps its shape. */
+  .mark {
+    background: var(--color-mark-custom);
+    inline-size: var(--size-3);
+    block-size: var(--size-3);
+    pointer-events: none;
+  }
+
+  /* The pointer lights a square a step, as it lights an action, and never as far as the chosen one. */
   @media (hover: hover) {
-    .choice:hover:not(.custom, :has(:disabled, :checked)) {
-      outline: var(--border-width-thin) solid var(--color-control-border-hover);
-      outline-offset: var(--border-width-thin);
+    .choice:hover:not(:has(:disabled, :checked)) {
+      background: var(--color-tint-custom-lit);
       color: var(--color-text-primary);
+    }
+
+    .swatch:hover:not(:has(:disabled, :checked)) {
+      background: color-mix(in oklab, var(--color-mark-custom) var(--color-mix-8), var(--color-tint-custom));
     }
   }
 
-  /* The chosen square draws in, inside a ring that shows around any color, so a dense grid needs no room for it.
-     The ring gives the mark its shape, so the mark drops its rim, and its corner keeps the ring's center. */
-  .choice:has(:checked),
-  .custom {
-    outline: var(--border-width-strong) solid var(--color-text-primary);
-    outline-offset: calc(-1 * var(--border-width-strong));
+  /* The chosen swatch shows its color at full strength. No line marks it: its light does. */
+  .swatch:has(:checked) {
+    background: var(--color-mark-custom);
   }
 
-  .choice:has(:checked) .mark,
-  .custom .mark {
-    margin: var(--space-1);
-    border-color: transparent;
-    border-radius: calc(var(--radius-sm) - var(--space-1));
+  /* No color has none to show at full strength, so its square takes a chosen neutral action's fill. */
+  .blank:has(:checked) {
+    background: var(--color-action-neutral-selected);
   }
 
-  /* Focus colors the square's line, as it does a checkbox's: its rim, and its ring once chosen. */
+  /* The keyboard's focus keeps its line, a hairline away so it shows around its own color too. */
   .choice:has(:focus-visible) {
-    outline-color: var(--color-control-border-focus);
-    box-shadow: var(--shadow-focus-ring);
-  }
-
-  .choice:has(:focus-visible):not(.custom, :has(:checked)) .mark {
-    border-color: var(--color-control-border-focus);
+    outline: var(--focus-ring-width) solid var(--color-focus-ring);
+    outline-offset: var(--border-width-thin);
   }
 
   .choice:has(:disabled) {
@@ -254,19 +254,21 @@ color with `customColorStyle`.
     cursor: not-allowed;
   }
 
+  /* Forced colors replace every fill, so there the squares keep their colors and a line marks the chosen one. */
   @media (forced-colors: active) {
+    .choice,
     .mark {
       forced-color-adjust: none;
     }
 
-    .choice:has(:checked),
-    .custom {
-      outline-color: Highlight;
+    .choice:has(:checked, [aria-current]) {
+      outline: var(--border-width-strong) solid Highlight;
+      outline-offset: calc(-1 * var(--border-width-strong));
     }
 
     .choice:has(:focus-visible) {
-      outline: var(--border-width-strong) solid Highlight;
-      outline-offset: var(--focus-ring-offset);
+      outline: var(--focus-ring-width) solid Highlight;
+      outline-offset: var(--border-width-thin);
     }
   }
 </style>
