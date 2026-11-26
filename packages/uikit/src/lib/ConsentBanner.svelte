@@ -3,7 +3,8 @@
 Asks the visitor to accept or decline an optional processing, such as telemetry, without blocking
 the page. Both answers carry the same weight, and either one hides the banner. The application
 supplies the wording and its policy link; the banner supplies the translated answers. A modal dialog
-leaves the page inert, so the topmost one open shows the banner too, where it stays answerable.
+leaves the page inert, so the topmost one open from the same copy of uikit shows the banner too, where
+it stays answerable.
 
 ```svelte
 <script lang="ts">
