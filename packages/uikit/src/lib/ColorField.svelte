@@ -1,10 +1,11 @@
 <!--
 @component
-Picks an item's custom color under a label, as a field does: no color, one of the swatches, or any other opaque color
-through the browser's own color input. The choices are native controls, so the keyboard, assistive technology
-and the form need nothing else: arrow keys move through no color and the swatches, Tab reaches the color input, and
-the form receives the six-digit hex value under `name`, or an empty value for no color. Draw the chosen color with
-`customColorStyle`.
+Picks an item's custom color under a label: no color, one of the swatches, or any other opaque color through the
+browser's own color input. The choices pack as a grid of squares, two rows deep: a blank square for no color, the
+swatches, then the square that opens the color input. They are native controls, so the keyboard, assistive
+technology and the form need nothing else: arrow keys move through no color and the swatches, Tab reaches the color
+input, and the form receives the six-digit hex value under `name`, or an empty value for no color. Draw the chosen
+color with `customColorStyle`.
 
 ```svelte
 <script lang="ts">
@@ -31,7 +32,7 @@ the form receives the six-digit hex value under `name`, or an empty value for no
     legend: Content;
     /** Supporting content rendered below the choices, before any error. */
     hint?: Content;
-    /** Validation message; its presence outlines the field as invalid. */
+    /** Validation message rendered below the choices, after any hint. */
     error?: Content;
     /** Form name of the chosen color. */
     name: string;
@@ -45,12 +46,11 @@ the form receives the six-digit hex value under `name`, or an empty value for no
   import { customColorStyle } from "./customColor";
   import FieldMessages, { messageIds } from "./internal/FieldMessages.svelte";
   import RenderContent from "./internal/RenderContent.svelte";
-  import Well from "./internal/Well.svelte";
   import { type MessageKey, useMessages } from "./internal/i18n";
 
   import { swatches } from "@a-novel-kit/uikit-tokens/palette";
 
-  import { Palette as CustomIcon, Ban as NoColorIcon } from "@lucide/svelte";
+  import { Palette as CustomIcon } from "@lucide/svelte";
 
   const id = $props.id();
 
@@ -69,6 +69,8 @@ the form receives the six-digit hex value under `name`, or an empty value for no
 
   const value = $derived(controller.state.value?.toLowerCase());
   const custom = $derived(value !== undefined && !swatches.some((swatch) => swatch.hex === value));
+  // No color, the swatches and the color input, over two rows.
+  const columns = Math.ceil((swatches.length + 2) / 2);
 
   let fieldset: HTMLFieldSetElement;
 
@@ -89,63 +91,63 @@ the form receives the six-digit hex value under `name`, or an empty value for no
   aria-describedby={messageIds({ id, hint, error }, describedBy)}
 >
   <legend><RenderContent content={legend} /></legend>
-  <Well as="div" invalid={Boolean(error)} hover={false}>
-    <div class="choices">
+  <div class="choices" style:grid-template-columns="repeat({columns}, var(--size-6))">
+    <label class="choice">
+      <input
+        type="radio"
+        {name}
+        value=""
+        checked={value === undefined}
+        defaultChecked={value === undefined}
+        aria-label={t("colorField.none")}
+        form={rest.form}
+        onchange={(event) => choose(event.currentTarget)}
+      />
+      <span class="mark"></span>
+    </label>
+    {#each swatches as swatch (swatch.hex)}
       <label class="choice">
         <input
           type="radio"
           {name}
-          value=""
-          checked={value === undefined}
-          defaultChecked={value === undefined}
-          aria-label={t("colorField.none")}
+          value={swatch.hex}
+          checked={value === swatch.hex}
+          defaultChecked={value === swatch.hex}
+          aria-label={t(`colorField.swatch.${swatch.name}` as MessageKey)}
           form={rest.form}
           onchange={(event) => choose(event.currentTarget)}
         />
-        <NoColorIcon class="icon" aria-hidden="true" />
+        <span class="mark" style:--color-mark-custom={swatch.hex}></span>
       </label>
-      {#each swatches as swatch (swatch.hex)}
-        <label class="choice">
-          <input
-            type="radio"
-            {name}
-            value={swatch.hex}
-            checked={value === swatch.hex}
-            defaultChecked={value === swatch.hex}
-            aria-label={t(`colorField.swatch.${swatch.name}` as MessageKey)}
-            form={rest.form}
-            onchange={(event) => choose(event.currentTarget)}
-          />
-          <span class="mark" style:--color-mark-custom={swatch.hex}></span>
-        </label>
-      {/each}
-      <!-- The browser's own color input covers the last choice, unseen. It starts from the color showing, returns to
-           it when its form resets, and the form reads it only while its color is the one chosen. -->
-      <label class="choice" class:custom>
-        <input
-          type="color"
-          name={custom ? name : undefined}
-          {value}
-          defaultValue={value}
-          aria-label={t("colorField.custom")}
-          aria-current={custom ? "true" : undefined}
-          form={rest.form}
-          oninput={(event) => controller.setValue(event.currentTarget.value)}
-        />
-        {#if custom}
-          <span class="mark" style={customColorStyle(value)}></span>
-        {:else}
-          <CustomIcon class="icon" aria-hidden="true" />
-        {/if}
-      </label>
-    </div>
-  </Well>
+    {/each}
+    <!-- The browser's own color input covers the last square, unseen. It starts from the color showing, returns to
+         it when its form resets, and the form reads it only while its color is the one chosen. -->
+    <label class="choice" class:custom>
+      <input
+        type="color"
+        name={custom ? name : undefined}
+        {value}
+        defaultValue={value}
+        aria-label={t("colorField.custom")}
+        aria-current={custom ? "true" : undefined}
+        form={rest.form}
+        oninput={(event) => controller.setValue(event.currentTarget.value)}
+      />
+      {#if custom}
+        <span class="mark" style={customColorStyle(value)}></span>
+      {:else}
+        <span class="mark"><CustomIcon class="icon" aria-hidden="true" /></span>
+      {/if}
+    </label>
+  </div>
   <FieldMessages {id} {hint} {error} />
 </fieldset>
 
 <style>
+  /* A field stretched by what holds it keeps its parts packed at its start. */
   .color-field {
     display: grid;
+    align-content: start;
     gap: var(--space-2);
     margin: 0;
     border: 0;
@@ -153,7 +155,7 @@ the form receives the six-digit hex value under `name`, or an empty value for no
     min-inline-size: 0;
   }
 
-  /* The name reads as a field's label: regular, above the well. */
+  /* The name reads as a field's label: regular, above the choices. */
   legend {
     margin-block-end: var(--space-2);
     padding: 0;
@@ -161,32 +163,23 @@ the form receives the six-digit hex value under `name`, or an empty value for no
     font: var(--text-ui);
   }
 
-  /* The choices overlap the well's line and inset, as a button at a field's end does: they sit a space-1 from its
-     edge on every side, so one row keeps a medium field's height. They wrap on a narrow field. */
+  /* The squares pack as a grid, as close as the lines of one item. */
   .choices {
-    display: flex;
-    flex: 1;
-    flex-wrap: wrap;
+    display: grid;
+    place-content: start;
     gap: var(--space-1);
-    margin: calc(-1 * var(--border-width-outline)) calc(-1 * (var(--space-2) + var(--border-width-outline)));
-    min-inline-size: 0;
   }
 
-  /* A choice is a button inside a field: a square with no border, lit by a soft box under the pointer. Its native
-     control covers it, unseen. */
+  /* A choice is a square the least size a pointer needs, on a checkbox's well, which a blank mark leaves bare: that
+     is no color. Its native control covers it, unseen. */
   .choice {
     display: grid;
     position: relative;
-    flex: none;
-    place-items: center;
-    transition:
-      background-color var(--motion-state),
-      color var(--motion-state);
     cursor: pointer;
-    /* The field's radius less its inset, so both corners share centers. */
-    border-radius: calc(var(--radius-lg) - var(--space-1));
-    inline-size: var(--control-height-nested);
-    block-size: var(--control-height-nested);
+    border-radius: var(--radius-sm);
+    background: var(--color-control-surface);
+    inline-size: var(--size-6);
+    block-size: var(--size-6);
     color: var(--color-text-muted);
   }
 
@@ -202,45 +195,58 @@ the form receives the six-digit hex value under `name`, or an empty value for no
     block-size: 100%;
   }
 
-  .choice :global(.icon) {
-    inline-size: var(--icon-size-md);
-    block-size: var(--icon-size-md);
-    pointer-events: none;
-  }
-
-  /* A mark carries its own fill, so its rim stays opaque, as an avatar's does: a dark color still shows its shape. */
+  /* A mark fills the square with its color, inside a checkbox's opaque rim, so a dark color keeps its shape. */
   .mark {
+    display: grid;
+    place-items: center;
+    transition:
+      margin var(--motion-state),
+      border-color var(--motion-state),
+      background-color var(--motion-state);
     box-sizing: border-box;
     border: var(--border-width-thin) solid var(--color-control-border);
-    border-radius: var(--radius-round);
+    border-radius: inherit;
     background: var(--color-mark-custom);
-    inline-size: var(--icon-size-md);
-    block-size: var(--icon-size-md);
     pointer-events: none;
   }
 
+  .mark :global(.icon) {
+    inline-size: var(--icon-size-sm);
+    block-size: var(--icon-size-sm);
+  }
+
+  /* The pointer rings a square it can choose, a hairline away, which fits between two squares. */
   @media (hover: hover) {
-    .choice:hover:not(:has(:disabled)) {
-      background: var(--color-action-subtle-hover);
+    .choice:hover:not(.custom, :has(:disabled, :checked)) {
+      outline: var(--border-width-thin) solid var(--color-control-border-hover);
+      outline-offset: var(--border-width-thin);
       color: var(--color-text-primary);
     }
   }
 
-  /* The chosen color wears a ring, which shows around any color. No color has no mark to ring, so it lights. */
+  /* The chosen square draws in, inside a ring that shows around any color, so a dense grid needs no room for it.
+     The ring gives the mark its shape, so the mark drops its rim, and its corner keeps the ring's center. */
+  .choice:has(:checked),
+  .custom {
+    outline: var(--border-width-strong) solid var(--color-text-primary);
+    outline-offset: calc(-1 * var(--border-width-strong));
+  }
+
   .choice:has(:checked) .mark,
   .custom .mark {
-    outline: var(--border-width-strong) solid var(--color-text-primary);
-    outline-offset: var(--border-width-thin);
+    margin: var(--space-1);
+    border-color: transparent;
+    border-radius: calc(var(--radius-sm) - var(--space-1));
   }
 
-  .choice:has(:checked):not(:has(.mark)) {
-    background: var(--color-action-subtle-active);
-    color: var(--color-text-primary);
-  }
-
+  /* Focus colors the square's line, as it does a checkbox's: its rim, and its ring once chosen. */
   .choice:has(:focus-visible) {
-    outline: var(--focus-ring-width) solid var(--color-focus-ring);
-    outline-offset: var(--border-width-strong);
+    outline-color: var(--color-control-border-focus);
+    box-shadow: var(--shadow-focus-ring);
+  }
+
+  .choice:has(:focus-visible):not(.custom, :has(:checked)) .mark {
+    border-color: var(--color-control-border-focus);
   }
 
   .choice:has(:disabled) {
@@ -253,13 +259,14 @@ the form receives the six-digit hex value under `name`, or an empty value for no
       forced-color-adjust: none;
     }
 
-    .choice:has(:checked) .mark,
-    .custom .mark {
+    .choice:has(:checked),
+    .custom {
       outline-color: Highlight;
     }
 
     .choice:has(:focus-visible) {
-      outline-color: Highlight;
+      outline: var(--border-width-strong) solid Highlight;
+      outline-offset: var(--focus-ring-offset);
     }
   }
 </style>

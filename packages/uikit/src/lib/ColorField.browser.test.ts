@@ -24,14 +24,9 @@ function renderIn(inlineSize: string, initialValue?: string) {
   return { controller, ...render(ColorField, { target, props: { legend: "Color", name: "color", controller } }) };
 }
 
-/** Measures a probe set to a size token. */
-function tokenSize(token: string) {
-  const probe = document.body.appendChild(document.createElement("div"));
-  probe.style.blockSize = `var(${token})`;
-  const { height } = probe.getBoundingClientRect();
-  probe.remove();
-  return height;
-}
+/** Reads where each choice's target sits. */
+const targets = (container: HTMLElement) =>
+  Array.from(container.querySelectorAll(".choice input"), (input) => input.getBoundingClientRect());
 
 describe("ColorField", () => {
   it("moves through no color and the swatches with the arrow keys, and reaches the color input with Tab", async () => {
@@ -50,40 +45,59 @@ describe("ColorField", () => {
     expect(document.activeElement?.getAttribute("aria-label")).toBe("Another color");
   });
 
-  it("keeps a medium field's height while its choices fit one row", () => {
+  it("packs its choices as a grid two rows deep, no color first and the color input last", () => {
     const { container } = renderIn("40rem");
+    const rows = Map.groupBy(targets(container), (target) => Math.round(target.top));
 
-    expect(container.querySelector(".well")!.getBoundingClientRect().height).toBeCloseTo(
-      tokenSize("--control-height-md"),
-      0
-    );
+    expect([...rows.values()].map((row) => row.length)).toEqual([swatches.length / 2 + 1, swatches.length / 2 + 1]);
+    expect(container.querySelector(".choice input")!.getAttribute("aria-label")).toBe("No color");
+    expect([...container.querySelectorAll(".choice input")].at(-1)!.getAttribute("type")).toBe("color");
   });
 
-  it("wraps its choices inside a narrow field", () => {
-    const { container } = renderIn("10rem");
-    const well = container.querySelector(".well")!;
+  it("keeps its rows together when what holds it stretches it", () => {
+    const { container } = renderIn("40rem");
+    const field = container.querySelector("fieldset")!;
+    const packed = field.querySelector(".choices")!.getBoundingClientRect().height;
 
-    expect(well.scrollWidth).toBeLessThanOrEqual(well.clientWidth);
-    expect(well.getBoundingClientRect().height).toBeGreaterThan(2 * tokenSize("--control-height-nested"));
+    field.style.blockSize = "20rem";
+
+    expect(field.querySelector(".choices")!.getBoundingClientRect().height).toBe(packed);
   });
 
-  it("gives every choice a target of 24px or more, apart from its neighbors", () => {
-    const { container } = renderIn("40rem");
-    const targets = Array.from(container.querySelectorAll(".choice input"), (input) => input.getBoundingClientRect());
+  it("fits a narrow field without overflowing it", () => {
+    const { container } = renderIn("12rem");
+    const field = container.querySelector("fieldset")!;
 
-    expect(targets).toHaveLength(swatches.length + 2);
-    for (const [index, target] of targets.entries()) {
+    expect(field.scrollWidth).toBeLessThanOrEqual(field.clientWidth);
+  });
+
+  it("gives every choice a target of 24px or more that overlaps no other", () => {
+    const { container } = renderIn("40rem");
+    const all = targets(container);
+
+    expect(all).toHaveLength(swatches.length + 2);
+    for (const [index, target] of all.entries()) {
       expect(target.width).toBeGreaterThanOrEqual(24);
       expect(target.height).toBeGreaterThanOrEqual(24);
-      if (index > 0) expect(targets[index - 1].right).toBeLessThanOrEqual(target.left);
+
+      for (const other of all.slice(index + 1)) {
+        const apart = target.right <= other.left || other.right <= target.left || target.bottom <= other.top;
+        expect(apart).toBe(true);
+      }
     }
+  });
+
+  it("leaves the square of no color blank", () => {
+    const { container } = renderIn("40rem", steel);
+
+    expect(getComputedStyle(container.querySelector(".mark")!).backgroundColor).toBe(resolveColor("transparent"));
   });
 
   it("shows a color outside the swatches as it was picked, on the last choice", () => {
     const { container } = renderIn("40rem", steel);
 
     const marks = container.querySelectorAll(".mark");
-    expect(marks).toHaveLength(swatches.length + 1);
+    expect(marks).toHaveLength(swatches.length + 2);
     expect(getComputedStyle(marks[marks.length - 1]).backgroundColor).toBe(resolveColor(steel));
   });
 });

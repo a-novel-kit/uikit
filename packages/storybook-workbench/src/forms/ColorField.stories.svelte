@@ -16,7 +16,7 @@
       docs: {
         description: {
           component:
-            "Picks an item's custom color: no color, one of the swatches, or any other opaque color through the browser's own color input. No color is the default. The choices are native controls: arrow keys move through no color and the swatches, Tab reaches the color input, and each choice carries its name for assistive technology. The form receives a six-digit hex value, or an empty value for no color.",
+            "Picks an item's custom color from a grid of squares: a blank square for no color, the swatches, and a last square that opens the browser's own color input for any other opaque color. No color is the default. The choices are native controls: arrow keys move through no color and the swatches, Tab reaches the color input, and each choice carries its name for assistive technology. The form receives a six-digit hex value, or an empty value for no color.",
         },
       },
     },
@@ -44,13 +44,13 @@
     docs: {
       description: {
         story:
-          "The chosen color wears a ring, which shows around any color. A color outside the swatches shows in the last choice, where the color input sits. Without a color, the first choice is lit.",
+          "The chosen square draws in, inside a ring that shows around any color. A color outside the swatches shows in the last square, where the color input sits.",
       },
     },
   }}
   asChild
 >
-  <div class="form">
+  <div class="states">
     <ColorField legend="No color" name="none" controller={noColor} />
     <ColorField legend="A swatch" name="swatch" controller={swatchChosen} />
     <ColorField legend="A dark swatch" name="dark" controller={darkSwatchChosen} />
@@ -64,9 +64,6 @@
     />
     <ColorField legend="Invalid" error="Pick a color for this calendar." name="invalid" controller={noColor} />
     <ColorField legend="Disabled" name="disabled" controller={swatchChosen} disabled />
-    <div class="narrow">
-      <ColorField legend="In a narrow field, the choices wrap" name="narrow" controller={freeChosen} />
-    </div>
   </div>
 </Story>
 
@@ -75,7 +72,7 @@
   parameters={{
     docs: {
       description: {
-        story: "On the canvas the field takes a ring; inside an island it is a bare well, as every field is.",
+        story: "The squares draw the same on the canvas and inside an island, as a checkbox does.",
       },
     },
   }}
@@ -116,8 +113,12 @@
     inline-size: min(100%, var(--layout-container-sm));
   }
 
-  .narrow {
-    inline-size: min(100%, calc(var(--size-20) * 3));
+  /* The states sit side by side while they fit, each in a column as wide as a small floating surface. */
+  .states {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(var(--layout-floating-sm), 1fr));
+    gap: var(--space-8) var(--space-6);
+    inline-size: min(100%, var(--layout-container-md));
   }
 
   .preview {
