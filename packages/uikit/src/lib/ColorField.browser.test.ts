@@ -113,15 +113,21 @@ describe("ColorField", () => {
     expect(blank()).toBe(resolveColor("var(--color-action-neutral-selected)"));
   });
 
-  it("draws no line around a square, chosen or not", () => {
-    const { container } = renderIn("40rem", swatches[0].hex);
+  it("draws a chosen outline button's line around the chosen square, and none around the others", () => {
+    const { getByRole } = renderIn("40rem", swatches[0].hex);
+    const line = (name: string) => getComputedStyle(getByRole("radio", { name }).parentElement!).borderTopColor;
 
-    for (const square of container.querySelectorAll(".choice")) {
-      const style = getComputedStyle(square);
-      expect(style.borderStyle).toBe("none");
-      expect(style.outlineStyle).toBe("none");
-      expect(style.boxShadow).toBe("none");
-    }
+    expect(line("Sky blue")).toBe(resolveColor("var(--color-border-strong)"));
+    expect(line("Blue")).toBe(resolveColor("transparent"));
+    expect(line("No color")).toBe(resolveColor("transparent"));
+  });
+
+  it("draws that line around the last square once it holds the chosen color", () => {
+    const line = (initialValue?: string) =>
+      getComputedStyle(renderIn("40rem", initialValue).getByLabelText("Another color").parentElement!).borderTopColor;
+
+    expect(line(steel)).toBe(resolveColor("var(--color-border-strong)"));
+    expect(line()).toBe(resolveColor("transparent"));
   });
 
   it("shows a color outside the swatches as it was picked, in the last square", () => {

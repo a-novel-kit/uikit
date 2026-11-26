@@ -44,7 +44,7 @@
     docs: {
       description: {
         story:
-          "A swatch rests dimmed toward its hue's tint, and the chosen one shows its color at full strength: its light marks it, with no line. The blank square is no color. A color outside the swatches shows in the last square, where the color input sits.",
+          "A swatch rests dimmed toward its hue's tint. The chosen one shows its color at full strength, inside the line a chosen outline button draws. The blank square is no color. A color outside the swatches shows in the last square, where the color input sits.",
       },
     },
   }}
@@ -72,7 +72,7 @@
   parameters={{
     docs: {
       description: {
-        story: "The squares draw the same on the canvas and inside an island.",
+        story: "Inside an island the chosen square's line is a hairline, as every outline is there.",
       },
     },
   }}

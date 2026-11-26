@@ -3,7 +3,7 @@
 Picks an item's custom color under a label: no color, one of the swatches, or any other opaque color through the
 browser's own color input. The choices pack as a grid of squares, two rows deep: a blank square for no color, the
 swatches, then the square that opens the color input. A swatch rests dimmed toward its hue's tint, and the chosen one
-shows its color at full strength: its light marks it, with no line. They are native controls, so the keyboard, assistive
+shows its color at full strength, inside the line a chosen outline button draws. They are native controls, so the keyboard, assistive
 technology and the form need nothing else: arrow keys move through no color and the swatches, Tab reaches the color
 input, and the form receives the six-digit hex value under `name`, or an empty value for no color. Draw the chosen
 color with `customColorStyle`.
@@ -172,16 +172,19 @@ color with `customColorStyle`.
     gap: var(--space-1);
   }
 
-  /* A choice is a square, the least size a pointer needs, filled as a neutral action is unless it has a hue. Its
-     native control covers it, unseen. */
+  /* A choice is a square, the least size a pointer needs, filled as a neutral action is unless it has a hue. It
+     keeps room for an outline's line, as a button does. Its native control covers it, unseen. */
   .choice {
     display: grid;
     position: relative;
     place-items: center;
     transition:
       background-color var(--motion-state),
+      border-color var(--motion-state),
       color var(--motion-state);
     cursor: pointer;
+    box-sizing: border-box;
+    border: var(--border-width-outline) solid transparent;
     border-radius: var(--radius-sm);
     background: var(--color-tint-custom);
     inline-size: var(--size-6);
@@ -189,16 +192,18 @@ color with `customColorStyle`.
     color: var(--color-text-secondary);
   }
 
+  /* The control takes the square's own size from over its line, so the whole square is its target. */
   .choice input {
     position: absolute;
     opacity: 0;
     cursor: inherit;
     margin: 0;
-    inset: 0;
+    inset-block-start: calc(-1 * var(--border-width-outline));
+    inset-inline-start: calc(-1 * var(--border-width-outline));
     border: 0;
     padding: 0;
-    inline-size: 100%;
-    block-size: 100%;
+    inline-size: var(--size-6);
+    block-size: var(--size-6);
   }
 
   .choice :global(.icon) {
@@ -233,7 +238,13 @@ color with `customColorStyle`.
     }
   }
 
-  /* The chosen swatch shows its color at full strength. No line marks it: its light does. */
+  /* The chosen square takes a chosen outline button's line, at an outline's weight. Its light alone was too faint
+     a mark on the darker hues. */
+  .choice:has(:checked, [aria-current]) {
+    border-color: var(--color-border-strong);
+  }
+
+  /* The chosen swatch also shows its color at full strength. */
   .swatch:has(:checked) {
     background: var(--color-mark-custom);
   }
@@ -254,7 +265,8 @@ color with `customColorStyle`.
     cursor: not-allowed;
   }
 
-  /* Forced colors replace every fill, so there the squares keep their colors and a line marks the chosen one. */
+  /* Forced colors replace every fill, so there the squares keep their colors, and the chosen one's line stands
+     out. */
   @media (forced-colors: active) {
     .choice,
     .mark {
@@ -262,8 +274,7 @@ color with `customColorStyle`.
     }
 
     .choice:has(:checked, [aria-current]) {
-      outline: var(--border-width-strong) solid Highlight;
-      outline-offset: calc(-1 * var(--border-width-strong));
+      border-color: Highlight;
     }
 
     .choice:has(:focus-visible) {
