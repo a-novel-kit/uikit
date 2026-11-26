@@ -61,6 +61,7 @@ Spread all trigger attributes onto that element; an open controller owns visibil
   let hovered = false;
   let focused = false;
   let source = $state<HTMLElement | null>(null);
+  let surface = $state<HTMLDivElement | null>(null);
   let openTimer: ReturnType<typeof setTimeout> | undefined;
 
   const triggerAttributes = $derived<TooltipTriggerAttributes>({
@@ -77,10 +78,12 @@ Spread all trigger attributes onto that element; an open controller owns visibil
     if (disabled) closeTooltip();
   });
 
-  // A tooltip its controller opens without a pointer or focus event anchors to the trigger it describes.
+  // A tooltip its controller opens without a pointer or focus event anchors to the trigger it describes, found in the
+  // tooltip's root: the document or a shadow root.
   $effect(() => {
-    if (!controller.state.open || untrack(() => source)) return;
-    source = document.querySelector<HTMLElement>(`[aria-describedby~="${CSS.escape(tooltipId)}"]`);
+    if (!controller.state.open || !surface || untrack(() => source)) return;
+    const root = surface.getRootNode() as Document | ShadowRoot;
+    source = root.querySelector<HTMLElement>(`[aria-describedby~="${CSS.escape(tooltipId)}"]`);
   });
 
   function scheduleOpen(element: HTMLElement) {
@@ -136,6 +139,7 @@ Spread all trigger attributes onto that element; an open controller owns visibil
 
 <FloatingSurface
   open={controller.state.open}
+  bind:element={surface}
   {source}
   mode="manual"
   id={tooltipId}

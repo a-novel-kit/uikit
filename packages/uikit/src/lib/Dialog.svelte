@@ -64,6 +64,7 @@ child with `autofocus` takes focus instead. Opening and closing fade the dialog 
   import ActionGroup from "./ActionGroup.svelte";
   import PanelHeader from "./PanelHeader.svelte";
   import { hold, overModal } from "./internal/overModal.svelte";
+  import { holdPage } from "./internal/pageHold";
 
   import { onMount, untrack } from "svelte";
 
@@ -98,10 +99,13 @@ child with `autofocus` takes focus instead. Opening and closing fade the dialog 
   // A request it shows stays fixed to the screen, where a moving dialog would carry it along, so while one waits the
   // dialog fades without rising. It keys on waiting requests, not on hosting: showDialog's focus starts the rise first.
   const steady = $derived(modal && overModal.requests.length > 0);
+  // A modal dialog inside a shadow root, which its page rules cannot reach, holds the page itself until it fades out.
+  let heldPage: ReturnType<typeof holdPage>;
 
   function leave() {
     leaveTop?.();
-    leaveTop = undefined;
+    heldPage?.leave();
+    leaveTop = heldPage = undefined;
   }
 
   $effect(() => leave);
@@ -119,6 +123,8 @@ child with `autofocus` takes focus instead. Opening and closing fade the dialog 
     if (modal) {
       dialog.showModal();
       leaveTop ??= untrack(() => hold(overModal.dialogs, self));
+      heldPage?.leave();
+      heldPage = holdPage(dialog, presentation !== "fullscreen");
     } else dialog.show();
     // The browser would focus the first control, usually the close button, and light its ring on
     // every opening. Focus the dialog itself unless content asks for autofocus; Tab reaches the rest.
@@ -133,6 +139,7 @@ child with `autofocus` takes focus instead. Opening and closing fade the dialog 
   // Reopens the dialog when the controller refuses a close the browser already performed.
   function handleClose(event: Event) {
     const currentDialog = event.currentTarget as HTMLDialogElement;
+    if (!currentDialog.open) heldPage?.release();
     // It keeps the requests through its fade out, so they cross back to the page's own instead of blinking.
     void Promise.allSettled(currentDialog.getAnimations().map((animation) => animation.finished)).then(() => {
       if (!currentDialog.open) leave();
@@ -210,7 +217,8 @@ child with `autofocus` takes focus instead. Opening and closing fade the dialog 
   .dialog.steady {
     translate: none;
   }
-  /* A modal dialog holds the page behind it still, as a phone would otherwise scroll it under its menu. */
+  /* A modal dialog holds the page behind it still, as a phone would otherwise scroll it under its menu. These page rules
+     reach no dialog inside a shadow root, which holds the page through holdPage instead: change both together. */
   :global(:root:has(dialog.dialog:modal)) {
     overflow: hidden;
   }

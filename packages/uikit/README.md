@@ -30,6 +30,16 @@ package root.
 <Button variant="solid">Continue</Button>
 ```
 
+## Shadow roots
+
+Components work inside a shadow root, which brings its own copy of their styles and of the tokens, and
+may run its own copy of uikit. A modal `Dialog` there blurs and holds the page behind it as one in the
+page does: while it shows, it adopts a stylesheet into the document, with the values of its own
+tokens, so the page needs no copy of uikit. The page scrolls on its root, which the dialog holds
+still, and marks its own frosted surfaces with `data-frost`, so they drop their blur under it. A
+request the reader must answer, such as a `ConsentBanner`, shows in the topmost modal dialog of its
+own copy of uikit. A dialog of another copy leaves it in the page, under its backdrop, until it closes.
+
 ## Localization
 
 Built-in text, such as labels and placeholders, ships in English and French. Inside an

@@ -143,10 +143,10 @@ For a custom trigger, spread the snippet attributes onto a native button.
   });
 
   // When the controller opens the menu without a trigger event, a composed trigger is found by the id
-  // its attributes carry.
+  // its attributes carry, in the menu's root: the document or a shadow root.
   $effect(() => {
-    if (!controller.state.open || untrack(() => triggerElement)) return;
-    triggerElement = document.getElementById(triggerId);
+    if (!controller.state.open || !menuElement || untrack(() => triggerElement)) return;
+    triggerElement = (menuElement.getRootNode() as Document | ShadowRoot).getElementById(triggerId);
   });
 
   onDestroy(typeahead.dispose);

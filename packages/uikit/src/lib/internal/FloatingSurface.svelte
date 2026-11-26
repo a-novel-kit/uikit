@@ -140,12 +140,14 @@
 
     const place = () => placeBySource(surface, source, gap);
     place();
-    addEventListener("scroll", place, { capture: true, passive: true });
-    addEventListener("resize", place);
-    return () => {
-      removeEventListener("scroll", place, { capture: true });
-      removeEventListener("resize", place);
-    };
+    const listening = new AbortController();
+    const onScroll = { capture: true, passive: true, signal: listening.signal };
+    addEventListener("scroll", place, onScroll);
+    // A scroll inside a shadow tree stops at its root, short of the window.
+    const root = surface.getRootNode();
+    if (root instanceof ShadowRoot) root.addEventListener("scroll", place, onScroll);
+    addEventListener("resize", place, { signal: listening.signal });
+    return () => listening.abort();
   });
 
   function handleToggle(event: ToggleEvent) {

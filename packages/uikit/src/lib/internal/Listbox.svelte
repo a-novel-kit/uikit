@@ -71,7 +71,11 @@ keys into requests to a `ListboxNavigation`, which this list shares for the poin
     /** Makes the option at `index` active and scrolls it into view once it renders. */
     activate(index: number) {
       this.activeIndex = index;
-      void tick().then(() => document.getElementById(this.optionId(index))?.scrollIntoView?.({ block: "nearest" }));
+      // The option lives in its control's root, the document or a shadow root.
+      void tick().then(() => {
+        const root = this.owner.control?.getRootNode() as Document | ShadowRoot | undefined;
+        root?.getElementById(this.optionId(index))?.scrollIntoView?.({ block: "nearest" });
+      });
     }
 
     /** Opens on the selected option, or on the first or last enabled option when `boundary` is set. */
