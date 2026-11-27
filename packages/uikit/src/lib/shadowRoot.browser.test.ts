@@ -77,9 +77,9 @@ describe.each([
     expect(rootStyle().overflow).not.toBe("hidden");
     await expect.poll(() => rootStyle().filter).toBe("none");
 
-    // Once the dialog has faded out, neither the page nor the shadow root keeps its rules.
-    await settled(dialog);
-    expect([document.adoptedStyleSheets.length, shadow.adoptedStyleSheets.length]).toEqual(adopted);
+    // Once the dialog has faded out, neither the page nor the shadow root keeps its rules. The dialog drops them when
+    // its fade's finished promises resolve, which can come a frame after the style shows the fade over.
+    await expect.poll(() => [document.adoptedStyleSheets.length, shadow.adoptedStyleSheets.length]).toEqual(adopted);
   });
 
   // Each frame an animation draws on the page makes the root blur it again.
@@ -138,8 +138,7 @@ describe("A modal dialog in a shadow root", () => {
     await expect.poll(() => rootStyle().filter).toBe("blur(8px)");
 
     first.controller.close();
-    await expect.poll(() => first.dialog.open).toBe(false);
-    await settled(first.dialog);
+    await expect.poll(() => first.shadow.adoptedStyleSheets.length).toBe(0);
     expect(rootStyle().filter).toBe("blur(8px)");
     expect(rootStyle().overflow).toBe("hidden");
 
